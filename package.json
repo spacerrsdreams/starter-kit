@@ -23,7 +23,8 @@
     "env:push:preview": "node scripts/vercel-env-push.js .env.development preview",
     "env:push:all-pre-production": "bun env:push:development && bun env:push:preview",
     "env:push:production": "node scripts/vercel-env-push.js .env.production production",
-    "env:push:one": "node scripts/vercel-env-push.js"
+    "env:push:one": "node scripts/vercel-env-push.js",
+    "create-starter-kit-app": "node packages/create-starter-kit-app/bin/create-starter-kit-app.js"
   },
   "dependencies": {
     "@ai-sdk/react": "^3.0.142",

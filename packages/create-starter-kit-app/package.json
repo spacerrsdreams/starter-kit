@@ -1,0 +1,31 @@
+{
+  "name": "create-starter-kit-app",
+  "version": "1.0.0",
+  "description": "Scaffold the spacerrsdreams starter-kit into a new directory",
+  "type": "module",
+  "bin": {
+    "create-starter-kit-app": "bin/create-starter-kit-app.js"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "starter-kit",
+    "nextjs",
+    "scaffold",
+    "create-app"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spacerrsdreams/starter-kit.git",
+    "directory": "packages/create-starter-kit-app"
+  },
+  "dependencies": {
+    "prompts": "^2.4.2"
+  }
+}
