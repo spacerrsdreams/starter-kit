@@ -1,0 +1,29 @@
+{
+  "endOfLine": "lf",
+  "semi": false,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 120,
+  "plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "src/app/globals.css",
+  "tailwindFunctions": ["cn", "cva"],
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@/config/(.*)$",
+    "^@/constants/(.*)$",
+    "^@/repositories/(.*)$",
+    "^@/lib/(.*)$",
+    "^@/utils/(.*)$",
+    "^@/features/(.*)$",
+    "^@/components/(.*)$",
+    "^@/types/(.*)$",
+    "^@/hooks/(.*)$",
+    "^@/providers/(.*)$",
+    "^@/ai/(.*)$",
+    "^@/schemas/(.*)$",
+    "",
+    "^[./]"
+  ]
+}

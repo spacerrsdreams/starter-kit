@@ -1,0 +1,36 @@
+---
+description: Require `server-only` in server actions, repositories, and other server-only modules so they cannot be bundled into client code by mistake
+globs: src/actions/**/*.{ts,tsx},src/**/actions/**/*.{ts,tsx},src/**/*actions*.{ts,tsx},src/**/repositories/**/*.ts,src/lib/prisma.ts,src/app/api/**/*.ts
+alwaysApply: false
+---
+
+Server-only guard (server-only)
+
+Use the official Next.js pattern so server-only code is never pulled into the client graph by accident. The server-only package throws at build time if a Client Component or client hook imports the module.
+
+Any file that is meant to run only on the server (and any shared module that must never be imported from client code) must start with import "server-only" as described below.
+
+Where server actions live (see react-features-architecture): cross-feature / general-purpose → src/actions/<area>/; feature-specific (e.g. Prisma for one domain) → src/features/<feature>/actions/. Both need import "server-only" when the implementation is server-only.
+
+When to add it
+
+Add import "server-only" as the first import (after any file-level comments) in:
+
+Server Actions — any file that uses "use server" (whole file or exported functions), including under src/actions/ and src/features/<feature>/actions/, and files named like *-actions.ts.
+Repositories / DB — modules under src/features//repositories/ and src/lib/prisma.ts (or other server-only data clients).
+App Router API route handlers — files under src/app/api/ (e.g. route.ts).
+Other server-only libraries — any src/lib/ module (or feature module) that uses secrets, DB, filesystem, or other Node/server-only APIs and must not be imported from "use client" trees.
+
+Pattern
+
+import "server-only"
+
+import { prisma } from "@/lib/prisma"
+// …rest of imports
+
+Do not import server-only from client components or from modules imported by "use client" files.
+If a server action file only re-exports from a repository that already has import "server-only", the action file should still include its own import "server-only" at the top so the action module is explicitly marked—imports of the action from client code fail at the action boundary.
+
+Dependency
+
+The server-only package must be listed in package.json dependencies (bun add server-only).

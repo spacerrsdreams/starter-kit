@@ -1,0 +1,26 @@
+---
+description: Public routes must include full SEO (metadata, OG/Twitter, keywords, JSON-LD); extend the same stack when a page lacks it
+alwaysApply: true
+---
+
+SEO for indexable routes
+
+When adding or editing a public, indexable route (page.tsx / parent layout.tsx with generateMetadata), check whether it already matches the optimizations used on /welcome and /contact. If anything is missing, apply the same pattern—do not ship a weaker SEO surface for new pages.
+
+Required when missing
+
+generateMetadata with locale-aware title and description (via getTranslations and message keys, not hard-coded English only).
+keywords: comma-separated string in messages (e.g. *.seo.keywords), parsed with parseSeoKeywords from @/lib/seo/parse-keywords.utils, and passed to metadata.
+alternates.canonical and alternates.languages via getCanonicalUrl + getAlternateLanguages for that route path.
+robots: { index: true, follow: true } when the page should be indexed (adjust only if intentionally noindex).
+Open Graph + Twitter: use buildOpenGraphAndTwitter from @/lib/seo/build-page-social-metadata.utils so url, locale, alternateLocale, images, and Twitter card stay consistent.
+JSON-LD: add SeoPageJsonLd (or extend StructuredData / shared schema only when appropriate) so the page has structured data aligned with its purpose; keep scripts as inline application/ld+json in server components (see seo-page-jsonld), not next/script.
+
+Messages
+
+Add or extend keys in all locale files under src/messages/*.json (same keys every locale—no orphaned locales). IF application has LOCALES
+
+Do not
+
+Rely on root app/layout.tsx metadata alone for a route-specific SEO story.
+Duplicate ad-hoc OG/twitter logic when buildOpenGraphAndTwitter already covers the case.

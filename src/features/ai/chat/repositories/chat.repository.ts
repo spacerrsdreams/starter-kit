@@ -1,0 +1,121 @@
+import "server-only"
+
+import { Prisma } from "@/generated/prisma/client"
+import type { Message as MessageRow } from "@/generated/prisma/client"
+import { toClientMessageId, toStorageMessageId } from "@/features/ai/chat/utils/chat-message-storage.utils"
+import { generateChatTitleFromUserMessage } from "@/features/ai/chat/utils/generate-chat-title"
+import { prisma } from "@/lib/prisma"
+import type { UIMessage } from "ai"
+
+function rowToUIMessage(row: MessageRow): UIMessage {
+  return {
+    id: toClientMessageId(row),
+    role: row.role,
+    parts: row.parts as UIMessage["parts"],
+  }
+}
+
+export async function createChat(userId: string): Promise<{ id: string }> {
+  const chat = await prisma.chat.create({ data: { userId } })
+  return { id: chat.id }
+}
+
+export async function chatExists(chatId: string, userId: string): Promise<boolean> {
+  const chat = await prisma.chat.findFirst({
+    where: { id: chatId, userId },
+    select: { id: true },
+  })
+  return chat !== null
+}
+
+export async function listChats(userId: string): Promise<Array<{ id: string; title: string | null; updatedAt: Date }>> {
+  return prisma.chat.findMany({
+    where: { userId },
+    orderBy: { updatedAt: "desc" },
+    select: { id: true, title: true, updatedAt: true },
+  })
+}
+
+export async function deleteChat(chatId: string, userId: string): Promise<boolean> {
+  const result = await prisma.chat.deleteMany({ where: { id: chatId, userId } })
+  return result.count > 0
+}
+
+export async function getChatWithMessages(
+  chatId: string,
+  userId: string
+): Promise<{ id: string; title: string | null; messages: UIMessage[] } | null> {
+  const chat = await prisma.chat.findUnique({
+    where: { id: chatId },
+    include: { messages: { orderBy: [{ createdAt: "asc" }, { id: "asc" }] } },
+  })
+  if (!chat || chat.userId !== userId) {
+    return null
+  }
+  return {
+    id: chat.id,
+    title: chat.title,
+    messages: chat.messages.map(rowToUIMessage),
+  }
+}
+
+function dedupeMessagesByIdPreservingOrder(messages: UIMessage[]): UIMessage[] {
+  const order: string[] = []
+  const byId = new Map<string, UIMessage>()
+  for (const message of messages) {
+    if (!byId.has(message.id)) {
+      order.push(message.id)
+    }
+    byId.set(message.id, message)
+  }
+  return order
+    .map((id) => byId.get(id))
+    .filter((message): message is UIMessage => Boolean(message))
+}
+
+export async function replaceMessagesForChat(chatId: string, userId: string, messages: UIMessage[]): Promise<void> {
+  const uniqueMessages = dedupeMessagesByIdPreservingOrder(messages)
+  const baseTime = Date.now()
+  const rows = uniqueMessages.map((message, index) => ({
+    id: toStorageMessageId(chatId, message.id),
+    chatId,
+    role: message.role,
+    parts: message.parts as Prisma.InputJsonValue,
+    createdAt: new Date(baseTime + index),
+  }))
+
+  await prisma.$transaction(async (tx) => {
+    await tx.message.deleteMany({ where: { chatId, chat: { userId } } })
+    if (rows.length > 0) {
+      await tx.message.createMany({ data: rows })
+    }
+    await tx.chat.update({
+      where: { id: chatId },
+      data: { updatedAt: new Date() },
+    })
+  })
+}
+
+export async function maybeGenerateAiChatTitle(chatId: string, userId: string, messages: UIMessage[]): Promise<void> {
+  const chat = await prisma.chat.findUnique({ where: { id: chatId } })
+  if (!chat || chat.userId !== userId || chat.title) {
+    return
+  }
+  const firstUser = messages.find((message) => message.role === "user")
+  if (!firstUser) {
+    return
+  }
+  const textPart = firstUser.parts.find((part) => part.type === "text")
+  if (!textPart || textPart.type !== "text") {
+    return
+  }
+  const raw = textPart.text.trim()
+  if (!raw) {
+    return
+  }
+  const title = await generateChatTitleFromUserMessage(raw)
+  await prisma.chat.update({
+    where: { id: chatId },
+    data: { title },
+  })
+}
