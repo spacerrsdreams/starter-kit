@@ -141,3 +141,8 @@
     border-radius: 0;
   }
 }
+
+html,
+body {
+  letter-spacing: -0.4px;
+}

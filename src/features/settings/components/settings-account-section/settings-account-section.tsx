@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
+import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
 import { sendEmailVerificationAction } from "@/features/settings/actions/send-email-verification.action"
 import type {
@@ -142,7 +143,7 @@ export function SettingsAccountSection() {
       <SettingsAccountSectionLayout
         icon={UserX}
         title="Deactivate account"
-        description="If you deactivate your account, your personal identifiers and records will be retained for 30 days and then permanently removed from our active systems. This action is final and ensures your data is no longer stored or processed by Imulogy, except where retention is required by law."
+        description={`If you deactivate your account, your personal identifiers and records will be retained for 30 days and then permanently removed from our active systems. This action is final and ensures your data is no longer stored or processed by ${SiteConfig.name}, except where retention is required by law.`}
       >
         <Button
           type="button"
