@@ -36,6 +36,7 @@ yarn-error.log*
 .env.development
 .env.preview
 .env.production
+.env
 
 # vercel
 .vercel
@@ -47,3 +48,4 @@ next-env.d.ts
 src/generated
 
 showcase
+
