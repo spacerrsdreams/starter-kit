@@ -1,4 +1,4 @@
-import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai"
+import { consumeStream, convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai"
 import { z } from "zod"
 
 import { CHAT_MODEL } from "@/lib/ai"
@@ -62,5 +62,6 @@ export async function POST(req: Request) {
       await replaceMessagesForChat(chatId, userId, finalMessages)
       await maybeGenerateAiChatTitle(chatId, userId, finalMessages)
     },
+    consumeSseStream: consumeStream,
   })
 }
