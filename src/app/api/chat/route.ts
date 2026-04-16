@@ -1,11 +1,8 @@
-import "server-only"
-
 import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai"
-import { headers } from "next/headers"
 import { z } from "zod"
 
-import { CHAT_MODEL, gateway } from "@/lib/ai"
-import { auth } from "@/lib/auth/auth"
+import { CHAT_MODEL } from "@/lib/ai"
+import { getSessionUserId } from "@/lib/auth/auth"
 import { CHAT_SYSTEM_PROMPT } from "@/features/ai/chat/constants/chat-system-prompt"
 import {
   chatExists,
@@ -20,13 +17,9 @@ const requestSchema = z.object({
   messages: z.array(z.unknown()),
 })
 
-async function getSessionUserId() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  return session?.user?.id ?? null
-}
-
 export async function POST(req: Request) {
   const userId = await getSessionUserId()
+
   if (!userId) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
@@ -35,6 +28,7 @@ export async function POST(req: Request) {
   }
 
   const parsed = requestSchema.safeParse(await req.json())
+
   if (!parsed.success) {
     return new Response(JSON.stringify({ error: "Invalid body" }), {
       status: 400,
@@ -43,7 +37,9 @@ export async function POST(req: Request) {
   }
 
   const { chatId, messages: rawMessages } = parsed.data
+
   const exists = await chatExists(chatId, userId)
+
   if (!exists) {
     return new Response(JSON.stringify({ error: "Chat not found" }), {
       status: 404,
@@ -52,8 +48,9 @@ export async function POST(req: Request) {
   }
 
   const messages = rawMessages as UIMessage[]
+
   const result = streamText({
-    model: gateway(CHAT_MODEL),
+    model: CHAT_MODEL,
     system: CHAT_SYSTEM_PROMPT,
     messages: await convertToModelMessages(messages),
     stopWhen: stepCountIs(5),

@@ -2,10 +2,11 @@ import "server-only"
 
 import { Prisma } from "@/generated/prisma/client"
 import type { Message as MessageRow } from "@/generated/prisma/client"
+import type { UIMessage } from "ai"
+
+import { prisma } from "@/lib/prisma"
 import { toClientMessageId, toStorageMessageId } from "@/features/ai/chat/utils/chat-message-storage.utils"
 import { generateChatTitleFromUserMessage } from "@/features/ai/chat/utils/generate-chat-title"
-import { prisma } from "@/lib/prisma"
-import type { UIMessage } from "ai"
 
 function rowToUIMessage(row: MessageRow): UIMessage {
   return {
@@ -21,11 +22,11 @@ export async function createChat(userId: string): Promise<{ id: string }> {
 }
 
 export async function chatExists(chatId: string, userId: string): Promise<boolean> {
-  const chat = await prisma.chat.findFirst({
+  const count = await prisma.chat.count({
     where: { id: chatId, userId },
-    select: { id: true },
   })
-  return chat !== null
+
+  return count > 0
 }
 
 export async function listChats(userId: string): Promise<Array<{ id: string; title: string | null; updatedAt: Date }>> {
@@ -68,9 +69,7 @@ function dedupeMessagesByIdPreservingOrder(messages: UIMessage[]): UIMessage[] {
     }
     byId.set(message.id, message)
   }
-  return order
-    .map((id) => byId.get(id))
-    .filter((message): message is UIMessage => Boolean(message))
+  return order.map((id) => byId.get(id)).filter((message): message is UIMessage => Boolean(message))
 }
 
 export async function replaceMessagesForChat(chatId: string, userId: string, messages: UIMessage[]): Promise<void> {

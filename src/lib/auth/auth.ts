@@ -1,6 +1,9 @@
+import "server-only"
+
 import { betterAuth, User } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { nextCookies } from "better-auth/next-js"
+import { headers } from "next/headers"
 
 import { MIN_PASSWORD_LENGTH } from "@/lib/auth/auth.schema"
 import { prisma } from "@/lib/prisma"
@@ -79,3 +82,8 @@ export const auth = betterAuth({
     },
   },
 })
+
+export async function getSessionUserId() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  return session?.user?.id ?? null
+}

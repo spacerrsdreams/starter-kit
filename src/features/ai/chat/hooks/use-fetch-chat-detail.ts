@@ -8,7 +8,7 @@ import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 export function useFetchChatDetail(chatId: string | null, enabled = true) {
   return useQuery({
     queryKey: chatQueryKeys.chat(chatId ?? ""),
-    queryFn: () => getChatApi(chatId!),
     enabled: enabled && Boolean(chatId),
+    queryFn: () => getChatApi(chatId!),
   })
 }
