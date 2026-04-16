@@ -41,7 +41,7 @@ export function DashboardHeader() {
   }
 
   return (
-    <header className="flex h-[57px] shrink-0 items-center gap-2 border-b-2">
+    <header className="flex h-[57px] shrink-0 items-center gap-2 border-b">
       <div className="flex flex-1 items-center gap-2 px-3">
         <SidebarTrigger className="hidden md:inline-flex" />
         <Separator orientation="vertical" className="mr-2 hidden md:block data-vertical:h-4 data-vertical:self-auto" />
