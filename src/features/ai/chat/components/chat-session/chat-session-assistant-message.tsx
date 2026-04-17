@@ -14,7 +14,6 @@ export function ChatSessionAssistantMessage({ message, isAnimating }: ChatSessio
     <Message key={message.id} from={message.role}>
       <MessageContent className="flex w-full min-w-0 flex-col gap-3">
         {message.parts.map((part, partIndex) => {
-          console.log(part)
           switch (part.type) {
             case "text":
               return (

@@ -2,8 +2,8 @@
 
 import { useChat } from "@ai-sdk/react"
 import type { FileUIPart } from "ai"
-import { PlusIcon } from "lucide-react"
-import { useCallback, useEffect, useState } from "react"
+import { ArrowUpIcon, PlusIcon } from "lucide-react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import { cn } from "@/lib/utils"
 import { AssistantThinkingIndicator } from "@/features/ai/chat/components/chat-session/assistant-thinking-indicator"
@@ -35,12 +35,13 @@ import {
   PromptInputActionMenu,
   PromptInputActionMenuContent,
   PromptInputActionMenuTrigger,
-  PromptInputFooter,
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
   usePromptInputAttachments,
+  usePromptInputController,
 } from "@/components/ai-elements/prompt-input"
+import { SpeechInput } from "@/components/ai-elements/speech-input"
 import { LogoIcon } from "@/components/ui/icons/logo"
 
 export function ChatSession({
@@ -54,9 +55,11 @@ export function ChatSession({
   onChatCreated,
   onConversationUpdated,
 }: ChatSessionProps) {
+  const [transcript, setTranscript] = useState("")
   const [transportApi] = useState(() => createStableChatTransport())
   const createChatMutation = useMutateCreateChat()
   const attachments = usePromptInputAttachments()
+  const promptController = usePromptInputController()
   const { openAuthModal } = useAuthRequiredModal()
   const { pendingPrompt, setPendingPrompt, clearPendingPrompt } = useChatAuthRequiredStore((state) => state)
 
@@ -116,18 +119,35 @@ export function ChatSession({
     sendAuthorizedMessage,
   ])
 
-  const handleSubmit = async ({ text, files }: { text: string; files: FileUIPart[] }) => {
-    const normalizedText = text.trim()
-    if ((!normalizedText && files.length === 0) || isGenerating) {
-      return
-    }
-    if (!isAuthenticated) {
-      setPendingPrompt(normalizedText)
-      openAuthModal()
-      return
-    }
-    await sendAuthorizedMessage(normalizedText, files)
-  }
+  const handleSubmit = useCallback(
+    async ({ text, files }: { text: string; files: FileUIPart[] }) => {
+      const normalizedText = text.trim()
+      if ((!normalizedText && files.length === 0) || isGenerating) {
+        return
+      }
+      if (!isAuthenticated) {
+        setPendingPrompt(normalizedText)
+        openAuthModal()
+        return
+      }
+      await sendAuthorizedMessage(normalizedText, files)
+    },
+    [isGenerating, isAuthenticated, setPendingPrompt, openAuthModal, sendAuthorizedMessage]
+  )
+
+  const currentInput = promptController.textInput.value
+  const hasPendingInput = currentInput.trim().length > 0 || attachments.files.length > 0
+  const isSubmitPrimary = hasPendingInput && !isGenerating
+  const isSubmitVisuallyDisabled = !hasPendingInput && !isGenerating
+
+  const isSpeechInputDisabled = isGenerating || createChatMutation.isPending
+
+  const handleTranscriptionChange = useCallback((text: string) => {
+    setTranscript((prev) => {
+      const newText = prev ? `${prev} ${text}` : text
+      return newText
+    })
+  }, [])
 
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
@@ -174,7 +194,7 @@ export function ChatSession({
         <ConversationScrollButton />
       </Conversation>
 
-      <div className={cn("shrink-0 bg-background px-4 pt-3 pb-1 md:pb-4", messages.length === 0 ? "pt-2" : undefined)}>
+      <div className={cn("shrink-0 bg-background px-4 pt-3 pb-1 md:pb-8", messages.length === 0 ? "pt-2" : undefined)}>
         {messages.length === 0 ? (
           <ChatExamplePrompts
             disabled={isGenerating || createChatMutation.isPending}
@@ -197,20 +217,37 @@ export function ChatSession({
               ))}
             </Attachments>
           ) : null}
-          <PromptInputTextarea placeholder="Ask me anything..." />
-          <PromptInputFooter>
-            <PromptInputTools>
-              <PromptInputActionMenu>
-                <PromptInputActionMenuTrigger tooltip="Add attachment">
-                  <PlusIcon className="size-4" />
-                </PromptInputActionMenuTrigger>
-                <PromptInputActionMenuContent className="w-48">
-                  <PromptInputActionAddAttachments className="whitespace-nowrap" />
-                </PromptInputActionMenuContent>
-              </PromptInputActionMenu>
-            </PromptInputTools>
-            <PromptInputSubmit onStop={stop} status={status} />
-          </PromptInputFooter>
+          <PromptInputTools className="order-first self-end p-2">
+            <PromptInputActionMenu>
+              <PromptInputActionMenuTrigger tooltip="Add attachment">
+                <PlusIcon className="size-4" />
+              </PromptInputActionMenuTrigger>
+              <PromptInputActionMenuContent className="w-48">
+                <PromptInputActionAddAttachments className="whitespace-nowrap" />
+              </PromptInputActionMenuContent>
+            </PromptInputActionMenu>
+          </PromptInputTools>
+          <PromptInputTextarea className="min-h-auto" placeholder="Ask me anything..." />
+          <div className="order-last flex items-center gap-1 self-end p-2">
+            <SpeechInput
+              aria-label="Capture speech and send message"
+              // onAudioRecorded={handleAudioRecorded}
+              onTranscriptionChange={handleTranscriptionChange}
+              size="icon"
+              variant="outline"
+            />
+            <PromptInputSubmit
+              aria-disabled={isSubmitVisuallyDisabled}
+              className={cn(
+                isSubmitPrimary ? "bg-primary text-primary-foreground hover:bg-primary/90" : undefined,
+                isSubmitVisuallyDisabled ? "cursor-not-allowed opacity-50" : undefined
+              )}
+              onStop={stop}
+              status={status}
+            >
+              <ArrowUpIcon className="size-4" />
+            </PromptInputSubmit>
+          </div>
         </PromptInput>
       </div>
     </div>

@@ -10,7 +10,7 @@ import { prisma } from "@/lib/prisma"
 import { sendEmailVerificationEmail, sendResetPasswordEmail, sendWelcomeEmail } from "@/lib/resend/actions"
 import { WebRoutes } from "@/lib/web.routes"
 
-const SevenDays = 60 * 60 * 24 * 7
+const ThirtyDays = 60 * 60 * 24 * 30
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -28,7 +28,7 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-  expiresIn: SevenDays,
+  expiresIn: ThirtyDays,
   emailAndPassword: {
     requireEmailVerification: false,
     enabled: true,
