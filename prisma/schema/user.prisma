@@ -2,6 +2,10 @@ model User {
   id            String    @id
   name          String
   email         String
+  role          UserRole  @default(user)
+  banned        Boolean   @default(false)
+  banReason     String?
+  banExpires    DateTime?
   emailVerified Boolean   @default(false)
   notificationsEmailMarketing    Boolean   @default(true)
   notificationsEmailPersonalized Boolean   @default(true)
@@ -24,6 +28,7 @@ model Session {
   id        String   @id
   expiresAt DateTime
   token     String
+  impersonatedBy String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ipAddress String?
@@ -89,5 +94,10 @@ enum DeactivationFeedbackCategory {
   PRIVACY_CONCERNS
   SWITCHED_TO_ALTERNATIVE
   OTHER
+}
+
+enum UserRole {
+  user
+  admin
 }
  

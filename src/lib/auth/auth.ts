@@ -3,6 +3,7 @@ import "server-only"
 import { betterAuth, User } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { nextCookies } from "better-auth/next-js"
+import { admin } from "better-auth/plugins"
 import { headers } from "next/headers"
 
 import { MIN_PASSWORD_LENGTH } from "@/lib/auth/auth.schema"
@@ -16,7 +17,13 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    admin({
+      defaultRole: "user",
+      adminRole: "admin",
+    }),
+  ],
   baseURL: process.env.BETTER_AUTH_URL!,
   trustedOrigins: [process.env.BETTER_AUTH_URL!],
   allowedOrigins: ["sole-capital-typically.ngrok-free.app"],

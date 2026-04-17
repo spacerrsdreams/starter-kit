@@ -1,10 +1,12 @@
 "use client"
 
-import { User } from "better-auth"
-import { ChevronsUpDown, CreditCard, LogOut, Settings, SparklesIcon } from "lucide-react"
+import type { User } from "better-auth"
+import { ChevronsUpDown, CreditCard, LogOut, Settings, SparklesIcon, UserRoundCheck } from "lucide-react"
 import { useState, useTransition } from "react"
+import { toast } from "sonner"
 
 import { authClient } from "@/lib/auth/auth-client"
+import type { UserButtonProps } from "@/features/auth/types/user-button.types"
 import { usePlanPickerDialog } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog-context"
 import { BILLING_TRACKING_EVENTS } from "@/features/billing/constants/billing-tracking.constants"
 import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
@@ -22,10 +24,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-type UserButtonProps = {
-  user: User
-}
-
 function getInitial(email: string): string {
   const trimmed = email.trim()
   if (!trimmed) return "U"
@@ -42,7 +40,7 @@ function getDisplayName(user: User): string {
   return emailName || "User"
 }
 
-export function UserButton({ user }: UserButtonProps) {
+export function UserButton({ user, isAdmin = false, isImpersonating = false }: UserButtonProps) {
   const [isPending, startTransition] = useTransition()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const planPickerDialog = usePlanPickerDialog()
@@ -75,6 +73,27 @@ export function UserButton({ user }: UserButtonProps) {
         })
       }
     })()
+  }
+
+  const handleStopImpersonation = () => {
+    startTransition(async () => {
+      await authClient.admin.stopImpersonating()
+    })
+  }
+
+  const handleStartImpersonation = () => {
+    const userId = window.prompt("Enter the target user ID to impersonate")
+    if (!userId?.trim()) {
+      return
+    }
+
+    startTransition(async () => {
+      try {
+        await authClient.admin.impersonateUser({ userId: userId.trim() })
+      } catch {
+        toast.error("Failed to impersonate user.")
+      }
+    })
   }
 
   return (
@@ -126,6 +145,18 @@ export function UserButton({ user }: UserButtonProps) {
             <Settings className="mr-2 h-4 w-4" />
             Settings
           </DropdownMenuItem>
+          {isAdmin && !isImpersonating ? (
+            <DropdownMenuItem onClick={handleStartImpersonation} disabled={isPending}>
+              <UserRoundCheck className="mr-2 h-4 w-4" />
+              Impersonate by user ID
+            </DropdownMenuItem>
+          ) : null}
+          {isImpersonating ? (
+            <DropdownMenuItem onClick={handleStopImpersonation} disabled={isPending}>
+              <UserRoundCheck className="mr-2 h-4 w-4" />
+              {isPending ? "Switching back..." : "Stop impersonation"}
+            </DropdownMenuItem>
+          ) : null}
           <DropdownMenuItem onClick={handleSignOut} disabled={isPending}>
             <LogOut className="mr-2 h-4 w-4" />
             {isPending ? "Logging out..." : "Log out"}

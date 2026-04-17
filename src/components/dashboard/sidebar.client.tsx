@@ -78,7 +78,11 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
             </div>
             <div className="border-t pt-2">
               <div className="flex items-center justify-end">
-                <UserButton user={session.user} />
+                <UserButton
+                  user={session.user}
+                  isAdmin={session.user.role === "admin"}
+                  isImpersonating={Boolean(session.session.impersonatedBy)}
+                />
               </div>
             </div>
           </div>
