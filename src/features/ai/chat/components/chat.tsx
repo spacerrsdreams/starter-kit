@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react"
 import { authClient } from "@/lib/auth/auth-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { ChatSession } from "@/features/ai/chat/components/chat-session/chat-session"
+import { ChatSessionSkeleton } from "@/features/ai/chat/components/chat-session/chat-session-skeleton"
 import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
 import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-detail"
@@ -15,7 +16,6 @@ import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation
 import type { ChatProps } from "@/features/ai/chat/types/chat.types"
 import { getChatRoute } from "@/features/ai/chat/utils/chat-routes.utils"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
-import { Spinner } from "@/components/ui/spinner"
 
 export function Chat({ initialChatId = null }: ChatProps) {
   const { data: session, isPending: isSessionPending } = authClient.useSession()
@@ -134,8 +134,10 @@ export function Chat({ initialChatId = null }: ChatProps) {
 
   if (isSessionPending || !routingReady || !sessionClientId) {
     return (
-      <div className="flex h-full min-h-[50vh] items-center justify-center">
-        <Spinner className="size-8" />
+      <div className="flex h-[calc(100dvh-57px-4.5rem)] min-h-0 md:h-[calc(100dvh-57px)]">
+        <main className="mx-auto flex min-h-0 max-w-3xl flex-1 flex-col">
+          <ChatSessionSkeleton />
+        </main>
       </div>
     )
   }
@@ -147,9 +149,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
     <div className="flex h-[calc(100dvh-57px-4.5rem)] min-h-0 md:h-[calc(100dvh-57px)]">
       <main className="mx-auto flex min-h-0 max-w-3xl flex-1 flex-col">
         {waitingForChatDetail ? (
-          <div className="flex min-h-0 flex-1 items-center justify-center">
-            <Spinner className="size-8" />
-          </div>
+          <ChatSessionSkeleton />
         ) : (
           <PromptInputProvider>
             <ChatSession

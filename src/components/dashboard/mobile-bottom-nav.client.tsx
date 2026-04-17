@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertCircle, HomeIcon, LogOut, Settings, SparklesIcon, User } from "lucide-react"
+import { AlertCircle, LogOut, Settings, SparklesIcon, User } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useTransition } from "react"
@@ -23,10 +23,6 @@ export function MobileBottomNav() {
   const user = session?.user
 
   const isActive = (path: string) => {
-    if (path === WebRoutes.root.path) {
-      return pathname === path
-    }
-
     return pathname.startsWith(path)
   }
 
@@ -63,11 +59,6 @@ export function MobileBottomNav() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="safe-area-bottom flex w-full flex-row items-center pt-2.5 pb-1.5">
-        <div className="flex min-w-0 flex-1 justify-center">
-          <Link href={WebRoutes.root.path} className={navLinkClassName(WebRoutes.root.path)} aria-label="Home">
-            <HomeIcon className={cn(iconClassName, isActive(WebRoutes.root.path) && "text-white")} />
-          </Link>
-        </div>
         <div className="flex min-w-0 flex-1 justify-center">
           <Link href={WebRoutes.askAi.path} className={navLinkClassName(WebRoutes.askAi.path)} aria-label="Ask AI">
             <SparklesIcon className={cn(iconClassName, isActive(WebRoutes.askAi.path) && "text-white")} />

@@ -18,16 +18,13 @@ export function ChatExamplePrompts({
       {prompts.map((prompt, index) => (
         <Button
           key={prompt}
-          variant="outline"
-          type="button"
           disabled={disabled}
+          variant="outline"
           className={cn(
-            "h-auto min-h-10 justify-start px-3 py-2 text-left text-xs font-normal whitespace-normal text-muted-foreground hover:text-foreground",
+            "min-h-10 justify-start px-3 py-2 text-xs",
             !isSingleColumn && index > 1 ? "hidden sm:flex" : undefined
           )}
-          onClick={() => {
-            onSelect(prompt)
-          }}
+          onClick={() => onSelect(prompt)}
         >
           {prompt}
         </Button>
