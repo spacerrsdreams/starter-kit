@@ -45,7 +45,7 @@ export async function deleteChat(chatId: string, userId: string): Promise<boolea
 export async function getChatWithMessages(
   chatId: string,
   userId: string
-): Promise<{ id: string; title: string | null; messages: UIMessage[] } | null> {
+): Promise<{ id: string; title: string | null; contextSummary: string | null; messages: UIMessage[] } | null> {
   const chat = await prisma.chat.findUnique({
     where: { id: chatId },
     include: { messages: { orderBy: [{ createdAt: "asc" }, { id: "asc" }] } },
@@ -56,6 +56,7 @@ export async function getChatWithMessages(
   return {
     id: chat.id,
     title: chat.title,
+    contextSummary: chat.contextSummary,
     messages: chat.messages.map(rowToUIMessage),
   }
 }
@@ -116,5 +117,12 @@ export async function maybeGenerateAiChatTitle(chatId: string, userId: string, m
   await prisma.chat.update({
     where: { id: chatId },
     data: { title },
+  })
+}
+
+export async function updateChatContextSummary(chatId: string, userId: string, contextSummary: string | null): Promise<void> {
+  await prisma.chat.updateMany({
+    where: { id: chatId, userId },
+    data: { contextSummary },
   })
 }

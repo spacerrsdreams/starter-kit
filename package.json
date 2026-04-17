@@ -9,7 +9,7 @@
     "prisma:push": "dotenv -e .env.local -- prisma db push && dotenv -e .env.local -- prisma generate",
     "prisma:push:hard": "dotenv -e .env.local -- prisma db push --force-reset",
     "prisma:generate": "dotenv -e .env.local -- prisma generate",
-    "prisma:migrate": "dotenv -e .env.local -- prisma migrate dev",
+    "prisma:migrate": "dotenv -e .env.local -- prisma migrate dev && dotenv -e .env.local -- prisma generate",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "postinstall": "bun prisma:migrate:deploy && bun prisma:generate",
     "prettier:format": "prettier --write .",
