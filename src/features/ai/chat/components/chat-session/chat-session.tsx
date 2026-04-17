@@ -1,30 +1,45 @@
 "use client"
 
 import { useChat } from "@ai-sdk/react"
+import type { FileUIPart } from "ai"
+import { PlusIcon } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 
 import { cn } from "@/lib/utils"
 import { AssistantThinkingIndicator } from "@/features/ai/chat/components/chat-session/assistant-thinking-indicator"
 import { ChatExamplePrompts } from "@/features/ai/chat/components/chat-session/chat-example-prompts"
 import { ChatSessionAssistantMessage } from "@/features/ai/chat/components/chat-session/chat-session-assistant-message"
+import { ChatSessionUserMessage } from "@/features/ai/chat/components/chat-session/chat-session-user-message"
 import { useMutateCreateChat } from "@/features/ai/chat/hooks/use-mutate-create-chat"
 import { useChatAuthRequiredStore } from "@/features/ai/chat/store/chat-auth-required.store"
 import type { ChatSessionProps } from "@/features/ai/chat/types/chat-session.types"
 import { createStableChatTransport } from "@/features/ai/chat/utils/stable-chat-transport"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
 import {
+  Attachment,
+  AttachmentInfo,
+  AttachmentPreview,
+  AttachmentRemove,
+  Attachments,
+} from "@/components/ai-elements/attachments"
+import {
   Conversation,
   ConversationContent,
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation"
-import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message"
+import { Message, MessageContent } from "@/components/ai-elements/message"
 import {
   PromptInput,
+  PromptInputActionAddAttachments,
+  PromptInputActionMenu,
+  PromptInputActionMenuContent,
+  PromptInputActionMenuTrigger,
   PromptInputFooter,
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
+  usePromptInputAttachments,
 } from "@/components/ai-elements/prompt-input"
 import { LogoIcon } from "@/components/ui/icons/logo"
 
@@ -41,6 +56,7 @@ export function ChatSession({
 }: ChatSessionProps) {
   const [transportApi] = useState(() => createStableChatTransport())
   const createChatMutation = useMutateCreateChat()
+  const attachments = usePromptInputAttachments()
   const { openAuthModal } = useAuthRequiredModal()
   const { pendingPrompt, setPendingPrompt, clearPendingPrompt } = useChatAuthRequiredStore((state) => state)
 
@@ -61,9 +77,9 @@ export function ChatSession({
   const lastIndex = messages.length - 1
 
   const sendAuthorizedMessage = useCallback(
-    async (text: string) => {
+    async (text: string, files: FileUIPart[] = []) => {
       const normalizedText = text.trim()
-      if (!normalizedText || isGenerating) {
+      if ((!normalizedText && files.length === 0) || isGenerating) {
         return false
       }
       if (!transportApi.getChatId()) {
@@ -75,7 +91,7 @@ export function ChatSession({
           return false
         }
       }
-      void sendMessage({ text: normalizedText })
+      void sendMessage({ files, text: normalizedText })
       return true
     },
     [createChatMutation, isGenerating, onChatCreated, sendMessage, transportApi]
@@ -100,9 +116,9 @@ export function ChatSession({
     sendAuthorizedMessage,
   ])
 
-  const handleSubmit = async ({ text }: { text: string }) => {
+  const handleSubmit = async ({ text, files }: { text: string; files: FileUIPart[] }) => {
     const normalizedText = text.trim()
-    if (!normalizedText || isGenerating) {
+    if ((!normalizedText && files.length === 0) || isGenerating) {
       return
     }
     if (!isAuthenticated) {
@@ -110,7 +126,7 @@ export function ChatSession({
       openAuthModal()
       return
     }
-    await sendAuthorizedMessage(normalizedText)
+    await sendAuthorizedMessage(normalizedText, files)
   }
 
   return (
@@ -144,40 +160,7 @@ export function ChatSession({
               )
             }
 
-            return (
-              <Message
-                key={message.id}
-                from={message.role}
-                className={cn(message.role === "user" && "w-fit max-w-[min(100%,32rem)] justify-end")}
-              >
-                <MessageContent
-                  className={cn(
-                    message.role === "user" ? "min-w-0 flex-col gap-3" : "flex w-full min-w-0 flex-col gap-3"
-                  )}
-                >
-                  {message.parts.map((part, partIndex) => {
-                    if (part.type !== "text") {
-                      return null
-                    }
-                    const isUser = message.role === "user"
-
-                    return (
-                      <div
-                        key={partIndex}
-                        className={cn("block min-w-0 shrink-0", isUser ? "max-w-full" : "w-full min-w-0")}
-                      >
-                        <MessageResponse
-                          className={cn("block min-w-0", isUser ? "max-w-full" : "w-full")}
-                          isAnimating={status === "streaming" && index === lastIndex && message.role === "assistant"}
-                        >
-                          {part.text}
-                        </MessageResponse>
-                      </div>
-                    )
-                  })}
-                </MessageContent>
-              </Message>
-            )
+            return <ChatSessionUserMessage key={message.id} message={message} />
           })}
 
           {status === "submitted" ? (
@@ -198,14 +181,34 @@ export function ChatSession({
             prompts={examplePrompts}
             layout={examplePromptsLayout}
             onSelect={(text) => {
-              void handleSubmit({ text })
+              void handleSubmit({ files: [], text })
             }}
           />
         ) : null}
         <PromptInput onSubmit={handleSubmit}>
+          {attachments.files.length > 0 ? (
+            <Attachments className="w-full justify-start px-3 pt-3" variant="inline">
+              {attachments.files.map((file) => (
+                <Attachment data={file} key={file.id} onRemove={() => attachments.remove(file.id)}>
+                  <AttachmentPreview />
+                  <AttachmentInfo />
+                  <AttachmentRemove />
+                </Attachment>
+              ))}
+            </Attachments>
+          ) : null}
           <PromptInputTextarea placeholder="Ask me anything..." />
           <PromptInputFooter>
-            <PromptInputTools />
+            <PromptInputTools>
+              <PromptInputActionMenu>
+                <PromptInputActionMenuTrigger tooltip="Add attachment">
+                  <PlusIcon className="size-4" />
+                </PromptInputActionMenuTrigger>
+                <PromptInputActionMenuContent className="w-48">
+                  <PromptInputActionAddAttachments className="whitespace-nowrap" />
+                </PromptInputActionMenuContent>
+              </PromptInputActionMenu>
+            </PromptInputTools>
             <PromptInputSubmit onStop={stop} status={status} />
           </PromptInputFooter>
         </PromptInput>

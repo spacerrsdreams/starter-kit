@@ -1,10 +1,9 @@
 "use client"
 
+import { ChatSessionCitations } from "@/features/ai/chat/components/chat-session/chat-session-citations"
 import type { ChatSessionAssistantMessageProps } from "@/features/ai/chat/types/chat-citations.types"
 import { getChatCitationSources } from "@/features/ai/chat/utils/chat-citations.utils"
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message"
-
-import { ChatSessionCitations } from "./chat-session-citations"
 
 export function ChatSessionAssistantMessage({ message, isAnimating }: ChatSessionAssistantMessageProps) {
   const citationSources = getChatCitationSources(message)

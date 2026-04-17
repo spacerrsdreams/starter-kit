@@ -14,6 +14,7 @@ import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
 import type { ChatProps } from "@/features/ai/chat/types/chat.types"
 import { getChatRoute } from "@/features/ai/chat/utils/chat-routes.utils"
+import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
 import { Spinner } from "@/components/ui/spinner"
 
 export function Chat({ initialChatId = null }: ChatProps) {
@@ -150,23 +151,25 @@ export function Chat({ initialChatId = null }: ChatProps) {
             <Spinner className="size-8" />
           </div>
         ) : (
-          <ChatSession
-            key={sessionClientId}
-            sessionClientId={sessionClientId}
-            isAuthenticated={isAuthenticated}
-            initialDbChatId={activeChatId}
-            initialMessages={initialMessages}
-            onChatCreated={(id) => {
-              setActiveChatId(id)
-              replaceAddressBarPath(getChatRoute(id))
-            }}
-            onConversationUpdated={() => {
-              if (!hasRefetchedChatsForSessionRef.current) {
-                hasRefetchedChatsForSessionRef.current = true
-                void queryClient.invalidateQueries({ queryKey: chatQueryKeys.chats() })
-              }
-            }}
-          />
+          <PromptInputProvider>
+            <ChatSession
+              key={sessionClientId}
+              sessionClientId={sessionClientId}
+              isAuthenticated={isAuthenticated}
+              initialDbChatId={activeChatId}
+              initialMessages={initialMessages}
+              onChatCreated={(id) => {
+                setActiveChatId(id)
+                replaceAddressBarPath(getChatRoute(id))
+              }}
+              onConversationUpdated={() => {
+                if (!hasRefetchedChatsForSessionRef.current) {
+                  hasRefetchedChatsForSessionRef.current = true
+                  void queryClient.invalidateQueries({ queryKey: chatQueryKeys.chats() })
+                }
+              }}
+            />
+          </PromptInputProvider>
         )}
       </main>
     </div>
