@@ -6,6 +6,7 @@ import * as React from "react"
 import { authClient } from "@/lib/auth/auth-client"
 import { ChatDashboardSidebar } from "@/features/ai/chat/components/chat-dashboard-sidebar/chat-dashboard-sidebar.client"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
+import { SidebarUpgradeCta } from "@/features/billing/components/sidebar-upgrade-cta/sidebar-upgrade-cta.client"
 import { SidebarLogo } from "@/components/sidebar-logo"
 import { Button } from "@/components/ui/button"
 import {
@@ -60,7 +61,7 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
           <ChatDashboardSidebar />
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t">
+      <SidebarFooter className="px-0">
         {isSessionPending ? (
           <div className="flex h-12 w-full items-center gap-2 px-2">
             <Skeleton className="size-8 rounded-full" />
@@ -71,8 +72,15 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
             <Skeleton className="size-4 rounded-sm" />
           </div>
         ) : session?.user ? (
-          <div className="flex items-center justify-end">
-            <UserButton user={session.user} />
+          <div className="space-y-2">
+            <div className="px-2">
+              <SidebarUpgradeCta />
+            </div>
+            <div className="border-t pt-2">
+              <div className="flex items-center justify-end">
+                <UserButton user={session.user} />
+              </div>
+            </div>
           </div>
         ) : (
           <Button type="button" variant="outline" onClick={() => authModalContext?.openAuthModal()}>
