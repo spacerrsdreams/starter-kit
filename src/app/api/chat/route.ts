@@ -1,11 +1,20 @@
-import { consumeStream, convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai"
+import "server-only"
+
+import {
+  consumeStream,
+  convertToModelMessages,
+  createIdGenerator,
+  stepCountIs,
+  streamText,
+  validateUIMessages,
+  type UIMessage,
+} from "ai"
 import { z } from "zod"
 
-import { CHAT_MODEL } from "@/lib/ai"
 import { getSessionUserId } from "@/lib/auth/auth"
 import { CHAT_SYSTEM_PROMPT } from "@/features/ai/chat/constants/chat-system-prompt"
 import {
-  chatExists,
+  getChatWithMessages,
   maybeGenerateAiChatTitle,
   replaceMessagesForChat,
 } from "@/features/ai/chat/repositories/chat.repository"
@@ -14,7 +23,12 @@ export const maxDuration = 300
 
 const requestSchema = z.object({
   chatId: z.string().min(1),
-  messages: z.array(z.unknown()),
+  message: z.unknown().optional(),
+})
+
+const generateMessageId = createIdGenerator({
+  prefix: "msg",
+  size: 16,
 })
 
 export async function POST(req: Request) {
@@ -36,21 +50,22 @@ export async function POST(req: Request) {
     })
   }
 
-  const { chatId, messages: rawMessages } = parsed.data
-
-  const exists = await chatExists(chatId, userId)
-
-  if (!exists) {
+  const { chatId, message } = parsed.data
+  const chat = await getChatWithMessages(chatId, userId)
+  if (!chat) {
     return new Response(JSON.stringify({ error: "Chat not found" }), {
       status: 404,
       headers: { "Content-Type": "application/json" },
     })
   }
 
-  const messages = rawMessages as UIMessage[]
+  const candidateMessages = message ? [...chat.messages, message] : chat.messages
+  const messages = await validateUIMessages<UIMessage>({
+    messages: candidateMessages,
+  })
 
   const result = streamText({
-    model: CHAT_MODEL,
+    model: "anthropic/claude-3.7-sonnet",
     system: CHAT_SYSTEM_PROMPT,
     messages: await convertToModelMessages(messages),
     stopWhen: stepCountIs(5),
@@ -58,10 +73,12 @@ export async function POST(req: Request) {
 
   return result.toUIMessageStreamResponse({
     originalMessages: messages,
+    sendSources: true,
+    generateMessageId,
+    consumeSseStream: consumeStream,
     onFinish: async ({ messages: finalMessages }) => {
       await replaceMessagesForChat(chatId, userId, finalMessages)
       await maybeGenerateAiChatTitle(chatId, userId, finalMessages)
     },
-    consumeSseStream: consumeStream,
   })
 }

@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { AssistantThinkingIndicator } from "@/features/ai/chat/components/chat-session/assistant-thinking-indicator"
 import { ChatExamplePrompts } from "@/features/ai/chat/components/chat-session/chat-example-prompts"
+import { ChatSessionAssistantMessage } from "@/features/ai/chat/components/chat-session/chat-session-assistant-message"
 import { useMutateCreateChat } from "@/features/ai/chat/hooks/use-mutate-create-chat"
 import { useChatAuthRequiredStore } from "@/features/ai/chat/store/chat-auth-required.store"
 import type { ChatSessionProps } from "@/features/ai/chat/types/chat-session.types"
@@ -41,9 +42,7 @@ export function ChatSession({
   const [transportApi] = useState(() => createStableChatTransport())
   const createChatMutation = useMutateCreateChat()
   const { openAuthModal } = useAuthRequiredModal()
-  const pendingPrompt = useChatAuthRequiredStore((state) => state.pendingPrompt)
-  const setPendingPrompt = useChatAuthRequiredStore((state) => state.setPendingPrompt)
-  const clearPendingPrompt = useChatAuthRequiredStore((state) => state.clearPendingPrompt)
+  const { pendingPrompt, setPendingPrompt, clearPendingPrompt } = useChatAuthRequiredStore((state) => state)
 
   useEffect(() => {
     transportApi.setChatId(initialDbChatId)
@@ -134,39 +133,52 @@ export function ChatSession({
             </ConversationEmptyState>
           ) : null}
 
-          {messages.map((message, index) => (
-            <Message
-              key={message.id}
-              from={message.role}
-              className={cn(message.role === "user" && "w-fit max-w-[min(100%,32rem)] justify-end")}
-            >
-              <MessageContent
-                className={cn(
-                  message.role === "user" ? "min-w-0 flex-col gap-3" : "flex w-full min-w-0 flex-col gap-3"
-                )}
+          {messages.map((message, index) => {
+            if (message.role === "assistant") {
+              return (
+                <ChatSessionAssistantMessage
+                  key={message.id}
+                  message={message}
+                  isAnimating={status === "streaming" && index === lastIndex}
+                />
+              )
+            }
+
+            return (
+              <Message
+                key={message.id}
+                from={message.role}
+                className={cn(message.role === "user" && "w-fit max-w-[min(100%,32rem)] justify-end")}
               >
-                {message.parts.map((part, partIndex) => {
-                  if (part.type !== "text") {
-                    return null
-                  }
-                  const isUser = message.role === "user"
-                  return (
-                    <div
-                      key={partIndex}
-                      className={cn("block min-w-0 shrink-0", isUser ? "max-w-full" : "w-full min-w-0")}
-                    >
-                      <MessageResponse
-                        className={cn("block min-w-0", isUser ? "max-w-full" : "w-full")}
-                        isAnimating={status === "streaming" && index === lastIndex && message.role === "assistant"}
+                <MessageContent
+                  className={cn(
+                    message.role === "user" ? "min-w-0 flex-col gap-3" : "flex w-full min-w-0 flex-col gap-3"
+                  )}
+                >
+                  {message.parts.map((part, partIndex) => {
+                    if (part.type !== "text") {
+                      return null
+                    }
+                    const isUser = message.role === "user"
+
+                    return (
+                      <div
+                        key={partIndex}
+                        className={cn("block min-w-0 shrink-0", isUser ? "max-w-full" : "w-full min-w-0")}
                       >
-                        {part.text}
-                      </MessageResponse>
-                    </div>
-                  )
-                })}
-              </MessageContent>
-            </Message>
-          ))}
+                        <MessageResponse
+                          className={cn("block min-w-0", isUser ? "max-w-full" : "w-full")}
+                          isAnimating={status === "streaming" && index === lastIndex && message.role === "assistant"}
+                        >
+                          {part.text}
+                        </MessageResponse>
+                      </div>
+                    )
+                  })}
+                </MessageContent>
+              </Message>
+            )
+          })}
 
           {status === "submitted" ? (
             <Message from="assistant">
