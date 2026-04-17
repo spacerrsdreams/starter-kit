@@ -1,4 +1,3 @@
-import { SparklesIcon } from "lucide-react"
 import Link from "next/link"
 
 import { SiteConfig } from "@/lib/site.config"

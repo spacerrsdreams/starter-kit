@@ -2,36 +2,22 @@
 
 import { PlusIcon } from "lucide-react"
 import type { Route } from "next"
-import dynamic from "next/dynamic"
 import { usePathname, useRouter } from "next/navigation"
 
-import { authClient } from "@/lib/auth/auth-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
-import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
 import { SidebarLogo } from "@/components/sidebar-logo"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
-const UserButton = dynamic(() => import("@/features/auth/components/user-button").then((module) => module.UserButton), {
-  ssr: false,
-  loading: () => null,
-})
-
 export function DashboardHeader() {
   const pathname = usePathname()
   const router = useRouter()
-  const { data: session } = authClient.useSession()
-  const authModalContext = useAuthRequiredModal()
   const currentRoute = Object.values(WebRoutes).find((route) => route.path === pathname)
   const currentLabel = currentRoute?.label ?? "Dashboard"
   const isAskAiRoute = pathname === WebRoutes.askAi.path || pathname.startsWith(`${WebRoutes.askAi.path}/`)
-
-  const handleSignInClick = () => {
-    authModalContext?.openAuthModal()
-  }
 
   const handleNewChatClick = () => {
     window.dispatchEvent(new CustomEvent(NEW_CHAT_EVENT_NAME))
@@ -63,15 +49,6 @@ export function DashboardHeader() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-      </div>
-      <div className="ml-auto hidden items-center gap-3 pr-4 md:flex">
-        {session?.user ? (
-          <UserButton user={session.user} />
-        ) : (
-          <Button type="button" className="min-w-20" variant="outline" onClick={handleSignInClick}>
-            Sign in
-          </Button>
-        )}
       </div>
     </header>
   )

@@ -8,4 +8,10 @@ export const ApiRoutes = {
   },
   authSignedIn: "/api/auth/signed-in",
   accountSendVerificationEmail: "/api/account/send-verification-email",
+  billing: {
+    subscription: "/api/billing/subscription",
+    checkoutSession: "/api/billing/checkout-session",
+    portalSession: "/api/billing/portal-session",
+    webhook: "/api/billing/webhook",
+  },
 } as const

@@ -10,21 +10,21 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
-      <Suspense fallback={<div />}>
-        <Sidebar />
-      </Suspense>
-      <SidebarInset className="pb-24 md:pb-0">
-        <Suspense fallback={null}>
-          <AuthRequiredModalProvider>
+    <AuthRequiredModalProvider>
+      <SidebarProvider>
+        <Suspense fallback={<div />}>
+          <Sidebar />
+        </Suspense>
+        <SidebarInset className="pb-24 md:pb-0">
+          <Suspense fallback={null}>
             <DashboardHeader />
             <MobileBottomNav />
             <SettingsDialogGlobalBridge />
             <AiWidgetLazy />
             {children}
-          </AuthRequiredModalProvider>
-        </Suspense>
-      </SidebarInset>
-    </SidebarProvider>
+          </Suspense>
+        </SidebarInset>
+      </SidebarProvider>
+    </AuthRequiredModalProvider>
   )
 }

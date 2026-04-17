@@ -3,7 +3,7 @@
 import { useChat } from "@ai-sdk/react"
 import type { FileUIPart } from "ai"
 import { ArrowUpIcon, PlusIcon } from "lucide-react"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { cn } from "@/lib/utils"
 import { AssistantThinkingIndicator } from "@/features/ai/chat/components/chat-session/assistant-thinking-indicator"
@@ -41,7 +41,6 @@ import {
   usePromptInputAttachments,
   usePromptInputController,
 } from "@/components/ai-elements/prompt-input"
-import { SpeechInput } from "@/components/ai-elements/speech-input"
 import { LogoIcon } from "@/components/ui/icons/logo"
 
 export function ChatSession({
@@ -55,7 +54,6 @@ export function ChatSession({
   onChatCreated,
   onConversationUpdated,
 }: ChatSessionProps) {
-  const [transcript, setTranscript] = useState("")
   const [transportApi] = useState(() => createStableChatTransport())
   const createChatMutation = useMutateCreateChat()
   const attachments = usePromptInputAttachments()
@@ -140,15 +138,6 @@ export function ChatSession({
   const isSubmitPrimary = hasPendingInput && !isGenerating
   const isSubmitVisuallyDisabled = !hasPendingInput && !isGenerating
 
-  const isSpeechInputDisabled = isGenerating || createChatMutation.isPending
-
-  const handleTranscriptionChange = useCallback((text: string) => {
-    setTranscript((prev) => {
-      const newText = prev ? `${prev} ${text}` : text
-      return newText
-    })
-  }, [])
-
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
       <Conversation className="min-h-0 flex-1 overflow-hidden">
@@ -229,13 +218,6 @@ export function ChatSession({
           </PromptInputTools>
           <PromptInputTextarea className="min-h-auto" placeholder="Ask me anything..." />
           <div className="order-last flex items-center gap-1 self-end p-2">
-            <SpeechInput
-              aria-label="Capture speech and send message"
-              // onAudioRecorded={handleAudioRecorded}
-              onTranscriptionChange={handleTranscriptionChange}
-              size="icon"
-              variant="outline"
-            />
             <PromptInputSubmit
               aria-disabled={isSubmitVisuallyDisabled}
               className={cn(

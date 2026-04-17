@@ -12,6 +12,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   chats         Chat[]
+  billingSubscription BillingSubscription?
   deactivationFeedbacks DeactivationFeedback[]
 
   @@unique([email])

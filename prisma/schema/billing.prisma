@@ -1,0 +1,16 @@
+model BillingSubscription {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeCustomerId   String   @unique
+  stripeSubscriptionId String?  @unique
+  stripePriceId      String?
+  stripeStatus       String?
+  currentPeriodEnd   DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([stripeSubscriptionId])
+  @@index([stripeCustomerId, stripeStatus])
+  @@map("billing_subscription")
+}
