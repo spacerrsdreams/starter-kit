@@ -18,7 +18,18 @@ const eslintConfig = defineConfig([
 
   {
     rules: {
+      "no-nested-ternary": "error",
       "react-hooks/set-state-in-effect": "off",
+      "@typescript-eslint/ban-ts-comment": [
+        "error",
+        {
+          "ts-check": false,
+          "ts-expect-error": "allow-with-description",
+          "ts-ignore": "allow-with-description",
+          "ts-nocheck": true,
+          minimumDescriptionLength: 3,
+        },
+      ],
     },
   },
 
@@ -29,7 +40,6 @@ const eslintConfig = defineConfig([
       "react-hooks/immutability": "off",
       "react-hooks/static-components": "off",
       "react/no-children-prop": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
     },
   },
 
