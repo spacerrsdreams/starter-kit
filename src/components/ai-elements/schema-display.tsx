@@ -80,6 +80,7 @@ export const SchemaDisplayPath = ({ className, children, ...props }: SchemaDispl
   return (
     <span
       className={cn("font-mono text-sm", className)}
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       dangerouslySetInnerHTML={{ __html: children ?? highlightedPath }}
       {...props}

@@ -99,6 +99,7 @@ export function RequestPasswordResetForm() {
 
   const isDeactivated = requestErrorCode === ACCOUNT_DEACTIVATED
   const requestErrorLabel = requestErrorCode ? getRequestPasswordResetErrorMessage(requestErrorCode) : null
+  // eslint-disable-next-line no-nested-ternary
   const cardDescription = isDeactivated ? null : emailSent ? texts.emailSentDescription : texts.requestResetDescription
 
   return (

@@ -86,6 +86,17 @@ export function SettingsAccountSection() {
     setIsSendingVerification(false)
   }
 
+  let verificationButtonLabel: string
+  if (isSendingVerification) {
+    verificationButtonLabel = "Sending..."
+  } else if (resendCooldown > 0) {
+    verificationButtonLabel = `Resend verification in ${formatResendTime(resendCooldown)}`
+  } else if (hasSentVerification) {
+    verificationButtonLabel = "Resend verification email"
+  } else {
+    verificationButtonLabel = "Send verification email"
+  }
+
   return (
     <div className="flex flex-col gap-6 pt-4">
       <SettingsAccountSectionLayout
@@ -124,13 +135,7 @@ export function SettingsAccountSection() {
                 onClick={() => void handleSendVerification()}
                 disabled={isSendingVerification || resendCooldown > 0}
               >
-                {isSendingVerification
-                  ? "Sending..."
-                  : resendCooldown > 0
-                    ? `Resend verification in ${formatResendTime(resendCooldown)}`
-                    : hasSentVerification
-                      ? "Resend verification email"
-                      : "Send verification email"}
+                {verificationButtonLabel}
               </Button>
               {verificationError && <p className="text-sm text-destructive">{verificationError}</p>}
             </div>
