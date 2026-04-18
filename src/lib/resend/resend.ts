@@ -29,7 +29,7 @@ export async function sendMail(options: SendMailOptions): Promise<void> {
   }
 
   const { error } = await resend.emails.send({
-    from: "noreply@imulogy.com",
+    from: process.env.RESEND_FROM_EMAIL!,
     to: options.to,
     subject: options.subject,
     react: options.react,

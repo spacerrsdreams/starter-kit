@@ -15,8 +15,6 @@ export const signUpWithEmailAndPasswordSchema = z
     email: z.email("Invalid email address"),
     password: passwordSchema,
     confirmPassword: passwordSchema,
-    notificationsEmailMarketing: z.boolean(),
-    notificationsEmailPersonalized: z.boolean(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],

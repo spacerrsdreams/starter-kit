@@ -16,7 +16,6 @@ import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
 import { UNKNOWN_ERROR_CODE } from "@/features/auth/constants"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field"
 import { GoogleIcon } from "@/components/ui/icons/google.icon"
@@ -39,7 +38,6 @@ const texts = {
   password: "Password",
   passwordPlaceholder: "Create a password",
   confirmPassword: "Confirm password",
-  confirmPasswordPlaceholder: "Re-enter your password",
   hidePassword: "Hide password",
   showPassword: "Show password",
   genericError: "An error occurred, please try again",
@@ -49,10 +47,6 @@ const texts = {
   termsOfService: "Terms of Service",
   privacyPolicy: "Privacy Policy",
   alreadyHaveAccount: "Already have an account?",
-  personalizedEmails: "Personalized emails",
-  personalizedEmailsDescription: "Receive product reminders and service updates.",
-  marketingEmails: "Marketing emails",
-  marketingEmailsDescription: "Receive promotions and feature announcements.",
 }
 
 export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
@@ -68,8 +62,6 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
       email: "",
       password: "",
       confirmPassword: "",
-      notificationsEmailMarketing: true,
-      notificationsEmailPersonalized: true,
     },
   })
 
@@ -84,15 +76,13 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
         email: values.email,
         password: values.password,
         confirmPassword: values.confirmPassword,
-        notificationsEmailMarketing: values.notificationsEmailMarketing,
-        notificationsEmailPersonalized: values.notificationsEmailPersonalized,
         embedded: true,
       })
       if (result.ok) {
         await refetchSession()
         await updateNotificationPreferencesAction({
-          notificationsEmailMarketing: values.notificationsEmailMarketing,
-          notificationsEmailPersonalized: values.notificationsEmailPersonalized,
+          notificationsEmailMarketing: true,
+          notificationsEmailPersonalized: true,
         })
         onSuccess()
         return
@@ -114,8 +104,12 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
     })
   }
 
-  const errorMessage =
-    errorCode === "USER_ALREADY_EXISTS" ? texts.userAlreadyExists : errorCode ? texts.genericError : null
+  let errorMessage: string | null = null
+  if (errorCode === "USER_ALREADY_EXISTS") {
+    errorMessage = texts.userAlreadyExists
+  } else if (errorCode) {
+    errorMessage = texts.genericError
+  }
   const emailValue = form.watch("email")
   const isSubmitDisabled = isLoading || googleLoading
 
@@ -165,11 +159,11 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
           <FieldLabel htmlFor="password">{texts.password}</FieldLabel>
           <div className="relative">
             <Input
+              placeholder="**********"
               id="password"
               type={passwordVisible ? "text" : "password"}
               autoComplete="new-password"
               required
-              placeholder={texts.passwordPlaceholder}
               className="pr-10"
               {...form.register("password", { onChange: clearErrorCode })}
             />
@@ -194,10 +188,10 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
           <div className="relative">
             <Input
               id="confirmPassword"
+              placeholder="**********"
               type={passwordVisible ? "text" : "password"}
               autoComplete="new-password"
               required
-              placeholder={texts.confirmPasswordPlaceholder}
               className="pr-10"
               {...form.register("confirmPassword", { onChange: clearErrorCode })}
             />
@@ -216,26 +210,6 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
           {form.formState.errors.confirmPassword?.message && (
             <FieldError errors={[{ message: form.formState.errors.confirmPassword.message }]} />
           )}
-        </Field>
-        <Field className="mt-1 rounded-xl border p-3">
-          <div className="flex items-start gap-3">
-            <Checkbox
-              id="notificationsEmailPersonalized"
-              checked={form.watch("notificationsEmailPersonalized")}
-              onCheckedChange={(checked) => form.setValue("notificationsEmailPersonalized", checked === true)}
-            />
-            <FieldDescription className="text-xs">{texts.personalizedEmailsDescription}</FieldDescription>
-          </div>
-        </Field>
-        <Field className="rounded-xl border p-3">
-          <div className="flex items-start gap-3">
-            <Checkbox
-              id="notificationsEmailMarketing"
-              checked={form.watch("notificationsEmailMarketing")}
-              onCheckedChange={(checked) => form.setValue("notificationsEmailMarketing", checked === true)}
-            />
-            <FieldDescription className="text-xs">{texts.marketingEmailsDescription}</FieldDescription>
-          </div>
         </Field>
         <Field>
           <Button

@@ -226,6 +226,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword }: Si
               type={showPassword ? "text" : "password"}
               aria-invalid={Boolean(form.formState.errors.password)}
               autoComplete="current-password"
+              placeholder="**********"
               required
               className="pr-10"
               {...form.register("password", {
