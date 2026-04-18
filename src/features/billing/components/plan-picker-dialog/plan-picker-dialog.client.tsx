@@ -38,7 +38,7 @@ export function PlanPickerDialog({ open, onOpenChange, isBillingLoading, onSelec
                 onCheckedChange={setIsYearly}
                 disabled={isBillingLoading}
                 aria-label="Billing cycle"
-                className="border-border data-checked:bg-accent-1 data-checked:**:data-[slot=switch-thumb]:bg-white data-unchecked:bg-sidebar data-unchecked:**:data-[slot=switch-thumb]:bg-black"
+                className="border-border px-2 py-1 data-[size=default]:h-7 data-[size=default]:w-14 data-checked:bg-accent-1 data-checked:**:data-[slot=switch-thumb]:bg-white data-checked:**:data-[slot=switch-thumb]:translate-x-6 data-unchecked:bg-sidebar data-unchecked:**:data-[slot=switch-thumb]:bg-black data-unchecked:**:data-[slot=switch-thumb]:translate-x-0"
               />
               <span className="text-sm font-medium">Yearly</span>
               <span className="bg-acent-1 rounded-full px-2.5 py-1 text-xs font-medium text-white">SAVE 20%</span>

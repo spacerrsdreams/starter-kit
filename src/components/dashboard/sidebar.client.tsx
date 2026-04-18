@@ -36,7 +36,7 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup className="space-y-1">
+        <SidebarGroup className="flex min-h-0 flex-1 flex-col space-y-1">
           <div className="hidden md:block">
             <SearchForm />
           </div>

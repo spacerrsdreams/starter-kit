@@ -5,7 +5,7 @@
     "": {
       "name": "starter-kit",
       "dependencies": {
-        "@ai-sdk/react": "^3.0.166",
+        "@ai-sdk/react": "^3.0.170",
         "@base-ui/react": "^1.4.0",
         "@hookform/resolvers": "^5.2.2",
         "@prisma/adapter-neon": "^7.7.0",
@@ -39,7 +39,7 @@
         "@radix-ui/react-use-controllable-state": "^1.2.2",
         "@radix-ui/react-visually-hidden": "^1.2.4",
         "@react-email/components": "^1.0.12",
-        "@rive-app/react-webgl2": "^4.28.0",
+        "@rive-app/react-webgl2": "^4.28.1",
         "@streamdown/cjk": "^1.0.3",
         "@streamdown/code": "^1.1.1",
         "@streamdown/math": "^1.0.2",
@@ -47,7 +47,7 @@
         "@tanstack/eslint-plugin-query": "^5.99.0",
         "@tanstack/react-query": "^5.99.0",
         "@xyflow/react": "^12.10.2",
-        "ai": "^6.0.164",
+        "ai": "^6.0.168",
         "ansi-to-react": "^6.2.6",
         "better-auth": "^1.6.5",
         "class-variance-authority": "^0.7.1",
@@ -57,6 +57,7 @@
         "dotenv-cli": "^11.0.0",
         "embla-carousel-react": "^8.6.0",
         "input-otp": "^1.4.2",
+        "lenis": "^1.3.23",
         "lucide-react": "^1.8.0",
         "media-chrome": "^4.19.0",
         "motion": "^12.38.0",
@@ -74,7 +75,7 @@
         "recharts": "3.8.1",
         "resend": "^6.12.0",
         "server-only": "^0.0.1",
-        "shadcn": "^4.2.0",
+        "shadcn": "^4.3.0",
         "shiki": "^4.0.2",
         "sonner": "^2.0.7",
         "streamdown": "^2.5.0",
@@ -1629,6 +1630,8 @@
     "layout-base": ["layout-base@1.0.2", "", {}, "sha512-8h2oVEZNktL4BH2JCOI90iD1yXwL6iNW7KcCKT2QZgQJR2vbqDsldCTPRU9NifTCqHZci57XvQQ15YTu+sTYPg=="],
 
     "leac": ["leac@0.6.0", "", {}, "sha512-y+SqErxb8h7nE/fiEX07jsbuhrpO9lL8eca7/Y1nuWV2moNlXhyd59iDGcRf6moVyDMbmTNzL40SUyrFU/yDpg=="],
+
+    "lenis": ["lenis@1.3.23", "", { "peerDependencies": { "@nuxt/kit": ">=3.0.0", "react": ">=17.0.0", "vue": ">=3.0.0" }, "optionalPeers": ["@nuxt/kit", "react", "vue"] }, "sha512-YxYq3TJqj9sJNv0V9SkyQHejt14xwyIwgDaaMK89Uf9SxQfIszu+gTQSSphh6BWlLTNVKvvXAGkg+Zf+oFIevg=="],
 
     "levn": ["levn@0.4.1", "", { "dependencies": { "prelude-ls": "^1.2.1", "type-check": "~0.4.0" } }, "sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ=="],
 

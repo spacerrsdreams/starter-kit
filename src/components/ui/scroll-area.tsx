@@ -13,6 +13,7 @@ function ScrollArea({
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
+      data-lenis-prevent
       className={cn("relative", className)}
       {...props}
     >

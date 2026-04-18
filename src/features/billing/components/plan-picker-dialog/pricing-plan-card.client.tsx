@@ -41,12 +41,12 @@ export function PricingPlanCard({
   return (
     <div
       className={cn(
-        "relative w-90 max-w-90 rounded-lg bg-sidebar px-10 py-8",
+        "relative w-90 max-w-90 overflow-hidden rounded-lg bg-sidebar px-10 py-8",
         isFeatured ? "border-2 border-black" : "border"
       )}
     >
       {isFeatured ? (
-        <span className="absolute top-0 right-0 rounded-tr-2xl rounded-bl-2xl bg-primary px-4 py-2 text-xs font-medium tracking-wider text-white">
+        <span className="absolute top-0 right-0 rounded-bl-md bg-primary p-2.5 text-xs! font-medium text-white">
           MOST POPULAR
         </span>
       ) : null}

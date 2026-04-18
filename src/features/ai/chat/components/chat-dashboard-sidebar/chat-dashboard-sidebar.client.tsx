@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronRight, EllipsisIcon, LinkIcon, PlusIcon, SparklesIcon, Trash2Icon } from "lucide-react"
+import { ChevronRight, EllipsisIcon, LinkIcon, PlusIcon, SparklesIcon, SquarePenIcon, Trash2Icon } from "lucide-react"
 import { Route } from "next"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -66,7 +66,7 @@ export function ChatDashboardSidebar() {
 
   return (
     <>
-      <Collapsible defaultOpen={isAskAiRoute} className="group/collapsible">
+      <Collapsible defaultOpen={isAskAiRoute} className="group/collapsible flex min-h-0 flex-1 flex-col">
         <SidebarMenu>
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
@@ -78,15 +78,16 @@ export function ChatDashboardSidebar() {
             </CollapsibleTrigger>
           </SidebarMenuItem>
         </SidebarMenu>
-        <CollapsibleContent>
-          <SidebarGroupContent className="pt-1 pl-1">
-            <SidebarMenu className="max-h-64 overflow-y-auto">
+        <CollapsibleContent className="min-h-0 flex-1">
+          <SidebarGroupContent className="flex min-h-0 flex-1 pt-1 pl-1">
+            <SidebarMenu className="min-h-0 flex-1 overflow-y-auto">
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === WebRoutes.askAi.path && !activeChatId ? true : undefined}
                 >
                   <button type="button" className="flex w-full items-center gap-2" onClick={handleStartNewChat}>
+                    <SquarePenIcon className="size-4" />
                     <span>New Chat</span>
                     <PlusIcon className="ml-auto size-4" />
                   </button>
