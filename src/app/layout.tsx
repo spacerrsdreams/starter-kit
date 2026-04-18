@@ -1,7 +1,7 @@
 import "@/app/globals.css"
 
 import type { Metadata } from "next"
-import { Nunito_Sans } from "next/font/google"
+import { Inter } from "next/font/google"
 
 import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
@@ -11,11 +11,10 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { QueryClientProviderWrapper } from "@/providers/query-client.provider"
 import { ThemeProvider } from "@/providers/theme.provider"
 
-const fontSans = Nunito_Sans({
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
-  fallback: ["system-ui", "arial"],
   preload: true,
 })
 
@@ -33,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans antialiased", fontSans.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans antialiased", inter.variable)}>
       <body>
         <ThemeProvider>
           <QueryClientProviderWrapper>

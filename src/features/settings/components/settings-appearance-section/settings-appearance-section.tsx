@@ -20,7 +20,7 @@ export function SettingsAppearanceSection() {
           )}
         </div>
         <div className="space-y-0.5">
-          <h3 className="text-sm leading-none font-semibold text-foreground">Theme</h3>
+          <h3 className="text-sm leading-none font-medium text-foreground">Theme</h3>
           <p className="text-xs leading-relaxed text-muted-foreground">Choose how the app looks for your account.</p>
         </div>
       </div>

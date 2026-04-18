@@ -14,7 +14,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-8 text-center">
       <div className="flex max-w-lg flex-col items-center">
-        <h1 className="mb-4 text-3xl font-semibold text-foreground sm:text-4xl">Something went wrong</h1>
+        <h1 className="mb-4 text-3xl font-medium text-foreground sm:text-4xl">Something went wrong</h1>
         <p className="mb-8 text-sm text-muted-foreground sm:text-base">
           If the problem persists, please contact support.
         </p>

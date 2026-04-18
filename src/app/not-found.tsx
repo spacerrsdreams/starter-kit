@@ -7,8 +7,8 @@ export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-8 text-center">
       <div className="flex max-w-lg flex-col items-center">
-        <h1 className="mb-2 text-4xl font-semibold text-foreground">404</h1>
-        <h2 className="mb-3 text-xl font-semibold text-foreground sm:text-2xl">Page not found</h2>
+        <h1 className="mb-2 text-4xl font-medium text-foreground">404</h1>
+        <h2 className="mb-3 text-xl font-medium text-foreground sm:text-2xl">Page not found</h2>
         <p className="mb-8 text-sm text-muted-foreground sm:text-base">
           The page you are looking for does not exist or has been moved.
         </p>

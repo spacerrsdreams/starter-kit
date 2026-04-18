@@ -20,7 +20,7 @@ export function SidebarLogo({ showTitle = true }: LogoProps) {
         <LogoIcon />
         {showTitle && (
           <div className="flex flex-col gap-0.5 leading-none">
-            <span className="font-semibold">{SiteConfig.name}</span>
+            <span className="font-medium">{SiteConfig.name}</span>
           </div>
         )}
       </Link>

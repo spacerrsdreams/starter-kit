@@ -24,7 +24,7 @@ export function DeactivationFeedbackPage({ hasError }: DeactivationFeedbackPageP
   return (
     <div className="w-full max-w-xl rounded-2xl border bg-background p-6 shadow-sm">
       <div className="mb-5 space-y-1.5 text-center">
-        <h1 className="flex items-center justify-center gap-2 text-xl font-semibold">{texts.title}</h1>
+        <h1 className="flex items-center justify-center gap-2 text-xl font-medium">{texts.title}</h1>
         <p className="text-sm text-muted-foreground">{texts.description}</p>
       </div>
       <form action={submitDeactivationFeedbackAction} className="space-y-4">

@@ -47,7 +47,7 @@ export const WelcomeEmailTemplate = ({ firstName }: WelcomeEmailTemplateProps) =
               alt={SiteConfig.name}
             />
 
-            <Text className="mt-4 text-xl font-semibold">
+            <Text className="mt-4 text-xl font-medium">
               {m.welcomeTitle} {firstName === "Anonymous" ? "" : `${firstName}!`}
             </Text>
             <Text className="mt-2 leading-relaxed">{m.thanks}</Text>
