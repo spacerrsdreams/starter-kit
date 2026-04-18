@@ -28,20 +28,20 @@ export function PlanPickerDialog({ open, onOpenChange, isBillingLoading, onSelec
               <Database className="size-3.5" />
               Pricing
             </div>
-            <DialogTitle className="mt-4 text-3xl font-medium tracking-tight text-balance sm:text-5xl">
+            <DialogTitle className="mt-4 text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
               Choose the Perfect Plan
             </DialogTitle>
-            <DialogDescription className="mt-16 flex items-center gap-3">
+            <DialogDescription className="mt-16 flex w-full items-center justify-center gap-3">
               <span className="text-sm font-medium">Monthly</span>
               <Switch
                 checked={isYearly}
                 onCheckedChange={setIsYearly}
                 disabled={isBillingLoading}
                 aria-label="Billing cycle"
-                className="border-border px-2 py-1 data-[size=default]:h-7 data-[size=default]:w-14 data-checked:bg-accent-1 data-checked:**:data-[slot=switch-thumb]:bg-white data-checked:**:data-[slot=switch-thumb]:translate-x-6 data-unchecked:bg-sidebar data-unchecked:**:data-[slot=switch-thumb]:bg-black data-unchecked:**:data-[slot=switch-thumb]:translate-x-0"
+                className="border-border px-2 py-1 data-[size=default]:h-7 data-[size=default]:w-14 data-checked:bg-accent-1 data-checked:**:data-[slot=switch-thumb]:translate-x-6 data-checked:**:data-[slot=switch-thumb]:bg-white data-unchecked:bg-sidebar data-unchecked:**:data-[slot=switch-thumb]:translate-x-0 data-unchecked:**:data-[slot=switch-thumb]:bg-black"
               />
-              <span className="text-sm font-medium">Yearly</span>
-              <span className="bg-acent-1 rounded-full px-2.5 py-1 text-xs font-medium text-white">SAVE 20%</span>
+              <span className="text-sm font-semibold">Yearly</span>
+              <span className="rounded-full bg-accent-1 px-2.5 py-1 text-xs font-medium text-white">SAVE 20%</span>
             </DialogDescription>
           </DialogHeader>
 
