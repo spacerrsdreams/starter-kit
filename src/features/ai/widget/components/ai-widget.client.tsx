@@ -15,6 +15,7 @@ import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-
 import { AiWidgetHistoryDropdown } from "@/features/ai/widget/components/ai-widget-history-dropdown"
 import { AI_WIDGET_EXAMPLE_PROMPTS } from "@/features/ai/widget/constants/ai-widget-example-prompts.constants"
 import type { AiWidgetProps } from "@/features/ai/widget/types/ai-widget.types"
+import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Spinner } from "@/components/ui/spinner"
@@ -40,7 +41,7 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
   const initialMessages: UIMessage[] = hydratedFromServer && chatDetailQuery.data ? chatDetailQuery.data.messages : []
   const waitingForChatDetail =
     isAuthenticated && Boolean(activeChatId) && hydratedFromServer && chatDetailQuery.isPending
-  const isAskAiRoute = pathname === "/ai" || pathname.startsWith("/ai/")
+  const isWidgetLoading = isSessionPending || !sessionClientId || waitingForChatDetail
 
   useEffect(() => {
     if (!sessionClientId) {
@@ -75,6 +76,8 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
     setActiveChatId(null)
     setSessionClientId(crypto.randomUUID())
   }
+
+  const isAskAiRoute = pathname === "/ai" || pathname.startsWith("/ai/")
 
   if (isAskAiRoute) {
     return null
@@ -163,34 +166,32 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
             </div>
           </div>
           <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-            {isSessionPending || !sessionClientId ? (
-              <div className="flex min-h-0 flex-1 items-center justify-center">
-                <Spinner className="size-7" />
-              </div>
-            ) : waitingForChatDetail ? (
+            {isWidgetLoading ? (
               <div className="flex min-h-0 flex-1 items-center justify-center">
                 <Spinner className="size-7" />
               </div>
             ) : (
-              <ChatSession
-                key={sessionClientId}
-                sessionClientId={sessionClientId}
-                isAuthenticated={isAuthenticated}
-                initialDbChatId={activeChatId}
-                initialMessages={initialMessages}
-                examplePrompts={AI_WIDGET_EXAMPLE_PROMPTS}
-                examplePromptsLayout="single-column"
-                compactMode
-                onChatCreated={(id) => {
-                  setActiveChatId(id)
-                }}
-                onConversationUpdated={() => {
-                  if (!hasRefetchedChatsForSessionRef.current) {
-                    hasRefetchedChatsForSessionRef.current = true
-                    void queryClient.invalidateQueries({ queryKey: chatQueryKeys.chats() })
-                  }
-                }}
-              />
+              <PromptInputProvider>
+                <ChatSession
+                  key={sessionClientId}
+                  sessionClientId={sessionClientId}
+                  isAuthenticated={isAuthenticated}
+                  initialDbChatId={activeChatId}
+                  initialMessages={initialMessages}
+                  examplePrompts={AI_WIDGET_EXAMPLE_PROMPTS}
+                  examplePromptsLayout="single-column"
+                  compactMode
+                  onChatCreated={(id) => {
+                    setActiveChatId(id)
+                  }}
+                  onConversationUpdated={() => {
+                    if (!hasRefetchedChatsForSessionRef.current) {
+                      hasRefetchedChatsForSessionRef.current = true
+                      void queryClient.invalidateQueries({ queryKey: chatQueryKeys.chats() })
+                    }
+                  }}
+                />
+              </PromptInputProvider>
             )}
           </div>
         </div>
