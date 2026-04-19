@@ -25,8 +25,8 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
   const { data: session, isPending: isSessionPending } = authClient.useSession()
 
   return (
-    <SidebarComponent className="border-r-0" {...props}>
-      <SidebarHeader className="border-b pb-0">
+    <SidebarComponent {...props}>
+      <SidebarHeader className="pb-0">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg">

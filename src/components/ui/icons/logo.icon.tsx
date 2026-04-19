@@ -6,7 +6,7 @@ export function LogoIcon({ size = 16 }: { size?: number }) {
 
   return (
     <div
-      className="flex aspect-square items-center justify-center rounded-md bg-foreground text-background"
+      className="flex aspect-square items-center justify-center rounded-sm bg-foreground text-background"
       style={{ height: containerSize, width: containerSize }}
     >
       <LogoSvg iconSize={iconSize} />

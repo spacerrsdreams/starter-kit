@@ -17,7 +17,7 @@ export function SidebarLogo({ showTitle = true }: LogoProps) {
         className="flex items-center gap-2"
         aria-label={`Go to ${SiteConfig.name} home page`}
       >
-        <LogoIcon size={16} />
+        <LogoIcon size={14} />
         {showTitle && (
           <div className="flex flex-col gap-0.5 leading-none">
             <span className="font-medium">{SiteConfig.name}</span>
