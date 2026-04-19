@@ -2,8 +2,7 @@
 
 import { useChat } from "@ai-sdk/react"
 import type { FileUIPart } from "ai"
-import { ArrowUpIcon, PlusIcon } from "lucide-react"
-import { useCallback, useEffect, useState } from "react"
+import { memo, useCallback, useEffect, useState } from "react"
 
 import { cn } from "@/lib/utils"
 import { AssistantThinkingIndicator } from "@/features/ai/chat/components/chat-session/assistant-thinking-indicator"
@@ -15,13 +14,7 @@ import { useChatAuthRequiredStore } from "@/features/ai/chat/store/chat-auth-req
 import type { ChatSessionProps } from "@/features/ai/chat/types/chat-session.types"
 import { createStableChatTransport } from "@/features/ai/chat/utils/stable-chat-transport"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
-import {
-  Attachment,
-  AttachmentInfo,
-  AttachmentPreview,
-  AttachmentRemove,
-  Attachments,
-} from "@/components/ai-elements/attachments"
+import { Attachment, AttachmentPreview, AttachmentRemove, Attachments } from "@/components/ai-elements/attachments"
 import {
   Conversation,
   ConversationContent,
@@ -29,19 +22,10 @@ import {
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation"
 import { Message, MessageContent } from "@/components/ai-elements/message"
-import {
-  PromptInput,
-  PromptInputActionAddAttachments,
-  PromptInputActionMenu,
-  PromptInputActionMenuContent,
-  PromptInputActionMenuTrigger,
-  PromptInputSubmit,
-  PromptInputTextarea,
-  PromptInputTools,
-  usePromptInputAttachments,
-  usePromptInputController,
-} from "@/components/ai-elements/prompt-input"
+import { usePromptInputAttachments, usePromptInputController } from "@/components/ai-elements/prompt-input"
 import { LogoIcon } from "@/components/ui/icons/logo"
+
+import { ChatInputForm } from "./chat-input-form"
 
 export function ChatSession({
   sessionClientId,
@@ -183,7 +167,7 @@ export function ChatSession({
         <ConversationScrollButton />
       </Conversation>
 
-      <div className={cn("shrink-0 bg-background px-4 pt-3 pb-1 md:pb-8", messages.length === 0 ? "pt-2" : undefined)}>
+      <div className={cn("shrink-0 px-4 pt-3 pb-1 md:pb-8", messages.length === 0 ? "pt-2" : undefined)}>
         {messages.length === 0 ? (
           <ChatExamplePrompts
             disabled={isGenerating || createChatMutation.isPending}
@@ -194,43 +178,7 @@ export function ChatSession({
             }}
           />
         ) : null}
-        <PromptInput onSubmit={handleSubmit}>
-          {attachments.files.length > 0 ? (
-            <Attachments className="w-full justify-start px-3 pt-3" variant="inline">
-              {attachments.files.map((file) => (
-                <Attachment data={file} key={file.id} onRemove={() => attachments.remove(file.id)}>
-                  <AttachmentPreview />
-                  <AttachmentInfo />
-                  <AttachmentRemove />
-                </Attachment>
-              ))}
-            </Attachments>
-          ) : null}
-          <PromptInputTools className="order-first self-end p-2">
-            <PromptInputActionMenu>
-              <PromptInputActionMenuTrigger tooltip="Add attachment">
-                <PlusIcon className="size-4" />
-              </PromptInputActionMenuTrigger>
-              <PromptInputActionMenuContent className="w-48">
-                <PromptInputActionAddAttachments className="whitespace-nowrap" />
-              </PromptInputActionMenuContent>
-            </PromptInputActionMenu>
-          </PromptInputTools>
-          <PromptInputTextarea className="min-h-auto" placeholder="Ask me anything..." />
-          <div className="order-last flex items-center gap-1 self-end p-2">
-            <PromptInputSubmit
-              aria-disabled={isSubmitVisuallyDisabled}
-              className={cn(
-                isSubmitPrimary ? "bg-primary text-primary-foreground hover:bg-primary/90" : undefined,
-                isSubmitVisuallyDisabled ? "cursor-not-allowed opacity-50" : undefined
-              )}
-              onStop={stop}
-              status={status}
-            >
-              <ArrowUpIcon className="size-4" />
-            </PromptInputSubmit>
-          </div>
-        </PromptInput>
+        <ChatInputForm onSubmit={handleSubmit} status={status} />
       </div>
     </div>
   )

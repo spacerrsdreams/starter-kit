@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertCircle, LogOut, Settings, SparklesIcon, User } from "lucide-react"
+import { AlertCircle, LogOut, Settings, Sparkles, User } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useTransition } from "react"
@@ -22,17 +22,10 @@ export function MobileBottomNav() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const user = session?.user
 
-  const isActive = (path: string) => {
-    return pathname.startsWith(path)
-  }
+  const askAiPath = WebRoutes.askAi.path
+  const isAskAiActive = pathname === askAiPath || pathname.startsWith(`${askAiPath}/`)
 
-  const iconClassName = "size-6"
-
-  const navLinkClassName = (path: string) =>
-    cn(
-      "flex flex-col items-center justify-center gap-1 rounded-lg px-3.5 py-2.5 transition-colors",
-      isActive(path) ? "bg-primary text-white" : "text-foreground hover:bg-muted/50"
-    )
+  const navIconClassName = "size-5 shrink-0"
 
   const handleSignInClick = () => {
     authModalContext?.openAuthModal()
@@ -55,13 +48,32 @@ export function MobileBottomNav() {
 
   return (
     <nav
-      className="fixed right-0 bottom-0 left-0 z-50 border-t border-sidebar-accent bg-sidebar md:hidden"
+      className="fixed right-0 bottom-0 left-0 z-50 border-t border-border bg-background md:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <div className="safe-area-bottom flex w-full flex-row items-center pt-2.5 pb-1.5">
+      <div className="safe-area-bottom flex w-full flex-row items-center py-1">
         <div className="flex min-w-0 flex-1 justify-center">
-          <Link href={WebRoutes.askAi.path} className={navLinkClassName(WebRoutes.askAi.path)} aria-label="Ask AI">
-            <SparklesIcon className={cn(iconClassName, isActive(WebRoutes.askAi.path) && "text-white")} />
+          <Link
+            href={askAiPath}
+            aria-label="Ask AI"
+            className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
+          >
+            <span
+              className={cn(
+                "inline-flex h-9 w-9 items-center justify-center rounded-sm",
+                isAskAiActive && "bg-primary text-white"
+              )}
+            >
+              <Sparkles className={cn(navIconClassName, isAskAiActive ? "text-white" : "text-muted-foreground")} />
+            </span>
+            <span
+              className={cn(
+                "max-w-full truncate text-xs leading-none font-semibold",
+                isAskAiActive ? "text-primary" : "text-muted-foreground"
+              )}
+            >
+              Ask AI
+            </span>
           </Link>
         </div>
         <div className="flex min-w-0 flex-1 justify-center">
@@ -69,13 +81,17 @@ export function MobileBottomNav() {
             <>
               <Sheet open={isAccountSheetOpen} onOpenChange={setIsAccountSheetOpen}>
                 <SheetTrigger asChild>
-                  <Button
+                  <button
                     type="button"
-                    variant="ghost"
-                    className="relative h-auto rounded-lg px-3.5 py-2.5 text-foreground hover:bg-muted/50"
+                    className="relative flex min-w-0 flex-col items-center justify-center gap-1.5 px-1 py-1 transition-colors"
                     aria-label="Account"
                   >
-                    <User className={iconClassName} />
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl">
+                      <User className={cn(navIconClassName, "text-muted-foreground")} />
+                    </span>
+                    <span className="max-w-full truncate text-xs leading-none font-semibold text-muted-foreground">
+                      Account
+                    </span>
                     {needsAttention && (
                       <span
                         className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-white"
@@ -85,7 +101,7 @@ export function MobileBottomNav() {
                         <AlertCircle className="h-2.5 w-2.5" />
                       </span>
                     )}
-                  </Button>
+                  </button>
                 </SheetTrigger>
                 <SheetContent side="bottom">
                   <SheetHeader className="shrink-0 border-b border-border px-4 py-3">
@@ -134,15 +150,19 @@ export function MobileBottomNav() {
               <SettingsDialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen} />
             </>
           ) : (
-            <Button
+            <button
               type="button"
               onClick={handleSignInClick}
-              variant="ghost"
-              className="h-auto rounded-lg px-3.5 py-2.5 text-foreground hover:bg-muted/50"
+              className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
               aria-label="Sign in"
             >
-              <User className={iconClassName} />
-            </Button>
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl">
+                <User className={cn(navIconClassName, "text-muted-foreground")} />
+              </span>
+              <span className="max-w-full truncate text-xs leading-none font-semibold text-muted-foreground">
+                Account
+              </span>
+            </button>
           )}
         </div>
       </div>

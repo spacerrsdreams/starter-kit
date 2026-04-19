@@ -1,7 +1,7 @@
 "use client"
 
 import type { ChatStatus, FileUIPart, SourceDocumentUIPart } from "ai"
-import { CornerDownLeftIcon, ImageIcon, Monitor, PlusIcon, SquareIcon, XIcon } from "lucide-react"
+import { ArrowUpIcon, CornerDownLeftIcon, ImageIcon, Monitor, PlusIcon, SquareIcon, XIcon } from "lucide-react"
 import { nanoid } from "nanoid"
 import type {
   ChangeEvent,
@@ -38,6 +38,20 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 // ============================================================================
 // Helpers
 // ============================================================================
+
+/** Stable identity for deduping `File` picks (name, size, last modified). */
+const getFileIdentity = (file: File): string => `${file.name}\0${file.size}\0${file.lastModified}`
+
+/** Stored on prompt attachments for duplicate detection; stripped before submit. */
+type PromptStoredFile = FileUIPart & { id: string; __fileIdentity: string }
+
+const stripPromptStoredFile = (item: FileUIPart & { id: string; __fileIdentity?: string }): FileUIPart => ({
+  filename: item.filename,
+  mediaType: item.mediaType,
+  providerMetadata: item.providerMetadata,
+  type: "file",
+  url: item.url,
+})
 
 const convertBlobUrlToDataUrl = async (url: string): Promise<string | null> => {
   try {
@@ -192,7 +206,7 @@ export const PromptInputProvider = ({ initialInput: initialTextInput = "", child
   const clearInput = useCallback(() => setTextInput(""), [])
 
   // ----- attachments state (global when wrapped)
-  const [attachmentFiles, setAttachmentFiles] = useState<(FileUIPart & { id: string })[]>([])
+  const [attachmentFiles, setAttachmentFiles] = useState<PromptStoredFile[]>([])
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   // oxlint-disable-next-line eslint(no-empty-function)
   const openRef = useRef<() => void>(() => {})
@@ -203,16 +217,29 @@ export const PromptInputProvider = ({ initialInput: initialTextInput = "", child
       return
     }
 
-    setAttachmentFiles((prev) => [
-      ...prev,
-      ...incoming.map((file) => ({
-        filename: file.name,
-        id: nanoid(),
-        mediaType: file.type,
-        type: "file" as const,
-        url: URL.createObjectURL(file),
-      })),
-    ])
+    setAttachmentFiles((prev) => {
+      const existing = new Set(prev.map((p) => p.__fileIdentity))
+      const next: PromptStoredFile[] = []
+      for (const file of incoming) {
+        const identity = getFileIdentity(file)
+        if (existing.has(identity)) {
+          continue
+        }
+        existing.add(identity)
+        next.push({
+          __fileIdentity: identity,
+          filename: file.name,
+          id: nanoid(),
+          mediaType: file.type,
+          type: "file",
+          url: URL.createObjectURL(file),
+        })
+      }
+      if (next.length === 0) {
+        return prev
+      }
+      return [...prev, ...next]
+    })
   }, [])
 
   const remove = useCallback((id: string) => {
@@ -409,6 +436,7 @@ export type PromptInputProps = Omit<HTMLAttributes<HTMLFormElement>, "onSubmit" 
   // e.g., "image/*" or leave undefined for any
   accept?: string
   multiple?: boolean
+  inputGroupClassName?: string
   // When true, accepts drops anywhere on document. Default false (opt-in).
   globalDrop?: boolean
   // Render a hidden input with given name and keep it in sync for native form posts. Default false.
@@ -423,6 +451,7 @@ export type PromptInputProps = Omit<HTMLAttributes<HTMLFormElement>, "onSubmit" 
 
 export const PromptInput = ({
   className,
+  inputGroupClassName,
   accept,
   multiple,
   globalDrop,
@@ -443,7 +472,7 @@ export const PromptInput = ({
   const formRef = useRef<HTMLFormElement | null>(null)
 
   // ----- Local attachments (only used when no provider)
-  const [items, setItems] = useState<(FileUIPart & { id: string })[]>([])
+  const [items, setItems] = useState<PromptStoredFile[]>([])
   const files = usingProvider ? controller.attachments.files : items
 
   // ----- Local referenced sources (always local to PromptInput)
@@ -513,15 +542,25 @@ export const PromptInput = ({
             message: "Too many files. Some were not added.",
           })
         }
-        const next: (FileUIPart & { id: string })[] = []
+        const existing = new Set(prev.map((p) => p.__fileIdentity))
+        const next: PromptStoredFile[] = []
         for (const file of capped) {
+          const identity = getFileIdentity(file)
+          if (existing.has(identity)) {
+            continue
+          }
+          existing.add(identity)
           next.push({
+            __fileIdentity: identity,
             filename: file.name,
             id: nanoid(),
             mediaType: file.type,
             type: "file",
             url: URL.createObjectURL(file),
           })
+        }
+        if (next.length === 0) {
+          return prev
         }
         return [...prev, ...next]
       })
@@ -752,16 +791,17 @@ export const PromptInput = ({
       try {
         // Convert blob URLs to data URLs asynchronously
         const convertedFiles: FileUIPart[] = await Promise.all(
-          files.map(async ({ ...item }) => {
-            if (item.url?.startsWith("blob:")) {
-              const dataUrl = await convertBlobUrlToDataUrl(item.url)
+          files.map(async (item) => {
+            const stripped = stripPromptStoredFile(item)
+            if (stripped.url?.startsWith("blob:")) {
+              const dataUrl = await convertBlobUrlToDataUrl(stripped.url)
               // If conversion failed, keep the original blob URL
               return {
-                ...item,
-                url: dataUrl ?? item.url,
+                ...stripped,
+                url: dataUrl ?? stripped.url,
               }
             }
-            return item
+            return stripped
           })
         )
 
@@ -806,7 +846,7 @@ export const PromptInput = ({
         type="file"
       />
       <form className={cn("w-full", className)} onSubmit={handleSubmit} ref={formRef} {...props}>
-        <InputGroup className="overflow-hidden">{children}</InputGroup>
+        <InputGroup className={cn("overflow-hidden", inputGroupClassName)}>{children}</InputGroup>
       </form>
     </>
   )
@@ -1043,7 +1083,7 @@ export const PromptInputSubmit = ({
 }: PromptInputSubmitProps) => {
   const isGenerating = status === "submitted" || status === "streaming"
 
-  let Icon = <CornerDownLeftIcon className="size-4" />
+  let Icon = <ArrowUpIcon className="size-4" />
 
   if (status === "submitted") {
     Icon = <Spinner />

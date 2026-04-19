@@ -120,7 +120,7 @@ export const Attachments = ({ variant = "grid", className, children, ...props }:
     <AttachmentsContext.Provider value={contextValue}>
       <div
         className={cn(
-          "flex items-start",
+          "flex w-full min-w-0 items-start pt-1 pl-1",
           variant === "list" ? "flex-col gap-2" : "flex-wrap gap-2",
           variant === "grid" && "ml-auto w-fit",
           className
@@ -158,7 +158,8 @@ export const Attachment = ({ data, onRemove, className, children, ...props }: At
           "group relative",
           variant === "grid" && "size-24 overflow-hidden rounded-lg",
           variant === "inline" && [
-            "flex h-8 cursor-pointer items-center gap-1.5 select-none",
+            // Fixed width so every chip matches; filename truncates inside (max-w alone lets short vs long look uneven).
+            "flex h-8 w-[min(100%,10rem)] flex-none cursor-pointer items-center gap-1.5 overflow-hidden select-none",
             "rounded-md border border-border px-1.5",
             "text-sm font-medium transition-all",
             "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
@@ -235,8 +236,8 @@ export const AttachmentInfo = ({ showMediaType = false, className, ...props }: A
   }
 
   return (
-    <div className={cn("min-w-0 flex-1", className)} {...props}>
-      <span className="block truncate">{label}</span>
+    <div className={cn("max-w-full min-w-0 flex-1 overflow-hidden", className)} {...props}>
+      <span className="block min-w-0 truncate">{label}</span>
       {showMediaType && data.mediaType && (
         <span className="block truncate text-xs text-muted-foreground">{data.mediaType}</span>
       )}
@@ -274,13 +275,13 @@ export const AttachmentRemove = ({ label = "Remove", className, children, ...pro
         variant === "grid" && [
           "absolute top-2 right-2 size-6 rounded-full p-0",
           "bg-background/80 backdrop-blur-sm",
-          "opacity-0 transition-opacity group-hover:opacity-100",
+          "opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100",
           "hover:bg-background",
           "[&>svg]:size-3",
         ],
         variant === "inline" && [
-          "size-5 rounded p-0",
-          "opacity-0 transition-opacity group-hover:opacity-100",
+          "size-5 shrink-0 rounded p-0",
+          "opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100",
           "[&>svg]:size-2.5",
         ],
         variant === "list" && ["size-8 shrink-0 rounded p-0", "[&>svg]:size-4"],

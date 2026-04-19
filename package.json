@@ -25,6 +25,7 @@
     "env:push:all-pre-production": "bun env:push:development && bun env:push:preview",
     "env:push:production": "node scripts/vercel-env-push.js .env.production production",
     "env:push:one": "node scripts/vercel-env-push.js",
+    "color:to-oklch": "node scripts/color-to-oklch.js",
     "create-starter-kit-app": "node packages/create-starter-kit-app/bin/create-starter-kit-app.js"
   },
   "dependencies": {
@@ -81,18 +82,19 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
-    "prisma": "^7.7.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "19.2.3",
+    "culori": "^4.0.2",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.2.4",
-    "tailwindcss": "^4.2.2",
-    "typescript": "^5.9.3",
+    "postcss": "^8.5.10",
     "prettier": "^3.8.3",
-    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "postcss": "^8.5.10"
+    "prisma": "^7.7.0",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.9.3"
   }
 }

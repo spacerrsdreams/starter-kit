@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
+import { cn } from "@/lib/utils"
 import { WebRoutes } from "@/lib/web.routes"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
@@ -33,11 +34,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import {
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar"
 
 export function ChatDashboardSidebar() {
   const pathname = usePathname()
   const router = useRouter()
+  const { isMobile, setOpenMobile } = useSidebar()
   const [pendingDeleteChatId, setPendingDeleteChatId] = useState<string | null>(null)
   const { data: session, isPending: isSessionPending } = authClient.useSession()
   const isAuthenticated = Boolean(session?.user)
@@ -100,9 +108,29 @@ export function ChatDashboardSidebar() {
                 const label = chat.title?.trim() || "Untitled chat"
                 return (
                   <SidebarMenuItem key={chat.id}>
-                    <SidebarMenuButton asChild isActive={isActive ? true : undefined} className="pr-8">
-                      <Link href={chatPath as Route} title={label}>
-                        <span className="truncate">{label}</span>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive ? true : undefined}
+                      className="group pr-8 transition-all duration-300 hover:text-[14.25px]"
+                    >
+                      <Link
+                        href={chatPath as Route}
+                        title={label}
+                        onClick={() => {
+                          if (isMobile) {
+                            setOpenMobile(false)
+                          }
+                        }}
+                      >
+                        <span
+                          className={cn(
+                            "truncate",
+                            "group-hover:text-foreground",
+                            isActive ? "font-medium text-foreground" : "font-normal text-foreground/80"
+                          )}
+                        >
+                          {label}
+                        </span>
                       </Link>
                     </SidebarMenuButton>
                     <div className="absolute top-1.5 right-1">
