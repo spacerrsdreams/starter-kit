@@ -1,9 +1,14 @@
 "use client"
 
+import { ChevronRight, CircleHelp, Settings, SparklesIcon } from "lucide-react"
 import dynamic from "next/dynamic"
+import { useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
+import { WebRoutes } from "@/lib/web.routes"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
+import { usePlanPickerDialog } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog-context"
+import { SettingsDialog } from "@/features/settings/components/settings-dialog/settings-dialog"
 import { Button } from "@/components/ui/button"
 
 import { SidebarFooterSkeleton } from "./sidebar-footer-skeleton"
@@ -22,6 +27,8 @@ type SidebarFooterUserActionProps = {
 
 export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFooterUserActionProps) {
   const authModalContext = useAuthRequiredModal()
+  const planPickerDialog = usePlanPickerDialog()
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
   if (isSessionPending) {
     return <SidebarFooterSkeleton />
@@ -29,10 +36,63 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
 
   if (!session?.user) {
     return (
-      <div className="px-2">
-        <Button type="button" variant="outline" className="w-full" onClick={() => authModalContext?.openAuthModal()}>
-          Sign in
-        </Button>
+      <div className="space-y-3 px-2 pb-2">
+        <div className="space-y-0.5">
+          <Button
+            type="button"
+            variant="ghost"
+            className="h-10 w-full justify-start rounded-full px-3.5 text-[15px] font-medium text-sidebar-foreground"
+            onClick={() => planPickerDialog?.openPlanPickerDialog()}
+            disabled={planPickerDialog?.isPlanPickerCheckoutLoading}
+          >
+            <SparklesIcon className="mr-2.5 size-4" />
+            See plans and pricing
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            className="h-10 w-full justify-start rounded-full px-3.5 text-[15px] font-medium text-sidebar-foreground"
+            onClick={() => setIsSettingsOpen(true)}
+          >
+            <Settings className="mr-2.5 size-4" />
+            Settings
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            className="h-10 w-full justify-start rounded-full px-3.5 text-[15px] font-medium text-sidebar-foreground hover:bg-sidebar-accent/60"
+            onClick={() => {
+              window.location.href = WebRoutes.feedback.path
+            }}
+          >
+            <CircleHelp className="mr-2.5 size-4" />
+            Help
+            <ChevronRight className="ml-auto size-4 text-muted-foreground" />
+          </Button>
+        </div>
+
+        <div className="border-t border-sidebar-border px-2 pt-5">
+          <h3 className="text-[17px] leading-6 font-semibold tracking-tight text-sidebar-foreground">
+            Get responses tailored to you
+          </h3>
+          <p className="mt-3 text-[14px] leading-7 text-muted-foreground">
+            Log in to get answers based on
+            <br />
+            saved chats, plus create images
+            <br />
+            and upload files.
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-5 h-11 w-full rounded-full border-sidebar-border bg-background text-[14px] font-semibold text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            onClick={() => authModalContext?.openAuthModal()}
+          >
+            Log in
+          </Button>
+        </div>
+
+        {isSettingsOpen ? <SettingsDialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen} /> : null}
       </div>
     )
   }

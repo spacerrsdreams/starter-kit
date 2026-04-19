@@ -37,7 +37,7 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="flex min-h-0 flex-1 flex-col space-y-1">
-          <div className="hidden md:block">
+          <div className="hidden">
             <SearchForm />
           </div>
           <ChatDashboardSidebar />
@@ -45,9 +45,11 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
       </SidebarContent>
       <SidebarFooter className="px-0">
         <div className="space-y-2">
-          <div className="px-2">
-            <SidebarUpgradeCta />
-          </div>
+          {session?.user ? (
+            <div className="px-2">
+              <SidebarUpgradeCta />
+            </div>
+          ) : null}
           <div className="border-t pt-2">
             <SidebarFooterUserAction isSessionPending={isSessionPending} session={session} />
           </div>
