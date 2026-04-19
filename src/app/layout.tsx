@@ -2,7 +2,7 @@ import "@/app/globals.css"
 import "lenis/dist/lenis.css"
 
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { DM_Sans } from "next/font/google"
 
 import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
@@ -13,7 +13,7 @@ import { QueryClientProviderWrapper } from "@/providers/query-client.provider"
 import { SmoothScrollProvider } from "@/providers/smooth-scroll.provider"
 import { ThemeProvider } from "@/providers/theme.provider"
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans antialiased", inter.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans antialiased", dmSans.variable)}>
       <body>
         <ThemeProvider>
           <SmoothScrollProvider>

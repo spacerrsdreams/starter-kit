@@ -1,10 +1,20 @@
 "use client"
 
-import { ChevronRight, EllipsisIcon, LinkIcon, PlusIcon, SparklesIcon, SquarePenIcon, Trash2Icon } from "lucide-react"
+import {
+  Check,
+  ChevronRight,
+  EllipsisIcon,
+  Files,
+  PlusIcon,
+  SparklesIcon,
+  SquarePenIcon,
+  Trash2Icon,
+} from "lucide-react"
 import { Route } from "next"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { toast } from "sonner"
 
 import { authClient } from "@/lib/auth/auth-client"
 import { cn } from "@/lib/utils"
@@ -47,6 +57,8 @@ export function ChatDashboardSidebar() {
   const router = useRouter()
   const { isMobile, setOpenMobile } = useSidebar()
   const [pendingDeleteChatId, setPendingDeleteChatId] = useState<string | null>(null)
+  const [copiedChatId, setCopiedChatId] = useState<string | null>(null)
+  const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { data: session, isPending: isSessionPending } = authClient.useSession()
   const isAuthenticated = Boolean(session?.user)
   const activeChatId = useChatNavigationStore((state) => state.activeChatId)
@@ -56,13 +68,32 @@ export function ChatDashboardSidebar() {
 
   const isAskAiRoute = pathname === WebRoutes.askAi.path || pathname.startsWith(`${WebRoutes.askAi.path}/`)
 
-  const handleCopyLink = async (chatPath: string) => {
+  useEffect(
+    () => () => {
+      if (copyResetTimeoutRef.current) {
+        clearTimeout(copyResetTimeoutRef.current)
+      }
+    },
+    []
+  )
+
+  const handleCopyLink = async (chatPath: string, chatId: string) => {
     const fullUrl = `${window.location.origin}${chatPath}`
     try {
       await navigator.clipboard.writeText(fullUrl)
     } catch {
+      toast.error("Could not copy link")
       return
     }
+    if (copyResetTimeoutRef.current) {
+      clearTimeout(copyResetTimeoutRef.current)
+    }
+    setCopiedChatId(chatId)
+    toast.success("Link copied")
+    copyResetTimeoutRef.current = setTimeout(() => {
+      setCopiedChatId(null)
+      copyResetTimeoutRef.current = null
+    }, 2000)
   }
 
   const handleStartNewChat = () => {
@@ -87,18 +118,16 @@ export function ChatDashboardSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
         <CollapsibleContent className="min-h-0 flex-1">
-          <SidebarGroupContent className="flex min-h-0 flex-1 pt-1 pl-1">
+          <SidebarGroupContent className="flex min-h-0 flex-1 pt-1">
             <SidebarMenu className="min-h-0 flex-1 overflow-y-auto">
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === WebRoutes.askAi.path && !activeChatId ? true : undefined}
-                >
-                  <button type="button" className="flex w-full items-center gap-2" onClick={handleStartNewChat}>
-                    <SquarePenIcon className="size-4" />
+                <SidebarMenuButton asChild onClick={handleStartNewChat} className="pl-1">
+                  <div role="button" className="flex w-full cursor-pointer items-center gap-2">
+                    <div className="rounded-full bg-muted-foreground/15 p-1">
+                      <PlusIcon className="size-4" />
+                    </div>
                     <span>New Chat</span>
-                    <PlusIcon className="ml-auto size-4" />
-                  </button>
+                  </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               {chats.map((chat) => {
@@ -152,12 +181,29 @@ export function ChatDashboardSidebar() {
                         <DropdownMenuContent align="end" className="w-44 min-w-44">
                           <DropdownMenuGroup>
                             <DropdownMenuItem
-                              onSelect={() => {
-                                void handleCopyLink(chatPath)
+                              onSelect={(event) => {
+                                event.preventDefault()
+                                void handleCopyLink(chatPath, chat.id)
                               }}
                             >
-                              <LinkIcon />
-                              Copy link
+                              <span className="relative flex size-4 shrink-0 items-center justify-center" aria-hidden>
+                                <Files
+                                  className={cn(
+                                    "absolute size-4 transition-all duration-200 ease-out",
+                                    copiedChatId === chat.id ? "scale-50 opacity-0" : "scale-100 opacity-100"
+                                  )}
+                                />
+                                <Check
+                                  className={cn(
+                                    "absolute size-4 text-emerald-600 transition-all duration-200 ease-out dark:text-emerald-500",
+                                    copiedChatId === chat.id ? "scale-100 opacity-100" : "scale-50 opacity-0"
+                                  )}
+                                  strokeWidth={2.5}
+                                />
+                              </span>
+                              <span className="transition-colors duration-200">
+                                {copiedChatId === chat.id ? "Copied" : "Copy link"}
+                              </span>
                             </DropdownMenuItem>
                           </DropdownMenuGroup>
                           <DropdownMenuSeparator />

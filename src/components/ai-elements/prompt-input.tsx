@@ -532,6 +532,12 @@ export const PromptInput = ({
         })
         return
       }
+      if (accepted.length > sized.length) {
+        onError?.({
+          code: "max_file_size",
+          message: "One or more files exceed the maximum size.",
+        })
+      }
 
       setItems((prev) => {
         const capacity = typeof maxFiles === "number" ? Math.max(0, maxFiles - prev.length) : undefined
@@ -600,6 +606,12 @@ export const PromptInput = ({
           message: "All files exceed the maximum size.",
         })
         return
+      }
+      if (accepted.length > sized.length) {
+        onError?.({
+          code: "max_file_size",
+          message: "One or more files exceed the maximum size.",
+        })
       }
 
       const currentCount = files.length

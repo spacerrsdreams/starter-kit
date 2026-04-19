@@ -124,7 +124,8 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background tracking-[-0.4px] text-foreground;
+    @apply bg-background text-foreground;
+    letter-spacing: -0.4px;
   }
   html {
     @apply font-sans;
