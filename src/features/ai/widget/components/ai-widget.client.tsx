@@ -13,12 +13,13 @@ import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-deta
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-chat"
 import { AiWidgetHistoryDropdown } from "@/features/ai/widget/components/ai-widget-history-dropdown"
-import { AI_WIDGET_EXAMPLE_PROMPTS } from "@/features/ai/widget/constants/ai-widget-example-prompts.constants"
 import type { AiWidgetProps } from "@/features/ai/widget/types/ai-widget.types"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Spinner } from "@/components/ui/spinner"
+
+import { CHAT_EXAMPLE_PROMPTS } from "../../chat/constants/chat-example-prompts.constants"
 
 export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
   const queryClient = useQueryClient()
@@ -125,7 +126,7 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
           Chat with AI, browse conversation history, and start a new chat.
         </SheetDescription>
         <div className="flex h-full min-h-0 flex-col">
-          <div className="flex h-14 shrink-0 items-center justify-between border-b px-2 py-2.5">
+          <div className="flex h-[57px] shrink-0 items-center justify-between border-b px-2 py-2.5">
             <AiWidgetHistoryDropdown
               chats={chatsQuery.data ?? []}
               activeChatId={activeChatId}
@@ -178,7 +179,7 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
                   isAuthenticated={isAuthenticated}
                   initialDbChatId={activeChatId}
                   initialMessages={initialMessages}
-                  examplePrompts={AI_WIDGET_EXAMPLE_PROMPTS}
+                  examplePrompts={CHAT_EXAMPLE_PROMPTS}
                   examplePromptsLayout="single-column"
                   compactMode
                   onChatCreated={(id) => {

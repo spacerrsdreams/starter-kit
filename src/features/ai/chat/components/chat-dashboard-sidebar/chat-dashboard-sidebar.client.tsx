@@ -111,7 +111,7 @@ export function ChatDashboardSidebar() {
             <CollapsibleTrigger asChild>
               <SidebarMenuButton>
                 <SparklesIcon />
-                <span>Ask AI</span>
+                <span className="font-medium">Ask AI</span>
                 <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
               </SidebarMenuButton>
             </CollapsibleTrigger>
@@ -123,7 +123,7 @@ export function ChatDashboardSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild onClick={handleStartNewChat} className="pl-1">
                   <div role="button" className="flex w-full cursor-pointer items-center gap-2">
-                    <div className="rounded-full bg-muted-foreground/15 p-1">
+                    <div className="rounded-full bg-muted-foreground/15 p-1 font-medium">
                       <PlusIcon className="size-4" />
                     </div>
                     <span>New Chat</span>
@@ -154,8 +154,8 @@ export function ChatDashboardSidebar() {
                         <span
                           className={cn(
                             "truncate",
-                            "group-hover:text-foreground",
-                            isActive ? "font-medium text-foreground" : "font-normal text-foreground/80"
+                            "font-medium group-hover:text-foreground",
+                            isActive ? "text-foreground" : "text-foreground/80"
                           )}
                         >
                           {label}
