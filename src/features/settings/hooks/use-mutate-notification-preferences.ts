@@ -3,14 +3,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { updateNotificationPreferencesAction } from "@/actions/account/update-notification-preferences.action"
+import { authClient } from "@/lib/auth/auth-client"
 import { settingsQueryKeys } from "@/features/settings/constants/settings-query-keys"
-import type { NotificationPreferences } from "@/features/settings/schemas/notification-preferences.schema"
+import type {
+  NotificationPreferences,
+  UpdateNotificationPreferencesInput,
+} from "@/features/settings/schemas/notification-preferences.schema"
 
 export function useMutateNotificationPreferences() {
   const queryClient = useQueryClient()
+  const { data: session, isPending: isSessionPending } = authClient.useSession()
 
   return useMutation({
-    mutationFn: updateNotificationPreferencesAction,
+    mutationFn: async (patch: UpdateNotificationPreferencesInput) => {
+      if (isSessionPending || !session?.user) {
+        throw new Error("Authentication required")
+      }
+      return updateNotificationPreferencesAction(patch)
+    },
     onMutate: async (patch) => {
       await queryClient.cancelQueries({
         queryKey: settingsQueryKeys.accountNotificationPreferences,

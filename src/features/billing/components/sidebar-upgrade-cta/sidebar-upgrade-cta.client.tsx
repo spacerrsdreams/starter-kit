@@ -1,8 +1,5 @@
 "use client"
 
-import { SparklesIcon } from "lucide-react"
-
-import { authClient } from "@/lib/auth/auth-client"
 import { usePlanPickerDialog } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog-context"
 import { BILLING_TRACKING_EVENTS } from "@/features/billing/constants/billing-tracking.constants"
 import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
@@ -13,9 +10,7 @@ import { LogoSvg } from "@/components/ui/icons/logo.icon"
 
 export function SidebarUpgradeCta() {
   const planPickerDialog = usePlanPickerDialog()
-  const { data: session, isPending: isSessionPending } = authClient.useSession()
-  const isAuthenticated = Boolean(session?.user)
-  const subscriptionQuery = useFetchBillingSubscription(isAuthenticated && !isSessionPending)
+  const subscriptionQuery = useFetchBillingSubscription()
   const portalSessionMutation = useMutateCreatePortalSession()
 
   const isPaid = subscriptionQuery.data?.isPaid ?? false

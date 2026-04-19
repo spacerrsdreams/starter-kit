@@ -2,17 +2,21 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 
+import { authClient } from "@/lib/auth/auth-client"
 import { listChatsApi } from "@/features/ai/chat/api/chats.api"
 import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 
 const PAGE_LIMIT = 15
 
-export function useFetchChats(enabled = true) {
+export function useFetchChats() {
+  const { data: session, isPending: isSessionPending } = authClient.useSession()
+  const isAuthenticated = Boolean(session?.user)
+
   return useInfiniteQuery({
     queryKey: chatQueryKeys.chats(),
     initialPageParam: 0,
     queryFn: ({ pageParam }) => listChatsApi({ limit: PAGE_LIMIT, offset: pageParam }),
     getNextPageParam: (lastPage) => lastPage.nextOffset ?? undefined,
-    enabled,
+    enabled: !isSessionPending && isAuthenticated,
   })
 }

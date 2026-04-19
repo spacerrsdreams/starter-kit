@@ -2,10 +2,18 @@
 
 import { useMutation } from "@tanstack/react-query"
 
+import { authClient } from "@/lib/auth/auth-client"
 import { createPortalSessionApi } from "@/features/billing/api/billing.api"
 
 export function useMutateCreatePortalSession() {
+  const { data: session, isPending: isSessionPending } = authClient.useSession()
+
   return useMutation({
-    mutationFn: createPortalSessionApi,
+    mutationFn: async () => {
+      if (isSessionPending || !session?.user) {
+        throw new Error("Authentication required")
+      }
+      return createPortalSessionApi()
+    },
   })
 }

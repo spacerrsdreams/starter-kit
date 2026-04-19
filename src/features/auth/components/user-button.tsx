@@ -1,7 +1,7 @@
 "use client"
 
 import type { User } from "better-auth"
-import { ChevronsUpDown, CreditCard, LogOut, Settings, SparklesIcon, UserRoundCheck } from "lucide-react"
+import { ChevronsUpDown, CreditCard, LogOut, Settings, UserRoundCheck } from "lucide-react"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 

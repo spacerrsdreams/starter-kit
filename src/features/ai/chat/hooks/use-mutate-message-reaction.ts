@@ -2,6 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query"
 
+import { authClient } from "@/lib/auth/auth-client"
 import { setMessageReactionApi } from "@/features/ai/chat/api/chats.api"
 import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
 
@@ -12,9 +13,15 @@ type SetMessageReactionInput = {
 }
 
 export function useMutateMessageReaction() {
+  const { data: session, isPending: isSessionPending } = authClient.useSession()
+
   return useMutation({
-    mutationFn: ({ chatId, messageId, reaction }: SetMessageReactionInput) =>
-      setMessageReactionApi(chatId, messageId, reaction),
+    mutationFn: ({ chatId, messageId, reaction }: SetMessageReactionInput) => {
+      if (isSessionPending || !session?.user) {
+        throw new Error("Authentication required")
+      }
+      return setMessageReactionApi(chatId, messageId, reaction)
+    },
   })
 }
 

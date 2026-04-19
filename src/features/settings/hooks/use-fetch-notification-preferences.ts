@@ -3,9 +3,13 @@
 import { useQuery } from "@tanstack/react-query"
 
 import { getNotificationPreferencesAction } from "@/actions/account/get-notification-preferences.action"
+import { authClient } from "@/lib/auth/auth-client"
 import { settingsQueryKeys } from "@/features/settings/constants/settings-query-keys"
 
 export function useFetchNotificationPreferences() {
+  const { data: session, isPending: isSessionPending } = authClient.useSession()
+  const isAuthenticated = Boolean(session?.user)
+
   return useQuery({
     queryKey: settingsQueryKeys.accountNotificationPreferences,
     queryFn: async () => {
@@ -19,5 +23,6 @@ export function useFetchNotificationPreferences() {
     },
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
+    enabled: !isSessionPending && isAuthenticated,
   })
 }

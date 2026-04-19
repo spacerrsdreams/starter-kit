@@ -23,7 +23,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
   const isAuthenticated = Boolean(session?.user)
   const isGuestResolved = !isSessionPending && !isAuthenticated
   const queryClient = useQueryClient()
-  const chatsQuery = useFetchChats(isAuthenticated && !isSessionPending)
+  const chatsQuery = useFetchChats()
 
   const [routingReady, setRoutingReady] = useState(false)
   const [activeChatId, setActiveChatId] = useState<string | null>(initialChatId)
@@ -32,7 +32,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
   const ignoredInitialChatIdRef = useRef(false)
   const hasRefetchedChatsForSessionRef = useRef(false)
   const setNavigationActiveChatId = useChatNavigationStore((state) => state.setActiveChatId)
-  const chatDetailQuery = useFetchChatDetail(activeChatId, isAuthenticated)
+  const chatDetailQuery = useFetchChatDetail(activeChatId)
   const replaceAddressBarPath = (path: string) => {
     if (window.location.pathname === path) {
       return

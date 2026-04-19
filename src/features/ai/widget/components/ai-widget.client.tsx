@@ -36,8 +36,8 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
   const isAuthenticated = Boolean(session?.user)
   const isGuestResolved = !isSessionPending && !isAuthenticated
 
-  const chatsQuery = useFetchChats(isAuthenticated && !isSessionPending)
-  const chatDetailQuery = useFetchChatDetail(activeChatId, isAuthenticated)
+  const chatsQuery = useFetchChats()
+  const chatDetailQuery = useFetchChatDetail(activeChatId)
   const deleteChatMutation = useMutateDeleteChat()
   const chats = useMemo<ChatListItem[]>(
     () => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [],

@@ -1,7 +1,7 @@
 "use client"
 
 import type { ChatStatus, FileUIPart, SourceDocumentUIPart } from "ai"
-import { ArrowUpIcon, CornerDownLeftIcon, ImageIcon, Monitor, PlusIcon, SquareIcon, XIcon } from "lucide-react"
+import { ArrowUpIcon, ImageIcon, Monitor, PlusIcon, SquareIcon, XIcon } from "lucide-react"
 import { nanoid } from "nanoid"
 import type {
   ChangeEvent,

@@ -7,7 +7,6 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
-import { authClient } from "@/lib/auth/auth-client"
 import { cn } from "@/lib/utils"
 import { WebRoutes } from "@/lib/web.routes"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
@@ -52,10 +51,8 @@ export function ChatDashboardSidebar() {
   const [pendingDeleteChatId, setPendingDeleteChatId] = useState<string | null>(null)
   const [copiedChatId, setCopiedChatId] = useState<string | null>(null)
   const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const { data: session, isPending: isSessionPending } = authClient.useSession()
-  const isAuthenticated = Boolean(session?.user)
   const activeChatId = useChatNavigationStore((state) => state.activeChatId)
-  const chatsQuery = useFetchChats(isAuthenticated && !isSessionPending)
+  const chatsQuery = useFetchChats()
   const deleteChatMutation = useMutateDeleteChat()
   const chats = useMemo<ChatListItem[]>(
     () => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [],
