@@ -3,7 +3,7 @@ import Link from "next/link"
 import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
 import { ClientHoc } from "@/components/client.hoc"
-import { LogoIcon } from "@/components/ui/icons/logo"
+import { LogoIcon } from "@/components/ui/icons/logo.icon"
 
 interface LogoProps {
   showTitle?: boolean

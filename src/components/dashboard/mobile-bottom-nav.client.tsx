@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertCircle, LogOut, Settings, Sparkles, User } from "lucide-react"
+import { AlertCircle, LogOut, Settings, User } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useTransition } from "react"
@@ -11,6 +11,7 @@ import { WebRoutes } from "@/lib/web.routes"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
 import { SettingsDialog } from "@/features/settings/components/settings-dialog/settings-dialog"
 import { Button } from "@/components/ui/button"
+import { LogoSvg } from "@/components/ui/icons/logo.icon"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 export function MobileBottomNav() {
@@ -64,7 +65,10 @@ export function MobileBottomNav() {
                 isAskAiActive && "bg-primary text-white"
               )}
             >
-              <Sparkles className={cn(navIconClassName, isAskAiActive ? "text-white" : "text-muted-foreground")} />
+              <LogoSvg
+                iconSize={20}
+                className={cn(navIconClassName, isAskAiActive ? "text-white" : "text-muted-foreground")}
+              />
             </span>
             <span
               className={cn(

@@ -5,6 +5,7 @@ export const ApiRoutes = {
     create: "/api/chats",
     get: (chatId: string) => `/api/chats/${chatId}`,
     delete: (chatId: string) => `/api/chats/${chatId}`,
+    setMessageReaction: (chatId: string, messageId: string) => `/api/chats/${chatId}/messages/${messageId}/reaction`,
   },
   authSignedIn: "/api/auth/signed-in",
   accountSendVerificationEmail: "/api/account/send-verification-email",

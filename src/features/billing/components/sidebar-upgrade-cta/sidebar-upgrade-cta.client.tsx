@@ -9,6 +9,7 @@ import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-
 import { useMutateCreatePortalSession } from "@/features/billing/hooks/use-mutate-create-portal-session"
 import { trackBillingEvent } from "@/features/billing/utils/track-billing-event.client"
 import { Button } from "@/components/ui/button"
+import { LogoSvg } from "@/components/ui/icons/logo.icon"
 
 export function SidebarUpgradeCta() {
   const planPickerDialog = usePlanPickerDialog()
@@ -62,7 +63,7 @@ export function SidebarUpgradeCta() {
       disabled={isLoading || planPickerDialog?.isPlanPickerCheckoutLoading}
       onClick={handleUpgradeClick}
     >
-      <SparklesIcon className="text-amber-500" />
+      <LogoSvg className="mr-2 h-4 w-4 text-amber-500" />
       {isLoading ? "Opening..." : ctaLabel}
     </Button>
   )

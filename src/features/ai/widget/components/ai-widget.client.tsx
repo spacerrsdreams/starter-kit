@@ -16,6 +16,7 @@ import { AiWidgetHistoryDropdown } from "@/features/ai/widget/components/ai-widg
 import type { AiWidgetProps } from "@/features/ai/widget/types/ai-widget.types"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
 import { Button } from "@/components/ui/button"
+import { LogoSvg } from "@/components/ui/icons/logo.icon"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Spinner } from "@/components/ui/spinner"
 
@@ -106,14 +107,14 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
           className="fixed right-4 bottom-4 z-40 size-12 rounded-full shadow-lg md:right-6 md:bottom-6"
           aria-label="Open AI widget"
         >
-          <SparklesIcon className="size-5" />
+          <LogoSvg iconSize={20} />
         </Button>
       </SheetTrigger>
 
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="max-h-none gap-0 rounded-none border-l p-0 shadow-none data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-dvh data-[side=right]:max-h-none data-[side=right]:w-full data-[side=right]:max-w-[420px] data-[side=right]:sm:max-w-[420px]"
+        className="max-h-dvh"
         onInteractOutside={(event) => {
           event.preventDefault()
         }}

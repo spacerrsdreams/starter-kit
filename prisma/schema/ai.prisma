@@ -18,6 +18,7 @@ model Message {
   chat      Chat        @relation(fields: [chatId], references: [id], onDelete: Cascade)
   role      MessageRole
   parts     Json
+  reaction  MessageReaction?
   createdAt DateTime    @default(now())
 
   @@index([chatId, createdAt])
@@ -28,4 +29,9 @@ enum MessageRole {
   user
   assistant
   system
+}
+
+enum MessageReaction {
+  like
+  unlike
 }

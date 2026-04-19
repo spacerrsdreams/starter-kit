@@ -1095,14 +1095,14 @@ export const PromptInputSubmit = ({
 }: PromptInputSubmitProps) => {
   const isGenerating = status === "submitted" || status === "streaming"
 
-  let Icon = <ArrowUpIcon className="size-4" />
+  let Icon = <ArrowUpIcon className="size-4 text-white!" />
 
   if (status === "submitted") {
-    Icon = <Spinner />
+    Icon = <Spinner className="text-white!" />
   } else if (status === "streaming") {
-    Icon = <SquareIcon className="size-4 fill-current" />
+    Icon = <SquareIcon className="size-4 fill-current text-white!" />
   } else if (status === "error") {
-    Icon = <XIcon className="size-4" />
+    Icon = <XIcon className="size-4 text-white!" />
   }
 
   const handleClick = useCallback(

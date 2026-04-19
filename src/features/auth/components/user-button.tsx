@@ -23,6 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { LogoSvg } from "@/components/ui/icons/logo.icon"
 
 function getInitial(email: string): string {
   const trimmed = email.trim()
@@ -137,7 +138,7 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
               }}
               disabled={planPickerDialog?.isPlanPickerCheckoutLoading}
             >
-              <SparklesIcon className="mr-2 h-4 w-4 text-amber-500" />
+              <LogoSvg className="mr-2 h-4 w-4 text-amber-500" />
               Upgrade to Pro
             </DropdownMenuItem>
           )}

@@ -44,6 +44,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { LogoSvg } from "@/components/ui/icons/logo.icon"
 import {
   SidebarGroupContent,
   SidebarMenu,
@@ -110,7 +111,7 @@ export function ChatDashboardSidebar() {
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
               <SidebarMenuButton>
-                <SparklesIcon />
+                <LogoSvg />
                 <span className="font-medium">Ask AI</span>
                 <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
               </SidebarMenuButton>

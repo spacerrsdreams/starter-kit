@@ -1,19 +1,25 @@
 import "server-only"
 
-import { Prisma } from "@/generated/prisma/client"
+import { MessageReaction, Prisma } from "@/generated/prisma/client"
 import type { Message as MessageRow } from "@/generated/prisma/client"
 import type { UIMessage } from "ai"
 
 import { prisma } from "@/lib/prisma"
+import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
 import { toClientMessageId, toStorageMessageId } from "@/features/ai/chat/utils/chat-message-storage.utils"
+import { getMessageReaction, withMessageReaction } from "@/features/ai/chat/utils/chat-message-reaction.utils"
 import { generateChatTitleFromUserMessage } from "@/features/ai/chat/utils/generate-chat-title"
 
 function rowToUIMessage(row: MessageRow): UIMessage {
-  return {
+  const message = {
     id: toClientMessageId(row),
     role: row.role,
     parts: row.parts as UIMessage["parts"],
   }
+  if (!row.reaction) {
+    return message
+  }
+  return withMessageReaction(message, row.reaction)
 }
 
 export async function createChat(userId: string): Promise<{ id: string }> {
@@ -76,15 +82,29 @@ function dedupeMessagesByIdPreservingOrder(messages: UIMessage[]): UIMessage[] {
 export async function replaceMessagesForChat(chatId: string, userId: string, messages: UIMessage[]): Promise<void> {
   const uniqueMessages = dedupeMessagesByIdPreservingOrder(messages)
   const baseTime = Date.now()
-  const rows = uniqueMessages.map((message, index) => ({
-    id: toStorageMessageId(chatId, message.id),
-    chatId,
-    role: message.role,
-    parts: message.parts as Prisma.InputJsonValue,
-    createdAt: new Date(baseTime + index),
-  }))
 
   await prisma.$transaction(async (tx) => {
+    const existingMessageReactions = await tx.message.findMany({
+      where: { chatId, chat: { userId } },
+      select: { id: true, reaction: true },
+    })
+    const reactionByMessageId = new Map(
+      existingMessageReactions
+        .filter((message): message is { id: string; reaction: MessageReaction } => Boolean(message.reaction))
+        .map((message) => [message.id, message.reaction])
+    )
+    const rows = uniqueMessages.map((message, index) => {
+      const storageMessageId = toStorageMessageId(chatId, message.id)
+      const reaction = getMessageReaction(message) ?? reactionByMessageId.get(storageMessageId) ?? null
+      return {
+        id: storageMessageId,
+        chatId,
+        role: message.role,
+        parts: message.parts as Prisma.InputJsonValue,
+        reaction,
+        createdAt: new Date(baseTime + index),
+      }
+    })
     await tx.message.deleteMany({ where: { chatId, chat: { userId } } })
     if (rows.length > 0) {
       await tx.message.createMany({ data: rows })
@@ -94,6 +114,28 @@ export async function replaceMessagesForChat(chatId: string, userId: string, mes
       data: { updatedAt: new Date() },
     })
   })
+}
+
+export async function updateMessageReaction(
+  chatId: string,
+  userId: string,
+  clientMessageId: string,
+  reaction: ChatMessageReaction | null
+): Promise<boolean> {
+  const messageId = toStorageMessageId(chatId, clientMessageId)
+  const result = await prisma.message.updateMany({
+    where: {
+      id: messageId,
+      chatId,
+      chat: {
+        userId,
+      },
+    },
+    data: {
+      reaction,
+    },
+  })
+  return result.count > 0
 }
 
 export async function maybeGenerateAiChatTitle(chatId: string, userId: string, messages: UIMessage[]): Promise<void> {

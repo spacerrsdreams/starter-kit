@@ -102,7 +102,7 @@ export function ChatInputForm({ onSubmit, status }: ChatInputFormProps) {
         multiple
         onError={handleAttachmentError}
         onSubmit={onSubmit}
-        inputGroupClassName="rounded-xl"
+        inputGroupClassName="rounded-xl bg-background"
       >
         <PromptInputAttachmentsDisplay />
         <PromptInputBody>

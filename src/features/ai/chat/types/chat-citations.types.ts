@@ -1,5 +1,7 @@
 import type { UIMessage } from "ai"
 
+import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
+
 export type ChatCitationSource = {
   sourceId: string
   url: string
@@ -13,4 +15,11 @@ export type ChatSessionCitationsProps = {
 export type ChatSessionAssistantMessageProps = {
   message: UIMessage
   isAnimating: boolean
+  canRetry: boolean
+  showActionsByDefault: boolean
+  reaction: ChatMessageReaction | null
+  onCopy: () => Promise<void>
+  onRetry: () => Promise<void>
+  onToggleLike: () => Promise<void>
+  onToggleUnlike: () => Promise<void>
 }
