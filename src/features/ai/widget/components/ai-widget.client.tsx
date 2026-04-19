@@ -2,9 +2,9 @@
 
 import { useQueryClient } from "@tanstack/react-query"
 import type { UIMessage } from "ai"
-import { PlusIcon, SparklesIcon, XIcon } from "lucide-react"
+import { PlusIcon, XIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
 import { ChatSession } from "@/features/ai/chat/components/chat-session/chat-session"
@@ -12,6 +12,7 @@ import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-detail"
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-chat"
+import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
 import { AiWidgetHistoryDropdown } from "@/features/ai/widget/components/ai-widget-history-dropdown"
 import type { AiWidgetProps } from "@/features/ai/widget/types/ai-widget.types"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
@@ -38,6 +39,10 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
   const chatsQuery = useFetchChats(isAuthenticated && !isSessionPending)
   const chatDetailQuery = useFetchChatDetail(activeChatId, isAuthenticated)
   const deleteChatMutation = useMutateDeleteChat()
+  const chats = useMemo<ChatListItem[]>(
+    () => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [],
+    [chatsQuery.data?.pages]
+  )
 
   const hydratedFromServer = Boolean(activeChatId) && sessionClientId === activeChatId
   const initialMessages: UIMessage[] = hydratedFromServer && chatDetailQuery.data ? chatDetailQuery.data.messages : []
@@ -129,7 +134,7 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
         <div className="flex h-full min-h-0 flex-col">
           <div className="flex h-[57px] shrink-0 items-center justify-between border-b px-2 py-2.5">
             <AiWidgetHistoryDropdown
-              chats={chatsQuery.data ?? []}
+              chats={chats}
               activeChatId={activeChatId}
               isDeleting={deleteChatMutation.isPending}
               onSelectChat={(chatId) => {

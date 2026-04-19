@@ -3,6 +3,7 @@ import type { UIMessage } from "ai"
 
 export type ChatsListResponse = {
   chats: ChatListItem[]
+  nextOffset: number | null
 }
 
 export type CreateChatResponse = {

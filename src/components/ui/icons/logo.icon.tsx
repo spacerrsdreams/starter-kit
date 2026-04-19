@@ -24,7 +24,7 @@ export const LogoSvg = ({
       strokeLinejoin="round"
       viewBox="0 0 16 16"
       style={{ width: iconSize, height: iconSize }}
-      className={cn("text-background!", className)}
+      className={cn("text-background", className)}
       {...props}
     >
       <path

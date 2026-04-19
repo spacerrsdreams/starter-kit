@@ -35,9 +35,15 @@ export async function chatExists(chatId: string, userId: string): Promise<boolea
   return count > 0
 }
 
-export async function listChats(userId: string): Promise<Array<{ id: string; title: string | null; updatedAt: Date }>> {
+export async function listChats(
+  userId: string,
+  limit: number,
+  offset: number
+): Promise<Array<{ id: string; title: string | null; updatedAt: Date }>> {
   return prisma.chat.findMany({
     where: { userId },
+    skip: offset,
+    take: limit,
     orderBy: { updatedAt: "desc" },
     select: { id: true, title: true, updatedAt: true },
   })

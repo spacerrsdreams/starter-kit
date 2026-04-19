@@ -1,13 +1,20 @@
 import { ApiRoutes } from "@/lib/api.routes"
 import { apiRequest } from "@/lib/http-client"
 import type { ChatsListResponse, CreateChatResponse, GetChatResponse } from "@/features/ai/chat/types/chat-api.types"
-import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
 import type { SetMessageReactionPayload } from "@/features/ai/chat/types/chat-message-reaction-api.types"
 import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
 
-export async function listChatsApi(): Promise<ChatListItem[]> {
-  const response = await apiRequest<ChatsListResponse>(ApiRoutes.chats.list)
-  return response.chats
+type ListChatsApiParams = {
+  limit: number
+  offset: number
+}
+
+export async function listChatsApi({ limit, offset }: ListChatsApiParams): Promise<ChatsListResponse> {
+  const searchParams = new URLSearchParams({
+    limit: String(limit),
+    offset: String(offset),
+  })
+  return apiRequest<ChatsListResponse>(`${ApiRoutes.chats.list}?${searchParams.toString()}`)
 }
 
 export async function createChatApi(): Promise<CreateChatResponse> {

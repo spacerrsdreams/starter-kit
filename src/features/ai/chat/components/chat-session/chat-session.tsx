@@ -285,7 +285,7 @@ export function ChatSession({
             <ConversationEmptyState
               className={cn("min-h-0 flex-1 gap-2", compactMode && "w-full items-center justify-center text-center")}
             >
-              <LogoIcon size={24} />
+              <LogoIcon size={20} />
               <div className={cn("space-y-2", compactMode && "mx-auto w-full max-w-sm")}>
                 <h3 className="text-sm font-medium">How can I help you?</h3>
                 <p className={cn("max-w-md text-sm text-muted-foreground", compactMode && "mx-auto")}>

@@ -1,19 +1,10 @@
 "use client"
 
-import {
-  Check,
-  ChevronRight,
-  EllipsisIcon,
-  Files,
-  PlusIcon,
-  SparklesIcon,
-  SquarePenIcon,
-  Trash2Icon,
-} from "lucide-react"
+import { Check, ChevronRight, EllipsisIcon, Files, PlusIcon, Trash2Icon } from "lucide-react"
 import { Route } from "next"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
 import { authClient } from "@/lib/auth/auth-client"
@@ -22,8 +13,8 @@ import { WebRoutes } from "@/lib/web.routes"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-chat"
-import { groupChatsByUpdatedAt } from "@/features/ai/chat/components/chat-dashboard-sidebar/chat-history-groups.utils"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
+import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
 import { getChatRoute } from "@/features/ai/chat/utils/chat-routes.utils"
 import {
   AlertDialog,
@@ -66,8 +57,10 @@ export function ChatDashboardSidebar() {
   const activeChatId = useChatNavigationStore((state) => state.activeChatId)
   const chatsQuery = useFetchChats(isAuthenticated && !isSessionPending)
   const deleteChatMutation = useMutateDeleteChat()
-  const chats = chatsQuery.data ?? []
-  const chatGroups = groupChatsByUpdatedAt(chats)
+  const chats = useMemo<ChatListItem[]>(
+    () => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [],
+    [chatsQuery.data?.pages]
+  )
 
   const isAskAiRoute = pathname === WebRoutes.askAi.path || pathname.startsWith(`${WebRoutes.askAi.path}/`)
 
@@ -113,7 +106,7 @@ export function ChatDashboardSidebar() {
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
               <SidebarMenuButton>
-                <LogoSvg />
+                <LogoSvg className="text-foreground/80!" />
                 <span className="font-medium">Ask AI</span>
                 <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
               </SidebarMenuButton>
@@ -134,9 +127,9 @@ export function ChatDashboardSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem className="px-2 pt-3 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
-                Today
+                Recents
               </SidebarMenuItem>
-              {chatGroups.today.map((chat) => {
+              {chats.map((chat) => {
                 const chatPath = getChatRoute(chat.id)
                 const isActive =
                   pathname === chatPath || (pathname === WebRoutes.askAi.path && activeChatId === chat.id)
@@ -230,204 +223,21 @@ export function ChatDashboardSidebar() {
                   </SidebarMenuItem>
                 )
               })}
-              {chatGroups.last7Days.length > 0 ? (
-                <SidebarMenuItem className="px-2 pt-5 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
-                  Last 7 Days
+              {chatsQuery.hasNextPage ? (
+                <SidebarMenuItem className="px-1 pt-2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="h-8 w-full justify-start text-xs text-muted-foreground"
+                    disabled={chatsQuery.isFetchingNextPage}
+                    onClick={() => {
+                      void chatsQuery.fetchNextPage()
+                    }}
+                  >
+                    {chatsQuery.isFetchingNextPage ? "Loading..." : "Load more"}
+                  </Button>
                 </SidebarMenuItem>
               ) : null}
-              {chatGroups.last7Days.map((chat) => {
-                const chatPath = getChatRoute(chat.id)
-                const isActive =
-                  pathname === chatPath || (pathname === WebRoutes.askAi.path && activeChatId === chat.id)
-                const label = chat.title?.trim() || "Untitled chat"
-                return (
-                  <SidebarMenuItem key={chat.id}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive ? true : undefined}
-                      className="group pr-8 transition-all duration-300 hover:text-[14.25px]"
-                    >
-                      <Link
-                        href={chatPath as Route}
-                        title={label}
-                        onClick={() => {
-                          if (isMobile) {
-                            setOpenMobile(false)
-                          }
-                        }}
-                      >
-                        <span
-                          className={cn(
-                            "truncate",
-                            "font-medium group-hover:text-foreground",
-                            isActive ? "text-foreground" : "text-foreground/80"
-                          )}
-                        >
-                          {label}
-                        </span>
-                      </Link>
-                    </SidebarMenuButton>
-                    <div className="absolute top-1.5 right-1">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="size-5 cursor-pointer group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 md:opacity-0"
-                            aria-label="Chat actions"
-                            disabled={deleteChatMutation.isPending}
-                            onClick={(event) => {
-                              event.preventDefault()
-                            }}
-                          >
-                            <EllipsisIcon className="size-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-44 min-w-44">
-                          <DropdownMenuGroup>
-                            <DropdownMenuItem
-                              onSelect={(event) => {
-                                event.preventDefault()
-                                void handleCopyLink(chatPath, chat.id)
-                              }}
-                            >
-                              <span className="relative flex size-4 shrink-0 items-center justify-center" aria-hidden>
-                                <Files
-                                  className={cn(
-                                    "absolute size-4 transition-all duration-200 ease-out",
-                                    copiedChatId === chat.id ? "scale-50 opacity-0" : "scale-100 opacity-100"
-                                  )}
-                                />
-                                <Check
-                                  className={cn(
-                                    "absolute size-4 text-emerald-600 transition-all duration-200 ease-out dark:text-emerald-500",
-                                    copiedChatId === chat.id ? "scale-100 opacity-100" : "scale-50 opacity-0"
-                                  )}
-                                  strokeWidth={2.5}
-                                />
-                              </span>
-                              <span className="transition-colors duration-200">
-                                {copiedChatId === chat.id ? "Copied" : "Copy link"}
-                              </span>
-                            </DropdownMenuItem>
-                          </DropdownMenuGroup>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuGroup>
-                            <DropdownMenuItem
-                              variant="destructive"
-                              onSelect={() => {
-                                setPendingDeleteChatId(chat.id)
-                              }}
-                            >
-                              <Trash2Icon />
-                              Delete chat
-                            </DropdownMenuItem>
-                          </DropdownMenuGroup>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </SidebarMenuItem>
-                )
-              })}
-              {chatGroups.last30Days.length > 0 ? (
-                <SidebarMenuItem className="px-2 pt-5 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
-                  Last 30 Days
-                </SidebarMenuItem>
-              ) : null}
-              {chatGroups.last30Days.map((chat) => {
-                const chatPath = getChatRoute(chat.id)
-                const isActive =
-                  pathname === chatPath || (pathname === WebRoutes.askAi.path && activeChatId === chat.id)
-                const label = chat.title?.trim() || "Untitled chat"
-                return (
-                  <SidebarMenuItem key={chat.id}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive ? true : undefined}
-                      className="group pr-8 transition-all duration-300 hover:text-[14.25px]"
-                    >
-                      <Link
-                        href={chatPath as Route}
-                        title={label}
-                        onClick={() => {
-                          if (isMobile) {
-                            setOpenMobile(false)
-                          }
-                        }}
-                      >
-                        <span
-                          className={cn(
-                            "truncate",
-                            "font-medium group-hover:text-foreground",
-                            isActive ? "text-foreground" : "text-foreground/80"
-                          )}
-                        >
-                          {label}
-                        </span>
-                      </Link>
-                    </SidebarMenuButton>
-                    <div className="absolute top-1.5 right-1">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="size-5 cursor-pointer group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 md:opacity-0"
-                            aria-label="Chat actions"
-                            disabled={deleteChatMutation.isPending}
-                            onClick={(event) => {
-                              event.preventDefault()
-                            }}
-                          >
-                            <EllipsisIcon className="size-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-44 min-w-44">
-                          <DropdownMenuGroup>
-                            <DropdownMenuItem
-                              onSelect={(event) => {
-                                event.preventDefault()
-                                void handleCopyLink(chatPath, chat.id)
-                              }}
-                            >
-                              <span className="relative flex size-4 shrink-0 items-center justify-center" aria-hidden>
-                                <Files
-                                  className={cn(
-                                    "absolute size-4 transition-all duration-200 ease-out",
-                                    copiedChatId === chat.id ? "scale-50 opacity-0" : "scale-100 opacity-100"
-                                  )}
-                                />
-                                <Check
-                                  className={cn(
-                                    "absolute size-4 text-emerald-600 transition-all duration-200 ease-out dark:text-emerald-500",
-                                    copiedChatId === chat.id ? "scale-100 opacity-100" : "scale-50 opacity-0"
-                                  )}
-                                  strokeWidth={2.5}
-                                />
-                              </span>
-                              <span className="transition-colors duration-200">
-                                {copiedChatId === chat.id ? "Copied" : "Copy link"}
-                              </span>
-                            </DropdownMenuItem>
-                          </DropdownMenuGroup>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuGroup>
-                            <DropdownMenuItem
-                              variant="destructive"
-                              onSelect={() => {
-                                setPendingDeleteChatId(chat.id)
-                              }}
-                            >
-                              <Trash2Icon />
-                              Delete chat
-                            </DropdownMenuItem>
-                          </DropdownMenuGroup>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </SidebarMenuItem>
-                )
-              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </CollapsibleContent>

@@ -5,6 +5,7 @@ import type { UIMessage } from "ai"
 import { useEffect, useRef, useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
+import { ApiError } from "@/lib/http-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { ChatSession } from "@/features/ai/chat/components/chat-session/chat-session"
 import { ChatSessionSkeleton } from "@/features/ai/chat/components/chat-session/chat-session-skeleton"
@@ -28,6 +29,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
   const [activeChatId, setActiveChatId] = useState<string | null>(initialChatId)
   const [sessionClientId, setSessionClientId] = useState("")
   const bootstrapModeRef = useRef<"guest" | "authenticated" | null>(null)
+  const ignoredInitialChatIdRef = useRef(false)
   const hasRefetchedChatsForSessionRef = useRef(false)
   const setNavigationActiveChatId = useChatNavigationStore((state) => state.setActiveChatId)
   const chatDetailQuery = useFetchChatDetail(activeChatId, isAuthenticated)
@@ -68,7 +70,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
 
     bootstrapModeRef.current = "authenticated"
     queueMicrotask(() => {
-      if (initialChatId) {
+      if (initialChatId && !ignoredInitialChatIdRef.current) {
         setActiveChatId(initialChatId)
         setSessionClientId(initialChatId)
         setRoutingReady(true)
@@ -94,7 +96,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
       return
     }
 
-    if (initialChatId && activeChatId !== initialChatId) {
+    if (initialChatId && !ignoredInitialChatIdRef.current && activeChatId !== initialChatId) {
       setActiveChatId(initialChatId)
       setSessionClientId(initialChatId)
     }
@@ -119,6 +121,20 @@ export function Chat({ initialChatId = null }: ChatProps) {
     }
     hasRefetchedChatsForSessionRef.current = false
   }, [sessionClientId])
+
+  useEffect(() => {
+    if (!activeChatId || !chatDetailQuery.isError) {
+      return
+    }
+    const isNotFound = chatDetailQuery.error instanceof ApiError && chatDetailQuery.error.status === 404
+    if (!isNotFound) {
+      return
+    }
+    ignoredInitialChatIdRef.current = true
+    setActiveChatId(null)
+    setSessionClientId(crypto.randomUUID())
+    replaceAddressBarPath(WebRoutes.askAi.path)
+  }, [activeChatId, chatDetailQuery.error, chatDetailQuery.isError])
 
   useEffect(() => {
     setNavigationActiveChatId(activeChatId)
