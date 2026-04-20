@@ -14,13 +14,13 @@ export default function NotFound() {
         <h1 className="text-[220px] leading-none font-semibold tracking-tight text-black md:text-[280px]">
           4<span className="text-accent-1">0</span>4
         </h1>
-        <h2 className="-mt-3 text-4xl font-medium text-foreground">Sorry! Page not found</h2>
-        <p className="mt-4 max-w-xl text-base text-muted-foreground">
+        <h2 className="-mt-3 text-4xl font-bold text-foreground">Sorry! Page not found</h2>
+        <p className="mt-4 max-w-xl text-xl text-foreground">
           The page you are looking for does not exist or has been moved.
         </p>
         <Button
           asChild
-          className="mt-10 rounded-full bg-foreground px-8 py-5 font-semibold hover:bg-foreground/90"
+          className="mt-10 rounded-full bg-foreground px-8 py-6 font-semibold hover:bg-foreground/90"
           featureStylesEnabled
         >
           <Link href={WebRoutes.root.path}>Go Back To Home</Link>
