@@ -10,9 +10,10 @@ import { LogoIcon } from "@/components/ui/icons/logo.icon"
 
 const infoLinks = [
   { label: "AI Page", href: WebRoutes.askAi.path },
-  { label: "Contact", href: WebRoutes.contact.path },
   { label: "Pricing", href: WebRoutes.pricing.path },
 ] as const
+
+const resourcesLinks = [{ label: "Contact Us", href: WebRoutes.contact.path }] as const
 
 const companyLinks = [
   { label: "Terms and Conditions", href: WebRoutes.termsOfService.path },
@@ -28,8 +29,8 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-border bg-white dark:bg-background">
-      <div className="mx-auto grid w-full max-w-6xl gap-12 px-6 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
+    <footer className="bg-white dark:bg-background">
+      <div className="mx-auto grid w-full max-w-6xl gap-12 px-6 py-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
         <div className="space-y-5">
           <Link href={WebRoutes.root.path} className="flex items-center gap-3">
             <LogoIcon size={14} />
@@ -75,6 +76,21 @@ export function Footer() {
           <h3 className="text-sm font-semibold tracking-wide text-foreground/80 uppercase">Company</h3>
           <div className="space-y-2">
             {companyLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-sm font-semibold tracking-wide text-foreground/80 uppercase">Resources</h3>
+          <div className="space-y-2">
+            {resourcesLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}

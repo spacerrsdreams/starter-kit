@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { WebRoutes } from "@/lib/web.routes"
+import { Footer } from "@/components/footer"
 import { HeaderNavigation } from "@/components/header-navigation"
 import { TopGradient } from "@/components/top-gradient"
 import { Button } from "@/components/ui/button"
@@ -26,6 +27,7 @@ export default function NotFound() {
           <Link href={WebRoutes.root.path}>Go Back To Home</Link>
         </Button>
       </div>
+      <Footer />
     </div>
   )
 }
