@@ -1,75 +1,15 @@
 "use client"
 
-import { Database } from "lucide-react"
-import { useState } from "react"
-
-import { PricingPlanCard } from "@/features/billing/components/plan-picker-dialog/pricing-plan-card.client"
+import { PlanPicker } from "@/features/billing/components/plan-picker-dialog/plan-picker.client"
 import type { PlanPickerDialogProps } from "@/features/billing/types/plan-picker-dialog.types"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Switch } from "@/components/ui/switch"
-
-const MONTHLY_PLAN_FEATURES = ["Essential tools to get you up", "Up to 5 projects & reporting", "Email support"]
-
-const YEARLY_PLAN_FEATURES = ["Essential tools to get you up", "Unlimited projects & reporting", "Email support"]
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 
 export function PlanPickerDialog({ open, onOpenChange, isBillingLoading, onSelectInterval }: PlanPickerDialogProps) {
-  const [isYearly, setIsYearly] = useState(false)
-  const starterPrice = isYearly ? 31 : 39
-  const ultimatePrice = isYearly ? 63 : 79
-  const billedLabel = isYearly ? "yearly" : "monthly"
-  const selectedInterval = isYearly ? "yearly" : "monthly"
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="h-dvh max-h-dvh w-screen max-w-[100vw] gap-0 overflow-y-auto rounded-none border-none bg-background p-0 sm:max-w-[100vw]">
-        <div className="flex h-full flex-col items-center justify-center">
-          <DialogHeader className="items-center px-5 py-6 text-center sm:px-8 sm:py-7">
-            <div className="inline-flex items-center gap-2 rounded-full border bg-white px-4 py-1.5 text-sm font-medium shadow-xl">
-              <Database className="size-3.5" />
-              Pricing
-            </div>
-            <DialogTitle className="mt-4 text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
-              Choose the Perfect Plan
-            </DialogTitle>
-            <DialogDescription className="mt-16 flex w-full items-center justify-center gap-3">
-              <span className="text-sm font-medium">Monthly</span>
-              <Switch
-                checked={isYearly}
-                onCheckedChange={setIsYearly}
-                disabled={isBillingLoading}
-                aria-label="Billing cycle"
-                className="border-border px-2 py-1 data-[size=default]:h-7 data-[size=default]:w-14 data-checked:bg-accent-1 data-checked:**:data-[slot=switch-thumb]:translate-x-6 data-checked:**:data-[slot=switch-thumb]:bg-white data-unchecked:bg-sidebar data-unchecked:**:data-[slot=switch-thumb]:translate-x-0 data-unchecked:**:data-[slot=switch-thumb]:bg-black"
-              />
-              <span className="text-sm font-semibold">Yearly</span>
-              <span className="rounded-full bg-accent-1 px-2.5 py-1 text-xs font-medium text-white">SAVE 20%</span>
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="mx-auto flex w-full flex-col items-center justify-center gap-4 md:flex-row">
-            <PricingPlanCard
-              title="Starter"
-              subtitle="Perfect for individuals and small teams just getting started"
-              price={starterPrice}
-              billedLabel={billedLabel}
-              features={MONTHLY_PLAN_FEATURES}
-              ctaLabel="Get 14 Days Free Trial"
-              isLoading={isBillingLoading}
-              onSelect={() => onSelectInterval(selectedInterval)}
-              isLastFeatureMuted
-            />
-            <PricingPlanCard
-              title="Ultimate"
-              subtitle="Perfect for individuals and small teams just getting started"
-              price={ultimatePrice}
-              billedLabel={billedLabel}
-              features={YEARLY_PLAN_FEATURES}
-              ctaLabel="Get 14 Days Free Trial"
-              isLoading={isBillingLoading}
-              onSelect={() => onSelectInterval(selectedInterval)}
-              isFeatured
-            />
-          </div>
-        </div>
+        <DialogTitle className="sr-only">Choose the Perfect Plan</DialogTitle>
+        <PlanPicker isBillingLoading={isBillingLoading} onSelectInterval={onSelectInterval} />
       </DialogContent>
     </Dialog>
   )

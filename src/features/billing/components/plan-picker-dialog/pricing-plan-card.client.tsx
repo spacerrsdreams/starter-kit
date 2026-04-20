@@ -66,6 +66,7 @@ export function PricingPlanCard({
         asChild
         type="button"
         variant={isFeatured ? "default" : "outline"}
+        featureStylesEnabled={isFeatured}
         disabled={isLoading}
         onClick={onSelect}
         className={cn(
@@ -75,14 +76,21 @@ export function PricingPlanCard({
       >
         <motion.button
           type="button"
-          className="min-w-0"
+          className="relative min-w-0"
           initial="rest"
           animate="rest"
           whileHover="hover"
           transition={slideTransition}
         >
+          <span
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute top-1 right-3 left-3 h-1/3 rounded-full bg-linear-to-b",
+              isFeatured ? "from-white/14 to-transparent" : "from-white/10 to-transparent"
+            )}
+          />
           <span className="sr-only">{ctaText}</span>
-          <span aria-hidden className="relative mx-auto block h-5 min-h-6 w-full min-w-0 overflow-hidden">
+          <span aria-hidden className="relative z-10 mx-auto block h-5 min-h-6 w-full min-w-0 overflow-hidden">
             <motion.span
               className="flex w-full flex-col"
               variants={{

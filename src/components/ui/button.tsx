@@ -46,6 +46,7 @@ function Button({
   size = "default",
   asChild = false,
   isLoading = false,
+  featureStylesEnabled = false,
   disabled = false,
   children,
   ...props
@@ -53,6 +54,7 @@ function Button({
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
     isLoading?: boolean
+    featureStylesEnabled?: boolean
   }) {
   const Comp = asChild ? Slot.Root : "button"
 
@@ -67,6 +69,11 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
+      style={{
+        background: featureStylesEnabled
+          ? "linear-gradient(rgb(255, 255, 255) -51%, rgb(16, 2, 2) 20%, rgb(16, 2, 2) 132%) rgba(0, 0, 0, 0)"
+          : "",
+      }}
       disabled={disabled || isLoading}
       {...props}
     >

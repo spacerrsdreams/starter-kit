@@ -3,7 +3,7 @@
 import type { User } from "better-auth"
 import { ArrowUpRight, CircleHelp, CreditCard, FileText, Info, LogOut, Settings, UserRoundCheck } from "lucide-react"
 import Link from "next/link"
-import { useState, useTransition } from "react"
+import { useState, useTransition, type MouseEvent } from "react"
 import { toast } from "sonner"
 
 import { authClient } from "@/lib/auth/auth-client"
@@ -113,6 +113,12 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
     })
   }
 
+  const handleUpgradeBadgeClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    handleUpgradeClick()
+  }
+
   const helpLinks = [
     {
       label: "Help Center",
@@ -141,28 +147,38 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
     <>
       <div className="flex w-full items-center gap-2 px-2">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild className="cursor-pointer px-0!">
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-10 min-w-0 flex-1 justify-start gap-2 px-2! py-2! hover:bg-input/50"
-              aria-label="Open account menu"
-            >
-              <Avatar className="size-7">
-                <AvatarImage src={user.image ?? undefined} alt={user.name ?? "User"} />
-                <AvatarFallback>{getInitial(user.email)}</AvatarFallback>
-              </Avatar>
-              <div className="grid min-w-0 flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{getDisplayName(user)}</span>
-                <span className="truncate text-xs text-muted-foreground">{planStatusLabel}</span>
-              </div>
-              {isFreeUser ? (
-                <span className="inline-flex h-7 shrink-0 items-center rounded-full border border-border bg-background px-2.5 text-xs font-medium text-foreground shadow-xs">
-                  Upgrade
-                </span>
-              ) : null}
-            </Button>
-          </DropdownMenuTrigger>
+          <div className="relative min-w-0 flex-1">
+            <DropdownMenuTrigger asChild className="cursor-pointer px-0!">
+              <Button
+                type="button"
+                variant="ghost"
+                className={`h-10 w-full min-w-0 justify-start gap-2 px-2! py-2! hover:bg-input/50 ${isFreeUser ? "pr-24!" : ""}`}
+                aria-label="Open account menu"
+              >
+                <Avatar className="size-7">
+                  <AvatarImage src={user.image ?? undefined} alt={user.name ?? "User"} />
+                  <AvatarFallback>{getInitial(user.email)}</AvatarFallback>
+                </Avatar>
+                <div className="grid min-w-0 flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">{getDisplayName(user)}</span>
+                  <span className="truncate text-xs text-muted-foreground">{planStatusLabel}</span>
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            {isFreeUser ? (
+              <button
+                type="button"
+                className="absolute top-1/2 right-2 z-50 inline-flex h-7 -translate-y-1/2 cursor-pointer items-center rounded-full border border-border bg-background px-2.5 text-xs font-medium text-foreground shadow-xs"
+                onPointerDown={(event) => {
+                  event.preventDefault()
+                  event.stopPropagation()
+                }}
+                onClick={handleUpgradeBadgeClick}
+              >
+                Upgrade
+              </button>
+            ) : null}
+          </div>
           <DropdownMenuContent align="start" side="top" className="ml-2 w-72 max-w-[calc(100vw-16px)]">
             <DropdownMenuLabel className="py-2">
               <div className="flex items-center gap-3">

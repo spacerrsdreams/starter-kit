@@ -72,3 +72,5 @@ Notes:
 
 - This repo uses Bun as package manager and script runner.
 - If Google auth redirect fails, check that `BETTER_AUTH_URL` and Google redirect URI match exactly.
+
+Do not forget to add rate limit to ur ai chat route its very very important
