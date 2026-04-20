@@ -50,9 +50,7 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
               <SidebarUpgradeCta />
             </div>
           ) : null}
-          <div className="border-t pt-2">
-            <SidebarFooterUserAction isSessionPending={isSessionPending} session={session} />
-          </div>
+          <SidebarFooterUserAction isSessionPending={isSessionPending} session={session} />
         </div>
       </SidebarFooter>
       <SidebarRail />

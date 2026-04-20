@@ -36,12 +36,12 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
 
   if (!session?.user) {
     return (
-      <div className="space-y-3 px-2 pb-2">
-        <div className="space-y-0.5">
+      <div className="space-y-3">
+        <div className="space-y-0 px-2">
           <Button
             type="button"
             variant="ghost"
-            className="h-10 w-full justify-start rounded-full px-3.5 text-[15px] font-medium text-sidebar-foreground"
+            className="h-8 w-full justify-start rounded-md px-2 text-sm font-medium text-sidebar-foreground"
             onClick={() => planPickerDialog?.openPlanPickerDialog()}
             disabled={planPickerDialog?.isPlanPickerCheckoutLoading}
           >
@@ -51,7 +51,7 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
           <Button
             type="button"
             variant="ghost"
-            className="h-10 w-full justify-start rounded-full px-3.5 text-[15px] font-medium text-sidebar-foreground"
+            className="h-8 w-full justify-start rounded-md px-2 text-sm font-medium text-sidebar-foreground"
             onClick={() => setIsSettingsOpen(true)}
           >
             <Settings className="mr-2.5 size-4" />
@@ -60,7 +60,7 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
           <Button
             type="button"
             variant="ghost"
-            className="h-10 w-full justify-start rounded-full px-3.5 text-[15px] font-medium text-sidebar-foreground hover:bg-sidebar-accent/60"
+            className="h-8 w-full justify-start rounded-md px-2 text-sm font-medium text-sidebar-foreground"
             onClick={() => {
               window.location.href = WebRoutes.feedback.path
             }}
@@ -71,11 +71,9 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
           </Button>
         </div>
 
-        <div className="border-t border-sidebar-border px-2 pt-5">
-          <h3 className="text-[17px] leading-6 font-semibold tracking-tight text-sidebar-foreground">
-            Get responses tailored to you
-          </h3>
-          <p className="mt-3 text-[14px] leading-7 text-muted-foreground">
+        <div className="border-t border-sidebar-border p-4 pb-3">
+          <h3 className="text-sm font-semibold text-sidebar-foreground">Get responses tailored to you</h3>
+          <p className="mt-3 text-sm text-muted-foreground">
             Log in to get answers based on
             <br />
             saved chats, plus create images

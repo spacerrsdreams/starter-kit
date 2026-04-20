@@ -114,7 +114,7 @@ export function ChatDashboardSidebar() {
           <SidebarGroupContent className="flex min-h-0 flex-1 pt-1">
             <SidebarMenu className="min-h-0 flex-1 overflow-y-auto">
               <SidebarMenuItem>
-                <SidebarMenuButton asChild onClick={handleStartNewChat} className="pl-1">
+                <SidebarMenuButton isActive={isAskAiRoute} asChild onClick={handleStartNewChat} className="pl-1">
                   <div role="button" className="flex w-full cursor-pointer items-center gap-2">
                     <div className="rounded-full bg-muted-foreground/15 p-1 font-medium">
                       <PlusIcon className="size-4" />
