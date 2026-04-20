@@ -1,11 +1,10 @@
 "use client"
 
-import { ChevronRight, CircleHelp, Settings, SparklesIcon } from "lucide-react"
+import { Settings, SparklesIcon } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
-import { WebRoutes } from "@/lib/web.routes"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
 import { usePlanPickerDialog } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog-context"
 import { SettingsDialog } from "@/features/settings/components/settings-dialog/settings-dialog"
@@ -16,6 +15,9 @@ import { SidebarFooterSkeleton } from "./sidebar-footer-skeleton"
 const UserButton = dynamic(() => import("@/features/auth/components/user-button").then((module) => module.UserButton), {
   ssr: false,
   loading: () => <SidebarFooterSkeleton />,
+})
+const HelpPopover = dynamic(() => import("@/features/help/components/help-popover/help-popover.client").then((module) => module.HelpPopover), {
+  ssr: false,
 })
 
 type SessionData = ReturnType<typeof authClient.useSession>["data"]
@@ -57,18 +59,7 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
             <Settings className="mr-2.5 size-4" />
             Settings
           </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            className="h-8 w-full justify-start rounded-md px-2 text-sm font-medium text-sidebar-foreground"
-            onClick={() => {
-              window.location.href = WebRoutes.feedback.path
-            }}
-          >
-            <CircleHelp className="mr-2.5 size-4" />
-            Help
-            <ChevronRight className="ml-auto size-4 text-muted-foreground" />
-          </Button>
+          <HelpPopover />
         </div>
 
         <div className="border-t border-sidebar-border p-4 pb-3">

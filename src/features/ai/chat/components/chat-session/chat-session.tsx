@@ -343,7 +343,7 @@ export function ChatSession({
         <ConversationScrollButton />
       </Conversation>
 
-      <div className={cn("shrink-0 px-4 pt-3 pb-1 md:pb-8", messages.length === 0 ? "pt-2" : undefined)}>
+      <div className={cn("shrink-0 px-4 pt-3 pb-1 sm:pb-4.5", messages.length === 0 ? "pt-2" : undefined)}>
         {messages.length === 0 ? (
           <ChatExamplePrompts
             disabled={isGenerating || createChatMutation.isPending}

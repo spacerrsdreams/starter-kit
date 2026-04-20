@@ -30,6 +30,7 @@ export const WebRoutes = {
   signIn: createRoute("Sign In", "/sign-in"),
   signUp: createRoute("Sign Up", "/sign-up"),
   resetPassword: createRoute("Reset Password", "/reset-password"),
+  contact: createRoute("Contact", "/contact"),
   feedback: createRoute("Feedback", "/feedback"),
   verifyEmail: createRoute("Verify Email", "/verify-email"),
   emailUnsubscribe: createRoute("Email Preferences", "/email-unsubscribe"),
