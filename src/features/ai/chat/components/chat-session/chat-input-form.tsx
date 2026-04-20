@@ -74,10 +74,12 @@ const PromptInputAttachmentsDisplay = () => {
 
 interface ChatInputFormProps {
   onSubmit: ({ text, files }: { text: string; files: FileUIPart[] }) => Promise<void>
+  onStop: () => void
+  isInputLocked: boolean
   status: ChatStatus
 }
 
-export function ChatInputForm({ onSubmit, status }: ChatInputFormProps) {
+export function ChatInputForm({ onSubmit, onStop, isInputLocked, status }: ChatInputFormProps) {
   const handleAttachmentError = useCallback(
     (err: { code: "max_files" | "max_file_size" | "accept"; message: string }) => {
       if (err.code === "max_files") {
@@ -101,7 +103,12 @@ export function ChatInputForm({ onSubmit, status }: ChatInputFormProps) {
         maxFiles={MAX_ATTACHMENT_FILES}
         multiple
         onError={handleAttachmentError}
-        onSubmit={onSubmit}
+        onSubmit={async (message) => {
+          if (isInputLocked) {
+            throw new Error("Input is locked while response is streaming")
+          }
+          await onSubmit(message)
+        }}
         inputGroupClassName="rounded-xl bg-background"
       >
         <PromptInputAttachmentsDisplay />
@@ -118,7 +125,7 @@ export function ChatInputForm({ onSubmit, status }: ChatInputFormProps) {
               </PromptInputActionMenuContent>
             </PromptInputActionMenu>
           </PromptInputTools>
-          <PromptInputSubmit status={status} />
+          <PromptInputSubmit onStop={onStop} status={status} />
         </PromptInputFooter>
       </PromptInput>
     </PromptInputProvider>

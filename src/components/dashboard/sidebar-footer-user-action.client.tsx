@@ -16,9 +16,12 @@ const UserButton = dynamic(() => import("@/features/auth/components/user-button"
   ssr: false,
   loading: () => <SidebarFooterSkeleton />,
 })
-const HelpPopover = dynamic(() => import("@/features/help/components/help-popover/help-popover.client").then((module) => module.HelpPopover), {
-  ssr: false,
-})
+const HelpPopover = dynamic(
+  () => import("@/features/help/components/help-popover/help-popover.client").then((module) => module.HelpPopover),
+  {
+    ssr: false,
+  }
+)
 
 type SessionData = ReturnType<typeof authClient.useSession>["data"]
 
@@ -87,7 +90,7 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
   }
 
   return (
-    <div className="flex items-center justify-end">
+    <div className="flex w-full items-center">
       <UserButton
         user={session.user}
         isAdmin={session.user.role === "admin"}

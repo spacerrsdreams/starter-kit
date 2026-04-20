@@ -19,6 +19,10 @@ import { getMessageReaction } from "@/features/ai/chat/utils/chat-message-reacti
 import { getMessageFileParts, getMessageTextContent } from "@/features/ai/chat/utils/chat-session-message.utils"
 import { createStableChatTransport } from "@/features/ai/chat/utils/stable-chat-transport"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
+import { usePlanPickerDialog } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog-context"
+import { BILLING_TRACKING_EVENTS } from "@/features/billing/constants/billing-tracking.constants"
+import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
+import { trackBillingEvent } from "@/features/billing/utils/track-billing-event.client"
 import {
   Conversation,
   ConversationContent,
@@ -26,7 +30,8 @@ import {
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation"
 import { Message, MessageContent } from "@/components/ai-elements/message"
-import { LogoIcon } from "@/components/ui/icons/logo.icon"
+import { Button } from "@/components/ui/button"
+import { LogoIcon, LogoSvg } from "@/components/ui/icons/logo.icon"
 
 import { ChatInputForm } from "./chat-input-form"
 
@@ -47,6 +52,9 @@ export function ChatSession({
   const isSendInFlightRef = useRef(false)
   const wasGeneratingRef = useRef(false)
   const { openAuthModal } = useAuthRequiredModal()
+  const planPickerDialog = usePlanPickerDialog()
+  const subscriptionQuery = useFetchBillingSubscription()
+  const isPaid = subscriptionQuery.data?.isPaid ?? false
   const { pendingPrompt, setPendingPrompt, clearPendingPrompt } = useChatAuthRequiredStore((state) => state)
   const [messageReactionOverrides, setMessageReactionOverrides] = useState<Record<string, ChatMessageReaction | null>>(
     {}
@@ -57,7 +65,7 @@ export function ChatSession({
     transportApi.setChatId(initialDbChatId)
   }, [initialDbChatId, transportApi])
 
-  const { messages, sendMessage, setMessages, status } = useChat({
+  const { messages, sendMessage, setMessages, status, stop } = useChat({
     id: sessionClientId,
     messages: initialMessages,
     transport: transportApi.transport,
@@ -275,8 +283,35 @@ export function ChatSession({
     [isGenerating, isAuthenticated, setPendingPrompt, openAuthModal, sendAuthorizedMessage]
   )
 
+  const showUpgradePill = isAuthenticated && subscriptionQuery.isSuccess && !isPaid
+
+  const handleUpgradeClick = useCallback(() => {
+    planPickerDialog?.openPlanPickerDialog()
+    trackBillingEvent({
+      type: BILLING_TRACKING_EVENTS.ctaClicked,
+      source: "sidebar_upgrade_cta",
+      plan: "free",
+    })
+  }, [planPickerDialog])
+
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
+      {messages.length === 0 && showUpgradePill ? (
+        <div className="shrink-0 px-4 pt-2">
+          <div className="flex justify-center">
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-8 rounded-full bg-violet-100 px-3 text-xs leading-4 font-semibold text-violet-900 hover:bg-violet-200 dark:bg-violet-500/20 dark:text-violet-200 dark:hover:bg-violet-500/30"
+              onClick={handleUpgradeClick}
+              disabled={planPickerDialog?.isPlanPickerCheckoutLoading}
+            >
+              <LogoSvg className="mr-1 size-3.5 text-violet-600!" />
+              Get Plus
+            </Button>
+          </div>
+        </div>
+      ) : null}
       <Conversation className="min-h-0 flex-1 overflow-hidden">
         <ConversationContent
           className={cn("flex min-h-0 flex-col", messages.length === 0 ? "h-full justify-center" : undefined)}
@@ -354,7 +389,7 @@ export function ChatSession({
             }}
           />
         ) : null}
-        <ChatInputForm onSubmit={handleSubmit} status={status} />
+        <ChatInputForm isInputLocked={isGenerating} onStop={stop} onSubmit={handleSubmit} status={status} />
       </div>
     </div>
   )

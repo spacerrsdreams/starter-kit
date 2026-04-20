@@ -137,7 +137,7 @@ export async function signUpWithEmailAndPasswordAction(input: SignUpWithEmailAnd
   try {
     await auth.api.signUpEmail({
       body: {
-        name: "Anonymous",
+        name: "User",
         email,
         password,
         callbackURL: ApiRoutes.authSignedIn,
