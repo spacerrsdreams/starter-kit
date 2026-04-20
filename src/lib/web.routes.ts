@@ -25,7 +25,9 @@ function createRoute(label: string, path: string): RouteDefinition {
 export const WebRoutes = {
   root: createRoute("Home", "/"),
   search: createRoute("Search", "/search"),
-  askAi: createRoute("Ask AI", "/ai"),
+  askAi: createRoute("Ask AI", "/dashboard/ai"),
+  dashboard: createRoute("Dashboard", "/dashboard"),
+  dashboardAi: createRoute("Dashboard AI", "/dashboard/ai"),
   pricing: createRoute("Pricing", "/pricing"),
   inbox: createRoute("Inbox", "/inbox"),
   signIn: createRoute("Sign In", "/sign-in"),
@@ -52,3 +54,20 @@ export const headerCompanyLinks = [
 ] as const
 
 export const headerMenuLinks = [...headerPageLinks, ...headerCompanyLinks] as const
+
+function normalizePathname(pathname: string): string {
+  const normalizedPath = pathname.replace(/\/+$/, "")
+
+  if (!normalizedPath) {
+    return "/"
+  }
+
+  return normalizedPath
+}
+
+export function isDashboardPath(pathname: string): boolean {
+  const normalizedPathname = normalizePathname(pathname)
+  const dashboardPath = WebRoutes.dashboard.path
+
+  return normalizedPathname === dashboardPath || normalizedPathname.startsWith(`${dashboardPath}/`)
+}

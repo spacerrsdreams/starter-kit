@@ -73,7 +73,11 @@ export function HeaderNavigationClient() {
             </div>
 
             <div className="hidden items-center gap-4 md:flex">
-              <Button asChild className="h-10 rounded-full bg-background px-5 py-6 font-semibold" featureStylesEnabled>
+              <Button
+                asChild
+                className="h-10 rounded-full bg-foreground px-5 py-6 font-semibold hover:bg-foreground/90!"
+                featureStylesEnabled
+              >
                 <Link href={WebRoutes.signUp.path}>Get Started</Link>
               </Button>
             </div>

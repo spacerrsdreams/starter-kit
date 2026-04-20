@@ -35,7 +35,7 @@ export function WaveGlowButton({ href, label }: WaveGlowButtonProps) {
             scaleY: [0.9, 1.04, 0.95, 1],
             opacity: [0.58, 0.72, 0.55, 0.62],
           }}
-          transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+          transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
         />
       </span>
 
