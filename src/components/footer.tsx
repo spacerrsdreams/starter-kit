@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
+import { FooterLinksSection } from "@/components/footer-links-section"
 import { FacebookIcon } from "@/components/ui/icons/facebook.icon"
 import { InstagramIcon } from "@/components/ui/icons/instagram.icon"
 import { LinkedInIcon } from "@/components/ui/icons/linkedin.icon"
@@ -57,51 +58,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-12 pb-12 sm:grid-cols-2 md:grid-cols-3">
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold tracking-wide text-foreground/80 uppercase">Info</h3>
-            <div className="space-y-2">
-              {infoLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold tracking-wide text-foreground/80 uppercase">Resources</h3>
-            <div className="space-y-2">
-              {resourcesLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold tracking-wide text-foreground/80 uppercase">Company</h3>
-            <div className="space-y-2">
-              {companyLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
+        <div className="grid grid-cols-1 gap-6 pb-12 sm:grid-cols-2 md:grid-cols-3">
+          <FooterLinksSection title="Info" links={infoLinks} />
+          <FooterLinksSection title="Resources" links={resourcesLinks} />
+          <FooterLinksSection title="Company" links={companyLinks} />
         </div>
       </div>
       <div className="mx-auto mt-6 border-t border-border/75 py-6">
