@@ -3,6 +3,7 @@ const SiteName = "StarterKit"
 export const SiteConfig = {
   name: SiteName,
   description: `${SiteName} is a template for building web applications.`,
+  copyrightYear: 2026,
   /** Open Graph title: 50–60 chars */
   ogTitle: `${SiteName} — Web Application Template`,
   /** Open Graph description: 110–160 chars */

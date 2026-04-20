@@ -112,7 +112,7 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
           className="fixed right-4 bottom-4 z-40 size-12 rounded-full shadow-lg md:right-6 md:bottom-6"
           aria-label="Open AI widget"
         >
-          <LogoSvg iconSize={20} />
+          <LogoSvg iconSize={20} className="text-white!" />
         </Button>
       </SheetTrigger>
 

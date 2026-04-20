@@ -67,7 +67,7 @@ export function Footer() {
       <div className="mx-auto mt-6 border-t border-border/75 py-6">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-center p-6 text-sm font-medium text-foreground">
           <p>
-            © {new Date().getFullYear()} {SiteConfig.name}, Inc. All rights reserved.
+            © {SiteConfig.copyrightYear} {SiteConfig.name}, Inc. All rights reserved.
           </p>
         </div>
       </div>
