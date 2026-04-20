@@ -1,33 +1,30 @@
 import Link from "next/link"
 
 import { WebRoutes } from "@/lib/web.routes"
+import { HeaderNavigation } from "@/components/header-navigation"
+import { TopGradient } from "@/components/top-gradient"
 import { Button } from "@/components/ui/button"
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-8 text-center">
-      <div className="flex max-w-lg flex-col items-center">
-        <h1 className="mb-2 text-4xl font-medium text-foreground">404</h1>
-        <h2 className="mb-3 text-xl font-medium text-foreground sm:text-2xl">Page not found</h2>
-        <p className="mb-8 text-sm text-muted-foreground sm:text-base">
+    <div className="min-h-screen bg-background">
+      <TopGradient />
+      <HeaderNavigation />
+      <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center text-center">
+        <h1 className="text-[220px] leading-none font-semibold tracking-tight text-black md:text-[280px]">
+          4<span className="text-accent-1">0</span>4
+        </h1>
+        <h2 className="-mt-3 text-4xl font-medium text-foreground">Sorry! Page not found</h2>
+        <p className="mt-4 max-w-xl text-base text-muted-foreground">
           The page you are looking for does not exist or has been moved.
         </p>
-        <div className="flex w-full max-w-sm flex-col gap-3 sm:flex-row sm:justify-center">
-          <Button asChild className="w-full sm:w-auto">
-            <Link href={WebRoutes.root.path}>Go back home</Link>
-          </Button>
-          <Button asChild variant="outline" className="w-full sm:w-auto">
-            <Link href={WebRoutes.root.path}>Go to dashboard</Link>
-          </Button>
-        </div>
-        <p className="mt-8 text-sm text-muted-foreground">
-          <Link
-            href={WebRoutes.root.path}
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
-          >
-            Need help? Contact support
-          </Link>
-        </p>
+        <Button
+          asChild
+          className="mt-10 rounded-full bg-foreground px-8 py-5 font-semibold hover:bg-foreground/90"
+          featureStylesEnabled
+        >
+          <Link href={WebRoutes.root.path}>Go Back To Home</Link>
+        </Button>
       </div>
     </div>
   )

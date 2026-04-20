@@ -26,6 +26,7 @@ export const WebRoutes = {
   root: createRoute("Home", "/"),
   search: createRoute("Search", "/search"),
   askAi: createRoute("Ask AI", "/ai"),
+  pricing: createRoute("Pricing", "/pricing"),
   inbox: createRoute("Inbox", "/inbox"),
   signIn: createRoute("Sign In", "/sign-in"),
   signUp: createRoute("Sign Up", "/sign-up"),
@@ -37,3 +38,17 @@ export const WebRoutes = {
   privacyPolicy: createRoute("Privacy Policy", "/privacy-policy"),
   termsOfService: createRoute("Terms of Service", "/terms-of-service"),
 } as const
+
+export const headerPageLinks = [
+  { title: "Home", href: WebRoutes.root.path },
+  { title: "AI Page", href: WebRoutes.askAi.path },
+  { title: "Contact", href: WebRoutes.contact.path },
+  { title: "Pricing", href: WebRoutes.pricing.path },
+] as const
+
+export const headerCompanyLinks = [
+  { title: "Terms and Conditions", href: WebRoutes.termsOfService.path },
+  { title: "Privacy Policy", href: WebRoutes.privacyPolicy.path },
+] as const
+
+export const headerMenuLinks = [...headerPageLinks, ...headerCompanyLinks] as const

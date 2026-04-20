@@ -1,16 +1,14 @@
+const SiteName = "StarterKit"
+
 export const SiteConfig = {
-  name: "Starter Kit",
-
-  description: "Starter Kit is a template for building web applications.",
-
+  name: SiteName,
+  description: `${SiteName} is a template for building web applications.`,
   /** Open Graph title: 50–60 chars */
-  ogTitle: "Starter Kit — Web Application Template",
-
+  ogTitle: `${SiteName} — Web Application Template`,
   /** Open Graph description: 110–160 chars */
-  ogDescription: "Starter Kit is a template for building web applications.",
-
+  ogDescription: `${SiteName} is a template for building web applications.`,
   keywords: [
-    "Starter Kit",
+    SiteName,
     "Web Application Template",
     "Web Application",
     "Template",

@@ -1,12 +1,15 @@
 import { cn } from "@/lib/utils"
 
-export function LogoIcon({ size = 16 }: { size?: number }) {
+export function LogoIcon({ size = 16, className }: React.ComponentProps<"svg"> & { size?: number }) {
   const containerSize = size * 2
   const iconSize = size
 
   return (
     <div
-      className="flex aspect-square items-center justify-center rounded-sm bg-foreground text-background"
+      className={cn(
+        "flex aspect-square items-center justify-center rounded-sm bg-foreground text-background",
+        className
+      )}
       style={{ height: containerSize, width: containerSize }}
     >
       <LogoSvg iconSize={iconSize} />
