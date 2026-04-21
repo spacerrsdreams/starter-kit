@@ -2,5 +2,6 @@ import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-
 
 export type SetMessageReactionPayload = {
   reaction: ChatMessageReaction | null
+  feedbackText?: string | null
 }
 

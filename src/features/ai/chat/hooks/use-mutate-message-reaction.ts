@@ -10,17 +10,18 @@ type SetMessageReactionInput = {
   chatId: string
   messageId: string
   reaction: ChatMessageReaction | null
+  feedbackText?: string | null
 }
 
 export function useMutateMessageReaction() {
   const { data: session, isPending: isSessionPending } = authClient.useSession()
 
   return useMutation({
-    mutationFn: ({ chatId, messageId, reaction }: SetMessageReactionInput) => {
+    mutationFn: ({ chatId, messageId, reaction, feedbackText }: SetMessageReactionInput) => {
       if (isSessionPending || !session?.user) {
         throw new Error("Authentication required")
       }
-      return setMessageReactionApi(chatId, messageId, reaction)
+      return setMessageReactionApi(chatId, messageId, reaction, feedbackText)
     },
   })
 }

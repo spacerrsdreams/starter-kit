@@ -13,6 +13,9 @@ type RouteContext = {
 
 const requestSchema = z.object({
   reaction: z.enum(["like", "unlike"]).nullable(),
+  feedbackText: z.string().trim().max(500).nullable().optional(),
+}).refine((data) => data.reaction !== "unlike" || Boolean(data.feedbackText?.trim()), {
+  message: "Feedback text is required for unlike reaction",
 })
 
 async function getSessionUserId() {
@@ -32,7 +35,8 @@ export async function PATCH(req: Request, context: RouteContext) {
   }
 
   const { chatId, messageId } = await context.params
-  const updated = await updateMessageReaction(chatId, userId, messageId, parseResult.data.reaction)
+  const feedbackText = parseResult.data.reaction === "unlike" ? (parseResult.data.feedbackText?.trim() ?? null) : null
+  const updated = await updateMessageReaction(chatId, userId, messageId, parseResult.data.reaction, feedbackText)
 
   if (!updated) {
     return NextResponse.json({ error: "Message not found" }, { status: 404 })

@@ -14,6 +14,8 @@ import { getChatToolInvocationPart } from "@/features/ai/chat/utils/chat-tool-st
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message"
 import { Button } from "@/components/ui/button"
 import { LogoSvg } from "@/components/ui/icons/logo.icon"
+import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "@/components/ui/popover"
+import { Textarea } from "@/components/ui/textarea"
 
 export function ChatSessionAssistantMessage({
   message,
@@ -25,9 +27,12 @@ export function ChatSessionAssistantMessage({
   onRetry,
   onToggleLike,
   onToggleUnlike,
+  onSubmitUnlikeFeedback,
 }: ChatSessionAssistantMessageProps) {
   const [isCopied, setIsCopied] = useState(false)
   const [isRetrying, setIsRetrying] = useState(false)
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
+  const [feedbackText, setFeedbackText] = useState("")
   const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -138,18 +143,51 @@ export function ChatSessionAssistantMessage({
                   >
                     <ThumbsUp className="size-4" />
                   </Button>
-                  <Button
-                    size="icon"
-                    type="button"
-                    variant="ghost"
-                    className="size-7"
-                    aria-label="Unlike message"
-                    onClick={() => {
-                      void onToggleUnlike()
-                    }}
-                  >
-                    <ThumbsDown className="size-4" />
-                  </Button>
+                  <Popover open={isFeedbackOpen} onOpenChange={setIsFeedbackOpen}>
+                    <PopoverTrigger asChild>
+                      <Button size="icon" type="button" variant="ghost" className="size-7" aria-label="Unlike message">
+                        <ThumbsDown className="size-4" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className="w-72">
+                      <PopoverHeader>
+                        <PopoverTitle>Tell us what was wrong</PopoverTitle>
+                      </PopoverHeader>
+                      <form
+                        className="space-y-2"
+                        onSubmit={(event) => {
+                          event.preventDefault()
+                          const trimmedFeedback = feedbackText.trim()
+                          if (!trimmedFeedback) {
+                            toast.error("Please add feedback")
+                            return
+                          }
+                          void (async () => {
+                            try {
+                              await onSubmitUnlikeFeedback(trimmedFeedback)
+                              setFeedbackText("")
+                              setIsFeedbackOpen(false)
+                            } catch {
+                              return
+                            }
+                          })()
+                        }}
+                      >
+                        <Textarea
+                          value={feedbackText}
+                          onChange={(event) => setFeedbackText(event.target.value)}
+                          placeholder="Tell us why this response wasn't useful"
+                          maxLength={500}
+                          rows={3}
+                        />
+                        <div className="flex justify-end">
+                          <Button type="submit" size="sm">
+                            Submit
+                          </Button>
+                        </div>
+                      </form>
+                    </PopoverContent>
+                  </Popover>
                 </motion.div>
               ) : null}
 

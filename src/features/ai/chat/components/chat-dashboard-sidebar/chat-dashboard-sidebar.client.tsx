@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, ChevronRight, EllipsisIcon, Files, PlusIcon, Trash2Icon } from "lucide-react"
+import { Check, ChevronRight, EllipsisIcon, Files, Pencil, PlusIcon, Star, Trash2Icon } from "lucide-react"
 import { Route } from "next"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -11,7 +11,9 @@ import { cn } from "@/lib/utils"
 import { WebRoutes } from "@/lib/web.routes"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
+import { useMutateCreateChatShare } from "@/features/ai/chat/hooks/use-mutate-create-chat-share"
 import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-chat"
+import { useMutateUpdateChat } from "@/features/ai/chat/hooks/use-mutate-update-chat"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
 import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
 import {
@@ -35,6 +37,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { LogoSvg } from "@/components/ui/icons/logo.icon"
+import { Input } from "@/components/ui/input"
+import { Popover, PopoverAnchor, PopoverContent, PopoverHeader, PopoverTitle } from "@/components/ui/popover"
 import {
   SidebarGroupContent,
   SidebarMenu,
@@ -48,17 +52,23 @@ export function ChatDashboardSidebar() {
   const router = useRouter()
   const { isMobile, setOpenMobile } = useSidebar()
   const [pendingDeleteChatId, setPendingDeleteChatId] = useState<string | null>(null)
+  const [renamingChatId, setRenamingChatId] = useState<string | null>(null)
+  const [renameTitle, setRenameTitle] = useState("")
   const [copiedChatId, setCopiedChatId] = useState<string | null>(null)
   const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const activeChatId = useChatNavigationStore((state) => state.activeChatId)
   const chatsQuery = useFetchChats()
   const deleteChatMutation = useMutateDeleteChat()
+  const updateChatMutation = useMutateUpdateChat()
+  const createChatShareMutation = useMutateCreateChatShare()
   const chats = useMemo<ChatListItem[]>(
     () => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [],
     [chatsQuery.data?.pages]
   )
 
   const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${WebRoutes.dashboard.path}/`)
+  const savedChats = useMemo(() => chats.filter((chat) => chat.isSaved), [chats])
+  const recentChats = useMemo(() => chats.filter((chat) => !chat.isSaved), [chats])
 
   useEffect(
     () => () => {
@@ -69,8 +79,19 @@ export function ChatDashboardSidebar() {
     []
   )
 
-  const handleCopyLink = async (chatPath: string, chatId: string) => {
-    const fullUrl = `${window.location.origin}${chatPath}`
+  const handleCopyLink = async (chatPath: string, chatId: string, shareId: string | null) => {
+    let finalShareId = shareId
+    if (!finalShareId) {
+      try {
+        const createdShare = await createChatShareMutation.mutateAsync(chatId)
+        finalShareId = createdShare.shareId
+      } catch {
+        toast.error("Could not create share link")
+        return
+      }
+    }
+    const sharedPath = WebRoutes.sharedChat(finalShareId)
+    const fullUrl = `${window.location.origin}${sharedPath}`
     try {
       await navigator.clipboard.writeText(fullUrl)
     } catch {
@@ -86,6 +107,175 @@ export function ChatDashboardSidebar() {
       setCopiedChatId(null)
       copyResetTimeoutRef.current = null
     }, 2000)
+  }
+
+  const handleChatRename = async () => {
+    const chatId = renamingChatId
+    const title = renameTitle.trim()
+    if (!chatId || !title) {
+      return
+    }
+    try {
+      await updateChatMutation.mutateAsync({ chatId, title })
+      setRenamingChatId(null)
+      setRenameTitle("")
+    } catch {
+      toast.error("Could not rename chat")
+    }
+  }
+
+  const renderChatRow = (chat: ChatListItem) => {
+    const chatPath = WebRoutes.chat(chat.id)
+    const isActive = pathname === chatPath || (pathname === WebRoutes.dashboard.path && activeChatId === chat.id)
+    const label = chat.title?.trim() || "Untitled chat"
+
+    return (
+      <SidebarMenuItem key={chat.id}>
+        <SidebarMenuButton
+          asChild
+          isActive={isActive ? true : undefined}
+          className="group pr-8 transition-all duration-300 hover:text-[14.25px]"
+        >
+          <Link
+            href={chatPath as Route}
+            title={label}
+            onClick={() => {
+              if (isMobile) {
+                setOpenMobile(false)
+              }
+            }}
+          >
+            <span
+              className={cn(
+                "truncate",
+                "font-medium group-hover:text-foreground",
+                isActive ? "text-foreground" : "text-foreground/80"
+              )}
+            >
+              {label}
+            </span>
+          </Link>
+        </SidebarMenuButton>
+        <div className="absolute top-1.5 right-1 z-20">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="z-10 size-5 cursor-pointer group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 md:opacity-0"
+                aria-label="Chat actions"
+                disabled={
+                  deleteChatMutation.isPending || updateChatMutation.isPending || createChatShareMutation.isPending
+                }
+              >
+                <EllipsisIcon className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48 min-w-48">
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  onSelect={async (event) => {
+                    event.preventDefault()
+                    try {
+                      await updateChatMutation.mutateAsync({ chatId: chat.id, isSaved: !chat.isSaved })
+                    } catch {
+                      toast.error("Could not update saved status")
+                    }
+                  }}
+                >
+                  <Star className={cn(chat.isSaved ? "fill-current text-amber-500" : undefined)} />
+                  {chat.isSaved ? "Remove from saved" : "Save chat"}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={(event) => {
+                    event.preventDefault()
+                    setRenamingChatId(chat.id)
+                    setRenameTitle(label)
+                  }}
+                >
+                  <Pencil />
+                  Rename chat
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={(event) => {
+                    event.preventDefault()
+                    void handleCopyLink(chatPath, chat.id, chat.shareId)
+                  }}
+                >
+                  <span className="relative flex size-4 shrink-0 items-center justify-center" aria-hidden>
+                    <Files
+                      className={cn(
+                        "absolute size-4 transition-all duration-200 ease-out",
+                        copiedChatId === chat.id ? "scale-50 opacity-0" : "scale-100 opacity-100"
+                      )}
+                    />
+                    <Check
+                      className={cn(
+                        "absolute size-4 text-amber-600 transition-all duration-200 ease-out",
+                        copiedChatId === chat.id ? "scale-100 opacity-100" : "scale-50 opacity-0"
+                      )}
+                      strokeWidth={2.5}
+                    />
+                  </span>
+                  <span className="transition-colors duration-200">
+                    {copiedChatId === chat.id ? "Copied" : "Share link"}
+                  </span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={() => {
+                    setPendingDeleteChatId(chat.id)
+                  }}
+                >
+                  <Trash2Icon />
+                  Delete chat
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <Popover
+          modal
+          open={renamingChatId === chat.id}
+          onOpenChange={(open) => {
+            if (!open) {
+              setRenamingChatId(null)
+            }
+          }}
+        >
+          <PopoverAnchor asChild>
+            <div className="absolute top-1.5 right-1 size-5" />
+          </PopoverAnchor>
+          <PopoverContent align="start" side="bottom" className="w-80">
+            <PopoverHeader>
+              <PopoverTitle>Rename chat</PopoverTitle>
+            </PopoverHeader>
+            <form
+              className="space-y-2"
+              onSubmit={(event) => {
+                event.preventDefault()
+                void handleChatRename()
+              }}
+            >
+              <Input
+                value={renameTitle}
+                onChange={(event) => setRenameTitle(event.target.value)}
+                maxLength={120}
+                autoFocus
+              />
+              <div className="flex justify-end">
+                <Button type="submit" size="sm" disabled={updateChatMutation.isPending || !renameTitle.trim()}>
+                  Save
+                </Button>
+              </div>
+            </form>
+          </PopoverContent>
+        </Popover>
+      </SidebarMenuItem>
+    )
   }
 
   const handleStartNewChat = () => {
@@ -122,104 +312,18 @@ export function ChatDashboardSidebar() {
                   </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              {savedChats.length > 0 ? (
+                <>
+                  <SidebarMenuItem className="px-2 pt-3 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
+                    Saved chats
+                  </SidebarMenuItem>
+                  {savedChats.map(renderChatRow)}
+                </>
+              ) : null}
               <SidebarMenuItem className="px-2 pt-3 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
                 Recents
               </SidebarMenuItem>
-              {chats.map((chat) => {
-                const chatPath = WebRoutes.chat(chat.id)
-                const isActive =
-                  pathname === chatPath || (pathname === WebRoutes.dashboard.path && activeChatId === chat.id)
-                const label = chat.title?.trim() || "Untitled chat"
-
-                return (
-                  <SidebarMenuItem key={chat.id}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive ? true : undefined}
-                      className="group pr-8 transition-all duration-300 hover:text-[14.25px]"
-                    >
-                      <Link
-                        href={chatPath as Route}
-                        title={label}
-                        onClick={() => {
-                          if (isMobile) {
-                            setOpenMobile(false)
-                          }
-                        }}
-                      >
-                        <span
-                          className={cn(
-                            "truncate",
-                            "font-medium group-hover:text-foreground",
-                            isActive ? "text-foreground" : "text-foreground/80"
-                          )}
-                        >
-                          {label}
-                        </span>
-                      </Link>
-                    </SidebarMenuButton>
-                    <div className="absolute top-1.5 right-1">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="size-5 cursor-pointer group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 md:opacity-0"
-                            aria-label="Chat actions"
-                            disabled={deleteChatMutation.isPending}
-                            onClick={(event) => {
-                              event.preventDefault()
-                            }}
-                          >
-                            <EllipsisIcon className="size-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-44 min-w-44">
-                          <DropdownMenuGroup>
-                            <DropdownMenuItem
-                              onSelect={(event) => {
-                                event.preventDefault()
-                                void handleCopyLink(chatPath, chat.id)
-                              }}
-                            >
-                              <span className="relative flex size-4 shrink-0 items-center justify-center" aria-hidden>
-                                <Files
-                                  className={cn(
-                                    "absolute size-4 transition-all duration-200 ease-out",
-                                    copiedChatId === chat.id ? "scale-50 opacity-0" : "scale-100 opacity-100"
-                                  )}
-                                />
-                                <Check
-                                  className={cn(
-                                    "absolute size-4 text-emerald-600 transition-all duration-200 ease-out dark:text-emerald-500",
-                                    copiedChatId === chat.id ? "scale-100 opacity-100" : "scale-50 opacity-0"
-                                  )}
-                                  strokeWidth={2.5}
-                                />
-                              </span>
-                              <span className="transition-colors duration-200">
-                                {copiedChatId === chat.id ? "Copied" : "Copy link"}
-                              </span>
-                            </DropdownMenuItem>
-                          </DropdownMenuGroup>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuGroup>
-                            <DropdownMenuItem
-                              variant="destructive"
-                              onSelect={() => {
-                                setPendingDeleteChatId(chat.id)
-                              }}
-                            >
-                              <Trash2Icon />
-                              Delete chat
-                            </DropdownMenuItem>
-                          </DropdownMenuGroup>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </SidebarMenuItem>
-                )
-              })}
+              {recentChats.map(renderChatRow)}
               {chatsQuery.hasNextPage ? (
                 <SidebarMenuItem className="px-1 pt-2">
                   <Button

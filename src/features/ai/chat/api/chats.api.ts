@@ -29,13 +29,32 @@ export async function deleteChatApi(id: string): Promise<void> {
   await apiRequest<unknown>(ApiRoutes.chats.delete(id), { method: "DELETE" })
 }
 
+type UpdateChatApiPayload = {
+  title?: string
+  isSaved?: boolean
+}
+
+export async function updateChatApi(id: string, payload: UpdateChatApiPayload): Promise<void> {
+  await apiRequest<unknown>(ApiRoutes.chats.get(id), {
+    method: "PATCH",
+    body: payload,
+  })
+}
+
+export async function createChatShareApi(id: string): Promise<{ shareId: string }> {
+  return apiRequest<{ shareId: string }>(ApiRoutes.chats.share(id), {
+    method: "POST",
+  })
+}
+
 export async function setMessageReactionApi(
   chatId: string,
   messageId: string,
-  reaction: ChatMessageReaction | null
+  reaction: ChatMessageReaction | null,
+  feedbackText?: string | null
 ): Promise<void> {
   await apiRequest<unknown>(ApiRoutes.chats.setMessageReaction(chatId, messageId), {
     method: "PATCH",
-    body: JSON.stringify({ reaction } satisfies SetMessageReactionPayload),
+    body: { reaction, feedbackText } satisfies SetMessageReactionPayload,
   })
 }

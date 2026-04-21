@@ -3,6 +3,7 @@ import "lenis/dist/lenis.css"
 
 import type { Metadata } from "next"
 import { DM_Sans } from "next/font/google"
+import { Suspense } from "react"
 
 import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
@@ -41,17 +42,19 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <body>
-        <ThemeProvider>
-          <SmoothScrollProvider>
-            <QueryClientProviderWrapper>
-              <TooltipProvider>
-                {children}
-                <Toaster position="bottom-right" />
-                <CookieConsentBannerLazy />
-              </TooltipProvider>
-            </QueryClientProviderWrapper>
-          </SmoothScrollProvider>
-        </ThemeProvider>
+        <Suspense fallback={null}>
+          <ThemeProvider>
+            <SmoothScrollProvider>
+              <QueryClientProviderWrapper>
+                <TooltipProvider>
+                  {children}
+                  <Toaster position="bottom-right" />
+                  <CookieConsentBannerLazy />
+                </TooltipProvider>
+              </QueryClientProviderWrapper>
+            </SmoothScrollProvider>
+          </ThemeProvider>
+        </Suspense>
       </body>
     </html>
   )

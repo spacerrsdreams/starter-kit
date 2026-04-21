@@ -54,6 +54,7 @@ export const WebRoutes = {
   search: createRoute("Search", "/search"),
   dashboard: createRoute("Dashboard", "/dashboard"),
   chat: createDynamicRoute("Chat", "/dashboard/ai/:id", (chatId) => `/dashboard/ai/${chatId}`),
+  sharedChat: createDynamicRoute("Shared Chat", "/chat/shared/:id", (shareId) => `/chat/shared/${shareId}`),
   pricing: createRoute("Pricing", "/pricing"),
   inbox: createRoute("Inbox", "/inbox"),
   signIn: createRoute("Sign In", "/sign-in"),

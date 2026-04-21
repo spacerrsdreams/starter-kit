@@ -22,4 +22,5 @@ export type ChatSessionAssistantMessageProps = {
   onRetry: () => Promise<void>
   onToggleLike: () => Promise<void>
   onToggleUnlike: () => Promise<void>
+  onSubmitUnlikeFeedback: (feedbackText: string) => Promise<void>
 }

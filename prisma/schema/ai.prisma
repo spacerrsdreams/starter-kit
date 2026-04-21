@@ -1,6 +1,8 @@
 model Chat {
   id             String    @id @default(cuid())
   title          String?
+  isSaved        Boolean   @default(false)
+  shareId        String?   @unique
   contextSummary String?
   userId         String
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -19,6 +21,7 @@ model Message {
   role      MessageRole
   parts     Json
   reaction  MessageReaction?
+  reactionNote String?
   createdAt DateTime    @default(now())
 
   @@index([chatId, createdAt])

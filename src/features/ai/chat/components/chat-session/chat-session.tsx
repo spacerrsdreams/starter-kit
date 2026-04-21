@@ -135,7 +135,7 @@ export function ChatSession({
   )
 
   const updateMessageReaction = useCallback(
-    async (message: UIMessage, nextReaction: ChatMessageReaction | null) => {
+    async (message: UIMessage, nextReaction: ChatMessageReaction | null, feedbackText?: string | null) => {
       const activeChatId = transportApi.getChatId()
       if (!activeChatId || !isAuthenticated) {
         return
@@ -150,6 +150,7 @@ export function ChatSession({
           chatId: activeChatId,
           messageId: message.id,
           reaction: nextReaction,
+          feedbackText,
         })
       } catch {
         setMessageReactionOverrides((current) => ({
@@ -348,6 +349,7 @@ export function ChatSession({
                   onRetry={() => retryFromAssistantMessage(message)}
                   onToggleLike={() => updateMessageReaction(message, reaction === "like" ? null : "like")}
                   onToggleUnlike={() => updateMessageReaction(message, reaction === "unlike" ? null : "unlike")}
+                  onSubmitUnlikeFeedback={(feedbackText) => updateMessageReaction(message, "unlike", feedbackText)}
                 />
               )
             }
