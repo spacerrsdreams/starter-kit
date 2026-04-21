@@ -4,15 +4,19 @@ import { Database } from "lucide-react"
 import { useState } from "react"
 
 import { PricingPlanCard } from "@/features/billing/components/plan-picker-dialog/pricing-plan-card.client"
-import type { PlanPickerProps } from "@/features/billing/types/plan-picker.types"
 import { Chip } from "@/components/ui/chip"
 import { Switch } from "@/components/ui/switch"
 
 const MONTHLY_PLAN_FEATURES = ["Essential tools to get you up", "Up to 5 projects & reporting", "Email support"]
-
 const YEARLY_PLAN_FEATURES = ["Essential tools to get you up", "Unlimited projects & reporting", "Email support"]
 
-export function PlanPicker({ isBillingLoading, onSelectInterval }: PlanPickerProps) {
+export type PlanPickerProps = {
+  isBillingLoading: boolean
+  showMainlabel?: boolean
+  onSelectInterval: (interval: "monthly" | "yearly") => void
+}
+
+export function PlanPicker({ isBillingLoading, showMainlabel = true, onSelectInterval }: PlanPickerProps) {
   const [isYearly, setIsYearly] = useState(false)
   const starterPrice = isYearly ? 31 : 39
   const ultimatePrice = isYearly ? 63 : 79
@@ -22,9 +26,9 @@ export function PlanPicker({ isBillingLoading, onSelectInterval }: PlanPickerPro
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <div className="items-center px-5 py-6 text-center sm:px-8 sm:py-7">
-        <Chip title="Pricing" Icon={Database} />
+        {showMainlabel === true && <Chip title="Pricing" Icon={Database} />}
         <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance sm:text-5xl">Choose the Perfect Plan</h2>
-        <div className="mt-16 flex w-full items-center justify-center gap-3">
+        <div className="mt-12 flex w-full items-center justify-center gap-3">
           <span className="text-sm font-medium">Monthly</span>
           <Switch
             checked={isYearly}
