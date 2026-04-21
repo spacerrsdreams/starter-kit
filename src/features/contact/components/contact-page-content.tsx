@@ -1,4 +1,9 @@
+import { Quote } from "lucide-react"
+import Image from "next/image"
+
+import { WebRoutes } from "@/lib/web.routes"
 import { ContactFormClient } from "@/features/contact/components/contact-form.client"
+import { WaveGlowButton } from "@/features/test/components/wave-glow-button"
 import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { GlassPanel } from "@/components/ui/glass-panel"
@@ -42,6 +47,90 @@ export function ContactPageContent() {
           <GlassPanel>
             <ContactFormClient />
           </GlassPanel>
+        </BottomUpFadeAnimation>
+      </section>
+
+      <section className="mt-28 space-y-12">
+        <BottomUpFadeAnimation delay={0.25}>
+          <div className="space-y-3 text-center">
+            <h2 className="text-4xl font-medium tracking-[-2px] text-foreground md:text-5xl">
+              Chosen by +2,500 companies
+            </h2>
+            <p className="text-base text-muted-foreground">
+              Businesses choose Salix because it simplifies the complexity
+            </p>
+          </div>
+        </BottomUpFadeAnimation>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <BottomUpFadeAnimation delay={0.35}>
+            <div className="space-y-8 rounded-xl border p-8">
+              <div className="space-y-5 border-b border-border/70 pb-8">
+                <p className="text-2xl font-medium text-foreground">Nexora</p>
+                <Quote className="size-5 text-muted-foreground" />
+                <p className="text-lg leading-8 text-foreground">
+                  We used to juggle spreadsheets and emails. Now everything is in one place. Orders, inventory,
+                  customers super smooth and efficient!
+                </p>
+                <p className="text-base text-muted-foreground">Albert Flores Co-founder at Nexora</p>
+              </div>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <p className="text-4xl font-semibold text-accent-1">$200K</p>
+                  <p className="mt-2 text-sm text-muted-foreground">Revenue boost per year</p>
+                </div>
+                <div>
+                  <p className="text-4xl font-semibold text-accent-1">80-90%</p>
+                  <p className="mt-2 text-sm text-muted-foreground">Revenue boost per year</p>
+                </div>
+              </div>
+            </div>
+          </BottomUpFadeAnimation>
+
+          <BottomUpFadeAnimation delay={0.45}>
+            <GlassPanel className="h-full" innerClassName="h-full p-3 md:p-5">
+              <div className="relative flex h-full min-h-[420px] items-center justify-center overflow-hidden rounded-xl bg-secondary/70">
+                <Image
+                  src="/assets/placeholder.webp"
+                  alt="Customer portrait"
+                  width={560}
+                  height={640}
+                  className="h-full w-full rounded-xl object-cover"
+                />
+              </div>
+            </GlassPanel>
+          </BottomUpFadeAnimation>
+        </div>
+      </section>
+
+      <section className="mt-28 space-y-10">
+        <BottomUpFadeAnimation delay={0.25}>
+          <GlassPanel className="p-2" innerClassName="p-2 md:p-3">
+            <div className="relative overflow-hidden rounded-xl bg-secondary/70">
+              <Image
+                src="/assets/placeholder.webp"
+                alt="Salix dashboard preview"
+                width={1400}
+                height={900}
+                className="h-auto w-full rounded-xl object-cover"
+              />
+            </div>
+          </GlassPanel>
+        </BottomUpFadeAnimation>
+
+        <BottomUpFadeAnimation delay={0.35}>
+          <div className="space-y-4 text-center">
+            <h2 className="text-4xl font-medium tracking-[-2px] text-foreground md:text-6xl">
+              Try Salix Free for 14 Days
+            </h2>
+            <p className="text-lg text-muted-foreground">Start taking control of your business today</p>
+          </div>
+        </BottomUpFadeAnimation>
+
+        <BottomUpFadeAnimation delay={0.45}>
+          <div className="flex justify-center">
+            <WaveGlowButton href={WebRoutes.pricing.path} label="Get 14 Days Free Trial" />
+          </div>
         </BottomUpFadeAnimation>
       </section>
     </main>

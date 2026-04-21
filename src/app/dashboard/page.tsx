@@ -9,7 +9,7 @@ import { SeoPageJsonLd } from "@/components/seo/seo-page-json-ld"
 
 const title = "Ask AI"
 const description = "Chat with AI, keep conversation history, and continue your work from one place."
-const canonical = WebRoutes.askAi.withBaseUrl()
+const canonical = WebRoutes.dashboard.withBaseUrl()
 
 export const metadata: Metadata = {
   title,
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function AiPage() {
+export default function DashboardPage() {
   return (
     <>
       <SeoPageJsonLd name={title} description={description} url={canonical} />

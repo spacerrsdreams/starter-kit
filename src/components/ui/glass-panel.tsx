@@ -6,10 +6,10 @@ type GlassPanelProps = {
   children: ReactNode
   className?: string
   innerClassName?: string
-  size: "sm" | "default" | "lg"
+  size?: "sm" | "default" | "lg"
 }
 
-const sizeClassNameBySize: Record<GlassPanelProps["size"], string> = {
+const sizeClassNameBySize: Record<NonNullable<GlassPanelProps["size"]>, string> = {
   sm: "p-4",
   default: "p-6",
   lg: "p-8",

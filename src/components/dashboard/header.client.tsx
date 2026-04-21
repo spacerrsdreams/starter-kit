@@ -22,9 +22,9 @@ export function DashboardHeader() {
   const chatsQuery = useFetchChats()
   const chats = useMemo(() => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [], [chatsQuery.data?.pages])
   const currentRoute = Object.values(WebRoutes).find((route) => route.path === pathname)
-  const isAskAiRoute = pathname === WebRoutes.askAi.path || pathname.startsWith(`${WebRoutes.askAi.path}/`)
-  const chatIdFromPath = pathname.startsWith(`${WebRoutes.askAi.path}/`)
-    ? pathname.slice(`${WebRoutes.askAi.path}/`.length)
+  const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${WebRoutes.dashboard.path}/`)
+  const chatIdFromPath = pathname.startsWith(`${WebRoutes.dashboard.path}/`)
+    ? pathname.slice(`${WebRoutes.dashboard.path}/`.length)
     : null
   const selectedChatId = activeChatId ?? chatIdFromPath
   const selectedChatTitle = chats.find((chat) => chat.id === selectedChatId)?.title?.trim() || ""
@@ -32,8 +32,8 @@ export function DashboardHeader() {
 
   const handleNewChatClick = () => {
     window.dispatchEvent(new CustomEvent(NEW_CHAT_EVENT_NAME))
-    if (pathname !== WebRoutes.askAi.path) {
-      router.push(WebRoutes.askAi.path as Route)
+    if (pathname !== WebRoutes.dashboard.path) {
+      router.push(WebRoutes.dashboard.path as Route)
     }
   }
 

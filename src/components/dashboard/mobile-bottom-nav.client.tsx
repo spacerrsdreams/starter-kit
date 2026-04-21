@@ -23,7 +23,7 @@ export function MobileBottomNav() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const user = session?.user
 
-  const askAiPath = WebRoutes.askAi.path
+  const askAiPath = WebRoutes.dashboard.path
   const isAskAiActive = pathname === askAiPath || pathname.startsWith(`${askAiPath}/`)
 
   const navIconClassName = "size-5 shrink-0"

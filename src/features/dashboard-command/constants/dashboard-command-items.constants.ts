@@ -5,7 +5,7 @@ import type { DashboardCommandItem } from "@/features/dashboard-command/types/da
 
 export const dashboardCommandItems: DashboardCommandItem[] = [
   { label: "Home", icon: HomeIcon, kind: "route", path: WebRoutes.root.path },
-  { label: "Ask AI", icon: SparklesIcon, kind: "route", path: WebRoutes.askAi.path },
+  { label: "Ask AI", icon: SparklesIcon, kind: "route", path: WebRoutes.dashboard.path },
   { label: "Settings", icon: SettingsIcon, kind: "action", actionId: "open-settings" },
   { label: "Profile", icon: UserIcon, kind: "action", actionId: "open-profile" },
   { label: "Notifications", icon: BellIcon, kind: "action", actionId: "open-notifications" },

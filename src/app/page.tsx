@@ -18,7 +18,7 @@ export default function DashboardPage() {
         </p>
         <Link
           className="text-sm font-medium text-primary underline underline-offset-4 transition-colors hover:text-primary/80"
-          href={WebRoutes.askAi.path}
+          href={WebRoutes.dashboard.path}
         >
           Explore AI page
         </Link>

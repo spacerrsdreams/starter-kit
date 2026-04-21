@@ -32,6 +32,7 @@ import {
 import { Message, MessageContent } from "@/components/ai-elements/message"
 import { Button } from "@/components/ui/button"
 import { LogoIcon, LogoSvg } from "@/components/ui/icons/logo.icon"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 import { ChatInputForm } from "./chat-input-form"
 
@@ -46,6 +47,7 @@ export function ChatSession({
   onChatCreated,
   onConversationUpdated,
 }: ChatSessionProps) {
+  const isMobile = useIsMobile()
   const [transportApi] = useState(() => createStableChatTransport())
   const createChatMutation = useMutateCreateChat()
   const messageReactionMutation = useMutateMessageReaction()
@@ -283,7 +285,7 @@ export function ChatSession({
     [isGenerating, isAuthenticated, setPendingPrompt, openAuthModal, sendAuthorizedMessage]
   )
 
-  const showUpgradePill = isAuthenticated && subscriptionQuery.isSuccess && !isPaid
+  const showUpgradePill = isMobile && isAuthenticated && subscriptionQuery.isSuccess && !isPaid
 
   const handleUpgradeClick = useCallback(() => {
     planPickerDialog?.openPlanPickerDialog()

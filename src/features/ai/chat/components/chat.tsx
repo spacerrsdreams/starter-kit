@@ -106,7 +106,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
     const handleNewChat = () => {
       setActiveChatId(null)
       setSessionClientId(crypto.randomUUID())
-      replaceAddressBarPath(WebRoutes.askAi.path)
+      replaceAddressBarPath(WebRoutes.dashboard.path)
     }
 
     window.addEventListener(NEW_CHAT_EVENT_NAME, handleNewChat)
@@ -133,7 +133,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
     ignoredInitialChatIdRef.current = true
     setActiveChatId(null)
     setSessionClientId(crypto.randomUUID())
-    replaceAddressBarPath(WebRoutes.askAi.path)
+    replaceAddressBarPath(WebRoutes.dashboard.path)
   }, [activeChatId, chatDetailQuery.error, chatDetailQuery.isError])
 
   useEffect(() => {

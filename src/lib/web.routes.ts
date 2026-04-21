@@ -25,9 +25,7 @@ function createRoute(label: string, path: string): RouteDefinition {
 export const WebRoutes = {
   root: createRoute("Home", "/"),
   search: createRoute("Search", "/search"),
-  askAi: createRoute("Ask AI", "/dashboard/ai"),
   dashboard: createRoute("Dashboard", "/dashboard"),
-  dashboardAi: createRoute("Dashboard AI", "/dashboard/ai"),
   pricing: createRoute("Pricing", "/pricing"),
   inbox: createRoute("Inbox", "/inbox"),
   signIn: createRoute("Sign In", "/sign-in"),
@@ -43,7 +41,7 @@ export const WebRoutes = {
 
 export const headerPageLinks = [
   { title: "Home", href: WebRoutes.root.path },
-  { title: "AI Page", href: WebRoutes.askAi.path },
+  { title: "Dashboard", href: WebRoutes.dashboard.path },
   { title: "Contact", href: WebRoutes.contact.path },
   { title: "Pricing", href: WebRoutes.pricing.path },
 ] as const

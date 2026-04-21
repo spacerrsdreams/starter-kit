@@ -59,7 +59,7 @@ export function ChatDashboardSidebar() {
     [chatsQuery.data?.pages]
   )
 
-  const isAskAiRoute = pathname === WebRoutes.askAi.path || pathname.startsWith(`${WebRoutes.askAi.path}/`)
+  const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${WebRoutes.dashboard.path}/`)
 
   useEffect(
     () => () => {
@@ -91,8 +91,8 @@ export function ChatDashboardSidebar() {
 
   const handleStartNewChat = () => {
     window.dispatchEvent(new CustomEvent(NEW_CHAT_EVENT_NAME))
-    if (pathname !== WebRoutes.askAi.path) {
-      router.push(WebRoutes.askAi.path as Route)
+    if (pathname !== WebRoutes.dashboard.path) {
+      router.push(WebRoutes.dashboard.path as Route)
     }
   }
 
@@ -129,7 +129,7 @@ export function ChatDashboardSidebar() {
               {chats.map((chat) => {
                 const chatPath = getChatRoute(chat.id)
                 const isActive =
-                  pathname === chatPath || (pathname === WebRoutes.askAi.path && activeChatId === chat.id)
+                  pathname === chatPath || (pathname === WebRoutes.dashboard.path && activeChatId === chat.id)
                 const label = chat.title?.trim() || "Untitled chat"
                 return (
                   <SidebarMenuItem key={chat.id}>
@@ -270,7 +270,7 @@ export function ChatDashboardSidebar() {
                     const deletedPath = getChatRoute(chatId)
                     if (pathname === deletedPath) {
                       const nextChat = chats.find((chat) => chat.id !== chatId)
-                      router.replace((nextChat ? getChatRoute(nextChat.id) : WebRoutes.askAi.path) as Route)
+                      router.replace((nextChat ? getChatRoute(nextChat.id) : WebRoutes.dashboard.path) as Route)
                     }
                     setPendingDeleteChatId(null)
                   } catch {
