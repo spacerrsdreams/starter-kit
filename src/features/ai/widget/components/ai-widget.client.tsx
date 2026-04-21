@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
+import { WebRoutes } from "@/lib/web.routes"
 import { ChatSession } from "@/features/ai/chat/components/chat-session/chat-session"
 import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-detail"
@@ -84,7 +85,7 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
     setSessionClientId(crypto.randomUUID())
   }
 
-  const isAskAiRoute = pathname === "/ai" || pathname.startsWith("/ai/")
+  const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${WebRoutes.dashboard.path}/`)
 
   if (isAskAiRoute) {
     return null

@@ -41,12 +41,6 @@ export async function updateChatApi(id: string, payload: UpdateChatApiPayload): 
   })
 }
 
-export async function createChatShareApi(id: string): Promise<{ shareId: string }> {
-  return apiRequest<{ shareId: string }>(ApiRoutes.chats.share(id), {
-    method: "POST",
-  })
-}
-
 export async function setMessageReactionApi(
   chatId: string,
   messageId: string,

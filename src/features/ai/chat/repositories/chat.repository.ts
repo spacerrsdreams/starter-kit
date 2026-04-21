@@ -26,7 +26,6 @@ export async function createChat(userId: string): Promise<{ id: string }> {
   const chat = await prisma.chat.create({
     data: {
       userId,
-      shareId: crypto.randomUUID(),
     },
   })
   return { id: chat.id }
@@ -44,13 +43,13 @@ export async function listChats(
   userId: string,
   limit: number,
   offset: number
-): Promise<Array<{ id: string; title: string | null; isSaved: boolean; shareId: string | null; updatedAt: Date }>> {
+): Promise<Array<{ id: string; title: string | null; isSaved: boolean; updatedAt: Date }>> {
   return prisma.chat.findMany({
     where: { userId },
     skip: offset,
     take: limit,
     orderBy: { updatedAt: "desc" },
-    select: { id: true, title: true, isSaved: true, shareId: true, updatedAt: true },
+    select: { id: true, title: true, isSaved: true, updatedAt: true },
   })
 }
 
@@ -65,7 +64,6 @@ export async function getChatWithMessages(
 ): Promise<{
   id: string
   title: string | null
-  shareId: string | null
   contextSummary: string | null
   messages: UIMessage[]
 } | null> {
@@ -79,25 +77,7 @@ export async function getChatWithMessages(
   return {
     id: chat.id,
     title: chat.title,
-    shareId: chat.shareId,
     contextSummary: chat.contextSummary,
-    messages: chat.messages.map(rowToUIMessage),
-  }
-}
-
-export async function getSharedChatWithMessages(
-  shareId: string
-): Promise<{ id: string; title: string | null; messages: UIMessage[] } | null> {
-  const chat = await prisma.chat.findUnique({
-    where: { shareId },
-    include: { messages: { orderBy: [{ createdAt: "asc" }, { id: "asc" }] } },
-  })
-  if (!chat) {
-    return null
-  }
-  return {
-    id: chat.id,
-    title: chat.title,
     messages: chat.messages.map(rowToUIMessage),
   }
 }
@@ -185,25 +165,6 @@ export async function updateChatMetadata(
     data,
   })
   return updated.count > 0
-}
-
-export async function ensureChatShareId(chatId: string, userId: string): Promise<string | null> {
-  const chat = await prisma.chat.findUnique({
-    where: { id: chatId },
-    select: { shareId: true, userId: true },
-  })
-  if (!chat || chat.userId !== userId) {
-    return null
-  }
-  if (chat.shareId) {
-    return chat.shareId
-  }
-  const updated = await prisma.chat.update({
-    where: { id: chatId },
-    data: { shareId: crypto.randomUUID() },
-    select: { shareId: true },
-  })
-  return updated.shareId
 }
 
 export async function maybeGenerateAiChatTitle(chatId: string, userId: string, messages: UIMessage[]): Promise<void> {

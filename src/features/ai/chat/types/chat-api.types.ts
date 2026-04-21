@@ -13,6 +13,5 @@ export type CreateChatResponse = {
 export type GetChatResponse = {
   id: string
   title: string | null
-  shareId?: string | null
   messages: UIMessage[]
 }

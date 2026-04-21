@@ -1,17 +1,16 @@
 "use client"
 
-import { Check, ChevronRight, EllipsisIcon, Files, Pencil, PlusIcon, Star, Trash2Icon } from "lucide-react"
+import { ChevronRight, EllipsisIcon, Pencil, PlusIcon, Star, Trash2Icon } from "lucide-react"
 import { Route } from "next"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useMemo, useState } from "react"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
 import { WebRoutes } from "@/lib/web.routes"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
-import { useMutateCreateChatShare } from "@/features/ai/chat/hooks/use-mutate-create-chat-share"
 import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-chat"
 import { useMutateUpdateChat } from "@/features/ai/chat/hooks/use-mutate-update-chat"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
@@ -54,13 +53,10 @@ export function ChatDashboardSidebar() {
   const [pendingDeleteChatId, setPendingDeleteChatId] = useState<string | null>(null)
   const [renamingChatId, setRenamingChatId] = useState<string | null>(null)
   const [renameTitle, setRenameTitle] = useState("")
-  const [copiedChatId, setCopiedChatId] = useState<string | null>(null)
-  const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const activeChatId = useChatNavigationStore((state) => state.activeChatId)
   const chatsQuery = useFetchChats()
   const deleteChatMutation = useMutateDeleteChat()
   const updateChatMutation = useMutateUpdateChat()
-  const createChatShareMutation = useMutateCreateChatShare()
   const chats = useMemo<ChatListItem[]>(
     () => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [],
     [chatsQuery.data?.pages]
@@ -69,45 +65,6 @@ export function ChatDashboardSidebar() {
   const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${WebRoutes.dashboard.path}/`)
   const savedChats = useMemo(() => chats.filter((chat) => chat.isSaved), [chats])
   const recentChats = useMemo(() => chats.filter((chat) => !chat.isSaved), [chats])
-
-  useEffect(
-    () => () => {
-      if (copyResetTimeoutRef.current) {
-        clearTimeout(copyResetTimeoutRef.current)
-      }
-    },
-    []
-  )
-
-  const handleCopyLink = async (chatPath: string, chatId: string, shareId: string | null) => {
-    let finalShareId = shareId
-    if (!finalShareId) {
-      try {
-        const createdShare = await createChatShareMutation.mutateAsync(chatId)
-        finalShareId = createdShare.shareId
-      } catch {
-        toast.error("Could not create share link")
-        return
-      }
-    }
-    const sharedPath = WebRoutes.sharedChat(finalShareId)
-    const fullUrl = `${window.location.origin}${sharedPath}`
-    try {
-      await navigator.clipboard.writeText(fullUrl)
-    } catch {
-      toast.error("Could not copy link")
-      return
-    }
-    if (copyResetTimeoutRef.current) {
-      clearTimeout(copyResetTimeoutRef.current)
-    }
-    setCopiedChatId(chatId)
-    toast.success("Link copied")
-    copyResetTimeoutRef.current = setTimeout(() => {
-      setCopiedChatId(null)
-      copyResetTimeoutRef.current = null
-    }, 2000)
-  }
 
   const handleChatRename = async () => {
     const chatId = renamingChatId
@@ -164,9 +121,7 @@ export function ChatDashboardSidebar() {
                 variant="ghost"
                 className="z-10 size-5 cursor-pointer group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 md:opacity-0"
                 aria-label="Chat actions"
-                disabled={
-                  deleteChatMutation.isPending || updateChatMutation.isPending || createChatShareMutation.isPending
-                }
+                disabled={deleteChatMutation.isPending || updateChatMutation.isPending}
               >
                 <EllipsisIcon className="size-4" />
               </Button>
@@ -195,31 +150,6 @@ export function ChatDashboardSidebar() {
                 >
                   <Pencil />
                   Rename chat
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onSelect={(event) => {
-                    event.preventDefault()
-                    void handleCopyLink(chatPath, chat.id, chat.shareId)
-                  }}
-                >
-                  <span className="relative flex size-4 shrink-0 items-center justify-center" aria-hidden>
-                    <Files
-                      className={cn(
-                        "absolute size-4 transition-all duration-200 ease-out",
-                        copiedChatId === chat.id ? "scale-50 opacity-0" : "scale-100 opacity-100"
-                      )}
-                    />
-                    <Check
-                      className={cn(
-                        "absolute size-4 text-amber-600 transition-all duration-200 ease-out",
-                        copiedChatId === chat.id ? "scale-100 opacity-100" : "scale-50 opacity-0"
-                      )}
-                      strokeWidth={2.5}
-                    />
-                  </span>
-                  <span className="transition-colors duration-200">
-                    {copiedChatId === chat.id ? "Copied" : "Share link"}
-                  </span>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

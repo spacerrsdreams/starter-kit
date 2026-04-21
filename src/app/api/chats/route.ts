@@ -29,7 +29,6 @@ export async function GET(req: Request) {
     id: chat.id,
     title: chat.title,
     isSaved: chat.isSaved,
-    shareId: chat.shareId,
     updatedAt: chat.updatedAt.toISOString(),
   }))
   const nextOffset = rows.length < limit ? null : offset + rows.length

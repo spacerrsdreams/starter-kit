@@ -2,12 +2,20 @@
 CREATE TYPE "MessageRole" AS ENUM ('user', 'assistant', 'system');
 
 -- CreateEnum
+CREATE TYPE "MessageReaction" AS ENUM ('like', 'unlike');
+
+-- CreateEnum
 CREATE TYPE "DeactivationFeedbackCategory" AS ENUM ('MISSING_FEATURES', 'TOO_EXPENSIVE', 'TOO_COMPLEX', 'BUGS_OR_PERFORMANCE', 'PRIVACY_CONCERNS', 'SWITCHED_TO_ALTERNATIVE', 'OTHER');
+
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('user', 'admin');
 
 -- CreateTable
 CREATE TABLE "chat" (
     "id" TEXT NOT NULL,
     "title" TEXT,
+    "isSaved" BOOLEAN NOT NULL DEFAULT false,
+    "contextSummary" TEXT,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -21,9 +29,26 @@ CREATE TABLE "message" (
     "chatId" TEXT NOT NULL,
     "role" "MessageRole" NOT NULL,
     "parts" JSONB NOT NULL,
+    "reaction" "MessageReaction",
+    "reactionNote" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "message_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "billing_subscription" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "stripeCustomerId" TEXT NOT NULL,
+    "stripeSubscriptionId" TEXT,
+    "stripePriceId" TEXT,
+    "stripeStatus" TEXT,
+    "currentPeriodEnd" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "billing_subscription_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -31,6 +56,10 @@ CREATE TABLE "user" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "role" "UserRole" NOT NULL DEFAULT 'user',
+    "banned" BOOLEAN NOT NULL DEFAULT false,
+    "banReason" TEXT,
+    "banExpires" TIMESTAMP(3),
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "notificationsEmailMarketing" BOOLEAN NOT NULL DEFAULT true,
     "notificationsEmailPersonalized" BOOLEAN NOT NULL DEFAULT true,
@@ -47,6 +76,7 @@ CREATE TABLE "session" (
     "id" TEXT NOT NULL,
     "expiresAt" TIMESTAMP(3) NOT NULL,
     "token" TEXT NOT NULL,
+    "impersonatedBy" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "ipAddress" TEXT,
@@ -106,6 +136,21 @@ CREATE INDEX "chat_userId_updatedAt_idx" ON "chat"("userId", "updatedAt");
 CREATE INDEX "message_chatId_createdAt_idx" ON "message"("chatId", "createdAt");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "billing_subscription_userId_key" ON "billing_subscription"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "billing_subscription_stripeCustomerId_key" ON "billing_subscription"("stripeCustomerId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "billing_subscription_stripeSubscriptionId_key" ON "billing_subscription"("stripeSubscriptionId");
+
+-- CreateIndex
+CREATE INDEX "billing_subscription_stripeSubscriptionId_idx" ON "billing_subscription"("stripeSubscriptionId");
+
+-- CreateIndex
+CREATE INDEX "billing_subscription_stripeCustomerId_stripeStatus_idx" ON "billing_subscription"("stripeCustomerId", "stripeStatus");
+
+-- CreateIndex
 CREATE INDEX "user_deactivatedAt_idx" ON "user"("deactivatedAt");
 
 -- CreateIndex
@@ -131,6 +176,9 @@ ALTER TABLE "chat" ADD CONSTRAINT "chat_userId_fkey" FOREIGN KEY ("userId") REFE
 
 -- AddForeignKey
 ALTER TABLE "message" ADD CONSTRAINT "message_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "chat"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "billing_subscription" ADD CONSTRAINT "billing_subscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;

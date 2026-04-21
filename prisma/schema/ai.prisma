@@ -2,7 +2,6 @@ model Chat {
   id             String    @id @default(cuid())
   title          String?
   isSaved        Boolean   @default(false)
-  shareId        String?   @unique
   contextSummary String?
   userId         String
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
