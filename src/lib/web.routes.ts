@@ -68,18 +68,25 @@ export const WebRoutes = {
 } as const
 
 export const headerPageLinks = [
-  { title: "Home", href: WebRoutes.root.path },
   { title: "Dashboard", href: WebRoutes.dashboard.path },
-  { title: "Contact", href: WebRoutes.contact.path },
+  { title: "Marketing", href: WebRoutes.root.path },
   { title: "Pricing", href: WebRoutes.pricing.path },
 ] as const
 
 export const headerCompanyLinks = [
+  { title: "Contact", href: WebRoutes.contact.path },
   { title: "Terms and Conditions", href: WebRoutes.termsOfService.path },
   { title: "Privacy Policy", href: WebRoutes.privacyPolicy.path },
 ] as const
 
-export const headerMenuLinks = [...headerPageLinks, ...headerCompanyLinks] as const
+export const headerMenuLinks = [
+  headerPageLinks[0],
+  headerCompanyLinks[0],
+  headerPageLinks[1],
+  headerCompanyLinks[1],
+  headerPageLinks[2],
+  headerCompanyLinks[2],
+] as const
 
 function normalizePathname(pathname: string): string {
   const normalizedPath = pathname.replace(/\/+$/, "")
