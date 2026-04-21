@@ -15,7 +15,6 @@ import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-deta
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
 import type { ChatProps } from "@/features/ai/chat/types/chat.types"
-import { getChatRoute } from "@/features/ai/chat/utils/chat-routes.utils"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
 
 export function Chat({ initialChatId = null }: ChatProps) {
@@ -176,7 +175,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
               initialMessages={initialMessages}
               onChatCreated={(id) => {
                 setActiveChatId(id)
-                replaceAddressBarPath(getChatRoute(id))
+                replaceAddressBarPath(WebRoutes.chat(id))
               }}
               onConversationUpdated={() => {
                 if (!hasRefetchedChatsForSessionRef.current) {

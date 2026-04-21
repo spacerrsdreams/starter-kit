@@ -2,8 +2,8 @@
 
 import "server-only"
 
+import { sendContactSubmissionEmail } from "@/lib/resend/actions"
 import type { ContactFormActionState } from "@/features/contact/types/contact-form-action-state.types"
-import { createContactSubmission } from "@/features/contact/repositories/contact-submission.repository"
 import { submitContactFormSchema } from "@/features/contact/schemas/contact-submission.schema"
 
 export async function submitContactFormAction(
@@ -25,7 +25,7 @@ export async function submitContactFormAction(
     }
   }
 
-  await createContactSubmission(parsed.data)
+  await sendContactSubmissionEmail(parsed.data)
 
   return {
     status: "success",

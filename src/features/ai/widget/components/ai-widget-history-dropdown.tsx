@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
-import { getChatRoute } from "@/features/ai/chat/utils/chat-routes.utils"
+import { WebRoutes } from "@/lib/web.routes"
 import type { AiWidgetHistoryDropdownProps } from "@/features/ai/widget/types/ai-widget-history-dropdown.types"
 import { Button } from "@/components/ui/button"
 import {
@@ -39,7 +39,7 @@ export function AiWidgetHistoryDropdown({
   )
 
   const handleCopyLink = async (chatId: string) => {
-    const chatPath = getChatRoute(chatId)
+    const chatPath = WebRoutes.chat(chatId)
     const fullUrl = `${window.location.origin}${chatPath}`
     try {
       await navigator.clipboard.writeText(fullUrl)

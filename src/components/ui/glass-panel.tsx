@@ -10,9 +10,9 @@ type GlassPanelProps = {
 }
 
 const sizeClassNameBySize: Record<NonNullable<GlassPanelProps["size"]>, string> = {
-  sm: "p-4",
-  default: "p-6",
-  lg: "p-8",
+  sm: "p-2 sm:p-4",
+  default: "p-3 sm:p-6",
+  lg: "p-4 sm:p-8",
 }
 
 export function GlassPanel({ children, className, innerClassName, size = "default" }: GlassPanelProps) {

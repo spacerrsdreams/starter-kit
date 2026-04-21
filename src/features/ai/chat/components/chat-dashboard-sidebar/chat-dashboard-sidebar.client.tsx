@@ -14,7 +14,6 @@ import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-chat"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
 import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
-import { getChatRoute } from "@/features/ai/chat/utils/chat-routes.utils"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -127,10 +126,11 @@ export function ChatDashboardSidebar() {
                 Recents
               </SidebarMenuItem>
               {chats.map((chat) => {
-                const chatPath = getChatRoute(chat.id)
+                const chatPath = WebRoutes.chat(chat.id)
                 const isActive =
                   pathname === chatPath || (pathname === WebRoutes.dashboard.path && activeChatId === chat.id)
                 const label = chat.title?.trim() || "Untitled chat"
+
                 return (
                   <SidebarMenuItem key={chat.id}>
                     <SidebarMenuButton
@@ -267,10 +267,10 @@ export function ChatDashboardSidebar() {
                 void (async () => {
                   try {
                     await deleteChatMutation.mutateAsync(chatId)
-                    const deletedPath = getChatRoute(chatId)
+                    const deletedPath = WebRoutes.chat(chatId)
                     if (pathname === deletedPath) {
                       const nextChat = chats.find((chat) => chat.id !== chatId)
-                      router.replace((nextChat ? getChatRoute(nextChat.id) : WebRoutes.dashboard.path) as Route)
+                      router.replace((nextChat ? WebRoutes.chat(nextChat.id) : WebRoutes.dashboard.path) as Route)
                     }
                     setPendingDeleteChatId(null)
                   } catch {

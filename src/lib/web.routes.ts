@@ -8,6 +8,13 @@ type RouteDefinition = {
   withBaseUrl: () => string
 }
 
+type DynamicRouteDefinition<T extends string> = {
+  label: string
+  pattern: string
+  withBaseUrl: (param: T) => string;
+  (param: T): Route
+}
+
 function createRoute(label: string, path: string): RouteDefinition {
   return {
     label,
@@ -22,10 +29,31 @@ function createRoute(label: string, path: string): RouteDefinition {
   }
 }
 
+function createDynamicRoute<T extends string>(
+  label: string,
+  pattern: string,
+  createPath: (param: T) => string
+): DynamicRouteDefinition<T> {
+  const routeFn = ((param: T) => createPath(param) as Route) as DynamicRouteDefinition<T>
+  routeFn.label = label
+  routeFn.pattern = pattern
+  routeFn.withBaseUrl = (param: T) => {
+    const path = createPath(param)
+    if (!baseUrl) {
+      return path
+    }
+
+    return `${baseUrl.replace(/\/$/, "")}${path}`
+  }
+
+  return routeFn
+}
+
 export const WebRoutes = {
   root: createRoute("Home", "/"),
   search: createRoute("Search", "/search"),
   dashboard: createRoute("Dashboard", "/dashboard"),
+  chat: createDynamicRoute("Chat", "/dashboard/ai/:id", (chatId) => `/dashboard/ai/${chatId}`),
   pricing: createRoute("Pricing", "/pricing"),
   inbox: createRoute("Inbox", "/inbox"),
   signIn: createRoute("Sign In", "/sign-in"),

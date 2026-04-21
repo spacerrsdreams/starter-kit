@@ -3,6 +3,7 @@ import "server-only"
 import { z } from "zod"
 
 import { sendMail } from "@/lib/resend/resend"
+import { ContactSubmissionEmailTemplate } from "@/lib/resend/templates/contact-submission.template"
 import { EmailVerificationEmailTemplate } from "@/lib/resend/templates/email-verification.template"
 import { ResetPasswordEmailTemplate } from "@/lib/resend/templates/reset-password.template"
 import { WelcomeEmailTemplate } from "@/lib/resend/templates/welcome.template"
@@ -65,5 +66,43 @@ export async function sendEmailVerificationEmail(props: SendEmailVerificationEma
     to,
     subject,
     react: EmailVerificationEmailTemplate({ firstName, url }),
+  })
+}
+
+export const sendContactSubmissionEmailSchema = z.object({
+  firstName: z.string().trim().min(1, "firstName is required"),
+  lastName: z.string().trim().nullable(),
+  email: z.email("email must be a valid email"),
+  subject: z.string().trim().nullable(),
+  message: z.string().trim().min(1, "message is required"),
+})
+
+type SendContactSubmissionEmailProps = z.infer<typeof sendContactSubmissionEmailSchema>
+
+export async function sendContactSubmissionEmail(props: SendContactSubmissionEmailProps) {
+  const parsed = sendContactSubmissionEmailSchema.safeParse(props)
+
+  if (!parsed.success) {
+    throw new Error(`Invalid sendContactSubmissionEmail props: ${parsed.error.message}`)
+  }
+
+  const supportEmail = process.env.SUPPORT_EMAIL
+  if (!supportEmail) {
+    throw new Error("SUPPORT_EMAIL is not configured. Please add SUPPORT_EMAIL to your .env file.")
+  }
+
+  const { firstName, lastName, email, subject, message } = parsed.data
+  const submitterName = [firstName, lastName].filter(Boolean).join(" ").trim()
+  const normalizedSubject = subject?.trim().length ? subject : "New contact form submission"
+
+  await sendMail({
+    to: supportEmail,
+    subject: `[Contact] ${normalizedSubject}`,
+    react: ContactSubmissionEmailTemplate({
+      submitterName: submitterName || firstName,
+      email,
+      subject: normalizedSubject,
+      message,
+    }),
   })
 }

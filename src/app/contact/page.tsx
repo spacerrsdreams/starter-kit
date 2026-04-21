@@ -5,7 +5,7 @@ import { TopGradient } from "@/components/top-gradient"
 
 export default function ContactPage() {
   return (
-    <div className="bg-background">
+    <div className="min-h-screen bg-background">
       <TopGradient />
       <HeaderNavigationClient />
       <ContactPageContent />
