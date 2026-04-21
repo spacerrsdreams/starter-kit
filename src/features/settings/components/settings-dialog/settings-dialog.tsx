@@ -1,10 +1,10 @@
 "use client"
 
 import { ChevronLeft, Menu, X } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
-import { settingsNavItems } from "@/features/settings/constants/settings-nav.constants"
+import { getVisibleSettingsNavItems } from "@/features/settings/constants/settings-nav.constants"
 import type {
   SettingsDialogProps,
   SettingsMobileView,
@@ -36,13 +36,24 @@ export function SettingsDialog({ open, onOpenChange, defaultSection = "account" 
 
   const { data: session } = authClient.useSession()
   const accountHasWarning = session?.user?.emailVerified !== true
+  const isAuthenticated = Boolean(session?.user)
+  const visibleNavItems = useMemo(() => getVisibleSettingsNavItems(isAuthenticated), [isAuthenticated])
+  const activeSectionLabel = visibleNavItems.find((item) => item.id === section)?.label ?? "Settings"
 
   useEffect(() => {
     if (!open) return
 
-    setSection(defaultSection)
+    const requestedSection = visibleNavItems.find((item) => item.id === defaultSection)?.id
+    setSection(requestedSection ?? visibleNavItems[0]?.id ?? "legal")
     setMobileView("list")
-  }, [defaultSection, open])
+  }, [defaultSection, open, visibleNavItems])
+
+  useEffect(() => {
+    const isCurrentSectionVisible = visibleNavItems.some((item) => item.id === section)
+    if (!isCurrentSectionVisible) {
+      setSection(visibleNavItems[0]?.id ?? "legal")
+    }
+  }, [section, visibleNavItems])
 
   const handleSectionSelect = (id: SettingsSectionId) => {
     setSection(id)
@@ -65,7 +76,7 @@ export function SettingsDialog({ open, onOpenChange, defaultSection = "account" 
         </Button>
       </header>
       <nav className="flex flex-1 flex-col overflow-y-auto p-2">
-        {settingsNavItems.map((item) => (
+        {visibleNavItems.map((item) => (
           <Button
             key={item.id}
             variant="ghost"
@@ -96,9 +107,7 @@ export function SettingsDialog({ open, onOpenChange, defaultSection = "account" 
         >
           <ChevronLeft className="size-5" />
         </Button>
-        <span className="text-sm font-medium">
-          {settingsNavItems.find((item) => item.id === section)?.label ?? "Settings"}
-        </span>
+        <span className="text-sm font-medium">{activeSectionLabel}</span>
         <Button
           variant="ghost"
           size="icon"
@@ -127,7 +136,7 @@ export function SettingsDialog({ open, onOpenChange, defaultSection = "account" 
           <SheetContent side="left" className="w-64 p-0">
             <SheetTitle className="sr-only">Settings</SheetTitle>
             <nav className="flex flex-col pt-6">
-              {settingsNavItems.map((item) => (
+              {visibleNavItems.map((item) => (
                 <Button
                   key={item.id}
                   variant={section === item.id ? "secondary" : "ghost"}
@@ -146,9 +155,7 @@ export function SettingsDialog({ open, onOpenChange, defaultSection = "account" 
             </nav>
           </SheetContent>
         </Sheet>
-        <span className="text-sm font-medium">
-          {settingsNavItems.find((item) => item.id === section)?.label ?? "Settings"}
-        </span>
+        <span className="text-sm font-medium">{activeSectionLabel}</span>
         <DialogClose asChild>
           <Button variant="ghost" size="icon" className="ml-auto size-9 shrink-0" aria-label="Close settings">
             <X className="size-5" />
@@ -188,7 +195,7 @@ export function SettingsDialog({ open, onOpenChange, defaultSection = "account" 
               <SidebarGroup>
                 <SidebarGroupContent>
                   <SidebarMenu>
-                    {settingsNavItems.map((item) => (
+                    {visibleNavItems.map((item) => (
                       <SidebarMenuItem key={item.id}>
                         <SidebarMenuButton isActive={section === item.id} onClick={() => setSection(item.id)}>
                           <item.icon />
