@@ -15,7 +15,7 @@ const waveGradient =
 export function WaveGlowButton({ href, label }: WaveGlowButtonProps) {
   const slideTransition = {
     type: "tween" as const,
-    duration: 0.85,
+    duration: 2.85,
     ease: [0.22, 1, 0.36, 1] as const,
   }
   const ctaLineClass = "flex h-5 min-h-5 w-full shrink-0 items-center justify-center whitespace-nowrap leading-none"
@@ -25,17 +25,19 @@ export function WaveGlowButton({ href, label }: WaveGlowButtonProps) {
       href={href as Route}
       className="group relative inline-flex flex-col items-center justify-center gap-2 overflow-visible rounded-[100px] bg-[linear-gradient(90deg,rgb(33,204,238)_0%,rgb(20,112,239)_33.2763%,rgb(105,39,218)_68.4697%,rgb(242,61,148)_100%)] pb-px"
     >
-      <span aria-hidden className="pointer-events-none absolute -bottom-3 left-1/2 -translate-x-1/2">
+      <span aria-hidden className="pointer-events-none absolute right-0 -bottom-2 left-0">
         <motion.span
-          className="block h-5 w-40 rounded-[135px] opacity-75 blur-md"
+          className="mx-auto block h-6 w-[90%] rounded-full opacity-100 blur-md"
           style={{ background: waveGradient }}
           animate={{
-            x: [0, 16, -16, 0],
-            scaleX: [0.96, 1.06, 0.92, 1],
-            scaleY: [0.9, 1.04, 0.95, 1],
-            opacity: [0.58, 0.72, 0.55, 0.62],
+            x: ["-10%", "10%", "-10%"],
+            opacity: [0.62, 0.72, 0.62],
           }}
-          transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+          transition={{
+            duration: 9,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
         />
       </span>
 
