@@ -46,7 +46,7 @@ export function CoreFeaturesLeftBorderGlow() {
       ref={containerRef}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className="absolute inset-y-0 -left-2 w-4"
+      className="inset-y-0 -left-2 hidden w-4 lg:absolute"
     >
       {/* base line */}
       <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-border/15" />

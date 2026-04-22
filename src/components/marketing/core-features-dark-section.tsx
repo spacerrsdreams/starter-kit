@@ -4,6 +4,8 @@ import { CoreFeaturesLeftBorderGlow } from "@/components/marketing/core-features
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
+import { AnimatedSvg } from "../ui/animated-svg.animation"
+
 const coreFeaturesItems: Array<{
   title: string
   description: string
@@ -43,13 +45,13 @@ const coreFeaturesItems: Array<{
 
 export function CoreFeaturesDarkSection() {
   return (
-    <section className="w-full px-8">
+    <section className="w-full overflow-hidden px-4 lg:px-8">
       <div className="rounded-3xl bg-[rgb(24,24,24)]">
         <div className="relative mx-auto max-w-[1200px] overflow-hidden border border-r border-l border-border/5 px-6 py-12 md:px-10 md:py-30">
           <CoreFeaturesLeftBorderGlow />
           <BottomUpFadeAnimation>
             <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-              <Chip Icon={Rocket} title="Core Features" variant="dark" size="lg" />
+              <Chip Icon={Rocket} title="Core Features" variant="dark" />
               <h2 className="mt-6 text-2xl font-semibold text-zinc-100 md:text-4xl">What&apos;s inside Salix?</h2>
               <p className="mt-4 max-w-sm text-background/80">
                 Businesses choose Salix because it simplifies the complexity of sales management.
@@ -61,7 +63,9 @@ export function CoreFeaturesDarkSection() {
             {coreFeaturesItems.map(({ title, description, Icon }, index) => (
               <BottomUpFadeAnimation key={title} delay={0.08 + index * 0.06}>
                 <article className="rounded-xl border border-border/5 p-6">
-                  <Icon className="size-12 text-accent-1" />
+                  <AnimatedSvg>
+                    <Icon className="size-12 text-accent-1" />
+                  </AnimatedSvg>
                   <h3 className="mt-7 text-xl font-semibold text-zinc-100">{title}</h3>
                   <p className="mt-3 text-base text-zinc-400">{description}</p>
                 </article>

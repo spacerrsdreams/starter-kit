@@ -75,16 +75,18 @@ export function KeyToolsScrollClient() {
   }, [])
 
   return (
-    <section className="mx-auto w-full max-w-5xl py-12 pb-28 md:pt-24">
+    <section className="mx-auto w-full max-w-5xl py-12 pb-0 md:pt-24 md:pb-20 lg:pb-28">
       <div className="grid gap-4 lg:grid-cols-[40%_60%] lg:gap-12">
         <BottomUpFadeAnimation delay={0.05}>
-          <aside className="h-fit lg:sticky lg:top-24">
-            <Chip Icon={Sparkles} title="Key Tools" />
-            <h2 className="mt-6 text-3xl leading-[1.05] font-semibold text-foreground/95 md:text-5xl">
+          <aside className="h-fit px-4 lg:sticky lg:top-24 lg:px-0">
+            <div className="flex justify-center lg:justify-start">
+              <Chip Icon={Sparkles} title="Key Tools" />
+            </div>
+            <h2 className="mt-6 text-center text-3xl font-medium text-foreground/95 md:text-5xl lg:text-start">
               AI that moves sales forward & faster
             </h2>
 
-            <nav className="mt-10 space-y-5">
+            <nav className="mt-10 hidden space-y-5 lg:block">
               {keyToolsSections.map((section) => {
                 const isActive = activeSectionId === section.id
                 return (
@@ -107,7 +109,7 @@ export function KeyToolsScrollClient() {
         </BottomUpFadeAnimation>
 
         <BottomUpFadeAnimation delay={0.2}>
-          <div className="space-y-24 pt-6 md:space-y-28 lg:pt-50">
+          <div className="space-y-24 px-4 pt-6 md:space-y-28 lg:px-0 lg:pt-50">
             {keyToolsSections.map((section, idx) => {
               const sectionIndex = sectionIndexById.get(section.id) ?? 0
 
@@ -121,8 +123,8 @@ export function KeyToolsScrollClient() {
                     className="space-y-5"
                   >
                     <div className="space-y-3">
-                      <h3 className="text-3xl font-medium text-foreground">{section.title}</h3>
-                      <p className="text-lg leading-relaxed text-foreground/80">{section.description}</p>
+                      <h3 className="text-xl font-medium text-foreground lg:text-3xl">{section.title}</h3>
+                      <p className="text-base leading-relaxed text-foreground/80 lg:text-lg">{section.description}</p>
                     </div>
 
                     <div className="rounded-md border border-border/70 bg-secondary/80 p-4">

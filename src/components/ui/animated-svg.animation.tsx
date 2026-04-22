@@ -36,7 +36,7 @@ export function AnimatedSvg({ children, className, duration = 1, repeatIn = 3 }:
     const repeatDelay = Math.max(0, repeatIn - duration)
     const controls = animate(
       SVG_SHAPES_SELECTOR,
-      { pathLength: [0, 1] },
+      { pathLength: [0, 1], pathOffset: [1, 0] },
       { duration, ease: "easeInOut", repeat: Infinity, repeatDelay }
     )
 

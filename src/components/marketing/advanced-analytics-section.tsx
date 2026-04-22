@@ -1,4 +1,4 @@
-import { BarChart3 } from "lucide-react"
+import { Rocket } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
@@ -8,23 +8,23 @@ const analyticsPills = ["Integrated Payment", "Authorization", "Just ready AI"] 
 
 export function AdvancedAnalyticsSection() {
   return (
-    <section className="w-full px-8 py-14 md:py-28">
+    <section className="w-full px-4 py-14 md:py-28">
       <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
         <BottomUpFadeAnimation>
-          <Chip Icon={BarChart3} title="Growth Gear" />
+          <Chip Icon={Rocket} title="Growth Gear" />
           <h2 className="mt-6 text-3xl font-medium text-foreground md:text-5xl">Advanced analytics &amp; reporting</h2>
-          <p className="mx-auto mt-4 max-w-md text-muted-foreground">
+          <p className="mx-auto mt-4 max-w-md text-foreground/80">
             Businesses choose Salix because it simplifies the complexity of sales management.
           </p>
         </BottomUpFadeAnimation>
 
         <BottomUpFadeAnimation delay={0.08}>
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-12 grid w-full max-w-3xl grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {analyticsPills.map((pill, index) => (
               <div
                 key={pill}
                 className={cn(
-                  "rounded-full border px-5 py-2 text-base font-medium",
+                  "w-full rounded-full border px-5 py-2 text-center text-base font-medium",
                   index === 0 && "border-cyan-400 bg-cyan-100/70 text-foreground",
                   index !== 0 && "border-border/70 bg-secondary/70 text-foreground/90"
                 )}
@@ -38,8 +38,8 @@ export function AdvancedAnalyticsSection() {
 
       <BottomUpFadeAnimation delay={0.15}>
         <div className="mx-auto mt-8 size-full max-w-4xl rounded-2xl bg-secondary/80 p-4">
-          <div className="size-full rounded-xl border border-border/70 bg-white">
-            <div className="flex min-h-120 items-center justify-center text-sm font-semibold">
+          <div className="size-full rounded-xl border bg-white">
+            <div className="flex min-h-60 items-center justify-center text-sm font-semibold md:min-h-80 lg:min-h-120">
               <p>@Spacerr</p>
             </div>
           </div>

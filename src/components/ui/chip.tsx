@@ -10,7 +10,7 @@ interface ChipProps {
   title: string
   className?: string
   variant?: "light" | "dark"
-  size?: "sm" | "default" | "lg"
+  size?: "sm" | "default"
 }
 
 const ChipVariants = cva("inline-flex items-center gap-3 rounded-full bg-background text-sm font-medium", {
@@ -21,8 +21,7 @@ const ChipVariants = cva("inline-flex items-center gap-3 rounded-full bg-backgro
     },
     sizes: {
       sm: "px-3 py-1.5 [&_svg]:size-3.5",
-      default: "px-4 py-2 [&_svg]:size-4",
-      lg: "px-5 py-2.5 [&_svg]:size-5",
+      default: "px-4 py-2.5 [&_svg]:size-5",
     },
   },
   defaultVariants: {
