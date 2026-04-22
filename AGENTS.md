@@ -61,3 +61,145 @@ For multi-step tasks, state a brief plan:
 These guidelines are working if: fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
 <!-- BEGIN:Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed. -->
+
+## Project Rules (Migrated from `.cursor/rules`)
+
+### Architecture (Strict)
+
+- Keep product/feature logic under `src/features/<feature-name>/`.
+- Keep `src/app/` thin: routing, layouts, and wiring only.
+- Shared cross-feature code belongs in `src/lib/` or truly shared modules.
+- Keep code colocated by slice: `components/`, `hooks/`, `utils/`, `types/`, `constants/`, `repositories/`, `actions/`, `schemas/`, `store/`.
+- No heavy business logic in route files.
+
+### API Route Strings (Strict)
+
+- Do not hardcode API strings in feature API clients.
+- Centralize endpoint paths in `src/lib/api.routes.ts` (`ApiRoutes`).
+- Extend `ApiRoutes` first, then consume constants/functions in feature API modules.
+
+### Types (Strict)
+
+- Do not define shared domain/feature types inline in `.tsx` or implementation files.
+- Use dedicated files: `types.ts`, `*.types.ts`, or a `types/` folder.
+- Cross-feature shared types live in `src/global.types.ts` and import via `@/global.types`.
+- Prefer direct `import type` from concrete modules for inferred types.
+- Avoid inline `typeof import("...").symbol` style type hacks.
+
+### TypeScript + Lint Discipline (Strict)
+
+- Minimize casts/assertions (`as`, `as unknown as`, non-null `!`).
+- Prefer narrowing, guards, and validated boundaries.
+- No source suppressions: avoid `eslint-disable`, `@ts-ignore`, `@ts-expect-error`, `@ts-nocheck`.
+
+### Single Responsibility
+
+- One main concern per file.
+- Split large UI into smaller components.
+- Extract pure helpers into `utils/` or `*.utils.ts`.
+- Reuse `src/components/ui` and `src/components/ai-elements`; do not copy internals.
+
+### SOLID (Practical)
+
+- **S**: Separate UI/data/formatting responsibilities.
+- **O**: Extend by composition/hooks/props.
+- **L**: Keep contracts substitutable.
+- **I**: Use focused props and return shapes.
+- **D**: Depend on explicit modules and concrete files.
+
+### React Query Hooks (Strict)
+
+- Do not inline reusable query/mutation definitions in UI components.
+- Place each query/mutation custom hook in its own file under `hooks/`.
+- One primary query/mutation per hook file.
+- Use `useFetch...` naming for reads and `useMutate...` naming for writes.
+
+### No Barrel Index Files
+
+- Do not create barrel-only `index.ts` / `index.tsx` files that only re-export symbols.
+- Import directly from the defining module.
+- `index.ts` is allowed only when it contains real implementation logic.
+
+### One React Component per `.tsx` File
+
+- Exactly one React component per `*.tsx` file.
+- No inner helper components in the same file; split into sibling files.
+- Files with hooks only should be `*.ts`.
+- Move pure helpers out of component files into `utils`/`helpers`.
+
+### Server-First UI + Client Islands
+
+- Default to Server Components.
+- Add `"use client"` only when browser-only APIs/interactivity are required.
+- Do not mark large route shells as client for one hook; split into islands.
+- Name client-only modules with `.client.tsx` (or `.client.ts`).
+- Server parent owns data/copy/layout and passes serializable props to client islands.
+
+### Server-Only Guard
+
+- For server-only modules, include `import "server-only"` as the first import (after comments).
+- Apply to server actions, repositories/DB modules, and server-only libraries.
+- If an action re-exports a server-only repository, the action file should still include `import "server-only"`.
+- Keep `server-only` in dependencies.
+- Note: `src/app/api/**` route handlers are server runtime by default.
+
+### Providers + HTTP Client
+
+- Root providers live under `src/providers/`.
+- Keep `src/app/layout.tsx` thin and compose a single `AppProviders`.
+- Use `src/lib/http-client.ts` (`apiRequest`, `ApiError`, shared parsing) for browser API transport.
+- Feature endpoints live next to the feature and call `apiRequest`.
+- Client-side data loading/mutations should flow through TanStack Query.
+- Do not call raw `useQuery`/`useMutation` in UI components; wrap in feature hooks.
+- `QueryClient` creation/defaults live in `src/providers/query-client-provider.tsx`.
+- `useQueryClient()` is allowed in components for invalidation/removal when needed.
+
+### Client Persistence (Zustand)
+
+- No direct `localStorage` / `sessionStorage` calls in components or feature hooks (except store internals).
+- Use Zustand for shared/persisted client state, with `persist` middleware when persisted.
+- Store files belong under `src/features/<feature>/store/`.
+- Validate persisted JSON with Zod before use.
+- Wait for hydration completion before trusting persisted values for routing/bootstrap behavior.
+
+### Zod Validation (Client + Server)
+
+- Any **form validation** or **backend validation** should use Zod, including on the client.
+- For unknown/untrusted structured data (API bodies, search params, storage JSON, websocket payloads), prefer Zod (`safeParse`) over ad hoc shape checks.
+- Exception: if the shape is truly trivial single-field validation (for example, only `email`), lightweight validation without Zod is acceptable.
+- For anything involving **2 or more fields** (or nested/object rules), use Zod.
+- Do not cast unknown JSON to app types before validation.
+- Prefer `z.infer<typeof schema>` as the source of truth instead of duplicating interfaces.
+- Place feature-local schemas under `src/features/<feature>/schemas/` (or colocated `*.schema.ts`).
+- Shared schemas go in `src/lib/schemas/` or `src/schemas/`.
+
+### UI and Styling (Strict)
+
+- Do not edit `src/components/ui/` or `src/components/ai-elements/` (treat as read-only vendor-like libs).
+- Use `@/components/ui/*` for generic primitives and `@/components/ai-elements/*` for AI/chat patterns.
+- Use `lucide-react` for icons.
+- Minimize one-off styling; prefer variants, tokens, and `cn` utility patterns.
+- Avoid introducing parallel styling/component systems.
+
+### Prisma + Migrations
+
+- Prisma source lives under `prisma/schema/` (multi-file schema), migrations under `prisma/migrations`.
+- Use domain-first schema files (for example `ai.prisma`, `billing.prisma`, `user.prisma`) rather than mixing unrelated domains.
+- Agent may edit schema files and migration SQL files.
+- For relation changes, explicitly review and choose delete behavior (`Cascade` vs `Restrict`/`NoAction`/`SetNull`).
+- Do not run DB-applying commands (`prisma migrate dev/deploy/reset`, `prisma db push`).
+- `prisma generate` is separate from applying migrations; run only if explicitly needed.
+- Prefer Prisma Client queries over raw SQL.
+
+### Package Manager: Bun
+
+- Use Bun for installs/scripts/tooling by default.
+- Use `bun install`, `bun add`, `bun run`, and `bunx`.
+- Avoid npm/pnpm/yarn unless a documented exception requires it.
+- In multi-package setups, run Bun commands in the relevant package directory as configured.
+
+### SEO Rules Source of Truth (Strict)
+
+- For anything SEO-related, always read and follow `skills/SEO.md`.
+- This includes metadata, canonical tags, robots, sitemap, structured data (JSON-LD), OG/Twitter tags/images, indexing behavior, and SEO performance requirements.
+- Do not invent alternate SEO rules if `skills/SEO.md` already defines them; treat that file as authoritative.

@@ -2,11 +2,9 @@ const SiteName = "StarterKit"
 
 export const SiteConfig = {
   name: SiteName,
-  description: `${SiteName} is a template for building web applications.`,
   copyrightYear: 2026,
-  /** Open Graph title: 50–60 chars */
+  description: `${SiteName} is a template for building web applications.`,
   ogTitle: `${SiteName} — Web Application Template`,
-  /** Open Graph description: 110–160 chars */
   ogDescription: `${SiteName} is a template for building web applications.`,
   keywords: [
     SiteName,
@@ -18,8 +16,9 @@ export const SiteConfig = {
     "Tailwind CSS",
     "Shadcn UI",
   ],
-
   author: "Irakli Kverenchkhiladze",
-  authorUrl: "https://www.linkedin.com/in/kverenchkhiladze",
+  authorUrl: "https://x.com/TheSpacerr",
   creator: "TheSpacerr",
+  twitterCreator: "@TheSpacerr",
+  twitterSite: "@TheSpacerr",
 }

@@ -55,7 +55,6 @@ export const WebRoutes = {
   dashboard: createRoute("Dashboard", "/dashboard"),
   chat: createDynamicRoute("Chat", "/dashboard/ai/:id", (chatId) => `/dashboard/ai/${chatId}`),
   pricing: createRoute("Pricing", "/pricing"),
-  inbox: createRoute("Inbox", "/inbox"),
   signIn: createRoute("Sign In", "/sign-in"),
   signUp: createRoute("Sign Up", "/sign-up"),
   resetPassword: createRoute("Reset Password", "/reset-password"),
