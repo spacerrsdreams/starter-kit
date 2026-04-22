@@ -4,8 +4,6 @@ import { cn } from "@/lib/utils"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
-import { AnimatedSvg } from "../ui/animated-svg.animation"
-
 const analyticsPills = ["Integrated Payment", "Authorization", "Just ready AI"] as const
 
 export function AdvancedAnalyticsSection() {
@@ -13,9 +11,7 @@ export function AdvancedAnalyticsSection() {
     <section className="w-full px-8 py-14 md:py-28">
       <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
         <BottomUpFadeAnimation>
-          <AnimatedSvg>
-            <Chip Icon={BarChart3} title="Growth Gear" />
-          </AnimatedSvg>
+          <Chip Icon={BarChart3} title="Growth Gear" />
           <h2 className="mt-6 text-3xl font-medium text-foreground md:text-5xl">Advanced analytics &amp; reporting</h2>
           <p className="mx-auto mt-4 max-w-md text-muted-foreground">
             Businesses choose Salix because it simplifies the complexity of sales management.

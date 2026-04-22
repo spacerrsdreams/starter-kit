@@ -3,16 +3,12 @@ import { UserStar } from "lucide-react"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
-import { AnimatedSvg } from "../ui/animated-svg.animation"
-
 export function CustomerReviewsSection() {
   return (
     <section className="w-full px-8 py-14 md:py-20">
       <BottomUpFadeAnimation>
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
-          <AnimatedSvg>
-            <Chip Icon={UserStar} title="Customer Reviews" />
-          </AnimatedSvg>
+          <Chip Icon={UserStar} title="Customer Reviews" />
           <h2 className="mt-6 text-3xl font-semibold text-foreground md:text-4xl">
             Trusted by 2500+ growing companies worldwide
           </h2>

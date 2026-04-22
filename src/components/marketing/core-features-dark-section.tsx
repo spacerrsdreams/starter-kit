@@ -4,8 +4,6 @@ import { CoreFeaturesLeftBorderGlow } from "@/components/marketing/core-features
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
-import { AnimatedSvg } from "../ui/animated-svg.animation"
-
 const coreFeaturesItems: Array<{
   title: string
   description: string
@@ -63,9 +61,7 @@ export function CoreFeaturesDarkSection() {
             {coreFeaturesItems.map(({ title, description, Icon }, index) => (
               <BottomUpFadeAnimation key={title} delay={0.08 + index * 0.06}>
                 <article className="rounded-xl border border-border/5 p-6">
-                  <AnimatedSvg duration={1} repeatIn={5}>
-                    <Icon className="size-12 text-accent-1" />
-                  </AnimatedSvg>
+                  <Icon className="size-12 text-accent-1" />
                   <h3 className="mt-7 text-xl font-semibold text-zinc-100">{title}</h3>
                   <p className="mt-3 text-base text-zinc-400">{description}</p>
                 </article>
