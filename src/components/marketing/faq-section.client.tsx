@@ -34,8 +34,8 @@ const faqItems = [
 export function FaqSectionClient() {
   return (
     <section className="w-full px-8 py-14 md:py-20">
-      <div className="mx-auto grid max-w-5xl md:grid-cols-[50%_50%]">
-        <div className="space-y-6">
+      <div className="mx-auto grid max-w-5xl gap-10 md:grid-cols-2">
+        <div className="min-w-0 space-y-6">
           <Chip Icon={CircleHelp} title="FAQ" />
           <h2 className="text-2xl font-semibold tracking-tighter text-foreground md:text-5xl">
             Frequently Asked Questions
@@ -43,7 +43,7 @@ export function FaqSectionClient() {
           <p className="text-base text-foreground/80">Get answers to common questions here</p>
         </div>
 
-        <Accordion type="single" collapsible defaultValue="data-safety" className="space-y-3">
+        <Accordion type="single" collapsible defaultValue="data-safety" className="min-w-0 space-y-3">
           {faqItems.map((item) => (
             <AccordionItem
               key={item.id}

@@ -148,18 +148,18 @@ export function WhyChooseSection() {
       <BottomUpFadeAnimation>
         <div className="flex flex-col items-center text-center">
           <Chip Icon={Rocket} title="Power Pack" />
-          <h2 className="mt-6 text-3xl font-semibold tracking-tighter text-foreground md:text-4xl">
+          <h2 className="mt-6 text-3xl font-medium text-foreground md:text-4xl">
             Why businesses choose {SiteConfig.name}
           </h2>
-          <p className="mt-4 max-w-2xl text-muted-foreground">
+          <p className="mt-4 max-w-xs text-muted-foreground md:max-w-2xl">
             Businesses choose {SiteConfig.name} because it simplifies the complexity of sales management.
           </p>
         </div>
       </BottomUpFadeAnimation>
 
-      <div className="mt-10 grid gap-5 md:auto-rows-fr md:grid-cols-3">
+      <div className="mt-10 grid gap-6 px-4 md:auto-rows-fr md:grid-cols-2 lg:grid-cols-3 lg:px-0">
         {whyChooseCards.map((card, index) => (
-          <BottomUpFadeAnimation key={card.title} delay={0.1 + index * 0.12}>
+          <BottomUpFadeAnimation key={card.title} delay={0.1 + index * 0.12} className="h-full">
             <article className="flex h-full flex-col gap-4">
               <PreviewByIndex index={index} />
               <div className="space-y-2 px-1">

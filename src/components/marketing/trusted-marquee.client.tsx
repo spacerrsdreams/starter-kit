@@ -17,7 +17,7 @@ export function TrustedMarqueeClient() {
 
   return (
     <BottomUpFadeAnimation>
-      <section className="mx-auto mt-60 w-full max-w-5xl overflow-hidden border-t border-b border-border/50 py-10 md:py-16">
+      <section className="mx-auto mt-18 mb-8 w-full max-w-5xl overflow-hidden border-t border-b border-border/50 py-12 md:mt-30! md:mb-16">
         <p className="px-4 text-center text-sm font-semibold text-foreground/80 md:text-base">
           Trusted by 17,000+ founders & business owners
         </p>
