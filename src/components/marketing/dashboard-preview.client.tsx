@@ -20,7 +20,7 @@ export function DashboardPreviewClient() {
 
   return (
     <BottomUpFadeAnimation>
-      <div ref={targetRef} className="mx-auto mt-20 w-full max-w-5xl overflow-x-clip px-2">
+      <div ref={targetRef} className="mx-auto mt-20 w-full max-w-5xl overflow-x-clip px-2 lg:overflow-x-visible">
         <motion.div style={{ scale }} className="origin-top">
           <div className="mx-auto w-full rounded-sm bg-secondary/90 p-2 sm:rounded-md sm:p-4 lg:backdrop-blur-xl">
             <div className="relative aspect-849/510 overflow-hidden rounded-sm border sm:rounded-md">

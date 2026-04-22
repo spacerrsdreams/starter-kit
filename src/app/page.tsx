@@ -33,7 +33,7 @@ export default function DashboardPage() {
             <CustomerReviewsSection />
             <PlanPickerSectionClient />
             <FaqSectionClient />
-            <FreeTrialCtaSection className="mt-20 mb-20 px-8" />
+            <FreeTrialCtaSection className="mt-20 mb-28 px-8" />
             <Footer />
           </div>
         </main>
