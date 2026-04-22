@@ -4,7 +4,7 @@ import type { CreateCheckoutSessionInput } from "@/features/billing/schemas/crea
 
 export function getStripePriceId(interval: CreateCheckoutSessionInput["interval"]): string {
   if (interval === "yearly") {
-    const yearlyPriceId = process.env.STRIPE_PRICE_ID_PRO_YEARLY ?? process.env.STRIPE_PRICE_ID_YEARLY
+    const yearlyPriceId = process.env.STRIPE_PRICE_ID_PRO_YEARLY ?? process.env.STRIPE_PRICE_ID_PRO_YEARLY
     if (!yearlyPriceId) {
       throw new Error("Missing STRIPE_PRICE_ID_PRO_YEARLY")
     }
