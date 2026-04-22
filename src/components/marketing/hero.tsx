@@ -14,7 +14,7 @@ export function Hero() {
           <div className="mx-auto max-w-2xl">
             <BlurWaveTextAnimation
               text="The Smartest Way to Bring Best ROI for Sales"
-              className="mt-8 justify-center text-3xl leading-[0.95] font-semibold tracking-[-3px] text-foreground md:text-6xl"
+              className="mt-8 justify-center text-3xl leading-[0.95] font-semibold text-foreground md:text-6xl"
             />
           </div>
           <p className="mt-6 max-w-lg leading-relaxed tracking-tight text-foreground/90">

@@ -15,10 +15,7 @@ export function ContactPageContent() {
       <section className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-2">
         <div className="flex flex-col">
           <div className="space-y-4">
-            <BlurWaveTextAnimation
-              text="Get In Touch"
-              className="text-5xl font-medium tracking-[-3.5px] text-foreground md:text-6xl"
-            />
+            <BlurWaveTextAnimation text="Get In Touch" className="text-5xl font-medium text-foreground md:text-6xl" />
             <BottomUpFadeAnimation delay={0.25}>
               <p className="max-w-sm text-base leading-7 text-muted-foreground">
                 We&apos;d love to hear from you! Whether you have questions, need support

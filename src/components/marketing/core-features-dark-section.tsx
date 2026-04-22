@@ -52,9 +52,7 @@ export function CoreFeaturesDarkSection() {
           <BottomUpFadeAnimation>
             <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
               <Chip Icon={Rocket} title="Core Features" variant="dark" size="lg" />
-              <h2 className="mt-6 text-2xl font-semibold tracking-[-3px] text-zinc-100 md:text-4xl">
-                What&apos;s inside Salix?
-              </h2>
+              <h2 className="mt-6 text-2xl font-semibold text-zinc-100 md:text-4xl">What&apos;s inside Salix?</h2>
               <p className="mt-4 max-w-sm text-background/80">
                 Businesses choose Salix because it simplifies the complexity of sales management.
               </p>

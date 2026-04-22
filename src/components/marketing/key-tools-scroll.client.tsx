@@ -80,7 +80,7 @@ export function KeyToolsScrollClient() {
         <BottomUpFadeAnimation delay={0.05}>
           <aside className="h-fit lg:sticky lg:top-24">
             <Chip Icon={Sparkles} title="Key Tools" />
-            <h2 className="mt-6 text-3xl leading-[1.05] font-semibold tracking-[-3px] text-foreground/95 md:text-5xl">
+            <h2 className="mt-6 text-3xl leading-[1.05] font-semibold text-foreground/95 md:text-5xl">
               AI that moves sales forward & faster
             </h2>
 
@@ -121,7 +121,7 @@ export function KeyToolsScrollClient() {
                     className="space-y-5"
                   >
                     <div className="space-y-3">
-                      <h3 className="text-3xl font-medium tracking-[-3px] text-foreground">{section.title}</h3>
+                      <h3 className="text-3xl font-medium text-foreground">{section.title}</h3>
                       <p className="text-lg leading-relaxed text-foreground/80">{section.description}</p>
                     </div>
 
