@@ -75,7 +75,7 @@ export function KeyToolsScrollClient() {
   }, [])
 
   return (
-    <section className="mx-auto w-full max-w-5xl py-12 md:py-24">
+    <section className="mx-auto w-full max-w-5xl py-12 pb-28 md:pt-24">
       <div className="grid gap-4 lg:grid-cols-[40%_60%] lg:gap-12">
         <BottomUpFadeAnimation delay={0.05}>
           <aside className="h-fit lg:sticky lg:top-24">
@@ -108,7 +108,7 @@ export function KeyToolsScrollClient() {
 
         <BottomUpFadeAnimation delay={0.2}>
           <div className="space-y-24 pt-6 md:space-y-28 lg:pt-50">
-            {keyToolsSections.map((section) => {
+            {keyToolsSections.map((section, idx) => {
               const sectionIndex = sectionIndexById.get(section.id) ?? 0
 
               return (
@@ -133,7 +133,7 @@ export function KeyToolsScrollClient() {
                       </div>
                     </div>
                   </article>
-                  <Separator className="bg-border/70" />
+                  {idx !== keyToolsSections.length - 1 && <Separator className="bg-border/70" />}
                 </div>
               )
             })}

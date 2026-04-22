@@ -34,18 +34,22 @@ const faqItems = [
 export function FaqSectionClient() {
   return (
     <section className="w-full px-8 py-14 md:py-20">
-      <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-[42%_58%] md:gap-12">
+      <div className="mx-auto grid max-w-5xl md:grid-cols-[50%_50%]">
         <div className="space-y-6">
           <Chip Icon={CircleHelp} title="FAQ" />
-          <h2 className="text-4xl font-semibold tracking-tighter text-foreground md:text-6xl">
+          <h2 className="text-2xl font-semibold tracking-tighter text-foreground md:text-5xl">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-muted-foreground">Get answers to common questions here</p>
+          <p className="text-base text-foreground/80">Get answers to common questions here</p>
         </div>
 
         <Accordion type="single" collapsible defaultValue="data-safety" className="space-y-3">
           {faqItems.map((item) => (
-            <AccordionItem key={item.id} value={item.id} className="rounded-xl border border-border/70 px-5 py-3">
+            <AccordionItem
+              key={item.id}
+              value={item.id}
+              className="rounded-xl border border-border/70 px-4 py-2 transition-colors duration-200 data-[state=open]:bg-secondary/80"
+            >
               <AccordionTrigger className="text-lg font-medium">{item.question}</AccordionTrigger>
               <AccordionContent className="text-base">{item.answer}</AccordionContent>
             </AccordionItem>

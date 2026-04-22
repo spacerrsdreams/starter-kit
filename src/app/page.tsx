@@ -7,7 +7,6 @@ import { DashboardPreviewClient } from "@/components/marketing/dashboard-preview
 import { FaqSectionClient } from "@/components/marketing/faq-section.client"
 import { FreeTrialCtaSection } from "@/components/marketing/free-trial-cta-section"
 import { Hero } from "@/components/marketing/hero"
-import { InsideSalixSection } from "@/components/marketing/inside-salix-section"
 import { KeyToolsScrollClient } from "@/components/marketing/key-tools-scroll.client"
 import { PlanPickerSectionClient } from "@/components/marketing/plan-picker-section.client"
 import { TrustedMarqueeClient } from "@/components/marketing/trusted-marquee.client"
@@ -26,7 +25,6 @@ export default function DashboardPage() {
             <DashboardPreviewClient />
             <TrustedMarqueeClient />
             <WhyChooseSection />
-            <InsideSalixSection />
             <KeyToolsScrollClient />
           </div>
           <CoreFeaturesDarkSection />
@@ -35,10 +33,10 @@ export default function DashboardPage() {
             <CustomerReviewsSection />
             <PlanPickerSectionClient />
             <FaqSectionClient />
+            <FreeTrialCtaSection className="mt-20 mb-20 px-8" />
+            <Footer />
           </div>
-          <FreeTrialCtaSection className="mt-20 px-8" />
         </main>
-        <Footer />
       </div>
     </div>
   )
