@@ -20,12 +20,14 @@ const faqItems = [
   {
     id: "crm-compatibility",
     question: "Does it work with my CRM?",
-    answer: "Yes, Salix supports common CRM workflows and integrations to keep your pipeline and customer data in sync.",
+    answer:
+      "Yes, Salix supports common CRM workflows and integrations to keep your pipeline and customer data in sync.",
   },
   {
     id: "sales-goals",
     question: "Can I track sales goals?",
-    answer: "Absolutely. You can set targets, monitor performance in real time, and review progress across teams and reps.",
+    answer:
+      "Absolutely. You can set targets, monitor performance in real time, and review progress across teams and reps.",
   },
 ] as const
 
@@ -35,17 +37,17 @@ export function FaqSectionClient() {
       <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-[42%_58%] md:gap-12">
         <div className="space-y-6">
           <Chip Icon={CircleHelp} title="FAQ" />
-          <h2 className="text-4xl font-semibold tracking-tighter text-foreground md:text-6xl">Frequently Asked Questions</h2>
+          <h2 className="text-4xl font-semibold tracking-tighter text-foreground md:text-6xl">
+            Frequently Asked Questions
+          </h2>
           <p className="text-xl text-muted-foreground">Get answers to common questions here</p>
         </div>
 
         <Accordion type="single" collapsible defaultValue="data-safety" className="space-y-3">
           {faqItems.map((item) => (
-            <AccordionItem key={item.id} value={item.id} className="rounded-2xl border border-border/70 bg-card px-5">
-              <AccordionTrigger className="py-5 text-2xl font-semibold text-foreground hover:no-underline">
-                {item.question}
-              </AccordionTrigger>
-              <AccordionContent className="pb-5 text-lg leading-relaxed text-muted-foreground">{item.answer}</AccordionContent>
+            <AccordionItem key={item.id} value={item.id} className="rounded-xl border border-border/70 px-5 py-3">
+              <AccordionTrigger className="text-lg font-medium">{item.question}</AccordionTrigger>
+              <AccordionContent className="text-base">{item.answer}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
