@@ -36,7 +36,7 @@ export function HeaderNavigationClient() {
 
   return (
     <motion.header
-      className="fixed top-2 left-1/2 z-50 w-full -translate-x-1/2 px-4"
+      className="fixed top-4 left-1/2 z-50 w-full -translate-x-1/2 px-4 sm:top-2"
       animate={{
         y: isVisible ? 0 : -88,
         opacity: isVisible ? 1 : 0.5,
