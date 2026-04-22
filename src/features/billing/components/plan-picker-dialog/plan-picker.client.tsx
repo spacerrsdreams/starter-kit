@@ -27,9 +27,11 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onSelectInt
     <div className="flex h-full flex-col items-center justify-center">
       <div className="items-center px-5 py-6 text-center sm:px-8 sm:py-7">
         {showMainlabel === true && <Chip title="Pricing" Icon={Database} />}
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance sm:text-5xl">Choose the Perfect Plan</h2>
-        <div className="mt-12 flex w-full items-center justify-center gap-3">
-          <span className="text-sm font-medium">Monthly</span>
+        <h2 className="mt-6 text-2xl leading-3 font-semibold tracking-tight text-balance sm:text-5xl">
+          Choose the Perfect Plan
+        </h2>
+        <div className="mt-8 flex w-full items-center justify-center gap-3">
+          <span className="text-sm font-semibold">Monthly</span>
           <Switch
             checked={isYearly}
             onCheckedChange={setIsYearly}

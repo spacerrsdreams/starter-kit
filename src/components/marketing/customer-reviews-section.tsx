@@ -2,10 +2,11 @@ import { UserStar } from "lucide-react"
 
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
+import { CountUpNumberAnimation } from "@/components/ui/count-up-number.animation"
 
 export function CustomerReviewsSection() {
   return (
-    <section className="w-full px-8 py-14 md:py-20">
+    <section className="w-full px-4 py-14 md:py-20 lg:px-8">
       <BottomUpFadeAnimation>
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
           <Chip Icon={UserStar} title="Customer Reviews" />
@@ -18,7 +19,12 @@ export function CustomerReviewsSection() {
       <div className="mx-auto mt-10 grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
         <BottomUpFadeAnimation className="sm:col-span-1 lg:col-span-3" delay={0.05}>
           <article className="flex h-full flex-col items-center justify-center rounded-xl border border-border bg-accent-1 px-14 py-18 text-center text-background">
-            <p className="text-5xl font-semibold tracking-tight md:text-6xl">60%</p>
+            <CountUpNumberAnimation
+              to={60}
+              suffix="%"
+              duration={3}
+              className="text-5xl font-semibold tracking-tight md:text-6xl"
+            />
             <p className="mt-4 text-lg text-background/90">Admin work reduced</p>
           </article>
         </BottomUpFadeAnimation>
@@ -38,21 +44,37 @@ export function CustomerReviewsSection() {
 
         <BottomUpFadeAnimation className="sm:col-span-1 lg:col-span-3" delay={0.15}>
           <article className="flex h-full flex-col items-center justify-center rounded-xl border border-border bg-background px-14 py-18 text-center">
-            <p className="text-5xl font-semibold tracking-tight text-foreground md:text-6xl">45%</p>
+            <CountUpNumberAnimation
+              to={45}
+              suffix="%"
+              duration={3}
+              className="text-5xl font-semibold tracking-tight text-foreground md:text-6xl"
+            />
             <p className="mt-4 text-lg text-muted-foreground">Revenue boost per year</p>
           </article>
         </BottomUpFadeAnimation>
 
         <BottomUpFadeAnimation className="sm:col-span-1 lg:col-span-3" delay={0.2}>
           <article className="flex h-full flex-col items-center justify-center rounded-xl border border-border bg-background px-14 py-18 text-center">
-            <p className="text-5xl font-semibold tracking-tight text-foreground md:text-6xl">35%</p>
+            <CountUpNumberAnimation
+              to={35}
+              duration={3}
+              suffix="%"
+              className="text-5xl font-semibold tracking-tight text-foreground md:text-6xl"
+            />
             <p className="mt-4 text-lg text-muted-foreground">Rep productivity</p>
           </article>
         </BottomUpFadeAnimation>
 
         <BottomUpFadeAnimation className="sm:col-span-1 lg:col-span-3" delay={0.25}>
           <article className="flex h-full flex-col items-center justify-center rounded-xl border border-primary/40 bg-primary px-14 py-18 text-center text-primary-foreground">
-            <p className="text-5xl font-semibold tracking-tight md:text-6xl">$45M</p>
+            <CountUpNumberAnimation
+              to={45}
+              prefix="$"
+              suffix="M"
+              duration={3}
+              className="text-5xl font-semibold tracking-tight md:text-6xl"
+            />
             <p className="mt-4 text-lg text-primary-foreground/90">Revenue boost per year</p>
           </article>
         </BottomUpFadeAnimation>

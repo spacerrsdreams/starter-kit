@@ -4,8 +4,8 @@ import { PlanPicker } from "@/features/billing/components/plan-picker-dialog/pla
 
 export function PlanPickerSectionClient() {
   return (
-    <section className="w-full px-8 py-14 md:py-20">
-      <PlanPicker isBillingLoading={false} showMainlabel={false} onSelectInterval={() => {}} />
+    <section className="w-full px-4 py-0">
+      <PlanPicker isBillingLoading={false} onSelectInterval={() => {}} />
     </section>
   )
 }
