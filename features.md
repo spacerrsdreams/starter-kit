@@ -68,12 +68,15 @@ This file lists the pages and product capabilities currently implemented in the 
 4. Message reactions (like/unlike) with optional dislike feedback.
 5. Auto chat title generation and chat context summarization.
 6. Global floating AI widget with quick chat access/history.
+7. AI widget is mounted globally and shown on most pages; it is intentionally hidden on the homepage, auth pages, and dashboard routes.
+8. Shared AI build-context utility is implemented and configurable through include/exclude flags (system instructions, company context, policy context, available pages), plus optional user/request context, feature flags, and extra instructions.
 
 ### Dashboard UX and navigation
 
 1. Responsive dashboard shell with desktop sidebar + mobile bottom nav.
 2. Command menu (Cmd/Ctrl + K) for quick navigation/actions.
 3. Global dialogs/providers wired in the dashboard layout.
+4. Global quick access menu is mounted at the app layout level and available across pages (rendered without inline trigger by default, with command menu support behind it).
 
 ### Settings and user preferences
 
