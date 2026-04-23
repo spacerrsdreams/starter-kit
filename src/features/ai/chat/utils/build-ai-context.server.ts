@@ -7,13 +7,13 @@ import {
   SYSTEM_LEVEL_INSTRUCTIONS,
   TERMS_OF_SERVICE_CONTEXT,
 } from "@/features/ai/chat/constants/ai-shared-context.constants"
-import type { BuildContextInput } from "@/features/ai/chat/types/build-context.types"
+import type { BuildAiContextInput } from "@/features/ai/chat/types/build-ai-context.types"
 
 function formatSection(title: string, lines: string[]) {
   return [`## ${title}`, ...lines].join("\n")
 }
 
-export function buildContext(input: BuildContextInput = {}) {
+export function buildAiContext(input: BuildAiContextInput = {}) {
   const sections: string[] = []
   const includeSystemInstructions = input.includeSystemInstructions ?? true
   const includeCompanyInstructions = input.includeCompanyInstructions ?? true

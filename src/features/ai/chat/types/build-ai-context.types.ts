@@ -1,4 +1,4 @@
-export type BuildContextInput = {
+export type BuildAiContextInput = {
   includeSystemInstructions?: boolean
   includeCompanyInstructions?: boolean
   includePolicyContext?: boolean

@@ -21,6 +21,7 @@ import {
   replaceMessagesForChat,
   updateChatContextSummary,
 } from "@/features/ai/chat/repositories/chat.repository"
+import { buildAiContext } from "@/features/ai/chat/utils/build-ai-context.server"
 import { buildBudgetedChatContext, buildSummaryTranscript } from "@/features/ai/chat/utils/chat-context-budget.utils"
 
 export const maxDuration = 300
@@ -165,9 +166,15 @@ export async function POST(req: Request) {
     })
   }
 
+  const sharedAppContext = buildAiContext({
+    currentPath: new URL(req.url).pathname,
+  })
+
+  const systemPrompt = [CHAT_SYSTEM_PROMPT, sharedAppContext].filter(Boolean).join("\n\n")
+
   const result = streamText({
     model: CHAT_MODEL_ID,
-    system: CHAT_SYSTEM_PROMPT,
+    system: systemPrompt,
     messages: await convertToModelMessages(budgetedContext.messagesForModel),
     tools: {
       weather: WeatherTool,
