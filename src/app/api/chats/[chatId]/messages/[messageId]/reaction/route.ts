@@ -11,12 +11,14 @@ type RouteContext = {
   params: Promise<{ chatId: string; messageId: string }>
 }
 
-const requestSchema = z.object({
-  reaction: z.enum(["like", "unlike"]).nullable(),
-  feedbackText: z.string().trim().max(500).nullable().optional(),
-}).refine((data) => data.reaction !== "unlike" || Boolean(data.feedbackText?.trim()), {
-  message: "Feedback text is required for unlike reaction",
-})
+const requestSchema = z
+  .object({
+    reaction: z.enum(["like", "unlike"]).nullable(),
+    feedbackText: z.string().trim().max(500).nullable().optional(),
+  })
+  .refine((data) => data.reaction !== "unlike" || Boolean(data.feedbackText?.trim()), {
+    message: "Feedback text is required for unlike reaction",
+  })
 
 async function getSessionUserId() {
   const session = await auth.api.getSession({ headers: await headers() })

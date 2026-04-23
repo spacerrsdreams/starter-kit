@@ -26,7 +26,7 @@ export function ChatSessionCitations({ sources }: ChatSessionCitationsProps) {
     <div className="mt-1 flex flex-wrap items-center gap-2">
       {sources.map((source, index) => (
         <InlineCitation key={`${source.sourceId}:${source.url}`}>
-          <InlineCitationText className="text-muted-foreground text-xs">[{index + 1}]</InlineCitationText>
+          <InlineCitationText className="text-xs text-muted-foreground">[{index + 1}]</InlineCitationText>
           <InlineCitationCard>
             <InlineCitationCardTrigger sources={[source.url]} />
             <InlineCitationCardBody>

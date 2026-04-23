@@ -36,7 +36,7 @@ export function ContactSubmissionEmailTemplate({
 
             <Section className="mt-6">
               <Text className="mb-2 text-sm font-medium">Message</Text>
-              <Text className="m-0 whitespace-pre-wrap text-sm leading-relaxed">{message}</Text>
+              <Text className="m-0 text-sm leading-relaxed whitespace-pre-wrap">{message}</Text>
             </Section>
           </Container>
         </Body>

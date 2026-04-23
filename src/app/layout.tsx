@@ -6,15 +6,15 @@ import { Suspense } from "react"
 
 import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
+import { AuthRequiredModalProvider } from "@/features/auth/components/auth-required-modal/auth-required-modal-provider.client"
 import { createMetadata } from "@/features/seo/metadata"
 import { CookieConsentBannerLazy } from "@/components/cookies/cookie-consent-banner-lazy.client"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { QueryClientProviderWrapper } from "@/providers/query-client.provider"
 import { PostHogProvider } from "@/providers/posthog.provider"
+import { QueryClientProviderWrapper } from "@/providers/query-client.provider"
 import { SmoothScrollProvider } from "@/providers/smooth-scroll.provider"
 import { ThemeProvider } from "@/providers/theme.provider"
-import { AuthRequiredModalProvider } from "@/features/auth/components/auth-required-modal/auth-required-modal-provider.client"
 
 const dmSans = DM_Sans({
   subsets: ["latin"],

@@ -2,8 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query"
 
-import { ApiError } from "@/lib/http-client"
 import { authClient } from "@/lib/auth/auth-client"
+import { ApiError } from "@/lib/http-client"
 import { getChatApi } from "@/features/ai/chat/api/chats.api"
 import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 

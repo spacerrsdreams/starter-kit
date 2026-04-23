@@ -14,14 +14,14 @@ model Chat {
 }
 
 model Message {
-  id        String      @id
-  chatId    String
-  chat      Chat        @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  role      MessageRole
-  parts     Json
-  reaction  MessageReaction?
+  id           String           @id
+  chatId       String
+  chat         Chat             @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  role         MessageRole
+  parts        Json
+  reaction     MessageReaction?
   reactionNote String?
-  createdAt DateTime    @default(now())
+  createdAt    DateTime         @default(now())
 
   @@index([chatId, createdAt])
   @@map("message")

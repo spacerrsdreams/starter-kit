@@ -18,4 +18,3 @@ export function getMessageFileParts(message: UIMessage): FileUIPart[] {
       url: part.url,
     }))
 }
-

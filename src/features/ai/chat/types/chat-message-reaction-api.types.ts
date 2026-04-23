@@ -4,4 +4,3 @@ export type SetMessageReactionPayload = {
   reaction: ChatMessageReaction | null
   feedbackText?: string | null
 }
-

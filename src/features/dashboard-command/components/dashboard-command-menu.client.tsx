@@ -1,7 +1,7 @@
 "use client"
 
-import dynamic from "next/dynamic"
 import { SearchIcon } from "lucide-react"
+import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 
 import type { DashboardCommandMenuProps } from "@/features/dashboard-command/types/dashboard-command-menu.types"

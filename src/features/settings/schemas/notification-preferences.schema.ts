@@ -6,7 +6,9 @@ export const notificationPreferencesSchema = z.object({
 })
 
 export const updateNotificationPreferencesSchema = notificationPreferencesSchema.partial().refine((value) => {
-  return typeof value.notificationsEmailMarketing === "boolean" || typeof value.notificationsEmailPersonalized === "boolean"
+  return (
+    typeof value.notificationsEmailMarketing === "boolean" || typeof value.notificationsEmailPersonalized === "boolean"
+  )
 })
 
 export type NotificationPreferences = z.infer<typeof notificationPreferencesSchema>

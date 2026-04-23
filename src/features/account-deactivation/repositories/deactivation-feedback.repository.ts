@@ -2,8 +2,8 @@ import "server-only"
 
 import { randomUUID } from "crypto"
 
-import type { SubmitDeactivationFeedbackInput } from "@/features/account-deactivation/schemas/deactivation-feedback.schema"
 import { prisma } from "@/lib/prisma"
+import type { SubmitDeactivationFeedbackInput } from "@/features/account-deactivation/schemas/deactivation-feedback.schema"
 
 type CreateDeactivationFeedbackInput = SubmitDeactivationFeedbackInput & {
   userId: string

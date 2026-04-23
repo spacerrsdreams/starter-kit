@@ -1,24 +1,24 @@
 model User {
-  id            String    @id
-  name          String
-  email         String
-  role          UserRole  @default(user)
-  banned        Boolean   @default(false)
-  banReason     String?
-  banExpires    DateTime?
-  emailVerified Boolean   @default(false)
-  notificationsEmailMarketing    Boolean   @default(true)
-  notificationsEmailPersonalized Boolean   @default(true)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deactivatedAt DateTime?
-  sessions      Session[]
-  accounts      Account[]
-  chats         Chat[]
-  billingSubscription BillingSubscription?
-  deactivationFeedbacks DeactivationFeedback[]
-  blogPosts      BlogPost[]
+  id                             String                 @id
+  name                           String
+  email                          String
+  role                           UserRole               @default(user)
+  banned                         Boolean                @default(false)
+  banReason                      String?
+  banExpires                     DateTime?
+  emailVerified                  Boolean                @default(false)
+  notificationsEmailMarketing    Boolean                @default(true)
+  notificationsEmailPersonalized Boolean                @default(true)
+  image                          String?
+  createdAt                      DateTime               @default(now())
+  updatedAt                      DateTime               @updatedAt
+  deactivatedAt                  DateTime?
+  sessions                       Session[]
+  accounts                       Account[]
+  chats                          Chat[]
+  billingSubscription            BillingSubscription?
+  deactivationFeedbacks          DeactivationFeedback[]
+  blogPosts                      BlogPost[]
 
   @@unique([email])
   @@index([deactivatedAt])
@@ -26,16 +26,16 @@ model User {
 }
 
 model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String
+  id             String   @id
+  expiresAt      DateTime
+  token          String
   impersonatedBy String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
   @@index([userId])
@@ -102,4 +102,3 @@ enum UserRole {
   admin
   moderator
 }
- 

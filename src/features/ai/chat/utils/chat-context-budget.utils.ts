@@ -1,6 +1,9 @@
 import type { UIMessage } from "ai"
 
-import type { BudgetedChatContextResult, ChatContextBudgetConfig } from "@/features/ai/chat/types/chat-context-budget.types"
+import type {
+  BudgetedChatContextResult,
+  ChatContextBudgetConfig,
+} from "@/features/ai/chat/types/chat-context-budget.types"
 
 function getMessageText(message: UIMessage): string {
   const role = message.role.toUpperCase()

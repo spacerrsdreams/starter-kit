@@ -26,6 +26,7 @@ This is the **global baseline**. All child pages inherit and can override.
 ```typescript
 // app/layout.tsx
 import type { Metadata } from "next"
+
 import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
 
@@ -102,7 +103,7 @@ export const metadata: Metadata = {
     description: SiteConfig.ogDescription,
     images: [`${process.env.NEXT_PUBLIC_DOMAIN}/opengraph-image.png`],
     creator: SiteConfig.twitterCreator, // e.g. "@yourhandle"
-    site: SiteConfig.twitterSite,       // e.g. "@yoursitehandle"
+    site: SiteConfig.twitterSite, // e.g. "@yoursitehandle"
   },
 
   // Icons — provide all sizes for full platform coverage
@@ -167,7 +168,7 @@ For pages with known content at build time:
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "About",           // renders as "About | MySite" via template
+  title: "About", // renders as "About | MySite" via template
   description: "Learn about our mission, team, and story.",
   alternates: {
     canonical: "https://yourdomain.com/about",
@@ -190,6 +191,7 @@ Use for any route with a `[slug]` or dynamic segment:
 ```typescript
 // app/blog/[slug]/page.tsx
 import type { Metadata } from "next"
+
 import { getPostBySlug } from "@/lib/blog"
 
 type Props = { params: Promise<{ slug: string }> }
@@ -263,12 +265,7 @@ export function JsonLdWebsite() {
       "query-input": "required name=search_term_string",
     },
   }
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  )
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 }
 ```
 
@@ -302,12 +299,7 @@ export function JsonLdArticle({ post }: { post: Post }) {
       "@id": `${process.env.NEXT_PUBLIC_DOMAIN}/blog/${post.slug}`,
     },
   }
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  )
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 }
 ```
 
@@ -321,23 +313,14 @@ export function JsonLdOrganization() {
     name: SiteConfig.name,
     url: process.env.NEXT_PUBLIC_DOMAIN,
     logo: `${process.env.NEXT_PUBLIC_DOMAIN}/logo.png`,
-    sameAs: [
-      SiteConfig.twitterUrl,
-      SiteConfig.linkedinUrl,
-      SiteConfig.githubUrl,
-    ].filter(Boolean),
+    sameAs: [SiteConfig.twitterUrl, SiteConfig.linkedinUrl, SiteConfig.githubUrl].filter(Boolean),
     contactPoint: {
       "@type": "ContactPoint",
       email: SiteConfig.contactEmail,
       contactType: "customer support",
     },
   }
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  )
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 }
 ```
 
@@ -355,12 +338,7 @@ export function JsonLdBreadcrumb({ items }: { items: { name: string; url: string
       item: item.url,
     })),
   }
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  )
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 }
 ```
 
@@ -377,12 +355,7 @@ export function JsonLdFaq({ faqs }: { faqs: { q: string; a: string }[] }) {
       acceptedAnswer: { "@type": "Answer", text: faq.a },
     })),
   }
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  )
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 }
 ```
 
@@ -401,9 +374,7 @@ export function JsonLdProduct({ product }: { product: Product }) {
       "@type": "Offer",
       price: product.price,
       priceCurrency: product.currency,
-      availability: product.inStock
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
+      availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       url: `${process.env.NEXT_PUBLIC_DOMAIN}/products/${product.slug}`,
     },
     aggregateRating: product.rating
@@ -414,12 +385,7 @@ export function JsonLdProduct({ product }: { product: Product }) {
         }
       : undefined,
   }
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  )
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 }
 ```
 
@@ -432,6 +398,7 @@ Use Next.js native convention — no external library needed.
 ```typescript
 // app/sitemap.ts
 import type { MetadataRoute } from "next"
+
 import { getAllPosts } from "@/lib/blog"
 import { getAllProducts } from "@/lib/products"
 
@@ -504,13 +471,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: [
-          "/api/",
-          "/dashboard/",
-          "/admin/",
-          "/_next/",
-          "/private/",
-        ],
+        disallow: ["/api/", "/dashboard/", "/admin/", "/_next/", "/private/"],
       },
       // Block AI scrapers if desired
       // {
@@ -533,6 +494,7 @@ Dynamic per-page OG images using Next.js built-in ImageResponse:
 ```tsx
 // app/opengraph-image.tsx  <- global fallback
 import { ImageResponse } from "next/og"
+
 import { SiteConfig } from "@/lib/site.config"
 
 export const runtime = "edge"
@@ -542,27 +504,21 @@ export const contentType = "image/png"
 
 export default async function Image() {
   return new ImageResponse(
-    (
-      <div
-        style={{
-          background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "60px",
-        }}
-      >
-        <div style={{ fontSize: 72, fontWeight: 700, color: "white", textAlign: "center" }}>
-          {SiteConfig.name}
-        </div>
-        <div style={{ fontSize: 32, color: "#94a3b8", marginTop: 24, textAlign: "center" }}>
-          {SiteConfig.description}
-        </div>
-      </div>
-    ),
+    <div
+      style={{
+        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "60px",
+      }}
+    >
+      <div style={{ fontSize: 72, fontWeight: 700, color: "white", textAlign: "center" }}>{SiteConfig.name}</div>
+      <div style={{ fontSize: 32, color: "#94a3b8", marginTop: 24, textAlign: "center" }}>{SiteConfig.description}</div>
+    </div>,
     { ...size }
   )
 }
@@ -571,6 +527,7 @@ export default async function Image() {
 ```tsx
 // app/blog/[slug]/opengraph-image.tsx  <- per-post OG image
 import { ImageResponse } from "next/og"
+
 import { getPostBySlug } from "@/lib/blog"
 
 export const runtime = "edge"
@@ -581,29 +538,23 @@ export default async function Image({ params }: { params: { slug: string } }) {
   const post = await getPostBySlug(params.slug)
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          background: "#0f172a",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-end",
-          padding: "60px",
-        }}
-      >
-        <div style={{ fontSize: 18, color: "#3b82f6", marginBottom: 16 }}>
-          {post?.category ?? "Blog"}
-        </div>
-        <div style={{ fontSize: 52, fontWeight: 700, color: "white", lineHeight: 1.2 }}>
-          {post?.title}
-        </div>
-        <div style={{ fontSize: 24, color: "#94a3b8", marginTop: 20 }}>
-          {post?.author?.name} · {post?.readingTime} min read
-        </div>
+    <div
+      style={{
+        background: "#0f172a",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+        padding: "60px",
+      }}
+    >
+      <div style={{ fontSize: 18, color: "#3b82f6", marginBottom: 16 }}>{post?.category ?? "Blog"}</div>
+      <div style={{ fontSize: 52, fontWeight: 700, color: "white", lineHeight: 1.2 }}>{post?.title}</div>
+      <div style={{ fontSize: 24, color: "#94a3b8", marginTop: 20 }}>
+        {post?.author?.name} · {post?.readingTime} min read
       </div>
-    ),
+    </div>,
     { ...size }
   )
 }

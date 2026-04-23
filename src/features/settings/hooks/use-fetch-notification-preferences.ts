@@ -1,8 +1,8 @@
 "use client"
 
+import { getNotificationPreferencesAction } from "@/actions/account/get-notification-preferences.action"
 import { useQuery } from "@tanstack/react-query"
 
-import { getNotificationPreferencesAction } from "@/actions/account/get-notification-preferences.action"
 import { authClient } from "@/lib/auth/auth-client"
 import { settingsQueryKeys } from "@/features/settings/constants/settings-query-keys"
 

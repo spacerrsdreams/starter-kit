@@ -40,4 +40,3 @@ export function groupChatsByUpdatedAt(chats: ChatListItem[], now: Date = new Dat
 
   return groups
 }
-

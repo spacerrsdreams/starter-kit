@@ -1,9 +1,9 @@
 "use client"
 
 import { usePathname, useSearchParams } from "next/navigation"
+import posthog from "posthog-js"
 import type { ReactNode } from "react"
 import { useEffect } from "react"
-import posthog from "posthog-js"
 
 type PostHogProviderProps = {
   children: ReactNode

@@ -8,5 +8,11 @@ export function SettingsDialogGlobalBridge() {
   const section = useSettingsDialogStore((state) => state.section)
   const closeDialog = useSettingsDialogStore((state) => state.closeDialog)
 
-  return <SettingsDialog open={open} onOpenChange={(isOpen) => (!isOpen ? closeDialog() : undefined)} defaultSection={section} />
+  return (
+    <SettingsDialog
+      open={open}
+      onOpenChange={(isOpen) => (!isOpen ? closeDialog() : undefined)}
+      defaultSection={section}
+    />
+  )
 }

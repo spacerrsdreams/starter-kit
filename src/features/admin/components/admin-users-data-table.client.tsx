@@ -1,18 +1,18 @@
 "use client"
 
-import * as React from "react"
 import {
-  type ColumnDef,
-  type ColumnFiltersState,
-  type SortingState,
-  type VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
 } from "@tanstack/react-table"
+import * as React from "react"
 
 import type { AdminUserListItem } from "@/features/admin/types/admin-users.types"
 import { Button } from "@/components/ui/button"
