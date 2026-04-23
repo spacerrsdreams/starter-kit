@@ -83,10 +83,9 @@ export function HeaderNavigationClient() {
                 onClick={() => {
                   if (session?.user) {
                     window.location.href = WebRoutes.dashboard.path
-                    return
+                  } else {
+                    openAuthModal()
                   }
-
-                  openAuthModal()
                 }}
               >
                 Get Started

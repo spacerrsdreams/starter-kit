@@ -20,8 +20,7 @@ const waveGradient =
 export function WaveGlowButton({ href, label, requireAuth = false, authenticatedHref }: WaveGlowButtonProps) {
   const { data: session } = authClient.useSession()
   const { openAuthModal } = useAuthRequiredModal()
-  const isAuthenticated = Boolean(session?.user)
-  const targetHref = (requireAuth && isAuthenticated ? authenticatedHref ?? href : href) as Route
+  const targetHref = (requireAuth && session?.user ? (authenticatedHref ?? href) : href) as Route
 
   const slideTransition = {
     type: "tween" as const,
@@ -34,12 +33,15 @@ export function WaveGlowButton({ href, label, requireAuth = false, authenticated
     <Link
       href={targetHref}
       onClick={(event) => {
-        if (!requireAuth || isAuthenticated) {
-          return
-        }
+        if (!requireAuth) return
 
         event.preventDefault()
-        openAuthModal()
+
+        if (session?.user) {
+          window.location.href = (authenticatedHref ?? href) as Route
+        } else {
+          openAuthModal()
+        }
       }}
       className="group relative inline-flex flex-col items-center justify-center gap-2 overflow-visible rounded-[100px] bg-[linear-gradient(90deg,rgb(33,204,238)_0%,rgb(20,112,239)_33.2763%,rgb(105,39,218)_68.4697%,rgb(242,61,148)_100%)] pb-px"
     >
