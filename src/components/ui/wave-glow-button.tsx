@@ -1,26 +1,23 @@
 "use client"
 
 import { motion } from "motion/react"
-import { Route } from "next"
-import Link from "next/link"
 
 import { authClient } from "@/lib/auth/auth-client"
+import { WebRoutes } from "@/lib/web.routes"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
+import { Button } from "@/components/ui/button"
 
 type WaveGlowButtonProps = {
-  href: string
   label: string
-  requireAuth?: boolean
-  authenticatedHref?: string
 }
 
 const waveGradient =
   "linear-gradient(90deg, rgb(33, 204, 238) 0%, rgb(20, 112, 239) 33.2763%, rgb(105, 39, 218) 68.4697%, rgb(242, 61, 148) 100%)"
 
-export function WaveGlowButton({ href, label, requireAuth = false, authenticatedHref }: WaveGlowButtonProps) {
-  const { data: session } = authClient.useSession()
+export function WaveGlowButton({ label }: WaveGlowButtonProps) {
+  const { data: session, isPending } = authClient.useSession()
   const { openAuthModal } = useAuthRequiredModal()
-  const targetHref = (requireAuth && session?.user ? (authenticatedHref ?? href) : href) as Route
+  const dashboardHref = WebRoutes.dashboard.path
 
   const slideTransition = {
     type: "tween" as const,
@@ -30,20 +27,17 @@ export function WaveGlowButton({ href, label, requireAuth = false, authenticated
   const ctaLineClass = "flex h-5 min-h-5 w-full shrink-0 items-center justify-center whitespace-nowrap leading-none"
 
   return (
-    <Link
-      href={targetHref}
-      onClick={(event) => {
-        if (!requireAuth) return
-
-        event.preventDefault()
-
+    <button
+      type="button"
+      onClick={() => {
         if (session?.user) {
-          window.location.href = (authenticatedHref ?? href) as Route
+          window.location.href = dashboardHref
         } else {
           openAuthModal()
         }
       }}
-      className="group relative inline-flex flex-col items-center justify-center gap-2 overflow-visible rounded-[100px] bg-[linear-gradient(90deg,rgb(33,204,238)_0%,rgb(20,112,239)_33.2763%,rgb(105,39,218)_68.4697%,rgb(242,61,148)_100%)] pb-px"
+      disabled={isPending}
+      className="group relative inline-flex cursor-pointer flex-col items-center justify-center gap-2 overflow-visible rounded-[100px] bg-[linear-gradient(90deg,rgb(33,204,238)_0%,rgb(20,112,239)_33.2763%,rgb(105,39,218)_68.4697%,rgb(242,61,148)_100%)] pb-px"
     >
       <span aria-hidden className="pointer-events-none absolute right-0 -bottom-2 left-0">
         <motion.span
@@ -84,6 +78,6 @@ export function WaveGlowButton({ href, label, requireAuth = false, authenticated
           </motion.span>
         </span>
       </motion.span>
-    </Link>
+    </button>
   )
 }

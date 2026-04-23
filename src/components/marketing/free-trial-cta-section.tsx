@@ -1,7 +1,6 @@
 import Image from "next/image"
 
 import { SiteConfig } from "@/lib/site.config"
-import { WebRoutes } from "@/lib/web.routes"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { LogoIcon } from "@/components/ui/icons/logo.icon"
 import { WaveGlowButton } from "@/components/ui/wave-glow-button"
@@ -22,12 +21,7 @@ export function FreeTrialCtaSection({ className }: FreeTrialCtaSectionProps) {
               Start taking control of your business today
             </p>
             <div className="mt-8">
-              <WaveGlowButton
-                href={WebRoutes.dashboard.path}
-                authenticatedHref={WebRoutes.dashboard.path}
-                requireAuth
-                label="Get Started"
-              />
+              <WaveGlowButton label="Get Started" />
             </div>
           </div>
 
@@ -52,12 +46,7 @@ export function FreeTrialCtaSection({ className }: FreeTrialCtaSectionProps) {
             <p className="mt-4 text-base text-muted-foreground">Start taking control of your business today</p>
 
             <div className="mt-8 pb-8">
-              <WaveGlowButton
-                href={WebRoutes.dashboard.path}
-                authenticatedHref={WebRoutes.dashboard.path}
-                requireAuth
-                label="Get Started"
-              />
+              <WaveGlowButton label="Get Started" />
             </div>
           </div>
         </div>

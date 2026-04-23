@@ -1,4 +1,3 @@
-import { WebRoutes } from "@/lib/web.routes"
 import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { WaveGlowButton } from "@/components/ui/wave-glow-button"
@@ -21,12 +20,7 @@ export function Hero() {
             The smarter way to manage sales starts with using tools that streamline every step of the process
           </p>
           <div className="mt-10">
-            <WaveGlowButton
-              href={WebRoutes.dashboard.path}
-              authenticatedHref={WebRoutes.dashboard.path}
-              requireAuth
-              label="Get Started Now"
-            />
+            <WaveGlowButton label="Get Started Now" />
           </div>
         </div>
       </section>
