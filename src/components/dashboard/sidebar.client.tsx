@@ -21,8 +21,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-import { SearchForm } from "./search-form"
-
 export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarComponent>) {
   const { data: session, isPending: isSessionPending } = authClient.useSession()
 
@@ -39,9 +37,6 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="flex min-h-0 flex-1 flex-col space-y-1">
-          <div className="hidden">
-            <SearchForm />
-          </div>
           {session?.user?.role === "admin" ? (
             <SidebarMenu>
               <SidebarMenuItem>

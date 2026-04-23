@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { z } from "zod"
@@ -9,6 +10,7 @@ import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-m
 import { Footer } from "@/components/footer"
 import { HeaderNavigationClient } from "@/components/header-navigation.client"
 import { TopGradient } from "@/components/top-gradient"
+import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
 
 const PAGE_SIZE = 9
 
@@ -38,26 +40,25 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <HeaderNavigationClient />
       <main className="container mx-auto min-h-screen px-4 py-36">
         <div className="mx-auto w-full max-w-5xl space-y-8">
-          <div className="space-y-2">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h1 className="text-4xl font-semibold text-foreground">Blog</h1>
-                <p className="text-sm text-muted-foreground">
-                  Server-rendered paginated feed. New posts are created from the admin create page.
-                </p>
-              </div>
-              {viewerRole ? (
-                <Link
-                  href={WebRoutes.createBlogPost.path}
-                  className="rounded-lg border border-border px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
-                >
-                  Create Post
-                </Link>
-              ) : null}
-            </div>
+          <div className="flex justify-center">
+            <BlurWaveTextAnimation
+              className="text-center text-4xl font-semibold tracking-[-3px] text-foreground"
+              text="Latest Articles & Insights"
+            />
           </div>
 
           <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {viewerRole ? (
+              <Link
+                href={WebRoutes.createBlogPost.path}
+                className="block rounded-xl border border-border/80 bg-background p-4 transition-colors hover:bg-muted/20"
+              >
+                <article className="flex min-h-66 flex-col items-center justify-center rounded-lg border border-dashed border-border/80">
+                  <Plus className="size-18 text-foreground" />
+                  <span className="mt-4 text-sm font-semibold text-foreground">Create Blog Post</span>
+                </article>
+              </Link>
+            ) : null}
             {posts.map((post) => (
               <article key={post.id} className="relative overflow-hidden rounded-xl border border-border bg-background">
                 {viewerRole ? (

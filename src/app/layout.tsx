@@ -7,8 +7,10 @@ import { Suspense } from "react"
 import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
 import { AuthRequiredModalProvider } from "@/features/auth/components/auth-required-modal/auth-required-modal-provider.client"
+import { AiWidgetLazy } from "@/features/ai/widget/components/ai-widget-lazy.client"
 import { createMetadata } from "@/features/seo/metadata"
 import { CookieConsentBannerLazy } from "@/components/cookies/cookie-consent-banner-lazy.client"
+import { QuickAccessMenuLazy } from "@/components/quick-access-menu-lazy.client"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { PostHogProvider } from "@/providers/posthog.provider"
@@ -137,6 +139,8 @@ export default function RootLayout({
                   <AuthRequiredModalProvider>
                     <TooltipProvider>
                       {children}
+                      <AiWidgetLazy />
+                      <QuickAccessMenuLazy renderInlineTrigger={false} />
                       <Toaster position="bottom-right" />
                       <CookieConsentBannerLazy />
                     </TooltipProvider>

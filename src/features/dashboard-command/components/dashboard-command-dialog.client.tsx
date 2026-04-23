@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
 
+import { authClient } from "@/lib/auth/auth-client"
 import { dashboardCommandItems } from "@/features/dashboard-command/constants/dashboard-command-items.constants"
 import type { DashboardCommandActionId } from "@/features/dashboard-command/types/dashboard-command-item.types"
 import { useSettingsDialogStore } from "@/features/settings/store/settings-dialog.store"
@@ -25,7 +26,9 @@ type DashboardCommandDialogProps = {
 export function DashboardCommandDialogClient({ open, onOpenChange }: DashboardCommandDialogProps) {
   const { setTheme } = useTheme()
   const router = useRouter()
+  const { data: session } = authClient.useSession()
   const openSettingsDialog = useSettingsDialogStore((state) => state.openDialog)
+  const viewerRole = session?.user?.role
 
   const handleAction = (actionId?: DashboardCommandActionId) => {
     if (!actionId) return
@@ -47,6 +50,12 @@ export function DashboardCommandDialogClient({ open, onOpenChange }: DashboardCo
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Navigation">
             {dashboardCommandItems
+              .filter((item) => {
+                if (!item.requiredRole) {
+                  return true
+                }
+                return item.requiredRole === viewerRole
+              })
               .filter((item) => item.kind === "route" || item.kind === "action")
               .map((item) => (
                 <CommandItem

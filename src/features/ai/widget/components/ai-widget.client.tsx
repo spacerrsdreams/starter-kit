@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
-import { WebRoutes } from "@/lib/web.routes"
 import { ChatSession } from "@/features/ai/chat/components/chat-session/chat-session"
 import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-detail"
@@ -16,6 +15,7 @@ import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-
 import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
 import { AiWidgetHistoryDropdown } from "@/features/ai/widget/components/ai-widget-history-dropdown"
 import type { AiWidgetProps } from "@/features/ai/widget/types/ai-widget.types"
+import { shouldHideAiWidget } from "@/features/ai/widget/utils/should-hide-ai-widget.utils"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
 import { Button } from "@/components/ui/button"
 import { LogoSvg } from "@/components/ui/icons/logo.icon"
@@ -85,9 +85,7 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
     setSessionClientId(crypto.randomUUID())
   }
 
-  const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${WebRoutes.dashboard.path}/`)
-
-  if (isAskAiRoute) {
+  if (isSessionPending || shouldHideAiWidget(pathname)) {
     return null
   }
 

@@ -1,6 +1,5 @@
 import { Suspense } from "react"
 
-import { AiWidgetLazy } from "@/features/ai/widget/components/ai-widget-lazy.client"
 import { PlanPickerDialogProvider } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog-provider.client"
 import { SettingsDialogGlobalBridge } from "@/features/settings/components/settings-dialog/settings-dialog-global-bridge.client"
 import { DashboardHeader } from "@/components/dashboard/header.client"
@@ -20,7 +19,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <DashboardHeader />
             <MobileBottomNav />
             <SettingsDialogGlobalBridge />
-            <AiWidgetLazy />
             {children}
           </Suspense>
         </SidebarInset>
