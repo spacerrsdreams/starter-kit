@@ -56,6 +56,8 @@ export const WebRoutes = {
   admin: createRoute("Admin", "/admin"),
   chat: createDynamicRoute("Chat", "/dashboard/ai/:id", (chatId) => `/dashboard/ai/${chatId}`),
   pricing: createRoute("Pricing", "/pricing"),
+  blog: createRoute("Blog", "/blog"),
+  createBlogPost: createRoute("Create Blog Post", "/admin/blog/create"),
   signIn: createRoute("Sign In", "/sign-in"),
   signUp: createRoute("Sign Up", "/sign-up"),
   resetPassword: createRoute("Reset Password", "/reset-password"),
@@ -70,6 +72,7 @@ export const WebRoutes = {
 export const headerPageLinks = [
   { title: "Dashboard", href: WebRoutes.dashboard.path },
   { title: "Marketing", href: WebRoutes.root.path },
+  { title: "Blog", href: WebRoutes.blog.path },
   { title: "Pricing", href: WebRoutes.pricing.path },
 ] as const
 
@@ -86,6 +89,7 @@ export const headerMenuLinks = [
   headerCompanyLinks[1],
   headerPageLinks[2],
   headerCompanyLinks[2],
+  headerPageLinks[3],
 ] as const
 
 function normalizePathname(pathname: string): string {

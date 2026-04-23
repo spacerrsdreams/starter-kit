@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   cacheComponents: true,
   allowedDevOrigins: ["sole-capital-typically.ngrok-free.app"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.public.blob.vercel-storage.com",
+      },
+    ],
+  },
 }
 
 export default nextConfig

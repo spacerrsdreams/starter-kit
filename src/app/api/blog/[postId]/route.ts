@@ -13,12 +13,18 @@ type BlogPostRouteContext = {
   }>
 }
 
-type BlogPostRecord = Pick<BlogPost, "id" | "title" | "imageSrc" | "content" | "createdAt" | "updatedAt">
+type BlogPostRecord = Pick<
+  BlogPost,
+  "id" | "title" | "slug" | "preview" | "seoKeywords" | "imageSrc" | "content" | "createdAt" | "updatedAt"
+>
 
 function toBlogPostResponse(post: BlogPostRecord) {
   return {
     id: post.id,
     title: post.title,
+    slug: post.slug,
+    preview: post.preview,
+    seoKeywords: post.seoKeywords,
     imageSrc: post.imageSrc,
     content: post.content,
     postedAt: post.createdAt.toISOString(),
@@ -51,6 +57,9 @@ export async function PATCH(request: Request, context: BlogPostRouteContext) {
   const { postId } = await context.params
   const updateResult = await updateBlogPost(postId, {
     title: parsed.data.title,
+    slug: parsed.data.slug,
+    preview: parsed.data.preview,
+    seoKeywords: parsed.data.seoKeywords,
     imageSrc: parsed.data.imageSrc,
     content: parsed.data.content as Prisma.InputJsonValue | undefined,
   })

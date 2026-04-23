@@ -4,8 +4,14 @@ import type { Prisma } from "@/generated/prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
-type BlogPostCreateData = Pick<Prisma.BlogPostUncheckedCreateInput, "title" | "imageSrc" | "content" | "authorId">
-type BlogPostUpdateData = Pick<Prisma.BlogPostUpdateManyMutationInput, "title" | "imageSrc" | "content">
+type BlogPostCreateData = Pick<
+  Prisma.BlogPostUncheckedCreateInput,
+  "title" | "slug" | "preview" | "seoKeywords" | "imageSrc" | "content" | "authorId"
+>
+type BlogPostUpdateData = Pick<
+  Prisma.BlogPostUpdateManyMutationInput,
+  "title" | "slug" | "preview" | "seoKeywords" | "imageSrc" | "content"
+>
 
 export async function listBlogPosts(limit: number, offset: number) {
   return prisma.blogPost.findMany({
@@ -17,6 +23,9 @@ export async function listBlogPosts(limit: number, offset: number) {
     select: {
       id: true,
       title: true,
+      slug: true,
+      preview: true,
+      seoKeywords: true,
       imageSrc: true,
       content: true,
       createdAt: true,
@@ -33,6 +42,9 @@ export async function getBlogPostById(postId: string) {
     select: {
       id: true,
       title: true,
+      slug: true,
+      preview: true,
+      seoKeywords: true,
       imageSrc: true,
       content: true,
       createdAt: true,
@@ -47,6 +59,9 @@ export async function createBlogPost(data: BlogPostCreateData) {
     select: {
       id: true,
       title: true,
+      slug: true,
+      preview: true,
+      seoKeywords: true,
       imageSrc: true,
       content: true,
       createdAt: true,

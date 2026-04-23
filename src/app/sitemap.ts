@@ -7,6 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: WebRoutes.root.withBaseUrl() },
     { url: WebRoutes.search.withBaseUrl() },
     { url: WebRoutes.dashboard.withBaseUrl() },
+    { url: WebRoutes.blog.withBaseUrl() },
     { url: WebRoutes.pricing.withBaseUrl() },
     { url: WebRoutes.signIn.withBaseUrl() },
     { url: WebRoutes.signUp.withBaseUrl() },

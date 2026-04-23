@@ -1,6 +1,9 @@
 model BlogPost {
   id        String   @id @default(cuid())
   title     String
+  slug      String   @unique
+  preview   String
+  seoKeywords String[]
   imageSrc  String
   content   Json
   authorId  String

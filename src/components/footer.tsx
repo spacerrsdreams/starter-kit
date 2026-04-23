@@ -12,6 +12,7 @@ import { LogoIcon } from "@/components/ui/icons/logo.icon"
 
 const infoLinks = [
   { label: "AI Page", href: WebRoutes.dashboard.path },
+  { label: "Blog", href: WebRoutes.blog.path },
   { label: "Pricing", href: WebRoutes.pricing.path },
 ] as const
 

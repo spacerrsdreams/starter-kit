@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 
 import { WebRoutes } from "@/lib/web.routes"
@@ -6,6 +7,7 @@ import { AdminUsersTable } from "@/features/admin/components/admin-users-table.c
 import { getAdminSession } from "@/features/admin/utils/get-admin-session.server"
 import { HeaderNavigationClient } from "@/components/header-navigation.client"
 import { TopGradient } from "@/components/top-gradient"
+import { Button } from "@/components/ui/button"
 
 const title = "Admin"
 const description = "Manage users and account access."
@@ -35,7 +37,12 @@ export default async function AdminPage() {
       <HeaderNavigationClient />
       <main className="container mx-auto min-h-screen space-y-6 p-6 py-48">
         <div className="bg-background">
-          <h1 className="text-4xl font-semibold">Admin Panel</h1>
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <h1 className="text-4xl font-semibold">Admin Panel</h1>
+            <Button asChild>
+              <Link href={WebRoutes.createBlogPost.path}>Create Post</Link>
+            </Button>
+          </div>
           <p className="mb-20 text-sm text-muted-foreground">Only users with the admin role can access this page.</p>
           <AdminUsersTable currentUserId={session.user.id} />
         </div>

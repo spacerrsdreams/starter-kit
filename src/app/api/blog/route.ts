@@ -10,12 +10,18 @@ import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-m
 const DEFAULT_LIMIT = 20
 const MAX_LIMIT = 50
 
-type BlogPostRecord = Pick<BlogPost, "id" | "title" | "imageSrc" | "content" | "createdAt" | "updatedAt">
+type BlogPostRecord = Pick<
+  BlogPost,
+  "id" | "title" | "slug" | "preview" | "seoKeywords" | "imageSrc" | "content" | "createdAt" | "updatedAt"
+>
 
 function toBlogPostResponse(post: BlogPostRecord) {
   return {
     id: post.id,
     title: post.title,
+    slug: post.slug,
+    preview: post.preview,
+    seoKeywords: post.seoKeywords,
     imageSrc: post.imageSrc,
     content: post.content,
     postedAt: post.createdAt.toISOString(),
@@ -51,6 +57,9 @@ export async function POST(request: Request) {
 
   const created = await createBlogPost({
     title: parsed.data.title,
+    slug: parsed.data.slug,
+    preview: parsed.data.preview,
+    seoKeywords: parsed.data.seoKeywords,
     imageSrc: parsed.data.imageSrc,
     content: parsed.data.content as Prisma.InputJsonValue,
     authorId: session.user.id,

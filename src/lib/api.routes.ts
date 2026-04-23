@@ -22,4 +22,10 @@ export const ApiRoutes = {
       delete: (userId: string) => `/api/admin/users/${userId}`,
     },
   },
+  blog: {
+    list: "/api/blog",
+    create: "/api/blog",
+    byId: (postId: string) => `/api/blog/${postId}`,
+    uploadCover: "/api/blog/upload-cover",
+  },
 } as const
