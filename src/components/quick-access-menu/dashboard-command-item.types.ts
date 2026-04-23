@@ -2,7 +2,7 @@ import type { LucideIcon } from "lucide-react"
 import type { Route } from "next"
 
 export type DashboardCommandItemKind = "route" | "theme" | "action"
-export type DashboardCommandActionId = "open-settings" | "open-profile" | "open-notifications"
+export type DashboardCommandActionId = "open-settings" | "open-notifications"
 export type DashboardCommandItemRole = "admin"
 
 export type DashboardCommandItem = {

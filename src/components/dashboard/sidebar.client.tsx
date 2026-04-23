@@ -1,6 +1,6 @@
 "use client"
 
-import { Shield } from "lucide-react"
+import { ShieldCheck } from "lucide-react"
 import Link from "next/link"
 import * as React from "react"
 
@@ -42,7 +42,7 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link href={WebRoutes.admin.path}>
-                    <Shield />
+                    <ShieldCheck className="size-4.5!" />
                     <span>Admin</span>
                   </Link>
                 </SidebarMenuButton>

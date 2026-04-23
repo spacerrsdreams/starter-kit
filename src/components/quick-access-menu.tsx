@@ -2,7 +2,7 @@
 
 import { Search } from "lucide-react"
 
-import { DashboardCommandMenu } from "@/features/dashboard-command/components/dashboard-command-menu.client"
+import { DashboardCommandMenu } from "@/components/quick-access-menu/dashboard-command-menu.client"
 import { Button } from "@/components/ui/button"
 
 type QuickAccessMenuProps = {
@@ -12,7 +12,7 @@ type QuickAccessMenuProps = {
 export function QuickAccessMenu({ renderInlineTrigger = true }: QuickAccessMenuProps) {
   return (
     <DashboardCommandMenu
-      renderTrigger={(open) => (
+      renderTrigger={(open) =>
         renderInlineTrigger ? (
           <Button
             variant="outline"
@@ -25,7 +25,7 @@ export function QuickAccessMenu({ renderInlineTrigger = true }: QuickAccessMenuP
             </div>
           </Button>
         ) : null
-      )}
+      }
     />
   )
 }

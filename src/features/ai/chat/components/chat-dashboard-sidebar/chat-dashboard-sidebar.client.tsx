@@ -217,62 +217,66 @@ export function ChatDashboardSidebar() {
 
   return (
     <>
-      <Collapsible defaultOpen={isAskAiRoute} className="group/collapsible flex min-h-0 flex-1 flex-col">
-        <SidebarMenu>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton>
+            <LogoSvg className="text-foreground/80!" />
+            <span className="font-medium">Ask AI</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+      <SidebarGroupContent className="flex min-h-0 flex-1 pt-1">
+        <SidebarMenu className="min-h-0 flex-1 overflow-y-auto">
           <SidebarMenuItem>
-            <CollapsibleTrigger asChild>
-              <SidebarMenuButton>
-                <LogoSvg className="text-foreground/80!" />
-                <span className="font-medium">Ask AI</span>
-                <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-              </SidebarMenuButton>
-            </CollapsibleTrigger>
+            <SidebarMenuButton isActive={isAskAiRoute} asChild onClick={handleStartNewChat} className="pl-1">
+              <div role="button" className="flex w-full cursor-pointer items-center gap-2">
+                <div className="rounded-full bg-muted-foreground/15 p-1 font-medium">
+                  <PlusIcon className="size-4" />
+                </div>
+                <span>New Chat</span>
+              </div>
+            </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarMenu>
-        <CollapsibleContent className="min-h-0 flex-1">
-          <SidebarGroupContent className="flex min-h-0 flex-1 pt-1">
-            <SidebarMenu className="min-h-0 flex-1 overflow-y-auto">
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive={isAskAiRoute} asChild onClick={handleStartNewChat} className="pl-1">
-                  <div role="button" className="flex w-full cursor-pointer items-center gap-2">
-                    <div className="rounded-full bg-muted-foreground/15 p-1 font-medium">
-                      <PlusIcon className="size-4" />
-                    </div>
-                    <span>New Chat</span>
-                  </div>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              {savedChats.length > 0 ? (
-                <>
-                  <SidebarMenuItem className="px-2 pt-3 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
-                    Saved chats
-                  </SidebarMenuItem>
-                  {savedChats.map(renderChatRow)}
-                </>
-              ) : null}
+          {savedChats.length > 0 ? (
+            <>
               <SidebarMenuItem className="px-2 pt-3 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
-                Recents
+                Saved chats
               </SidebarMenuItem>
+              {savedChats.map(renderChatRow)}
+            </>
+          ) : null}
+          <Collapsible defaultOpen={isAskAiRoute} className="group/recents-collapsible">
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton>
+                  <span className="text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
+                    Recents
+                  </span>
+                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/recents-collapsible:rotate-90" />
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
+            </SidebarMenuItem>
+            <CollapsibleContent>
               {recentChats.map(renderChatRow)}
-              {chatsQuery.hasNextPage ? (
-                <SidebarMenuItem className="px-1 pt-2">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    className="h-8 w-full justify-start text-xs text-muted-foreground"
-                    disabled={chatsQuery.isFetchingNextPage}
-                    onClick={() => {
-                      void chatsQuery.fetchNextPage()
-                    }}
-                  >
-                    {chatsQuery.isFetchingNextPage ? "Loading..." : "Load more"}
-                  </Button>
-                </SidebarMenuItem>
-              ) : null}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </CollapsibleContent>
-      </Collapsible>
+            </CollapsibleContent>
+          </Collapsible>
+          {chatsQuery.hasNextPage ? (
+            <SidebarMenuItem className="px-1 pt-2">
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-8 w-full justify-start text-xs text-muted-foreground"
+                disabled={chatsQuery.isFetchingNextPage}
+                onClick={() => {
+                  void chatsQuery.fetchNextPage()
+                }}
+              >
+                {chatsQuery.isFetchingNextPage ? "Loading..." : "Load more"}
+              </Button>
+            </SidebarMenuItem>
+          ) : null}
+        </SidebarMenu>
+      </SidebarGroupContent>
       <AlertDialog
         open={Boolean(pendingDeleteChatId)}
         onOpenChange={(open) => {

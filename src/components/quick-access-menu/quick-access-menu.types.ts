@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
 
-export type DashboardCommandMenuProps = {
+export type QuickAccessMenuTriggerProps = {
   renderTrigger?: (open: () => void) => ReactNode
 }

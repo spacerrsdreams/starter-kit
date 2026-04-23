@@ -1,12 +1,14 @@
 "use client"
 
+import { Route } from "next"
 import { useTheme } from "next-themes"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 import { authClient } from "@/lib/auth/auth-client"
-import { dashboardCommandItems } from "@/features/dashboard-command/constants/dashboard-command-items.constants"
-import type { DashboardCommandActionId } from "@/features/dashboard-command/types/dashboard-command-item.types"
+import { isDashboardPath, WebRoutes } from "@/lib/web.routes"
 import { useSettingsDialogStore } from "@/features/settings/store/settings-dialog.store"
+import type { DashboardCommandActionId } from "@/components/quick-access-menu/dashboard-command-item.types"
+import { dashboardCommandItems } from "@/components/quick-access-menu/dashboard-command-items.constants"
 import {
   Command,
   CommandDialog,
@@ -25,6 +27,7 @@ type DashboardCommandDialogProps = {
 
 export function DashboardCommandDialogClient({ open, onOpenChange }: DashboardCommandDialogProps) {
   const { setTheme } = useTheme()
+  const pathname = usePathname()
   const router = useRouter()
   const { data: session } = authClient.useSession()
   const openSettingsDialog = useSettingsDialogStore((state) => state.openDialog)
@@ -33,13 +36,20 @@ export function DashboardCommandDialogClient({ open, onOpenChange }: DashboardCo
   const handleAction = (actionId?: DashboardCommandActionId) => {
     if (!actionId) return
 
-    if (actionId === "open-settings" || actionId === "open-profile") {
-      openSettingsDialog("account")
+    if (isDashboardPath(pathname)) {
+      if (actionId === "open-settings") {
+        openSettingsDialog("account")
+      }
+
+      if (actionId === "open-notifications") {
+        openSettingsDialog("notifications")
+      }
+
+      return
     }
 
-    if (actionId === "open-notifications") {
-      openSettingsDialog("notifications")
-    }
+    const quickActionRoute = `${WebRoutes.dashboard.path}?quickAction=${actionId}`
+    router.push(quickActionRoute as Route)
   }
 
   return (

@@ -4,18 +4,18 @@ import { SearchIcon } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 
-import type { DashboardCommandMenuProps } from "@/features/dashboard-command/types/dashboard-command-menu.types"
+import type { QuickAccessMenuTriggerProps } from "@/components/quick-access-menu/quick-access-menu.types"
 import { Button } from "@/components/ui/button"
 
 const DashboardCommandDialogClient = dynamic(
   () =>
-    import("@/features/dashboard-command/components/dashboard-command-dialog.client").then(
+    import("@/components/quick-access-menu/dashboard-command-dialog.client").then(
       (module) => module.DashboardCommandDialogClient
     ),
   { ssr: false }
 )
 
-export function DashboardCommandMenu({ renderTrigger }: DashboardCommandMenuProps) {
+export function DashboardCommandMenu({ renderTrigger }: QuickAccessMenuTriggerProps) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
