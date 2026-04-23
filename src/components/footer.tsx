@@ -31,8 +31,8 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-white px-6 md:px-0 dark:bg-background">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 md:flex-row md:gap-60">
+    <footer className="bg-white px-6 lg:px-0 dark:bg-background">
+      <div className="mx-auto flex w-full max-w-5xl flex-col justify-start gap-12 md:flex-row lg:justify-between">
         <BottomUpFadeAnimation delay={0.15}>
           <div className="space-y-5">
             <Link href={WebRoutes.root.path} className="flex items-center gap-3">

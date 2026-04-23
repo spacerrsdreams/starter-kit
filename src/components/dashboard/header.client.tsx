@@ -63,7 +63,7 @@ export function DashboardHeader() {
         </div>
         <div className="ml-auto flex items-center gap-1 md:hidden">
           {isAskAiRoute ? (
-            <Button type="button" variant="ghost" size="icon" aria-label="Start new chat" onClick={handleNewChatClick}>
+            <Button type="button" variant="ghost" size="icon" aria-label="New chat" onClick={handleNewChatClick}>
               <PlusIcon className="size-4" />
             </Button>
           ) : null}

@@ -77,7 +77,10 @@ export default function PrivacyPolicyPage() {
       <HeaderNavigationClient />
       <main className="mx-auto w-full max-w-5xl px-4 py-30 sm:px-6 md:py-45">
         <div className="flex items-center justify-center">
-          <BlurWaveTextAnimation className="text-3xl font-semibold text-foreground sm:text-6xl" text="Privacy Policy" />
+          <BlurWaveTextAnimation
+            className="text-3xl font-semibold tracking-[-3.5px] text-foreground sm:text-6xl"
+            text="Privacy Policy"
+          />
         </div>
         <BottomUpFadeAnimation>
           <p className="mt-4 text-center leading-4 font-semibold tracking-wide text-muted-foreground">
