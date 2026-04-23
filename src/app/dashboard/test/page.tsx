@@ -1,5 +1,5 @@
 import { WebRoutes } from "@/lib/web.routes"
-import { WaveGlowButton } from "@/features/test/components/wave-glow-button"
+import { WaveGlowButton } from "@/components/ui/wave-glow-button"
 
 export default function TestPage() {
   return (

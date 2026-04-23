@@ -1,7 +1,7 @@
 import { WebRoutes } from "@/lib/web.routes"
-import { WaveGlowButton } from "@/features/test/components/wave-glow-button"
 import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { WaveGlowButton } from "@/components/ui/wave-glow-button"
 
 export function Hero() {
   return (

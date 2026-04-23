@@ -2,9 +2,9 @@ import Image from "next/image"
 
 import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
-import { WaveGlowButton } from "@/features/test/components/wave-glow-button"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { LogoIcon } from "@/components/ui/icons/logo.icon"
+import { WaveGlowButton } from "@/components/ui/wave-glow-button"
 
 type FreeTrialCtaSectionProps = {
   className?: string
