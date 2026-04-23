@@ -56,10 +56,10 @@ export function HeaderNavigationClient() {
             <div className="flex items-center gap-8">
               <Link href={WebRoutes.root.path} className="flex items-center gap-2">
                 <LogoIcon size={18} className="bg-accent-1" />
-                <span className="text-xl font-semibold text-foreground">{SiteConfig.name}</span>
+                <span className="text-xl font-semibold tracking-tighter text-foreground">{SiteConfig.name}</span>
               </Link>
 
-              <ul className="hidden items-center gap-7 md:flex">
+              <ul className="hidden items-center gap-4 md:flex">
                 <li>
                   <HeaderPagesMenu />
                 </li>
@@ -67,9 +67,9 @@ export function HeaderNavigationClient() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm font-semibold text-foreground/90 transition-colors hover:text-foreground"
+                      className="inline-flex h-9 items-center justify-center rounded-lg px-2.5 py-1.5 text-sm font-semibold text-foreground/90 transition-all hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1"
                     >
-                      {link.label}
+                      A{link.label}
                     </Link>
                   </li>
                 ))}

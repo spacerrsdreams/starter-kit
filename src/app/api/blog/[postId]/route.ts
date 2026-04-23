@@ -81,6 +81,9 @@ export async function DELETE(_: Request, context: BlogPostRouteContext) {
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
+  if (session.user.role !== "admin") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
 
   const { postId } = await context.params
   const deleteResult = await deleteBlogPost(postId)

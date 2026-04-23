@@ -30,3 +30,19 @@ export async function listBlogPostsApi(limit: number, offset: number) {
 
   return apiRequest<BlogPostsListResponse>(`${ApiRoutes.blog.list}?${params.toString()}`)
 }
+
+export async function updateBlogPostApi(postId: string, body: CreateBlogPostRequest) {
+  return apiRequest(ApiRoutes.blog.byId(postId), {
+    method: "PATCH",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+}
+
+export async function deleteBlogPostApi(postId: string) {
+  return apiRequest<void>(ApiRoutes.blog.byId(postId), {
+    method: "DELETE",
+  })
+}

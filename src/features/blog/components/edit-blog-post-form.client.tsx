@@ -7,19 +7,17 @@ import { z } from "zod"
 import { ApiError } from "@/lib/http-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { BlogContentEditor } from "@/features/blog/components/blog-content-editor.client"
-import { useMutateCreateBlogPost } from "@/features/blog/hooks/use-mutate-create-blog-post"
+import { useMutateUpdateBlogPost } from "@/features/blog/hooks/use-mutate-update-blog-post"
 import { useMutateUploadBlogCoverImage } from "@/features/blog/hooks/use-mutate-upload-blog-cover-image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
-const createBlogPostFormSchema = z.object({
+const updateBlogPostFormSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
   slug: z.string().trim().min(1, "Slug is required"),
   preview: z.string().trim().min(1, "Preview description is required"),
-  seoKeywords: z
-    .array(z.string().trim().min(1, "SEO keywords cannot be empty"))
-    .min(1, "At least one SEO keyword is required"),
+  seoKeywords: z.array(z.string().trim().min(1, "SEO keywords cannot be empty")).min(1, "At least one SEO keyword is required"),
   contentHtml: z.string().trim().min(1, "Content is required"),
 })
 
@@ -32,21 +30,40 @@ function normalizeSlug(value: string) {
     .replace(/-+/g, "-")
 }
 
-type FormErrors = Partial<Record<"title" | "slug" | "preview" | "seoKeywords" | "coverImage" | "contentHtml", string>>
+type FormErrors = Partial<Record<"title" | "slug" | "preview" | "seoKeywords" | "contentHtml", string>>
 
-export function CreateBlogPostForm() {
-  const createPostMutation = useMutateCreateBlogPost()
+type EditBlogPostFormProps = {
+  postId: string
+  initialTitle: string
+  initialSlug: string
+  initialPreview: string
+  initialSeoKeywords: string[]
+  initialContentHtml: string
+  initialImageSrc: string
+}
+
+export function EditBlogPostForm({
+  postId,
+  initialTitle,
+  initialSlug,
+  initialPreview,
+  initialSeoKeywords,
+  initialContentHtml,
+  initialImageSrc,
+}: EditBlogPostFormProps) {
+  const updatePostMutation = useMutateUpdateBlogPost()
   const uploadCoverImageMutation = useMutateUploadBlogCoverImage()
 
-  const [title, setTitle] = useState("")
-  const [slug, setSlug] = useState("")
-  const [preview, setPreview] = useState("")
-  const [seoKeywordsInput, setSeoKeywordsInput] = useState("")
-  const [contentHtml, setContentHtml] = useState("")
+  const [title, setTitle] = useState(initialTitle)
+  const [slug, setSlug] = useState(initialSlug)
+  const [preview, setPreview] = useState(initialPreview)
+  const [seoKeywordsInput, setSeoKeywordsInput] = useState(initialSeoKeywords.join(", "))
+  const [contentHtml, setContentHtml] = useState(initialContentHtml)
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null)
+  const [coverImagePreviewUrl, setCoverImagePreviewUrl] = useState<string | null>(null)
   const [errors, setErrors] = useState<FormErrors>({})
 
-  const isSubmitting = createPostMutation.isPending || uploadCoverImageMutation.isPending
+  const isSubmitting = updatePostMutation.isPending || uploadCoverImageMutation.isPending
 
   const seoKeywords = useMemo(
     () =>
@@ -56,7 +73,6 @@ export function CreateBlogPostForm() {
         .filter(Boolean),
     [seoKeywordsInput]
   )
-  const [coverImagePreviewUrl, setCoverImagePreviewUrl] = useState<string | null>(null)
 
   useEffect(() => {
     if (!coverImageFile) {
@@ -75,7 +91,7 @@ export function CreateBlogPostForm() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const parsed = createBlogPostFormSchema.safeParse({
+    const parsed = updateBlogPostFormSchema.safeParse({
       title,
       slug,
       preview,
@@ -83,48 +99,49 @@ export function CreateBlogPostForm() {
       contentHtml,
     })
 
-    const nextErrors: FormErrors = {}
     if (!parsed.success) {
       const flattened = parsed.error.flatten().fieldErrors
-      nextErrors.title = flattened.title?.[0]
-      nextErrors.slug = flattened.slug?.[0]
-      nextErrors.preview = flattened.preview?.[0]
-      nextErrors.seoKeywords = flattened.seoKeywords?.[0]
-      nextErrors.contentHtml = flattened.contentHtml?.[0]
-    }
-
-    if (!coverImageFile) {
-      nextErrors.coverImage = "Cover image is required"
-    }
-
-    setErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0 || !parsed.success || !coverImageFile) {
+      setErrors({
+        title: flattened.title?.[0],
+        slug: flattened.slug?.[0],
+        preview: flattened.preview?.[0],
+        seoKeywords: flattened.seoKeywords?.[0],
+        contentHtml: flattened.contentHtml?.[0],
+      })
       return
     }
 
-    try {
-      const uploadResponse = await uploadCoverImageMutation.mutateAsync(coverImageFile)
-      const formData = parsed.data
+    setErrors({})
 
-      await createPostMutation.mutateAsync({
-        title: formData.title,
-        slug: formData.slug,
-        preview: formData.preview,
-        seoKeywords: formData.seoKeywords,
-        imageSrc: uploadResponse.imageUrl,
-        content: { html: formData.contentHtml },
+    try {
+      const imageSrc = coverImageFile
+        ? (await uploadCoverImageMutation.mutateAsync(coverImageFile)).imageUrl
+        : initialImageSrc
+
+      await updatePostMutation.mutateAsync({
+        postId,
+        body: {
+          title: parsed.data.title,
+          slug: parsed.data.slug,
+          preview: parsed.data.preview,
+          seoKeywords: parsed.data.seoKeywords,
+          imageSrc,
+          content: { html: parsed.data.contentHtml },
+        },
       })
 
-      toast.success("Blog post created.")
-      window.location.assign(WebRoutes.blog.path)
+      toast.success("Blog post updated.")
+      window.location.assign(WebRoutes.blogPost(parsed.data.slug))
     } catch (error) {
       if (error instanceof ApiError) {
         toast.error(error.message)
       } else {
-        toast.error("Failed to create blog post.")
+        toast.error("Failed to update blog post.")
       }
     }
   }
+
+  const effectivePreviewImage = coverImagePreviewUrl ?? initialImageSrc
 
   return (
     <div className="space-y-8">
@@ -143,7 +160,6 @@ export function CreateBlogPostForm() {
                 setSlug(normalizeSlug(nextTitle))
               }
             }}
-            placeholder="How to ship faster with AI"
             className="h-10"
           />
           {errors.title ? <p className="text-sm text-destructive">{errors.title}</p> : null}
@@ -153,13 +169,7 @@ export function CreateBlogPostForm() {
           <label htmlFor="blog-slug" className="text-sm font-medium text-foreground">
             Slug
           </label>
-          <Input
-            id="blog-slug"
-            value={slug}
-            onChange={(event) => setSlug(normalizeSlug(event.target.value))}
-            placeholder="how-to-ship-faster-with-ai"
-            className="h-10"
-          />
+          <Input id="blog-slug" value={slug} onChange={(event) => setSlug(normalizeSlug(event.target.value))} className="h-10" />
           {errors.slug ? <p className="text-sm text-destructive">{errors.slug}</p> : null}
         </div>
 
@@ -167,13 +177,7 @@ export function CreateBlogPostForm() {
           <label htmlFor="blog-preview" className="text-sm font-medium text-foreground">
             Preview Description
           </label>
-          <Textarea
-            id="blog-preview"
-            value={preview}
-            onChange={(event) => setPreview(event.target.value)}
-            placeholder="A short summary used in blog cards."
-            className="min-h-24"
-          />
+          <Textarea id="blog-preview" value={preview} onChange={(event) => setPreview(event.target.value)} className="min-h-24" />
           {errors.preview ? <p className="text-sm text-destructive">{errors.preview}</p> : null}
         </div>
 
@@ -181,13 +185,7 @@ export function CreateBlogPostForm() {
           <label htmlFor="blog-seo-keywords" className="text-sm font-medium text-foreground">
             SEO Keywords
           </label>
-          <Input
-            id="blog-seo-keywords"
-            value={seoKeywordsInput}
-            onChange={(event) => setSeoKeywordsInput(event.target.value)}
-            placeholder="ai workflows, automation, startup"
-            className="h-10"
-          />
+          <Input id="blog-seo-keywords" value={seoKeywordsInput} onChange={(event) => setSeoKeywordsInput(event.target.value)} className="h-10" />
           {errors.seoKeywords ? <p className="text-sm text-destructive">{errors.seoKeywords}</p> : null}
         </div>
 
@@ -202,27 +200,20 @@ export function CreateBlogPostForm() {
             onChange={(event) => setCoverImageFile(event.target.files?.[0] ?? null)}
             className="h-10"
           />
-          {errors.coverImage ? <p className="text-sm text-destructive">{errors.coverImage}</p> : null}
         </div>
 
         <BlogContentEditor value={contentHtml} onChange={setContentHtml} />
         {errors.contentHtml ? <p className="text-sm text-destructive">{errors.contentHtml}</p> : null}
 
         <Button type="submit" className="h-10 px-5" isLoading={isSubmitting}>
-          Create Post
+          Save Changes
         </Button>
       </form>
 
       <section className="space-y-4 rounded-xl border border-border bg-background p-6">
         <h2 className="text-2xl font-semibold text-foreground">Preview</h2>
         <article className="space-y-4">
-          {coverImagePreviewUrl ? (
-            <img
-              src={coverImagePreviewUrl}
-              alt={title || "Blog preview cover"}
-              className="h-56 w-full rounded-lg object-cover"
-            />
-          ) : null}
+          <img src={effectivePreviewImage} alt={title || "Blog preview cover"} className="h-56 w-full rounded-lg object-cover" />
           <div className="space-y-2">
             <h3 className="text-3xl font-bold text-foreground">{title || "Post title preview"}</h3>
             <p className="text-sm text-muted-foreground">{preview || "Post description preview"}</p>
@@ -230,10 +221,7 @@ export function CreateBlogPostForm() {
           {seoKeywords.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {seoKeywords.map((keyword) => (
-                <span
-                  key={keyword}
-                  className="rounded-full border border-border px-2 py-1 text-xs text-muted-foreground"
-                >
+                <span key={keyword} className="rounded-full border border-border px-2 py-1 text-xs text-muted-foreground">
                   {keyword}
                 </span>
               ))}

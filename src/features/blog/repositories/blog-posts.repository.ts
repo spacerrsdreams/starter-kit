@@ -53,6 +53,25 @@ export async function getBlogPostById(postId: string) {
   })
 }
 
+export async function getBlogPostBySlug(slug: string) {
+  return prisma.blogPost.findUnique({
+    where: {
+      slug,
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      preview: true,
+      seoKeywords: true,
+      imageSrc: true,
+      content: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  })
+}
+
 export async function createBlogPost(data: BlogPostCreateData) {
   return prisma.blogPost.create({
     data,

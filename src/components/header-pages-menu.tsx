@@ -17,7 +17,7 @@ export function HeaderPagesMenu() {
     <NavigationMenu viewport={false}>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="">All Pages</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="font-semibold text-foreground/90">All Pages</NavigationMenuTrigger>
           <NavigationMenuContent className="top-14! rounded-2xl bg-background p-0">
             <ul className="grid w-100 grid-cols-2 gap-x-1 gap-y-1 px-2 py-4">
               {headerMenuLinks.map((link) => (

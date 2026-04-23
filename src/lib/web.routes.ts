@@ -57,6 +57,8 @@ export const WebRoutes = {
   chat: createDynamicRoute("Chat", "/dashboard/ai/:id", (chatId) => `/dashboard/ai/${chatId}`),
   pricing: createRoute("Pricing", "/pricing"),
   blog: createRoute("Blog", "/blog"),
+  blogPost: createDynamicRoute("Blog Post", "/blog/:slug", (slug) => `/blog/${slug}`),
+  editBlogPost: createDynamicRoute("Edit Blog Post", "/admin/blog/:postId/edit", (postId) => `/admin/blog/${postId}/edit`),
   createBlogPost: createRoute("Create Blog Post", "/admin/blog/create"),
   signIn: createRoute("Sign In", "/sign-in"),
   signUp: createRoute("Sign Up", "/sign-up"),
