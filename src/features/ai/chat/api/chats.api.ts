@@ -37,7 +37,7 @@ type UpdateChatApiPayload = {
 export async function updateChatApi(id: string, payload: UpdateChatApiPayload): Promise<void> {
   await apiRequest<unknown>(ApiRoutes.chats.get(id), {
     method: "PATCH",
-    body: payload,
+    body: JSON.stringify(payload),
   })
 }
 
@@ -47,8 +47,10 @@ export async function setMessageReactionApi(
   reaction: ChatMessageReaction | null,
   feedbackText?: string | null
 ): Promise<void> {
+  const body = { reaction, feedbackText } satisfies SetMessageReactionPayload
+
   await apiRequest<unknown>(ApiRoutes.chats.setMessageReaction(chatId, messageId), {
     method: "PATCH",
-    body: { reaction, feedbackText } satisfies SetMessageReactionPayload,
+    body: JSON.stringify(body),
   })
 }

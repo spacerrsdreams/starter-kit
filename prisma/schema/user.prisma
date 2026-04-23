@@ -18,6 +18,7 @@ model User {
   chats         Chat[]
   billingSubscription BillingSubscription?
   deactivationFeedbacks DeactivationFeedback[]
+  blogPosts      BlogPost[]
 
   @@unique([email])
   @@index([deactivatedAt])
@@ -99,5 +100,6 @@ enum DeactivationFeedbackCategory {
 enum UserRole {
   user
   admin
+  moderator
 }
  

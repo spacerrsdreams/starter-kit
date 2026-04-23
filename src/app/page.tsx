@@ -20,7 +20,7 @@ export default function DashboardPage() {
         <TopGradient />
         <HeaderNavigationClient />
         <main>
-          <div className="mx-auto max-w-[1200px] border-r border-l border-border/75">
+          <div className="container mx-auto border-r border-l border-border/75">
             <Hero />
             <DashboardPreviewClient />
             <TrustedMarqueeClient />
@@ -28,7 +28,7 @@ export default function DashboardPage() {
             <KeyToolsScrollClient />
           </div>
           <CoreFeaturesDarkSection />
-          <div className="mx-auto max-w-[1200px] border-r border-l border-border/75">
+          <div className="container mx-auto border-r border-l border-border/75">
             <AdvancedAnalyticsSection />
             <CustomerReviewsSection />
             <PlanPickerSectionClient />

@@ -40,6 +40,8 @@ export async function PATCH(request: Request, context: AdminUserRouteContext) {
   let normalizedRole: UserRole | undefined
   if (parsed.data.role === "admin") {
     normalizedRole = UserRole.admin
+  } else if (parsed.data.role === "moderator") {
+    normalizedRole = UserRole.moderator
   } else if (parsed.data.role === "user") {
     normalizedRole = UserRole.user
   }

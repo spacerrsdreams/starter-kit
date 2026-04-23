@@ -148,7 +148,7 @@ export function WhyChooseSection() {
       <BottomUpFadeAnimation>
         <div className="flex flex-col items-center text-center">
           <Chip Icon={Rocket} title="Power Pack" />
-          <h2 className="mt-6 text-3xl font-medium text-foreground md:text-4xl">
+          <h2 className="mt-6 text-3xl font-medium tracking-[-2.5px] text-foreground md:text-4xl">
             Why businesses choose {SiteConfig.name}
           </h2>
           <p className="mt-4 max-w-xs text-muted-foreground md:max-w-2xl">

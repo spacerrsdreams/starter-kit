@@ -11,7 +11,7 @@ import { useFetchAdminUsers } from "@/features/admin/hooks/use-fetch-admin-users
 import { useMutateDeleteAdminUser } from "@/features/admin/hooks/use-mutate-delete-admin-user"
 import { useMutateImpersonateAdminUser } from "@/features/admin/hooks/use-mutate-impersonate-admin-user"
 import { useMutateUpdateAdminUser } from "@/features/admin/hooks/use-mutate-update-admin-user"
-import type { AdminUserListItem } from "@/features/admin/types/admin-users.types"
+import type { AdminUserListItem, AdminUserRole } from "@/features/admin/types/admin-users.types"
 
 type AdminUsersTableProps = {
   currentUserId: string
@@ -25,7 +25,7 @@ export function AdminUsersTable({ currentUserId }: AdminUsersTableProps) {
   const deleteUserMutation = useMutateDeleteAdminUser()
   const impersonateUserMutation = useMutateImpersonateAdminUser()
 
-  const handleEditUserSubmit = async (payload: { userId: string; email: string; role: "user" | "admin" }) => {
+  const handleEditUserSubmit = async (payload: { userId: string; email: string; role: AdminUserRole }) => {
     try {
       await updateUserMutation.mutateAsync(payload)
       toast.success("User updated.")

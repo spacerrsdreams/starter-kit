@@ -42,7 +42,7 @@ export function FaqSectionClient() {
               <Chip Icon={CircleHelp} title="FAQ" />
             </div>
             <div className="space-y-2 pt-6 lg:space-y-6">
-              <h2 className="text-center text-2xl font-semibold tracking-tighter text-foreground md:text-5xl lg:text-start">
+              <h2 className="text-center text-2xl font-semibold tracking-[-2.5px] text-foreground md:text-5xl lg:text-start">
                 Frequently Asked Questions
               </h2>
               <p className="text-center text-base text-foreground/80 lg:text-start">

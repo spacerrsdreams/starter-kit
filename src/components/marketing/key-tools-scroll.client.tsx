@@ -82,7 +82,7 @@ export function KeyToolsScrollClient() {
             <div className="flex justify-center lg:justify-start">
               <Chip Icon={Sparkles} title="Key Tools" />
             </div>
-            <h2 className="mt-6 text-center text-3xl font-medium text-foreground/95 md:text-5xl lg:text-start">
+            <h2 className="mt-6 text-center text-3xl font-medium tracking-[-2.5px] text-foreground/95 md:text-5xl lg:text-start">
               AI that moves sales forward & faster
             </h2>
 
@@ -123,7 +123,9 @@ export function KeyToolsScrollClient() {
                     className="space-y-5"
                   >
                     <div className="space-y-3">
-                      <h3 className="text-xl font-medium text-foreground lg:text-3xl">{section.title}</h3>
+                      <h3 className="text-xl font-medium tracking-[-2px] text-foreground lg:text-3xl">
+                        {section.title}
+                      </h3>
                       <p className="text-base leading-relaxed text-foreground/80 lg:text-lg">{section.description}</p>
                     </div>
 

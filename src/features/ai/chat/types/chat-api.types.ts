@@ -1,5 +1,6 @@
-import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
 import type { UIMessage } from "ai"
+
+import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
 
 export type ChatsListResponse = {
   chats: ChatListItem[]

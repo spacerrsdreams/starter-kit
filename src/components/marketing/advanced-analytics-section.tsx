@@ -12,7 +12,9 @@ export function AdvancedAnalyticsSection() {
       <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
         <BottomUpFadeAnimation>
           <Chip Icon={Rocket} title="Growth Gear" />
-          <h2 className="mt-6 text-3xl font-medium text-foreground md:text-5xl">Advanced analytics &amp; reporting</h2>
+          <h2 className="mt-6 text-3xl font-medium tracking-[-2.5px] text-foreground md:text-5xl">
+            Advanced analytics &amp; reporting
+          </h2>
           <p className="mx-auto mt-4 max-w-md text-foreground/80">
             Businesses choose Salix because it simplifies the complexity of sales management.
           </p>

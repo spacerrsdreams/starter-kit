@@ -16,7 +16,7 @@ export function FreeTrialCtaSection({ className }: FreeTrialCtaSectionProps) {
         <div className="relative mx-auto w-full max-w-4xl lg:overflow-hidden lg:pb-16">
           <div className="flex flex-col items-center px-4 text-center lg:hidden">
             <LogoIcon size={28} className="bg-accent-1" />
-            <h2 className="mt-4 text-2xl font-semibold sm:text-4xl">Try {SiteConfig.name} Free for 14 Days</h2>
+            <h2 className="mt-4 text-2xl font-semibold sm:text-4xl">Try {SiteConfig.name} Now</h2>
             <p className="mt-4 text-sm text-muted-foreground sm:text-base">
               Start taking control of your business today
             </p>
@@ -42,7 +42,7 @@ export function FreeTrialCtaSection({ className }: FreeTrialCtaSectionProps) {
           <div className="absolute bottom-0 left-1/2 z-20 hidden w-full max-w-[640px] -translate-x-1/2 flex-col items-center px-4 text-center lg:flex">
             <LogoIcon size={28} className="bg-accent-1" />
 
-            <h2 className="mt-4 text-4xl font-semibold">Try {SiteConfig.name} Free for 14 Days</h2>
+            <h2 className="mt-4 text-4xl font-semibold">Try {SiteConfig.name} Now</h2>
             <p className="mt-4 text-base text-muted-foreground">Start taking control of your business today</p>
 
             <div className="mt-8 pb-8">

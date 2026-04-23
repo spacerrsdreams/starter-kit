@@ -25,6 +25,7 @@ No features beyond what was asked.
 No abstractions for single-use code.
 No "flexibility" or "configurability" that wasn't requested.
 No error handling for impossible scenarios.
+No error handling for TypeScript-guaranteed unreachable paths (exhaustive switch cases, narrowed unions). Do handle untrusted boundaries like external API responses, user input, and storage reads — even if the shape seems "obviously correct." When in doubt, treat a boundary as untrusted.
 If you write 200 lines and it could be 50, rewrite it.
 Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
@@ -85,6 +86,11 @@ These guidelines are working if: fewer unnecessary changes in diffs, fewer rewri
 - Cross-feature shared types live in `src/global.types.ts` and import via `@/global.types`.
 - Prefer direct `import type` from concrete modules for inferred types.
 - Avoid inline `typeof import("...").symbol` style type hacks.
+- Prefer Prisma-generated types for DB-backed entities/fields instead of duplicating manual model-like interfaces/unions.
+- Choose typing source by intent: use Prisma-generated types for DB-backed contracts, and app-local types for UI/view-state/domain-only shapes when Prisma would be misleading.
+- For client-side type imports from Prisma, use `@/generated/prisma/browser` with `import type`.
+- For server/runtime type imports from Prisma, use `@/generated/prisma/client`.
+- Component-local strict prop types (`*Props`, `*ComponentType`, `Component`) must stay in the same component file and should not directly import Prisma model types.
 
 ### TypeScript + Lint Discipline (Strict)
 
@@ -116,9 +122,7 @@ These guidelines are working if: fewer unnecessary changes in diffs, fewer rewri
 
 ### No Barrel Index Files
 
-- Do not create barrel-only `index.ts` / `index.tsx` files that only re-export symbols.
-- Import directly from the defining module.
-- `index.ts` is allowed only when it contains real implementation logic.
+Exactly one exported React component per .tsx file. Non-exported helper components used only by the parent may be colocated in the same file. Files with hooks only should be .ts. Move pure helpers out of component files into utils/helpers.
 
 ### One React Component per `.tsx` File
 
@@ -185,6 +189,9 @@ These guidelines are working if: fewer unnecessary changes in diffs, fewer rewri
 
 - Prisma source lives under `prisma/schema/` (multi-file schema), migrations under `prisma/migrations`.
 - Use domain-first schema files (for example `ai.prisma`, `billing.prisma`, `user.prisma`) rather than mixing unrelated domains.
+- For client components (`"use client"` files), import Prisma types from `@/generated/prisma/browser` using `import type`.
+- For server/runtime code, import Prisma types from `@/generated/prisma/client` (and use runtime Prisma Client only on server).
+- When typing entities/fields that exist in DB, prefer Prisma-generated types directly instead of duplicating manual string unions/interfaces.
 - Agent may edit schema files and migration SQL files.
 - For relation changes, explicitly review and choose delete behavior (`Cascade` vs `Restrict`/`NoAction`/`SetNull`).
 - Do not run DB-applying commands (`prisma migrate dev/deploy/reset`, `prisma db push`).

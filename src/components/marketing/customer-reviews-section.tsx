@@ -10,7 +10,7 @@ export function CustomerReviewsSection() {
       <BottomUpFadeAnimation>
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
           <Chip Icon={UserStar} title="Customer Reviews" />
-          <h2 className="mt-6 text-3xl font-semibold text-foreground md:text-4xl">
+          <h2 className="mt-6 text-3xl font-semibold tracking-[-2.5px] text-foreground md:text-4xl">
             Trusted by 2500+ growing companies worldwide
           </h2>
         </div>

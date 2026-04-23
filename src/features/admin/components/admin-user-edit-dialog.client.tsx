@@ -2,9 +2,16 @@
 
 import { useEffect, useState } from "react"
 
-import type { AdminUserListItem } from "@/features/admin/types/admin-users.types"
+import type { AdminUserListItem, AdminUserRole } from "@/features/admin/types/admin-users.types"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -13,12 +20,12 @@ type AdminUserEditDialogProps = {
   user: AdminUserListItem | null
   isPending: boolean
   onOpenChange: (open: boolean) => void
-  onSubmit: (payload: { userId: string; email: string; role: "user" | "admin" }) => Promise<void>
+  onSubmit: (payload: { userId: string; email: string; role: AdminUserRole }) => Promise<void>
 }
 
 export function AdminUserEditDialog({ open, user, isPending, onOpenChange, onSubmit }: AdminUserEditDialogProps) {
   const [email, setEmail] = useState("")
-  const [role, setRole] = useState<"user" | "admin">("user")
+  const [role, setRole] = useState<AdminUserRole>("user")
 
   useEffect(() => {
     if (!user) {
@@ -67,13 +74,14 @@ export function AdminUserEditDialog({ open, user, isPending, onOpenChange, onSub
             <label htmlFor="admin-user-role" className="text-sm font-medium">
               Role
             </label>
-            <Select value={role} onValueChange={(value) => setRole(value as "user" | "admin")} disabled={isPending}>
+            <Select value={role} onValueChange={(value) => setRole(value as AdminUserRole)} disabled={isPending}>
               <SelectTrigger id="admin-user-role" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="user">user</SelectItem>
                 <SelectItem value="admin">admin</SelectItem>
+                <SelectItem value="moderator">moderator</SelectItem>
               </SelectContent>
             </Select>
           </div>
