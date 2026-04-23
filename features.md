@@ -22,7 +22,7 @@ This file lists the pages and product capabilities currently implemented in the 
 
 1. `/dashboard` - Main AI workspace page
 2. `/dashboard/ai/[chatId]` - Open a specific saved chat
-3. `/dashboard/test` - Internal/test UI page
+3. `/admin` - Admin user management page
 4. `/feedback` - Deactivation feedback page
 
 ### SEO route files
@@ -41,9 +41,17 @@ This file lists the pages and product capabilities currently implemented in the 
 
 ### Admin and impersonation
 
-1. Admin role support is implemented (admin/user roles).
-2. Admin users can impersonate users by user ID.
-3. Admin users can stop impersonation and return to their own session.
+1. Admin and moderator role support is implemented (admin/moderator/user roles).
+2. Admin users can list, edit, and delete users from the admin page.
+3. Admin users can impersonate users from admin tooling.
+4. Admin users can stop impersonation and return to their own session.
+
+### Blog platform (backend)
+
+1. Blog post Prisma model and migration are implemented.
+2. Blog post repository layer is implemented.
+3. Blog post create/update payload validation schemas are implemented.
+4. Blog write operations are protected to admin/moderator sessions.
 
 ### Auth-related email flows (working)
 
@@ -79,6 +87,7 @@ This file lists the pages and product capabilities currently implemented in the 
 2. Stripe customer portal session support.
 3. Subscription status endpoint and repository-backed billing state.
 4. Stripe webhook handling for subscription lifecycle sync.
+5. ngrok local webhook tunneling support for Stripe testing (default `3000` Next.js port, optional custom port via `PORT` env).
 
 ### Contact and account lifecycle
 
@@ -95,9 +104,12 @@ This file lists the pages and product capabilities currently implemented in the 
 ## API Surface (high-level)
 
 1. Auth handlers (`/api/auth/[...all]`) via Better Auth.
-2. AI chat APIs (`/api/chat`, `/api/chats`, `/api/chats/[chatId]`, message reaction endpoint).
-3. Billing APIs (`/api/billing/checkout-session`, `/api/billing/portal-session`, `/api/billing/subscription`, `/api/billing/webhook`).
-4. Account verification email API (`/api/account/send-verification-email`).
+2. Auth signed-in helper API (`/api/auth/signed-in`).
+3. AI chat APIs (`/api/chat`, `/api/chats`, `/api/chats/[chatId]`, message reaction endpoint).
+4. Billing APIs (`/api/billing/checkout-session`, `/api/billing/portal-session`, `/api/billing/subscription`, `/api/billing/webhook`).
+5. Account verification email API (`/api/account/send-verification-email`).
+6. Admin APIs (`/api/admin/users`, `/api/admin/users/[userId]`).
+7. Blog APIs (`/api/blog`, `/api/blog/[postId]`).
 
 ## Major Technologies
 

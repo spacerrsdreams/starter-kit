@@ -1,6 +1,6 @@
 {
   "name": "starter-kit",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "clean:install": "rm -rf .next && rm -rf node_modules && rm bun.lock && bun install",
@@ -19,7 +19,7 @@
     "start": "next start",
     "start:prod": "bun run build && bun run start",
     "lint": "tsc --noEmit && eslint",
-    "ngrok": "ngrok http --url=sole-capital-typically.ngrok-free.app 3000",
+    "ngrok": "dotenv -e .env.local -- node scripts/run-ngrok.js",
     "env:push:development": "node scripts/vercel-env-push.js .env.development development",
     "env:push:preview": "node scripts/vercel-env-push.js .env.development preview",
     "env:push:all-pre-production": "bun env:push:development && bun env:push:preview",
