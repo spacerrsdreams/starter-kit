@@ -1,10 +1,11 @@
 "use client"
 
-import { PlusIcon } from "lucide-react"
+import { PlusIcon, UserRoundCheck } from "lucide-react"
 import type { Route } from "next"
 import { usePathname, useRouter } from "next/navigation"
-import { useMemo } from "react"
+import { useMemo, useTransition } from "react"
 
+import { authClient } from "@/lib/auth/auth-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
@@ -18,10 +19,12 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 export function DashboardHeader() {
   const pathname = usePathname()
   const router = useRouter()
+  const { data: session, refetch: refetchSession } = authClient.useSession()
+  const [isPending, startTransition] = useTransition()
   const activeChatId = useChatNavigationStore((state) => state.activeChatId)
   const chatsQuery = useFetchChats()
   const chats = useMemo(() => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [], [chatsQuery.data?.pages])
-  const currentRoute = Object.values(WebRoutes).find((route) => route.path === pathname)
+  const currentRoute = Object.values(WebRoutes).find((route) => "path" in route && route.path === pathname)
   const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${WebRoutes.dashboard.path}/`)
   const chatIdFromPath = pathname.startsWith(`${WebRoutes.dashboard.path}/`)
     ? pathname.slice(`${WebRoutes.dashboard.path}/`.length)
@@ -35,6 +38,19 @@ export function DashboardHeader() {
     if (pathname !== WebRoutes.dashboard.path) {
       router.push(WebRoutes.dashboard.path as Route)
     }
+  }
+
+  const handleStopImpersonation = () => {
+    startTransition(async () => {
+      try {
+        await authClient.admin.stopImpersonating()
+        await refetchSession()
+        router.refresh()
+        window.location.assign(WebRoutes.admin.path)
+      } catch {
+        // no-op
+      }
+    })
   }
 
   return (
@@ -61,6 +77,20 @@ export function DashboardHeader() {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
+      {session?.session?.impersonatedBy ? (
+        <div className="mr-3 hidden md:flex">
+          <Button
+            variant="outline"
+            size="sm"
+            className="relative overflow-visible"
+            onClick={handleStopImpersonation}
+            disabled={isPending}
+          >
+            <UserRoundCheck className="mr-2 size-4" />
+            {isPending ? "Switching back..." : "Stop impersonation"}
+          </Button>
+        </div>
+      ) : null}
     </header>
   )
 }

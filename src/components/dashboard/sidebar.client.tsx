@@ -1,8 +1,11 @@
 "use client"
 
+import { Shield } from "lucide-react"
+import Link from "next/link"
 import * as React from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
+import { WebRoutes } from "@/lib/web.routes"
 import { ChatDashboardSidebar } from "@/features/ai/chat/components/chat-dashboard-sidebar/chat-dashboard-sidebar.client"
 import { SidebarFooterUserAction } from "@/components/dashboard/sidebar-footer-user-action.client"
 import { SidebarLogo } from "@/components/sidebar-logo"
@@ -39,6 +42,18 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
           <div className="hidden">
             <SearchForm />
           </div>
+          {session?.user?.role === "admin" ? (
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href={WebRoutes.admin.path}>
+                    <Shield />
+                    <span>Admin</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          ) : null}
           <ChatDashboardSidebar />
         </SidebarGroup>
       </SidebarContent>

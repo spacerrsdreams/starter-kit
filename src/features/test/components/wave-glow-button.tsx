@@ -4,15 +4,25 @@ import { motion } from "motion/react"
 import { Route } from "next"
 import Link from "next/link"
 
+import { authClient } from "@/lib/auth/auth-client"
+import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
+
 type WaveGlowButtonProps = {
   href: string
   label: string
+  requireAuth?: boolean
+  authenticatedHref?: string
 }
 
 const waveGradient =
   "linear-gradient(90deg, rgb(33, 204, 238) 0%, rgb(20, 112, 239) 33.2763%, rgb(105, 39, 218) 68.4697%, rgb(242, 61, 148) 100%)"
 
-export function WaveGlowButton({ href, label }: WaveGlowButtonProps) {
+export function WaveGlowButton({ href, label, requireAuth = false, authenticatedHref }: WaveGlowButtonProps) {
+  const { data: session } = authClient.useSession()
+  const { openAuthModal } = useAuthRequiredModal()
+  const isAuthenticated = Boolean(session?.user)
+  const targetHref = (requireAuth && isAuthenticated ? authenticatedHref ?? href : href) as Route
+
   const slideTransition = {
     type: "tween" as const,
     duration: 2.85,
@@ -22,7 +32,15 @@ export function WaveGlowButton({ href, label }: WaveGlowButtonProps) {
 
   return (
     <Link
-      href={href as Route}
+      href={targetHref}
+      onClick={(event) => {
+        if (!requireAuth || isAuthenticated) {
+          return
+        }
+
+        event.preventDefault()
+        openAuthModal()
+      }}
       className="group relative inline-flex flex-col items-center justify-center gap-2 overflow-visible rounded-[100px] bg-[linear-gradient(90deg,rgb(33,204,238)_0%,rgb(20,112,239)_33.2763%,rgb(105,39,218)_68.4697%,rgb(242,61,148)_100%)] pb-px"
     >
       <span aria-hidden className="pointer-events-none absolute right-0 -bottom-2 left-0">

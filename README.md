@@ -46,6 +46,9 @@ Required env values:
 
 - `NEXT_PUBLIC_DOMAIN` (usually `http://localhost:3000`)
 - `NEXT_PUBLIC_ENVIRONMENT` (`development`)
+- `NEXT_PUBLIC_ANALYTICS_TRACKING` (`on` or `off`)
+- `NEXT_PUBLIC_POSTHOG_KEY` (PostHog project API key)
+- `NEXT_PUBLIC_POSTHOG_HOST` (usually `https://us.i.posthog.com`)
 - `AI_GATEWAY_API_KEY`
 - `DATABASE_URL` (Neon pooled connection string)
 - `DIRECT_URL` (Neon direct connection string)
@@ -66,6 +69,9 @@ Quick meaning:
 
 - `NEXT_PUBLIC_DOMAIN`: app URL (`http://localhost:3000` locally).
 - `NEXT_PUBLIC_ENVIRONMENT`: `development`, `preview`, or `production`.
+- `NEXT_PUBLIC_ANALYTICS_TRACKING`: enables/disables analytics capture.
+- `NEXT_PUBLIC_POSTHOG_KEY`: PostHog browser key.
+- `NEXT_PUBLIC_POSTHOG_HOST`: PostHog host URL.
 - `AI_GATEWAY_API_KEY`: VERCEL AI GATEWAY provider key.
 - `DATABASE_URL`: Neon pooled DB URL.
 - `DIRECT_URL`: Neon direct DB URL (Prisma migrations).

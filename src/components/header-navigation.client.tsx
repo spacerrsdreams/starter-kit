@@ -4,8 +4,10 @@ import { motion } from "motion/react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
+import { authClient } from "@/lib/auth/auth-client"
 import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
+import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
 import { HeaderMobileMenu } from "@/components/header-mobile-menu"
 import { HeaderPagesMenu } from "@/components/header-pages-menu"
 import { Button } from "@/components/ui/button"
@@ -16,6 +18,8 @@ const HEADER_HIDE_OFFSET = 24
 
 export function HeaderNavigationClient() {
   const [isVisible, setIsVisible] = useState(true)
+  const { data: session } = authClient.useSession()
+  const { openAuthModal } = useAuthRequiredModal()
 
   useEffect(() => {
     let previousScrollY = window.scrollY
@@ -74,11 +78,18 @@ export function HeaderNavigationClient() {
 
             <div className="hidden items-center gap-4 md:flex">
               <Button
-                asChild
                 className="h-10 rounded-full bg-foreground px-5 py-6 font-semibold hover:bg-foreground/90!"
                 featureStylesEnabled
+                onClick={() => {
+                  if (session?.user) {
+                    window.location.href = WebRoutes.dashboard.path
+                    return
+                  }
+
+                  openAuthModal()
+                }}
               >
-                <Link href={WebRoutes.signUp.path}>Get Started</Link>
+                Get Started
               </Button>
             </div>
 

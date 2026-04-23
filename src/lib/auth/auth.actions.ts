@@ -132,7 +132,7 @@ export async function signUpWithEmailAndPasswordAction(input: SignUpWithEmailAnd
     return { ok: false, code: "INVALID_EMAIL_OR_PASSWORD" }
   }
 
-  const { email, password, embedded } = parsed.data
+  const { email, password, callbackURL, embedded } = parsed.data
 
   try {
     await auth.api.signUpEmail({
@@ -140,7 +140,7 @@ export async function signUpWithEmailAndPasswordAction(input: SignUpWithEmailAnd
         name: "User",
         email,
         password,
-        callbackURL: ApiRoutes.authSignedIn,
+        callbackURL: callbackURL ?? ApiRoutes.authSignedIn,
       },
       headers: await headers(),
     })

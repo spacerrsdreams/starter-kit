@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertCircle, LogOut, Settings, User } from "lucide-react"
+import { AlertCircle, LogOut, Settings, User, UserRoundCheck } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useTransition } from "react"
@@ -38,14 +38,22 @@ export function MobileBottomNav() {
     })
   }
 
+  const handleStopImpersonation = () => {
+    startTransition(async () => {
+      await authClient.admin.stopImpersonating()
+      window.location.assign(WebRoutes.dashboard.path)
+    })
+  }
+
   const userInitials = (user?.name ?? "User")
     .split(" ")
     .filter(Boolean)
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() ?? "")
     .join("")
-  const needsAttention = user?.emailVerified !== true
-  const attentionTitle = "Action needed"
+  const isImpersonating = Boolean(session?.session?.impersonatedBy)
+  const needsAttention = isImpersonating || user?.emailVerified !== true
+  const attentionTitle = isImpersonating ? "Impersonation active" : "Action needed"
 
   return (
     <nav
@@ -98,10 +106,16 @@ export function MobileBottomNav() {
                     </span>
                     {needsAttention && (
                       <span
-                        className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-white"
+                        className={cn(
+                          "absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full text-white",
+                          isImpersonating ? "bg-destructive" : "bg-amber-500"
+                        )}
                         title={attentionTitle}
                         aria-hidden
                       >
+                        {isImpersonating ? (
+                          <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-destructive animation-duration-[2s]" />
+                        ) : null}
                         <AlertCircle className="h-2.5 w-2.5" />
                       </span>
                     )}
@@ -122,9 +136,27 @@ export function MobileBottomNav() {
                       </div>
                     </div>
 
+                    {isImpersonating ? (
+                      <Button
+                        variant="destructive"
+                        className="relative h-auto justify-start gap-3 overflow-visible rounded-lg font-semibold text-white!"
+                        onClick={handleStopImpersonation}
+                        disabled={isPending}
+                      >
+                        {!isPending ? (
+                          <span className="absolute inset-0 -z-10 rounded-lg bg-destructive animation-duration-[2s]" />
+                        ) : null}
+                        <UserRoundCheck className="size-4 shrink-0 text-white!" />
+                        <span>{isPending ? "Switching back..." : "Stop impersonation"}</span>
+                      </Button>
+                    ) : null}
+
                     <Button
                       variant="ghost"
-                      className={cn("h-auto justify-start gap-3 rounded-lg p-3", needsAttention && "bg-amber-500/10")}
+                      className={cn(
+                        "h-auto justify-start gap-3 rounded-lg p-3",
+                        !isImpersonating && needsAttention && "bg-amber-500/10"
+                      )}
                       onClick={() => {
                         setIsAccountSheetOpen(false)
                         setIsSettingsOpen(true)
@@ -132,7 +164,7 @@ export function MobileBottomNav() {
                     >
                       <Settings className="size-4 shrink-0" />
                       <span className="font-medium">Settings</span>
-                      {needsAttention && (
+                      {!isImpersonating && needsAttention && (
                         <span className="ml-auto flex items-center gap-1.5 text-xs font-medium text-amber-600">
                           <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
                           Action needed

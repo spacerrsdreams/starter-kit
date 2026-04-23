@@ -29,6 +29,7 @@ interface SignInFormProps {
   onSuccess: () => void
   onSwitchToSignUp: () => void
   onForgotPassword: () => void
+  callbackURL?: string
 }
 
 const texts = {
@@ -51,7 +52,7 @@ const texts = {
   showPassword: "Show password",
 }
 
-export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword }: SignInFormProps) {
+export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, callbackURL }: SignInFormProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const { refetch: refetchSession } = authClient.useSession()
@@ -64,6 +65,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword }: Si
   const [isReactivatePending, startReactivateTransition] = useTransition()
 
   const buildCallbackUrl = (): string =>
+    callbackURL ??
     buildPostAuthCallbackUrl({
       embedded: true,
       pathname,

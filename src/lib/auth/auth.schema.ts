@@ -54,6 +54,7 @@ export const reactivateAndSignInActionInputSchema = signInWithEmailAndPasswordSc
 export type ReactivateAndSignInActionInput = z.infer<typeof reactivateAndSignInActionInputSchema>
 
 export const signUpWithEmailAndPasswordActionInputSchema = signUpWithEmailAndPasswordSchema.extend({
+  callbackURL: z.string().optional(),
   embedded: z.boolean().optional(),
 })
 

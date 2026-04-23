@@ -11,8 +11,10 @@ import { CookieConsentBannerLazy } from "@/components/cookies/cookie-consent-ban
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { QueryClientProviderWrapper } from "@/providers/query-client.provider"
+import { PostHogProvider } from "@/providers/posthog.provider"
 import { SmoothScrollProvider } from "@/providers/smooth-scroll.provider"
 import { ThemeProvider } from "@/providers/theme.provider"
+import { AuthRequiredModalProvider } from "@/features/auth/components/auth-required-modal/auth-required-modal-provider.client"
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -131,11 +133,15 @@ export default function RootLayout({
           <ThemeProvider>
             <SmoothScrollProvider>
               <QueryClientProviderWrapper>
-                <TooltipProvider>
-                  {children}
-                  <Toaster position="bottom-right" />
-                  <CookieConsentBannerLazy />
-                </TooltipProvider>
+                <PostHogProvider>
+                  <AuthRequiredModalProvider>
+                    <TooltipProvider>
+                      {children}
+                      <Toaster position="bottom-right" />
+                      <CookieConsentBannerLazy />
+                    </TooltipProvider>
+                  </AuthRequiredModalProvider>
+                </PostHogProvider>
               </QueryClientProviderWrapper>
             </SmoothScrollProvider>
           </ThemeProvider>

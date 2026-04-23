@@ -51,7 +51,7 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onSelectInt
           price={starterPrice}
           billedLabel={billedLabel}
           features={MONTHLY_PLAN_FEATURES}
-          ctaLabel="Get 14 Days Free Trial"
+          ctaLabel="Get Started"
           isLoading={isBillingLoading}
           onSelect={() => onSelectInterval(selectedInterval)}
           isLastFeatureMuted
@@ -62,7 +62,7 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onSelectInt
           price={ultimatePrice}
           billedLabel={billedLabel}
           features={YEARLY_PLAN_FEATURES}
-          ctaLabel="Get 14 Days Free Trial"
+          ctaLabel="Get Started"
           isLoading={isBillingLoading}
           onSelect={() => onSelectInterval(selectedInterval)}
           isFeatured

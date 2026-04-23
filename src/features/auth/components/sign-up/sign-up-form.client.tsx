@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input"
 interface SignUpFormProps {
   onSuccess: () => void
   onSwitchToSignIn: () => void
+  callbackURL?: string
 }
 
 const texts = {
@@ -49,7 +50,7 @@ const texts = {
   alreadyHaveAccount: "Already have an account?",
 }
 
-export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
+export function SignUpForm({ onSuccess, onSwitchToSignIn, callbackURL }: SignUpFormProps) {
   const { refetch: refetchSession } = authClient.useSession()
   const [isLoading, startSubmitTransition] = useTransition()
   const [googleLoading, setGoogleLoading] = useState(false)
@@ -76,6 +77,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
         email: values.email,
         password: values.password,
         confirmPassword: values.confirmPassword,
+        callbackURL,
         embedded: true,
       })
       if (result.ok) {
@@ -95,7 +97,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
     setGoogleLoading(true)
     startSubmitTransition(async () => {
       try {
-        await signInWithGoogleAction(ApiRoutes.authSignedIn)
+        await signInWithGoogleAction(callbackURL ?? ApiRoutes.authSignedIn)
       } catch {
         /* OAuth redirect */
       } finally {

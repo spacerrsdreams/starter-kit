@@ -126,15 +126,6 @@
   body {
     @apply bg-background text-foreground;
     letter-spacing: -0.4px;
-    h1 {
-      letter-spacing: -3.5px;
-    }
-    h2 {
-      letter-spacing: -2px;
-    }
-    h3 {
-      letter-spacing: -1px;
-    }
   }
   html {
     @apply font-sans;
@@ -143,7 +134,7 @@
 }
 
 .lucide {
-  stroke-width: 2px;
+  stroke-width: 1.5px;
 }
 
 @media (max-width: 767px) {

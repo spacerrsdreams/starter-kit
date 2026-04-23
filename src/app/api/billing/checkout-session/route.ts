@@ -6,6 +6,7 @@ import type Stripe from "stripe"
 import { getSessionUserId } from "@/lib/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { getStripeClient } from "@/lib/stripe/stripe"
+import { WebRoutes } from "@/lib/web.routes"
 import {
   getBillingSubscriptionByUserId,
   updateSubscriptionFromStripe,
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
     mode: "subscription",
     customer: customerId,
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${appBaseUrl}/ai?billing=success`,
+    success_url: `${appBaseUrl}${WebRoutes.dashboard.path}?billing=success`,
     cancel_url: `${appBaseUrl}/ai?billing=cancelled`,
     client_reference_id: userId,
     metadata: {

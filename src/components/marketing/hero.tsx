@@ -21,7 +21,12 @@ export function Hero() {
             The smarter way to manage sales starts with using tools that streamline every step of the process
           </p>
           <div className="mt-10">
-            <WaveGlowButton href={WebRoutes.pricing.path} label="Get Started Now" />
+            <WaveGlowButton
+              href={WebRoutes.dashboard.path}
+              authenticatedHref={WebRoutes.dashboard.path}
+              requireAuth
+              label="Get Started Now"
+            />
           </div>
         </div>
       </section>

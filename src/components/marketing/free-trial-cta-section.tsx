@@ -22,7 +22,12 @@ export function FreeTrialCtaSection({ className }: FreeTrialCtaSectionProps) {
               Start taking control of your business today
             </p>
             <div className="mt-8">
-              <WaveGlowButton href={WebRoutes.pricing.path} label="Get 14 Days Free Trial" />
+              <WaveGlowButton
+                href={WebRoutes.dashboard.path}
+                authenticatedHref={WebRoutes.dashboard.path}
+                requireAuth
+                label="Get Started"
+              />
             </div>
           </div>
 
@@ -47,7 +52,12 @@ export function FreeTrialCtaSection({ className }: FreeTrialCtaSectionProps) {
             <p className="mt-4 text-base text-muted-foreground">Start taking control of your business today</p>
 
             <div className="mt-8 pb-8">
-              <WaveGlowButton href={WebRoutes.pricing.path} label="Get 14 Days Free Trial" />
+              <WaveGlowButton
+                href={WebRoutes.dashboard.path}
+                authenticatedHref={WebRoutes.dashboard.path}
+                requireAuth
+                label="Get Started"
+              />
             </div>
           </div>
         </div>

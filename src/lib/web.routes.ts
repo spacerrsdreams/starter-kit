@@ -53,6 +53,7 @@ export const WebRoutes = {
   root: createRoute("Home", "/"),
   search: createRoute("Search", "/search"),
   dashboard: createRoute("Dashboard", "/dashboard"),
+  admin: createRoute("Admin", "/admin"),
   chat: createDynamicRoute("Chat", "/dashboard/ai/:id", (chatId) => `/dashboard/ai/${chatId}`),
   pricing: createRoute("Pricing", "/pricing"),
   signIn: createRoute("Sign In", "/sign-in"),

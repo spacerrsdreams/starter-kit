@@ -20,11 +20,12 @@ export function AuthRequiredModalProvider({ children }: AuthRequiredModalProvide
 
   const handleSignInSuccess = useCallback(() => {
     setOpen(false)
+    window.location.href = WebRoutes.dashboard.path
   }, [])
 
   const handleSignUpSuccess = useCallback(() => {
     setOpen(false)
-    window.location.href = WebRoutes.root.withBaseUrl()
+    window.location.href = WebRoutes.dashboard.path
   }, [])
 
   return (

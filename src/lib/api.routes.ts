@@ -15,4 +15,11 @@ export const ApiRoutes = {
     portalSession: "/api/billing/portal-session",
     webhook: "/api/billing/webhook",
   },
+  admin: {
+    users: {
+      list: "/api/admin/users",
+      update: (userId: string) => `/api/admin/users/${userId}`,
+      delete: (userId: string) => `/api/admin/users/${userId}`,
+    },
+  },
 } as const
