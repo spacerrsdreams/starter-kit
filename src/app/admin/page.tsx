@@ -36,9 +36,9 @@ export default async function AdminPage() {
       <main className="container mx-auto min-h-screen space-y-6 p-6 py-48">
         <div className="bg-background">
           <h1 className="text-4xl font-semibold">Admin Panel</h1>
-          <p className="text-sm text-muted-foreground">Only users with the admin role can access this page.</p>
+          <p className="mb-20 text-sm text-muted-foreground">Only users with the admin role can access this page.</p>
+          <AdminUsersTable currentUserId={session.user.id} />
         </div>
-        <AdminUsersTable currentUserId={session.user.id} />
       </main>
     </div>
   )

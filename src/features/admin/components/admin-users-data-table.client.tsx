@@ -55,26 +55,26 @@ export function AdminUsersDataTable({ columns, data, totalUsers }: AdminUsersDat
     },
   })
 
+  const formatColumnLabel = (columnId: string) =>
+    columnId
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      .replace(/[_-]+/g, " ")
+      .trim()
+
   return (
     <div className="space-y-4">
-      <p className="text-2xl font-bold">
-        Total users: <span className="font-bold text-foreground">{totalUsers}</span>
-      </p>
-
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center justify-end gap-2">
         <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn("email")?.setFilterValue(event.target.value)}
-          className="w-full max-w-sm"
+          className="w-full max-w-sm sm:w-72"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-            </Button>
+            <Button variant="outline">Columns</Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-auto min-w-52">
             <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {table
@@ -85,13 +85,16 @@ export function AdminUsersDataTable({ columns, data, totalUsers }: AdminUsersDat
                   key={column.id}
                   checked={column.getIsVisible()}
                   onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                  className="capitalize"
+                  className="whitespace-nowrap"
                 >
-                  {column.id}
+                  {formatColumnLabel(column.id)}
                 </DropdownMenuCheckboxItem>
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        <p className="ml-auto text-base font-medium sm:text-lg">
+          Total users: <span className="font-bold text-foreground">{totalUsers}</span>
+        </p>
       </div>
 
       <div className="overflow-hidden rounded-md border">
