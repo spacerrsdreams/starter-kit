@@ -18,12 +18,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: noIndexHeaders })
   }
 
-  await prisma.session.updateMany({
+  await prisma.user.update({
     where: {
-      userId: session.user.id,
+      id: session.user.id,
     },
     data: {
-      updatedAt: new Date(),
+      lastActiveAt: new Date(),
     },
   })
 
