@@ -55,7 +55,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               >
                 <article className="flex min-h-66 flex-col items-center justify-center rounded-lg border border-dashed border-border/80">
                   <Plus className="size-18 text-foreground" />
-                  <span className="mt-4 text-sm font-semibold text-foreground">Create Blog Post</span>
+                  <span className="mt-4 text-sm font-semibold text-foreground">Create Post</span>
                 </article>
               </Link>
             ) : null}
