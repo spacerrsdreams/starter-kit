@@ -138,7 +138,7 @@ export function getAdminUsersColumns(actions: AdminUsersColumnActions): ColumnDe
     },
     {
       accessorKey: "deactivatedAt",
-      header: "Deactivated",
+      header: "Account Status",
       cell: ({ row }) =>
         row.original.deactivatedAt ? (
           <Badge variant="destructive">Deactivated</Badge>

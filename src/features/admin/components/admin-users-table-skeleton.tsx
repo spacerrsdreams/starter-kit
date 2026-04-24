@@ -29,7 +29,7 @@ export function AdminUsersTableSkeleton() {
               <TableHead>Role</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Last Seen At</TableHead>
-              <TableHead>Deactivated</TableHead>
+              <TableHead>Account Status</TableHead>
               <TableHead>Subscription Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
