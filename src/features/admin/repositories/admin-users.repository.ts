@@ -14,8 +14,11 @@ export async function listAdminUsers(): Promise<AdminUsersListResponse> {
       },
       select: {
         id: true,
+        name: true,
+        image: true,
         email: true,
         role: true,
+        createdAt: true,
         billingSubscription: {
           select: {
             stripeStatus: true,
@@ -29,8 +32,11 @@ export async function listAdminUsers(): Promise<AdminUsersListResponse> {
     totalUsers,
     users: users.map((user) => ({
       id: user.id,
+      name: user.name,
+      image: user.image,
       email: user.email,
       role: user.role,
+      createdAt: user.createdAt.toISOString(),
       subscriptionStatus: mapSubscriptionStatus(user.billingSubscription?.stripeStatus),
     })),
   }

@@ -5,8 +5,11 @@ export type AdminUserRole = UserRole
 
 export type AdminUserListItem = {
   id: string
+  name: string
+  image: string | null
   email: string
   role: AdminUserRole
+  createdAt: string
   subscriptionStatus: AdminUserSubscriptionStatus
 }
 
