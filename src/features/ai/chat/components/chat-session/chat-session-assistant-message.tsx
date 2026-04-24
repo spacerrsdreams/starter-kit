@@ -47,7 +47,7 @@ export function ChatSessionAssistantMessage({
 
   return (
     <Message key={message.id} from={message.role} className="relative overflow-visible pl-10">
-      <div className="absolute top-[-2px] -left-0.5 z-10 flex size-7 items-center justify-center rounded-sm border bg-input/20">
+      <div className="absolute top-[-2px] -left-0.5 z-10 flex size-7 items-center justify-center rounded-sm border border-border/20 bg-primary">
         <LogoSvg className="text-foreground!" />
       </div>
       <MessageContent className="flex w-full min-w-0 flex-col gap-3">
