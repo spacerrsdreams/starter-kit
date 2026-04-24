@@ -5,6 +5,11 @@ import { useEffect, useMemo, useState, type FormEvent } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import {
+  LOCALE_OPTIONS,
+  LOCALES,
+  type Locale,
+} from "@/i18n/locales"
 import { ApiError } from "@/lib/http-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { BlogContentEditor } from "@/features/blog/components/blog-content-editor.client"
@@ -17,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea"
 const updateBlogPostFormSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
   slug: z.string().trim().min(1, "Slug is required"),
+  locale: z.enum(LOCALES),
   preview: z.string().trim().min(1, "Preview description is required"),
   seoKeywords: z.array(z.string().trim().min(1, "SEO keywords cannot be empty")).min(1, "At least one SEO keyword is required"),
   contentHtml: z.string().trim().min(1, "Content is required"),
@@ -31,12 +37,13 @@ function normalizeSlug(value: string) {
     .replace(/-+/g, "-")
 }
 
-type FormErrors = Partial<Record<"title" | "slug" | "preview" | "seoKeywords" | "contentHtml", string>>
+type FormErrors = Partial<Record<"title" | "slug" | "locale" | "preview" | "seoKeywords" | "contentHtml", string>>
 
 type EditBlogPostFormProps = {
   postId: string
   initialTitle: string
   initialSlug: string
+  initialLocale: Locale
   initialPreview: string
   initialSeoKeywords: string[]
   initialContentHtml: string
@@ -47,6 +54,7 @@ export function EditBlogPostForm({
   postId,
   initialTitle,
   initialSlug,
+  initialLocale,
   initialPreview,
   initialSeoKeywords,
   initialContentHtml,
@@ -58,6 +66,7 @@ export function EditBlogPostForm({
 
   const [title, setTitle] = useState(initialTitle)
   const [slug, setSlug] = useState(initialSlug)
+  const [locale, setLocale] = useState<Locale>(initialLocale)
   const [preview, setPreview] = useState(initialPreview)
   const [seoKeywordsInput, setSeoKeywordsInput] = useState(initialSeoKeywords.join(", "))
   const [contentHtml, setContentHtml] = useState(initialContentHtml)
@@ -96,6 +105,7 @@ export function EditBlogPostForm({
     const parsed = updateBlogPostFormSchema.safeParse({
       title,
       slug,
+      locale,
       preview,
       seoKeywords,
       contentHtml,
@@ -106,6 +116,7 @@ export function EditBlogPostForm({
       setErrors({
         title: flattened.title?.[0],
         slug: flattened.slug?.[0],
+        locale: flattened.locale?.[0],
         preview: flattened.preview?.[0],
         seoKeywords: flattened.seoKeywords?.[0],
         contentHtml: flattened.contentHtml?.[0],
@@ -125,6 +136,7 @@ export function EditBlogPostForm({
         body: {
           title: parsed.data.title,
           slug: parsed.data.slug,
+          locale: parsed.data.locale,
           preview: parsed.data.preview,
           seoKeywords: parsed.data.seoKeywords,
           imageSrc,
@@ -173,6 +185,25 @@ export function EditBlogPostForm({
           </label>
           <Input id="blog-slug" value={slug} onChange={(event) => setSlug(normalizeSlug(event.target.value))} className="h-10" />
           {errors.slug ? <p className="text-sm text-destructive">{errors.slug}</p> : null}
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="blog-locale" className="text-sm font-medium text-foreground">
+            Locale
+          </label>
+          <select
+            id="blog-locale"
+            value={locale}
+            onChange={(event) => setLocale(z.enum(LOCALES).parse(event.target.value))}
+            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:outline-none"
+          >
+            {LOCALE_OPTIONS.map((localeOption) => (
+              <option key={localeOption.value} value={localeOption.value}>
+                {`${localeOption.flag} ${localeOption.label} (${localeOption.country})`}
+              </option>
+            ))}
+          </select>
+          {errors.locale ? <p className="text-sm text-destructive">{errors.locale}</p> : null}
         </div>
 
         <div className="space-y-2">

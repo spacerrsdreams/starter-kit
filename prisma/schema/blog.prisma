@@ -1,7 +1,13 @@
+enum BlogPostLocale {
+  EN
+  DE
+}
+
 model BlogPost {
   id          String   @id @default(cuid())
   title       String
-  slug        String   @unique
+  slug        String
+  locale      BlogPostLocale @default(EN)
   preview     String
   seoKeywords String[]
   imageSrc    String
@@ -13,5 +19,7 @@ model BlogPost {
 
   @@index([createdAt])
   @@index([authorId])
+  @@index([locale, createdAt])
+  @@unique([slug, locale])
   @@map("blog_post")
 }

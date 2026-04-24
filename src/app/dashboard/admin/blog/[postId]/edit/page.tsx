@@ -57,6 +57,7 @@ export default async function EditBlogPostPage({ params }: EditBlogPostPageProps
           postId={post.id}
           initialTitle={post.title}
           initialSlug={post.slug}
+          initialLocale={post.locale}
           initialPreview={post.preview}
           initialSeoKeywords={post.seoKeywords}
           initialContentHtml={getBlogContentHtml(post.content)}

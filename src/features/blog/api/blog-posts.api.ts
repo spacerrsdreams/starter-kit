@@ -1,6 +1,7 @@
 import { ApiRoutes } from "@/lib/api.routes"
 import { apiRequest } from "@/lib/http-client"
 import type { BlogPostsListResponse, CreateBlogPostRequest } from "@/features/blog/types/blog-post.types"
+import type { Locale } from "@/i18n/locales"
 
 export async function createBlogPostApi(body: CreateBlogPostRequest) {
   return apiRequest(ApiRoutes.blog.create, {
@@ -22,10 +23,11 @@ export async function uploadBlogCoverImageApi(file: File) {
   })
 }
 
-export async function listBlogPostsApi(limit: number, offset: number) {
+export async function listBlogPostsApi(limit: number, offset: number, locale: Locale) {
   const params = new URLSearchParams({
     limit: String(limit),
     offset: String(offset),
+    locale,
   })
 
   return apiRequest<BlogPostsListResponse>(`${ApiRoutes.blog.list}?${params.toString()}`)

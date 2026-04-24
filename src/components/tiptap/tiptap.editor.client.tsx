@@ -1,7 +1,6 @@
 "use client"
 
 import { Color } from "@tiptap/extension-color"
-import Link from "@tiptap/extension-link"
 import { TextStyle } from "@tiptap/extension-text-style"
 import { EditorContent, useEditor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
@@ -21,9 +20,9 @@ export function TiptapEditor({ id, value, onChange }: TiptapEditorProps) {
         heading: {
           levels: [1, 2, 3, 4, 5],
         },
-      }),
-      Link.configure({
-        openOnClick: false,
+        link: {
+          openOnClick: false,
+        },
       }),
       TextStyle,
       Color,

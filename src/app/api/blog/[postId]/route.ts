@@ -15,7 +15,7 @@ type BlogPostRouteContext = {
 
 type BlogPostRecord = Pick<
   BlogPost,
-  "id" | "title" | "slug" | "preview" | "seoKeywords" | "imageSrc" | "content" | "createdAt" | "updatedAt"
+  "id" | "title" | "slug" | "locale" | "preview" | "seoKeywords" | "imageSrc" | "content" | "createdAt" | "updatedAt"
 >
 
 function toBlogPostResponse(post: BlogPostRecord) {
@@ -23,6 +23,7 @@ function toBlogPostResponse(post: BlogPostRecord) {
     id: post.id,
     title: post.title,
     slug: post.slug,
+    locale: post.locale,
     preview: post.preview,
     seoKeywords: post.seoKeywords,
     imageSrc: post.imageSrc,
@@ -58,6 +59,7 @@ export async function PATCH(request: Request, context: BlogPostRouteContext) {
   const updateResult = await updateBlogPost(postId, {
     title: parsed.data.title,
     slug: parsed.data.slug,
+    locale: parsed.data.locale,
     preview: parsed.data.preview,
     seoKeywords: parsed.data.seoKeywords,
     imageSrc: parsed.data.imageSrc,

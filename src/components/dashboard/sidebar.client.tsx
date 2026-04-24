@@ -1,6 +1,6 @@
 "use client"
 
-import { ShieldCheck } from "lucide-react"
+import { BookMarked, BookOpen, ShieldCheck } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -26,6 +26,7 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
   const pathname = usePathname()
   const { data: session, isPending: isSessionPending } = authClient.useSession()
   const isAdminRoute = isPathWithinRoute(pathname, WebRoutes.admin.path)
+  const isBlogRoute = isPathWithinRoute(pathname, WebRoutes.blog.path)
 
   return (
     <SidebarComponent {...props}>
@@ -44,6 +45,13 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
               </Link>
             </SidebarMenuButton>
           )}
+
+          <SidebarMenuButton asChild isActive={isBlogRoute}>
+            <Link href={WebRoutes.blog.path}>
+              <BookMarked className="size-4.5!" />
+              <span className="font-medium text-sidebar-accent-foreground">{t("routes.blog")}</span>
+            </Link>
+          </SidebarMenuButton>
 
           <ChatDashboardSidebar />
         </SidebarGroup>

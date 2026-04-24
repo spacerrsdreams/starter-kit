@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
+import { z } from "zod"
 
+import { DEFAULT_LOCALE, LOCALES } from "@/i18n/locales"
 import { WebRoutes } from "@/lib/web.routes"
 import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-actions-menu.client"
 import { getBlogPostBySlug } from "@/features/blog/repositories/blog-posts.repository"
@@ -14,7 +16,12 @@ import "@/features/blog/styles/blog-rich-content.css"
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>
+  searchParams?: Promise<{ locale?: string }>
 }
+
+const blogPostSearchParamsSchema = z.object({
+  locale: z.enum(LOCALES).default(DEFAULT_LOCALE),
+})
 
 function formatBlogDate(date: Date) {
   return new Intl.DateTimeFormat("en-US", {
@@ -35,9 +42,12 @@ function getBlogContentHtml(content: unknown) {
   return "<p></p>"
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params
-  const post = await getBlogPostBySlug(slug)
+  const resolvedSearchParams = await searchParams
+  const parsed = blogPostSearchParamsSchema.safeParse(resolvedSearchParams)
+  const locale = parsed.success ? parsed.data.locale : DEFAULT_LOCALE
+  const post = await getBlogPostBySlug(slug, locale)
 
   if (!post) {
     return {
@@ -60,11 +70,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function BlogPostPage({ params, searchParams }: BlogPostPageProps) {
   const session = await getAdminOrModeratorSession()
   const viewerRole = session?.user?.role
   const { slug } = await params
-  const post = await getBlogPostBySlug(slug)
+  const resolvedSearchParams = await searchParams
+  const parsed = blogPostSearchParamsSchema.safeParse(resolvedSearchParams)
+  const locale = parsed.success ? parsed.data.locale : DEFAULT_LOCALE
+  const post = await getBlogPostBySlug(slug, locale)
 
   if (!post) {
     notFound()

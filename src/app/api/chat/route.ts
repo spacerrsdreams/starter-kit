@@ -48,7 +48,6 @@ const WeatherTool = tool({
   }),
   execute: async ({ location }) => {
     await sleep(2500)
-    console.log("Executing [ WEATHER_TOOL ] for location:", location + "\n\n")
     return {
       location,
       temperature: 72 + Math.floor(Math.random() * 21) - 10,
@@ -63,7 +62,6 @@ const HikePlanerTool = tool({
   }),
   execute: async ({ location }) => {
     await sleep(2000)
-    console.log("Executing [ HIKE_PLANER_TOOL ] for location:", location + "\n\n")
     return {
       location,
       hikePlan: "Hike plan for " + location + " is to hike the Mtatsminda mountain and then come back.",

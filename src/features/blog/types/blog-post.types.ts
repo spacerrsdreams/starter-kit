@@ -1,7 +1,10 @@
+import type { Locale } from "@/i18n/locales"
+
 export type BlogPostResponse = {
   id: string
   title: string
   slug: string
+  locale: Locale
   preview: string
   seoKeywords: string[]
   imageSrc: string
@@ -18,6 +21,7 @@ export type BlogPostsListResponse = {
 export type CreateBlogPostRequest = {
   title: string
   slug: string
+  locale: Locale
   preview: string
   seoKeywords: string[]
   imageSrc: string

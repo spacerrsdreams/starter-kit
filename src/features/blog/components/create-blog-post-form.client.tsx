@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { LOCALE_OPTIONS, LOCALES, DEFAULT_LOCALE } from "@/i18n/locales"
 import { ApiError } from "@/lib/http-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { BlogContentEditor } from "@/features/blog/components/blog-content-editor.client"
@@ -17,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea"
 const createBlogPostFormSchema = z.object({
   title: z.string().trim().min(1, "Title is required"),
   slug: z.string().trim().min(1, "Slug is required"),
+  locale: z.enum(LOCALES),
   preview: z.string().trim().min(1, "Preview description is required"),
   seoKeywords: z
     .array(z.string().trim().min(1, "SEO keywords cannot be empty"))
@@ -33,7 +35,7 @@ function normalizeSlug(value: string) {
     .replace(/-+/g, "-")
 }
 
-type FormErrors = Partial<Record<"title" | "slug" | "preview" | "seoKeywords" | "coverImage" | "contentHtml", string>>
+type FormErrors = Partial<Record<"title" | "slug" | "locale" | "preview" | "seoKeywords" | "coverImage" | "contentHtml", string>>
 
 export function CreateBlogPostForm() {
   const router = useRouter()
@@ -42,6 +44,7 @@ export function CreateBlogPostForm() {
 
   const [title, setTitle] = useState("")
   const [slug, setSlug] = useState("")
+  const [locale, setLocale] = useState(DEFAULT_LOCALE)
   const [preview, setPreview] = useState("")
   const [seoKeywordsInput, setSeoKeywordsInput] = useState("")
   const [contentHtml, setContentHtml] = useState("")
@@ -80,6 +83,7 @@ export function CreateBlogPostForm() {
     const parsed = createBlogPostFormSchema.safeParse({
       title,
       slug,
+      locale,
       preview,
       seoKeywords,
       contentHtml,
@@ -90,6 +94,7 @@ export function CreateBlogPostForm() {
       const flattened = parsed.error.flatten().fieldErrors
       nextErrors.title = flattened.title?.[0]
       nextErrors.slug = flattened.slug?.[0]
+      nextErrors.locale = flattened.locale?.[0]
       nextErrors.preview = flattened.preview?.[0]
       nextErrors.seoKeywords = flattened.seoKeywords?.[0]
       nextErrors.contentHtml = flattened.contentHtml?.[0]
@@ -111,6 +116,7 @@ export function CreateBlogPostForm() {
       await createPostMutation.mutateAsync({
         title: formData.title,
         slug: formData.slug,
+        locale: formData.locale,
         preview: formData.preview,
         seoKeywords: formData.seoKeywords,
         imageSrc: uploadResponse.imageUrl,
@@ -163,6 +169,25 @@ export function CreateBlogPostForm() {
             className="h-10"
           />
           {errors.slug ? <p className="text-sm text-destructive">{errors.slug}</p> : null}
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="blog-locale" className="text-sm font-medium text-foreground">
+            Locale
+          </label>
+          <select
+            id="blog-locale"
+            value={locale}
+            onChange={(event) => setLocale(z.enum(LOCALES).parse(event.target.value))}
+            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:outline-none"
+          >
+            {LOCALE_OPTIONS.map((localeOption) => (
+              <option key={localeOption.value} value={localeOption.value}>
+                {`${localeOption.flag} ${localeOption.label} (${localeOption.country})`}
+              </option>
+            ))}
+          </select>
+          {errors.locale ? <p className="text-sm text-destructive">{errors.locale}</p> : null}
         </div>
 
         <div className="space-y-2">

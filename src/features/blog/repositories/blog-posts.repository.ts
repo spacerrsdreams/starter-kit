@@ -2,19 +2,23 @@ import "server-only"
 
 import type { Prisma } from "@/generated/prisma/client"
 
+import { DEFAULT_LOCALE, type Locale } from "@/i18n/locales"
 import { prisma } from "@/lib/prisma"
 
 type BlogPostCreateData = Pick<
   Prisma.BlogPostUncheckedCreateInput,
-  "title" | "slug" | "preview" | "seoKeywords" | "imageSrc" | "content" | "authorId"
+  "title" | "slug" | "locale" | "preview" | "seoKeywords" | "imageSrc" | "content" | "authorId"
 >
 type BlogPostUpdateData = Pick<
   Prisma.BlogPostUpdateManyMutationInput,
-  "title" | "slug" | "preview" | "seoKeywords" | "imageSrc" | "content"
+  "title" | "slug" | "locale" | "preview" | "seoKeywords" | "imageSrc" | "content"
 >
 
-export async function listBlogPosts(limit: number, offset: number) {
+export async function listBlogPosts(limit: number, offset: number, locale: Locale = DEFAULT_LOCALE) {
   return prisma.blogPost.findMany({
+    where: {
+      locale,
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -24,6 +28,7 @@ export async function listBlogPosts(limit: number, offset: number) {
       id: true,
       title: true,
       slug: true,
+      locale: true,
       preview: true,
       seoKeywords: true,
       imageSrc: true,
@@ -43,6 +48,7 @@ export async function getBlogPostById(postId: string) {
       id: true,
       title: true,
       slug: true,
+      locale: true,
       preview: true,
       seoKeywords: true,
       imageSrc: true,
@@ -53,15 +59,17 @@ export async function getBlogPostById(postId: string) {
   })
 }
 
-export async function getBlogPostBySlug(slug: string) {
-  return prisma.blogPost.findUnique({
+export async function getBlogPostBySlug(slug: string, locale: Locale = DEFAULT_LOCALE) {
+  return prisma.blogPost.findFirst({
     where: {
       slug,
+      locale,
     },
     select: {
       id: true,
       title: true,
       slug: true,
+      locale: true,
       preview: true,
       seoKeywords: true,
       imageSrc: true,
@@ -79,6 +87,7 @@ export async function createBlogPost(data: BlogPostCreateData) {
       id: true,
       title: true,
       slug: true,
+      locale: true,
       preview: true,
       seoKeywords: true,
       imageSrc: true,

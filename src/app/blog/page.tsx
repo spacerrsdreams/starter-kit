@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { z } from "zod"
 
+import { DEFAULT_LOCALE, LOCALES } from "@/i18n/locales"
 import { WebRoutes } from "@/lib/web.routes"
 import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-actions-menu.client"
 import { listBlogPosts } from "@/features/blog/repositories/blog-posts.repository"
@@ -16,10 +17,11 @@ const PAGE_SIZE = 9
 
 const blogPageSearchParamsSchema = z.object({
   offset: z.coerce.number().int().min(0).default(0),
+  locale: z.enum(LOCALES).default(DEFAULT_LOCALE),
 })
 
 type BlogPageProps = {
-  searchParams?: Promise<{ offset?: string }>
+  searchParams?: Promise<{ offset?: string; locale?: string }>
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
@@ -28,8 +30,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const resolvedSearchParams = await searchParams
   const parsed = blogPageSearchParamsSchema.safeParse(resolvedSearchParams)
   const offset = parsed.success ? parsed.data.offset : 0
+  const locale = parsed.success ? parsed.data.locale : DEFAULT_LOCALE
 
-  const posts = await listBlogPosts(PAGE_SIZE, offset)
+  const posts = await listBlogPosts(PAGE_SIZE, offset, locale)
   const hasNextPage = posts.length === PAGE_SIZE
   const previousOffset = Math.max(0, offset - PAGE_SIZE)
   const nextOffset = offset + PAGE_SIZE
@@ -70,7 +73,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     />
                   </div>
                 ) : null}
-                <Link href={WebRoutes.blogPost(post.slug)} className="block transition-colors hover:bg-muted/20">
+                <Link href={`${WebRoutes.blogPost(post.slug)}?locale=${locale}`} className="block transition-colors hover:bg-muted/20">
                   <Image
                     src={post.imageSrc}
                     alt={post.title}
@@ -100,7 +103,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           <div className="flex items-center justify-between">
             {offset > 0 ? (
               <Link
-                href={`${WebRoutes.blog.path}?offset=${previousOffset}`}
+                href={`${WebRoutes.blog.path}?offset=${previousOffset}&locale=${locale}`}
                 className="rounded-lg border border-border px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
               >
                 Previous
@@ -111,7 +114,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
             {hasNextPage ? (
               <Link
-                href={`${WebRoutes.blog.path}?offset=${nextOffset}`}
+                href={`${WebRoutes.blog.path}?offset=${nextOffset}&locale=${locale}`}
                 className="rounded-lg border border-border px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
               >
                 Next
