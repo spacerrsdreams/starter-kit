@@ -31,7 +31,7 @@ type FooterLinksSectionProps = {
 export function FooterLinksSection({ title, links }: FooterLinksSectionProps) {
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-semibold tracking-wide text-foreground/80 uppercase">{title}</h3>
+      <h2 className="text-sm font-semibold tracking-wide text-foreground/80 uppercase">{title}</h2>
       <div className="space-y-2">
         {links.map((link) => (
           <Link
