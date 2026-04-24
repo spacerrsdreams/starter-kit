@@ -3,7 +3,7 @@
 import { Sparkles } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
 import { Separator } from "../ui/separator"

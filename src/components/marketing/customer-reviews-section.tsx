@@ -1,8 +1,8 @@
 import { UserStar } from "lucide-react"
 
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
-import { CountUpNumberAnimation } from "@/components/ui/count-up-number.animation"
+import { CountUpNumberAnimation } from "@/components/motion/count-up-number.animation"
 
 export function CustomerReviewsSection() {
   return (

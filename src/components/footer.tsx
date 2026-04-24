@@ -4,7 +4,7 @@ import Link from "next/link"
 
 import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { FacebookIcon } from "@/components/ui/icons/facebook.icon"
 import { InstagramIcon } from "@/components/ui/icons/instagram.icon"
 import { LinkedInIcon } from "@/components/ui/icons/linkedin.icon"

@@ -2,7 +2,7 @@ import Image from "next/image"
 
 import { SiteConfig } from "@/lib/site.config"
 import { GetStartedCtaButton } from "@/components/marketing/get-started-cta-button.client"
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { LogoIcon } from "@/components/ui/icons/logo.icon"
 
 type FreeTrialCtaSectionProps = {

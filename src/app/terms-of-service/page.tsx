@@ -2,8 +2,8 @@ import { TERMS_OF_SERVICE_SECTIONS } from "@/features/legal/constants/legal-cont
 import { Footer } from "@/components/footer"
 import { LegalSectionBlock } from "@/components/legal/legal-section-block"
 import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
-import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { TopGradient } from "@/components/ui/top-gradient"
 
 export default function TermsOfUsePage() {

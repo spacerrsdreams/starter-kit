@@ -3,8 +3,8 @@ import Image from "next/image"
 
 import { ContactFormClient } from "@/features/contact/components/contact-form.client"
 import { FreeTrialCtaSection } from "@/components/marketing/free-trial-cta-section"
-import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { GlassPanel } from "@/components/ui/glass-panel"
 
 const contactSteps = ["Leave us your details", "We will reach out within 24 hours", "Join a scheduled call"] as const

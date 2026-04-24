@@ -8,8 +8,8 @@ import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-action
 import { listBlogPosts } from "@/features/blog/repositories/blog-posts.repository"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
 import { Footer } from "@/components/footer"
+import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
 import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
-import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
 import { TopGradient } from "@/components/ui/top-gradient"
 
 const PAGE_SIZE = 9
@@ -38,11 +38,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     <div className="min-h-screen bg-background">
       <TopGradient />
       <HeaderNavigationClient />
-      <main className="container mx-auto min-h-screen px-4 py-36">
-        <div className="mx-auto w-full max-w-5xl space-y-8">
+      <main className="container mx-auto min-h-screen px-4 py-45">
+        <div className="mx-auto w-full max-w-5xl space-y-16">
           <div className="flex justify-center">
             <BlurWaveTextAnimation
-              className="text-center text-4xl font-semibold tracking-[-3px] text-foreground"
+              className="text-center text-4xl font-medium tracking-[-3px] text-foreground lg:text-6xl"
               text="Latest Articles & Insights"
             />
           </div>

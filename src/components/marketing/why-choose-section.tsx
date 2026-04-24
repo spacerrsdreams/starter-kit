@@ -2,7 +2,7 @@ import { Rocket } from "lucide-react"
 import Image from "next/image"
 
 import { SiteConfig } from "@/lib/site.config"
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
 const whyChooseCards = [

@@ -1,10 +1,10 @@
 import { Activity, BadgeDollarSign, Cpu, Gamepad2, Rocket, ShieldCheck, Workflow, type LucideIcon } from "lucide-react"
 
 import { CoreFeaturesLeftBorderGlow } from "@/components/marketing/core-features-left-border-glow.client"
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
-import { AnimatedSvg } from "../ui/animated-svg.animation"
+import { AnimatedSvg } from "../motion/animated-svg.animation"
 
 const coreFeaturesItems: Array<{
   title: string

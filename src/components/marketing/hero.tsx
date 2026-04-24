@@ -1,5 +1,5 @@
-import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { GetStartedCtaButton } from "@/components/marketing/get-started-cta-button.client"
 
 export function Hero() {

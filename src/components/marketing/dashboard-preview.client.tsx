@@ -5,7 +5,7 @@ import Image from "next/image"
 import { useRef } from "react"
 
 import { SiteConfig } from "@/lib/site.config"
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { useIsMobile } from "@/hooks/use-mobile"
 
 export function DashboardPreviewClient() {

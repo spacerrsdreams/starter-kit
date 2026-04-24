@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react"
 
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 
 const trustedCompanies = [
   { name: "Fyntra", logo: "FD", colorClass: "text-orange-500" },

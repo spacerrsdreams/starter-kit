@@ -3,7 +3,7 @@ import type { ComponentType, SVGProps } from "react"
 
 import { cn } from "@/lib/utils"
 
-import { AnimatedSvg } from "./animated-svg.animation"
+import { AnimatedSvg } from "../motion/animated-svg.animation"
 
 interface ChipProps {
   Icon: ComponentType<SVGProps<SVGSVGElement>>

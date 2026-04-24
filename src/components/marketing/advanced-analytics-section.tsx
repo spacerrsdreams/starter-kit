@@ -1,7 +1,7 @@
 import { Rocket } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
+import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
 const analyticsPills = ["Integrated Payment", "Authorization", "Just ready AI"] as const
