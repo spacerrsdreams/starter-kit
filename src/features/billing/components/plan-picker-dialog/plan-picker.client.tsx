@@ -14,16 +14,16 @@ const YEARLY_PLAN_FEATURES = ["Essential tools to get you up", "Unlimited projec
 export type PlanPickerProps = {
   isBillingLoading: boolean
   showMainlabel?: boolean
-  onSelectInterval: (interval: "monthly" | "yearly") => void
+  onProductSelect: (selectedPlan: "monthly" | "yearly") => void
 }
 
-export function PlanPicker({ isBillingLoading, showMainlabel = true, onSelectInterval }: PlanPickerProps) {
+export function PlanPicker({ isBillingLoading, showMainlabel = true, onProductSelect }: PlanPickerProps) {
   const [isYearly, setIsYearly] = useState(false)
   const { data: billingSubscription } = useFetchBillingSubscription()
   const starterPrice = isYearly ? 31 : 39
   const ultimatePrice = isYearly ? 63 : 79
   const billedLabel = isYearly ? "yearly" : "monthly"
-  const selectedInterval = isYearly ? "yearly" : "monthly"
+  const selectedPlan = isYearly ? "yearly" : "monthly"
   const isSubscribedToPaidPlan = Boolean(billingSubscription?.isPaid)
 
   return (
@@ -56,7 +56,7 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onSelectInt
           features={MONTHLY_PLAN_FEATURES}
           ctaLabel="Get Started"
           isLoading={isBillingLoading}
-          onSelect={() => onSelectInterval(selectedInterval)}
+          onSelect={() => onProductSelect(selectedPlan)}
           isLastFeatureMuted
         />
         <PricingPlanCard
@@ -67,7 +67,7 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onSelectInt
           features={YEARLY_PLAN_FEATURES}
           ctaLabel="Get Started"
           isLoading={isBillingLoading}
-          onSelect={() => onSelectInterval(selectedInterval)}
+          onSelect={() => onProductSelect(selectedPlan)}
           isFeatured
           badgeLabel={isSubscribedToPaidPlan ? "CURRENT" : undefined}
         />

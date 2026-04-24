@@ -36,6 +36,11 @@ export function DashboardCommandDialogClient({ open, onOpenChange }: DashboardCo
   const handleAction = (actionId?: DashboardCommandActionId) => {
     if (!actionId) return
 
+    if (actionId === "logout") {
+      void authClient.signOut()
+      return
+    }
+
     if (isDashboardPath(pathname)) {
       if (actionId === "open-settings") {
         openSettingsDialog("account")
@@ -61,6 +66,10 @@ export function DashboardCommandDialogClient({ open, onOpenChange }: DashboardCo
           <CommandGroup heading="Navigation">
             {dashboardCommandItems
               .filter((item) => {
+                if (item.requiresAuth && !session?.user) {
+                  return false
+                }
+
                 if (!item.requiredRole) {
                   return true
                 }

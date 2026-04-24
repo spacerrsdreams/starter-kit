@@ -18,10 +18,10 @@ export function PricingContentPage() {
   const { openAuthModal } = useAuthRequiredModal()
   const checkoutSessionMutation = useMutateCreateCheckoutSession()
 
-  const handleSelectInterval = useCallback(
-    (interval: "monthly" | "yearly") => {
+  const handleSelectProduct = useCallback(
+    (selectedPlan: "monthly" | "yearly") => {
       const nextSearchParams = new URLSearchParams(searchParams.toString())
-      nextSearchParams.set("checkoutInterval", interval)
+      nextSearchParams.set("checkoutInterval", selectedPlan)
       const redirectPath = `${pathname}?${nextSearchParams.toString()}`
       const callbackURL = `${ApiRoutes.authSignedIn}?${new URLSearchParams({ next: redirectPath }).toString()}`
 
@@ -32,7 +32,7 @@ export function PricingContentPage() {
 
       void (async () => {
         try {
-          const response = await checkoutSessionMutation.mutateAsync({ interval })
+          const response = await checkoutSessionMutation.mutateAsync({ interval: selectedPlan })
           window.location.href = response.checkoutUrl
         } catch (error) {
           console.error("Failed to start checkout from pricing page.", error)
@@ -50,7 +50,7 @@ export function PricingContentPage() {
       <PlanPicker
         isBillingLoading={checkoutSessionMutation.isPending || isSessionPending}
         showMainlabel={false}
-        onSelectInterval={handleSelectInterval}
+        onProductSelect={handleSelectProduct}
       />
     </main>
   )

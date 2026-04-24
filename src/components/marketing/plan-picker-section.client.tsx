@@ -1,82 +1,69 @@
 "use client"
 
-import { useCallback, useEffect, useRef } from "react"
-import type { Route } from "next"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
+import { useCallback, useEffect } from "react"
 
-import { ApiRoutes } from "@/lib/api.routes"
 import { authClient } from "@/lib/auth/auth-client"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
 import { PlanPicker } from "@/features/billing/components/plan-picker-dialog/plan-picker.client"
 import { useMutateCreateCheckoutSession } from "@/features/billing/hooks/use-mutate-create-checkout-session"
+import { SpinnerWithBackdrop } from "@/components/ui/spinner"
 
 export function PlanPickerSectionClient() {
   const pathname = usePathname()
-  const router = useRouter()
   const searchParams = useSearchParams()
   const { data: session, isPending: isSessionPending } = authClient.useSession()
   const { openAuthModal } = useAuthRequiredModal()
   const checkoutSessionMutation = useMutateCreateCheckoutSession()
-  const hasAutoStartedCheckoutRef = useRef(false)
 
-  const handleSelectInterval = useCallback(
-    (interval: "monthly" | "yearly") => {
-      const nextSearchParams = new URLSearchParams(searchParams.toString())
-      nextSearchParams.set("checkoutInterval", interval)
-      const redirectPath = `${pathname}?${nextSearchParams.toString()}`
-      const callbackURL = `${ApiRoutes.authSignedIn}?${new URLSearchParams({ next: redirectPath }).toString()}`
+  const selectedPlanFromUrl = searchParams.get("checkoutInterval")
+  const hasValidSelectedPlan = selectedPlanFromUrl === "monthly" || selectedPlanFromUrl === "yearly"
 
-      if (isSessionPending || !session?.user) {
+  const startCheckout = useCallback(
+    async (selectedPlan: "monthly" | "yearly") => {
+      try {
+        const { checkoutUrl } = await checkoutSessionMutation.mutateAsync({ interval: selectedPlan })
+        window.location.href = checkoutUrl
+      } catch (error) {
+        console.error("Failed to start checkout.", error)
+      }
+    },
+    [checkoutSessionMutation]
+  )
+
+  const handleSelectProduct = useCallback(
+    (selectedPlan: "monthly" | "yearly") => {
+      if (isSessionPending) return
+
+      if (!session?.user) {
+        const redirectPath = `${pathname}?${new URLSearchParams({
+          ...Object.fromEntries(searchParams),
+          checkoutInterval: selectedPlan,
+        })}`
         openAuthModal({ redirectPath })
         return
       }
 
-      void (async () => {
-        try {
-          const response = await checkoutSessionMutation.mutateAsync({ interval })
-          window.location.href = response.checkoutUrl
-        } catch (error) {
-          console.error("Failed to start checkout from pricing section.", error)
-          if (error instanceof Error && error.message === "Authentication required") {
-            router.push(callbackURL as Route)
-          }
-        }
-      })()
+      void startCheckout(selectedPlan)
     },
-    [checkoutSessionMutation, isSessionPending, openAuthModal, pathname, router, searchParams, session?.user]
+    [isSessionPending, session?.user, pathname, searchParams, openAuthModal, startCheckout]
   )
 
   useEffect(() => {
-    const selectedInterval = searchParams.get("checkoutInterval")
-    const isIntervalValid = selectedInterval === "monthly" || selectedInterval === "yearly"
+    if (!hasValidSelectedPlan || isSessionPending || !session?.user) return
+    void startCheckout(selectedPlanFromUrl)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasValidSelectedPlan, isSessionPending, selectedPlanFromUrl, session?.user])
 
-    if (!isIntervalValid) {
-      hasAutoStartedCheckoutRef.current = false
-      return
-    }
-
-    if (isSessionPending || !session?.user || checkoutSessionMutation.isPending || hasAutoStartedCheckoutRef.current) {
-      return
-    }
-
-    hasAutoStartedCheckoutRef.current = true
-
-    void (async () => {
-      try {
-        const response = await checkoutSessionMutation.mutateAsync({ interval: selectedInterval })
-        window.location.href = response.checkoutUrl
-      } catch (error) {
-        hasAutoStartedCheckoutRef.current = false
-        console.error("Failed to auto-start checkout after authentication.", error)
-      }
-    })()
-  }, [checkoutSessionMutation, isSessionPending, searchParams, session?.user])
+  const isRedirecting =
+    hasValidSelectedPlan && !isSessionPending && (session?.user ? checkoutSessionMutation.isPending : false)
 
   return (
     <section className="w-full px-4 py-0">
+      {isRedirecting ? <SpinnerWithBackdrop label="Redirecting to checkout..." /> : null}
       <PlanPicker
         isBillingLoading={checkoutSessionMutation.isPending || isSessionPending}
-        onSelectInterval={handleSelectInterval}
+        onProductSelect={handleSelectProduct}
       />
     </section>
   )

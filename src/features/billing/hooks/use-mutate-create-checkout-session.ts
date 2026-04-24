@@ -7,13 +7,14 @@ import { createCheckoutSessionApi } from "@/features/billing/api/billing.api"
 import type { CreateCheckoutSessionRequest } from "@/features/billing/types/billing-api.types"
 
 export function useMutateCreateCheckoutSession() {
-  const { data: session, isPending: isSessionPending } = authClient.useSession()
+  const { data: session, isPending } = authClient.useSession()
 
   return useMutation({
     mutationFn: async (payload: CreateCheckoutSessionRequest) => {
-      if (isSessionPending || !session?.user) {
+      if (isPending || !session?.user) {
         throw new Error("Authentication required")
       }
+
       return createCheckoutSessionApi(payload)
     },
   })
