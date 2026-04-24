@@ -16,6 +16,7 @@ import * as React from "react"
 
 import type { AdminUserListItem } from "@/features/admin/types/admin-users.types"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -115,22 +116,38 @@ export function AdminUsersDataTable({ columns, data }: AdminUsersDataTableProps)
   return (
     <div className="space-y-4">
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-md border p-3">
-          <p className="text-xs text-muted-foreground">Total users</p>
-          <p className="text-2xl font-semibold">{stats.totalUsers}</p>
-        </div>
-        <div className="rounded-md border p-3">
-          <p className="text-xs text-muted-foreground">Active users (seen in 30 days)</p>
-          <p className="text-2xl font-semibold">{stats.activeUsers}</p>
-        </div>
-        <div className="rounded-md border p-3">
-          <p className="text-xs text-muted-foreground">Subscribed users</p>
-          <p className="text-2xl font-semibold">{stats.subscribedUsers}</p>
-        </div>
-        <div className="rounded-md border p-3">
-          <p className="text-xs text-muted-foreground">Deactivated accounts</p>
-          <p className="text-2xl font-semibold">{stats.deactivatedUsers}</p>
-        </div>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs text-muted-foreground">Total users</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold">{stats.totalUsers}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs text-muted-foreground">Active users (seen in 30 days)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold">{stats.activeUsers}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs text-muted-foreground">Subscribed users</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold">{stats.subscribedUsers}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs text-muted-foreground">Deactivated accounts</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold">{stats.deactivatedUsers}</p>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="flex flex-wrap items-center justify-end gap-2">
@@ -166,19 +183,6 @@ export function AdminUsersDataTable({ columns, data }: AdminUsersDataTableProps)
             <SelectItem value="never">Last seen: Never</SelectItem>
           </SelectContent>
         </Select>
-        <Select
-          value={String(table.getColumn("deactivatedAt")?.getFilterValue() ?? "all")}
-          onValueChange={(value) => table.getColumn("deactivatedAt")?.setFilterValue(value)}
-        >
-          <SelectTrigger className="w-full sm:w-[220px]">
-            <SelectValue placeholder="Filter deactivated..." />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Deactivated: All</SelectItem>
-            <SelectItem value="active">Deactivated: No</SelectItem>
-            <SelectItem value="deactivated">Deactivated: Yes</SelectItem>
-          </SelectContent>
-        </Select>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">Columns</Button>
@@ -205,7 +209,7 @@ export function AdminUsersDataTable({ columns, data }: AdminUsersDataTableProps)
 
       <div className="overflow-hidden rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-sidebar">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

@@ -1,10 +1,11 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { useLocale } from "next-intl"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
+import { WebRoutes } from "@/lib/web.routes"
 import { AdminUserEditDialog } from "@/features/admin/components/admin-user-edit-dialog.client"
 import { getAdminUsersColumns } from "@/features/admin/components/admin-users-columns"
 import { AdminUsersDataTable } from "@/features/admin/components/admin-users-data-table.client"
@@ -14,7 +15,6 @@ import { useMutateDeleteAdminUser } from "@/features/admin/hooks/use-mutate-dele
 import { useMutateImpersonateAdminUser } from "@/features/admin/hooks/use-mutate-impersonate-admin-user"
 import { useMutateUpdateAdminUser } from "@/features/admin/hooks/use-mutate-update-admin-user"
 import type { AdminUserListItem, AdminUserRole } from "@/features/admin/types/admin-users.types"
-import { WebRoutes } from "@/lib/web.routes"
 
 type AdminUsersTableProps = {
   currentUserId: string

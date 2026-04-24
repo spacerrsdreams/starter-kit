@@ -57,14 +57,6 @@ function formatLastSeen(lastActiveAt: string | null, locale: string) {
   return formatCreatedAt(lastActiveAt, locale)
 }
 
-function formatDeactivatedAt(deactivatedAt: string | null, locale: string) {
-  if (!deactivatedAt) {
-    return "No"
-  }
-
-  return `Yes (${formatCreatedAt(deactivatedAt, locale)})`
-}
-
 export function getAdminUsersColumns(actions: AdminUsersColumnActions): ColumnDef<AdminUserListItem>[] {
   return [
     {
@@ -147,25 +139,12 @@ export function getAdminUsersColumns(actions: AdminUsersColumnActions): ColumnDe
     {
       accessorKey: "deactivatedAt",
       header: "Deactivated",
-      filterFn: (row, columnId, filterValue) => {
-        const value = row.getValue(columnId) as string | null
-        const filter = String(filterValue ?? "all")
-
-        if (filter === "all") {
-          return true
-        }
-
-        if (filter === "deactivated") {
-          return value !== null
-        }
-
-        if (filter === "active") {
-          return value === null
-        }
-
-        return true
-      },
-      cell: ({ row }) => formatDeactivatedAt(row.original.deactivatedAt, actions.locale),
+      cell: ({ row }) =>
+        row.original.deactivatedAt ? (
+          <Badge variant="destructive">Deactivated</Badge>
+        ) : (
+          <Badge variant="secondary">Active</Badge>
+        ),
     },
     {
       accessorKey: "subscriptionStatus",
