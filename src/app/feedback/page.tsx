@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 
-import { DeactivationFeedbackPage } from "@/features/account-deactivation/components/deactivation-feedback-page"
+import { DeactivationFeedbackPage } from "@/features/auth/account-deactivation/components/deactivation-feedback-page"
 import { Spinner } from "@/components/ui/spinner"
 
 type FeedbackPageProps = {

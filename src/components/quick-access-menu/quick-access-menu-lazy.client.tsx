@@ -2,9 +2,12 @@
 
 import dynamic from "next/dynamic"
 
-const QuickAccessMenu = dynamic(() => import("@/components/quick-access-menu").then((module) => module.QuickAccessMenu), {
-  ssr: false,
-})
+const QuickAccessMenu = dynamic(
+  () => import("@/components/quick-access-menu/quick-access-menu").then((module) => module.QuickAccessMenu),
+  {
+    ssr: false,
+  }
+)
 
 type QuickAccessMenuLazyProps = {
   renderInlineTrigger?: boolean

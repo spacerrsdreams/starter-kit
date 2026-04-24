@@ -1,9 +1,9 @@
-import { submitDeactivationFeedbackAction } from "@/features/account-deactivation/actions/submit-deactivation-feedback.action"
+import { submitDeactivationFeedbackAction } from "@/features/auth/account-deactivation/actions/submit-deactivation-feedback.action"
 import {
   deactivationFeedbackCategories,
   deactivationFeedbackCategoryLabels,
-} from "@/features/account-deactivation/constants/deactivation-feedback-category.constants"
-import type { DeactivationFeedbackPageProps } from "@/features/account-deactivation/types/deactivation-feedback-page.types"
+} from "@/features/auth/account-deactivation/constants/deactivation-feedback-category.constants"
+import type { DeactivationFeedbackPageProps } from "@/features/auth/account-deactivation/types/deactivation-feedback-page.types"
 import { Button } from "@/components/ui/button"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Textarea } from "@/components/ui/textarea"

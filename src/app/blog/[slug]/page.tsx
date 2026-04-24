@@ -7,8 +7,9 @@ import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-action
 import { getBlogPostBySlug } from "@/features/blog/repositories/blog-posts.repository"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
 import { Footer } from "@/components/footer"
-import { HeaderNavigationClient } from "@/components/header-navigation.client"
-import { TopGradient } from "@/components/top-gradient"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { TopGradient } from "@/components/ui/top-gradient"
+
 import "@/features/blog/styles/blog-rich-content.css"
 
 type BlogPostPageProps = {
@@ -80,7 +81,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           ) : null}
           <p className="text-center text-sm font-semibold text-muted-foreground">{formatBlogDate(post.createdAt)}</p>
 
-          <h1 className="text-center text-5xl leading-tight font-semibold tracking-tight text-foreground">{post.title}</h1>
+          <h1 className="text-center text-5xl leading-tight font-semibold tracking-tight text-foreground">
+            {post.title}
+          </h1>
 
           <Image
             src={post.imageSrc}

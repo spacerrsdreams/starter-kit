@@ -3,8 +3,8 @@ import "server-only"
 import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 
-import { auth } from "@/lib/auth/auth"
 import { createChat, listChats } from "@/features/ai/chat/repositories/chat.repository"
+import { auth } from "@/features/auth/lib/auth"
 
 const DEFAULT_LIMIT = 15
 const MAX_LIMIT = 15

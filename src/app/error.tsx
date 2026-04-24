@@ -5,9 +5,9 @@ import { useEffect } from "react"
 
 import { WebRoutes } from "@/lib/web.routes"
 import { Footer } from "@/components/footer"
-import { HeaderNavigationClient } from "@/components/header-navigation.client"
-import { TopGradient } from "@/components/top-gradient"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
 import { Button } from "@/components/ui/button"
+import { TopGradient } from "@/components/ui/top-gradient"
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {

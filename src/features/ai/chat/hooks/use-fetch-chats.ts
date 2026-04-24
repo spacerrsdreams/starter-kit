@@ -2,9 +2,9 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 
-import { authClient } from "@/lib/auth/auth-client"
 import { listChatsApi } from "@/features/ai/chat/api/chats.api"
 import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
+import { authClient } from "@/features/auth/lib/auth-client"
 
 const PAGE_LIMIT = 15
 

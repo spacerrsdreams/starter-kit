@@ -7,18 +7,18 @@ import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import z from "zod"
 
-import { authClient } from "@/lib/auth/auth-client"
-import {
-  reactivateAndSignInAction,
-  signInWithEmailAndPasswordAction,
-  signInWithGoogleAction,
-} from "@/lib/auth/auth.actions"
-import { signInWithEmailAndPasswordSchema } from "@/lib/auth/auth.schema"
 import { SiteConfig } from "@/lib/site.config"
 import { buildPostAuthCallbackUrl } from "@/features/auth/components/sign-in/sign-in-callback.utils"
 import { getSignInErrorMessageKey } from "@/features/auth/components/sign-in/sign-in-form.utils"
 import { SignInReactivateDialog } from "@/features/auth/components/sign-in/sign-in-reactivate-dialog.client"
 import { ACCOUNT_DEACTIVATED, UNKNOWN_ERROR_CODE } from "@/features/auth/constants"
+import { authClient } from "@/features/auth/lib/auth-client"
+import {
+  reactivateAndSignInAction,
+  signInWithEmailAndPasswordAction,
+  signInWithGoogleAction,
+} from "@/features/auth/lib/auth.actions"
+import { signInWithEmailAndPasswordSchema } from "@/features/auth/lib/auth.schema"
 import { Button } from "@/components/ui/button"
 import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field"

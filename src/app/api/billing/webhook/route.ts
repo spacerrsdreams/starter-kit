@@ -3,7 +3,7 @@ import "server-only"
 import { NextResponse } from "next/server"
 import type Stripe from "stripe"
 
-import { getStripeClient } from "@/lib/stripe/stripe"
+import { getStripeClient } from "@/features/billing/lib/stripe"
 import {
   getBillingSubscriptionByCustomerId,
   updateSubscriptionFromStripe,

@@ -4,7 +4,7 @@ import "server-only"
 
 import { headers } from "next/headers"
 
-import { auth } from "@/lib/auth/auth"
+import { auth } from "@/features/auth/lib/auth"
 import { sendEmailVerificationRequest } from "@/features/settings/repositories/email-verification.repository"
 import {
   sendEmailVerificationInputSchema,

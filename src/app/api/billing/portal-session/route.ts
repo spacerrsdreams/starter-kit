@@ -2,8 +2,8 @@ import "server-only"
 
 import { NextResponse } from "next/server"
 
-import { getSessionUserId } from "@/lib/auth/auth"
-import { getStripeClient } from "@/lib/stripe/stripe"
+import { getSessionUserId } from "@/features/auth/lib/auth"
+import { getStripeClient } from "@/features/billing/lib/stripe"
 import { getBillingSubscriptionByUserId } from "@/features/billing/repositories/billing.repository"
 
 function getAppBaseUrl() {

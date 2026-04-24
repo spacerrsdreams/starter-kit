@@ -2,10 +2,10 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
-import { auth } from "@/lib/auth/auth"
 import { WebRoutes } from "@/lib/web.routes"
 import { RequestPasswordResetForm } from "@/features/auth/components/reset-password/request-password-reset-form.client"
 import { ResetPasswordForm } from "@/features/auth/components/reset-password/reset-password-form.client"
+import { auth } from "@/features/auth/lib/auth"
 import { Spinner } from "@/components/ui/spinner"
 
 type Props = {

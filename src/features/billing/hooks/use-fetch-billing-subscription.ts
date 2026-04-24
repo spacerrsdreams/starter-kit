@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query"
 
-import { authClient } from "@/lib/auth/auth-client"
+import { authClient } from "@/features/auth/lib/auth-client"
 import { getBillingSubscriptionApi } from "@/features/billing/api/billing.api"
 import { billingQueryKeys } from "@/features/billing/constants/billing-query-keys"
 

@@ -1,5 +1,4 @@
 import { Footer } from "@/components/footer"
-import { HeaderNavigationClient } from "@/components/header-navigation.client"
 import { AdvancedAnalyticsSection } from "@/components/marketing/advanced-analytics-section"
 import { CoreFeaturesDarkSection } from "@/components/marketing/core-features-dark-section"
 import { CustomerReviewsSection } from "@/components/marketing/customer-reviews-section"
@@ -11,7 +10,8 @@ import { KeyToolsScrollClient } from "@/components/marketing/key-tools-scroll.cl
 import { PlanPickerSectionClient } from "@/components/marketing/plan-picker-section.client"
 import { TrustedMarqueeClient } from "@/components/marketing/trusted-marquee.client"
 import { WhyChooseSection } from "@/components/marketing/why-choose-section"
-import { TopGradient } from "@/components/top-gradient"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { TopGradient } from "@/components/ui/top-gradient"
 
 export default function DashboardPage() {
   return (

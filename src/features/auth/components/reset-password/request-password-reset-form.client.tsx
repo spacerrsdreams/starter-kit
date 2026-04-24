@@ -6,14 +6,14 @@ import { useEffect, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import z from "zod"
 
-import { requestPasswordResetAction } from "@/lib/auth/auth.actions"
-import { requestPasswordResetSchema } from "@/lib/auth/auth.schema"
 import { WebRoutes } from "@/lib/web.routes"
 import {
   ACCOUNT_DEACTIVATED,
   ACCOUNT_DEACTIVATED_RESET_PASSWORD_MESSAGE,
   UNKNOWN_ERROR_CODE,
 } from "@/features/auth/constants"
+import { requestPasswordResetAction } from "@/features/auth/lib/auth.actions"
+import { requestPasswordResetSchema } from "@/features/auth/lib/auth.schema"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"

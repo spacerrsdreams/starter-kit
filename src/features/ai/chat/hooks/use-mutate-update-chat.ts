@@ -3,10 +3,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { InfiniteData } from "@tanstack/react-query"
 
-import { authClient } from "@/lib/auth/auth-client"
 import { updateChatApi } from "@/features/ai/chat/api/chats.api"
 import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 import type { ChatsListResponse, GetChatResponse } from "@/features/ai/chat/types/chat-api.types"
+import { authClient } from "@/features/auth/lib/auth-client"
 
 type UpdateChatInput = {
   chatId: string

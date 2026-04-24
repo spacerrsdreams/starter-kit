@@ -8,10 +8,10 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { ApiRoutes } from "@/lib/api.routes"
-import { auth } from "@/lib/auth/auth"
-import type { AuthEmbeddedOnlySuccess, AuthRedirectSuccess } from "@/lib/auth/auth-action.types"
-import { getAuthApiErrorCode } from "@/lib/auth/auth-utils"
-import { reactivateDeactivatedAccountWithDetail } from "@/lib/auth/auth.repository"
+import { auth } from "@/features/auth/lib/auth"
+import type { AuthEmbeddedOnlySuccess, AuthRedirectSuccess } from "@/features/auth/lib/auth-action.types"
+import { getAuthApiErrorCode } from "@/features/auth/lib/auth-utils"
+import { reactivateDeactivatedAccountWithDetail } from "@/features/auth/lib/auth.repository"
 import {
   callbackUrlSchema,
   ReactivateAndSignInActionInput,
@@ -24,7 +24,7 @@ import {
   signUpWithEmailAndPasswordActionInputSchema,
   type SignInWithEmailAndPasswordActionInput,
   type SignUpWithEmailAndPasswordActionInput,
-} from "@/lib/auth/auth.schema"
+} from "@/features/auth/lib/auth.schema"
 import { WebRoutes } from "@/lib/web.routes"
 
 export type SocialSignInResult = { ok: false }

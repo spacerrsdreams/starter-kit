@@ -13,7 +13,6 @@ import {
 } from "ai"
 import { z } from "zod"
 
-import { getSessionUserId } from "@/lib/auth/auth"
 import { CHAT_SYSTEM_PROMPT } from "@/features/ai/chat/constants/chat-system-prompt"
 import {
   getChatWithMessages,
@@ -23,6 +22,7 @@ import {
 } from "@/features/ai/chat/repositories/chat.repository"
 import { buildAiContext } from "@/features/ai/chat/utils/build-ai-context.server"
 import { buildBudgetedChatContext, buildSummaryTranscript } from "@/features/ai/chat/utils/chat-context-budget.utils"
+import { getSessionUserId } from "@/features/auth/lib/auth"
 
 export const maxDuration = 300
 

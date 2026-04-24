@@ -3,10 +3,10 @@ import "server-only"
 import { NextResponse } from "next/server"
 import type Stripe from "stripe"
 
-import { getSessionUserId } from "@/lib/auth/auth"
 import { prisma } from "@/lib/prisma"
-import { getStripeClient } from "@/lib/stripe/stripe"
 import { WebRoutes } from "@/lib/web.routes"
+import { getSessionUserId } from "@/features/auth/lib/auth"
+import { getStripeClient } from "@/features/billing/lib/stripe"
 import {
   getBillingSubscriptionByUserId,
   updateSubscriptionFromStripe,

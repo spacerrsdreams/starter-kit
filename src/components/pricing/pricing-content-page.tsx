@@ -1,12 +1,12 @@
 "use client"
 
-import { useCallback } from "react"
 import type { Route } from "next"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useCallback } from "react"
 
 import { ApiRoutes } from "@/lib/api.routes"
-import { authClient } from "@/lib/auth/auth-client"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
+import { authClient } from "@/features/auth/lib/auth-client"
 import { PlanPicker } from "@/features/billing/components/plan-picker-dialog/plan-picker.client"
 import { useMutateCreateCheckoutSession } from "@/features/billing/hooks/use-mutate-create-checkout-session"
 

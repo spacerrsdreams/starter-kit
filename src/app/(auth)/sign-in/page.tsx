@@ -2,9 +2,9 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
-import { auth } from "@/lib/auth/auth"
 import { WebRoutes } from "@/lib/web.routes"
 import { SignInPageDialog } from "@/features/auth/components/sign-in/sign-in-page-dialog.client"
+import { auth } from "@/features/auth/lib/auth"
 import { Spinner } from "@/components/ui/spinner"
 
 async function SignInComponent() {

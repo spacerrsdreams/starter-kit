@@ -3,9 +3,9 @@ import "server-only"
 import { createEmailVerificationToken } from "better-auth/api"
 import { NextResponse } from "next/server"
 
-import { auth } from "@/lib/auth/auth"
+import { sendEmailVerificationEmail } from "@/features/emails/lib/emails.actions"
 import { checkVerificationEmailRatelimit } from "@/lib/ratelimit"
-import { sendEmailVerificationEmail } from "@/lib/resend/actions"
+import { auth } from "@/features/auth/lib/auth"
 
 const noIndexHeaders = {
   "X-Robots-Tag": "noindex, nofollow, noarchive, nosnippet",

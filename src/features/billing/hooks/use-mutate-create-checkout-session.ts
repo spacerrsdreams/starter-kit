@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query"
 
-import { authClient } from "@/lib/auth/auth-client"
+import { authClient } from "@/features/auth/lib/auth-client"
 import { createCheckoutSessionApi } from "@/features/billing/api/billing.api"
 import type { CreateCheckoutSessionRequest } from "@/features/billing/types/billing-api.types"
 

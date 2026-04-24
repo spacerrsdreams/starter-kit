@@ -1,9 +1,9 @@
 import { Send } from "lucide-react"
+import { Route } from "next"
 import Link from "next/link"
 
 import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
-import { FooterLinksSection } from "@/components/footer-links-section"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
 import { FacebookIcon } from "@/components/ui/icons/facebook.icon"
 import { InstagramIcon } from "@/components/ui/icons/instagram.icon"
@@ -29,6 +29,35 @@ const socialLinks = [
   { label: "Instagram", href: "#", icon: InstagramIcon },
   { label: "Telegram", href: "#", icon: Send },
 ] as const
+
+type FooterLink = {
+  label: string
+  href: string
+}
+
+type FooterLinksSectionProps = {
+  title: string
+  links: readonly FooterLink[]
+}
+
+export function FooterLinksSection({ title, links }: FooterLinksSectionProps) {
+  return (
+    <div className="space-y-4">
+      <h3 className="text-sm font-semibold tracking-wide text-foreground/80 uppercase">{title}</h3>
+      <div className="space-y-2">
+        {links.map((link) => (
+          <Link
+            key={link.label}
+            href={link.href as Route}
+            className="block text-sm text-foreground transition-colors hover:text-primary"
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export function Footer() {
   return (

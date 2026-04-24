@@ -4,7 +4,6 @@ import { useQueryClient } from "@tanstack/react-query"
 import type { UIMessage } from "ai"
 import { useEffect, useRef, useState } from "react"
 
-import { authClient } from "@/lib/auth/auth-client"
 import { ApiError } from "@/lib/http-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { ChatSession } from "@/features/ai/chat/components/chat-session/chat-session"
@@ -15,6 +14,7 @@ import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-deta
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
 import type { ChatProps } from "@/features/ai/chat/types/chat.types"
+import { authClient } from "@/features/auth/lib/auth-client"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
 
 export function Chat({ initialChatId = null }: ChatProps) {

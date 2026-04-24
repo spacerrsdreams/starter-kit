@@ -5,12 +5,12 @@ import type { Route } from "next"
 import { usePathname, useRouter } from "next/navigation"
 import { useMemo, useTransition } from "react"
 
-import { authClient } from "@/lib/auth/auth-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
-import { SidebarLogo } from "@/components/sidebar-logo"
+import { authClient } from "@/features/auth/lib/auth-client"
+import { NavLogo } from "@/components/dashboard/nav-logo"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -59,7 +59,7 @@ export function DashboardHeader() {
         <SidebarTrigger className="hidden md:inline-flex" />
         <Separator orientation="vertical" className="mr-2 hidden md:block data-vertical:h-4 data-vertical:self-auto" />
         <div className="md:hidden">
-          <SidebarLogo />
+          <NavLogo />
         </div>
         <div className="ml-auto flex items-center gap-1 md:hidden">
           {isAskAiRoute ? (

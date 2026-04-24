@@ -5,11 +5,11 @@ import "server-only"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
-import { auth } from "@/lib/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { WebRoutes } from "@/lib/web.routes"
-import { createDeactivationFeedback } from "@/features/account-deactivation/repositories/deactivation-feedback.repository"
-import { submitDeactivationFeedbackSchema } from "@/features/account-deactivation/schemas/deactivation-feedback.schema"
+import { createDeactivationFeedback } from "@/features/auth/account-deactivation/repositories/deactivation-feedback.repository"
+import { submitDeactivationFeedbackSchema } from "@/features/auth/account-deactivation/schemas/deactivation-feedback.schema"
+import { auth } from "@/features/auth/lib/auth"
 
 export async function submitDeactivationFeedbackAction(formData: FormData) {
   const rawCategory = formData.get("category")

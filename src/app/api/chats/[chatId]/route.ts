@@ -4,8 +4,8 @@ import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
-import { auth } from "@/lib/auth/auth"
 import { deleteChat, getChatWithMessages, updateChatMetadata } from "@/features/ai/chat/repositories/chat.repository"
+import { auth } from "@/features/auth/lib/auth"
 
 type RouteContext = {
   params: Promise<{ chatId: string }>

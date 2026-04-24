@@ -4,11 +4,11 @@ import { ShieldCheck } from "lucide-react"
 import Link from "next/link"
 import * as React from "react"
 
-import { authClient } from "@/lib/auth/auth-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { ChatDashboardSidebar } from "@/features/ai/chat/components/chat-dashboard-sidebar/chat-dashboard-sidebar.client"
+import { authClient } from "@/features/auth/lib/auth-client"
+import { NavLogo } from "@/components/dashboard/nav-logo"
 import { SidebarFooterUserAction } from "@/components/dashboard/sidebar-footer-user-action.client"
-import { SidebarLogo } from "@/components/sidebar-logo"
 import {
   Sidebar as SidebarComponent,
   SidebarContent,
@@ -30,7 +30,7 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg">
-              <SidebarLogo />
+              <NavLogo />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

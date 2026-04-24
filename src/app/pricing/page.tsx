@@ -1,7 +1,7 @@
 import { Footer } from "@/components/footer"
-import { HeaderNavigationClient } from "@/components/header-navigation.client"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
 import { PricingContentPage } from "@/components/pricing/pricing-content-page"
-import { TopGradient } from "@/components/top-gradient"
+import { TopGradient } from "@/components/ui/top-gradient"
 
 export default function PricingPage() {
   return (

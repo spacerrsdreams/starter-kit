@@ -4,8 +4,9 @@ import { redirect } from "next/navigation"
 import { WebRoutes } from "@/lib/web.routes"
 import { CreateBlogPostForm } from "@/features/blog/components/create-blog-post-form.client"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
-import { HeaderNavigationClient } from "@/components/header-navigation.client"
-import { TopGradient } from "@/components/top-gradient"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { TopGradient } from "@/components/ui/top-gradient"
+
 import "@/features/blog/styles/blog-rich-content.css"
 
 const title = "Create Blog Post"

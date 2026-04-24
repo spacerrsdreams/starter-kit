@@ -2,7 +2,7 @@ import "server-only"
 
 import { NextResponse } from "next/server"
 
-import { getSessionUserId } from "@/lib/auth/auth"
+import { getSessionUserId } from "@/features/auth/lib/auth"
 import { getBillingSubscriptionSnapshot } from "@/features/billing/repositories/billing.repository"
 
 export async function GET() {

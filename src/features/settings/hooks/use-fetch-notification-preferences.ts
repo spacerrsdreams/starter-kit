@@ -1,9 +1,9 @@
 "use client"
 
-import { getNotificationPreferencesAction } from "@/actions/account/get-notification-preferences.action"
+import { getNotificationPreferencesAction } from "@/features/settings/actions/get-notification-preferences.action"
 import { useQuery } from "@tanstack/react-query"
 
-import { authClient } from "@/lib/auth/auth-client"
+import { authClient } from "@/features/auth/lib/auth-client"
 import { settingsQueryKeys } from "@/features/settings/constants/settings-query-keys"
 
 export function useFetchNotificationPreferences() {

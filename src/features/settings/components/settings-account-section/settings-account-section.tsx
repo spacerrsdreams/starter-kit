@@ -4,9 +4,9 @@ import { CheckCircle2, Mail, ShieldAlert, UserX } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
-import { authClient } from "@/lib/auth/auth-client"
 import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
+import { authClient } from "@/features/auth/lib/auth-client"
 import { sendEmailVerificationAction } from "@/features/settings/actions/send-email-verification.action"
 import type {
   SendEmailVerificationActionErrorCode,

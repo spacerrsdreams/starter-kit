@@ -2,12 +2,12 @@ import "server-only"
 
 import { z } from "zod"
 
-import { sendMail } from "@/lib/resend/resend"
-import { ContactSubmissionEmailTemplate } from "@/lib/resend/templates/contact-submission.template"
-import { EmailVerificationEmailTemplate } from "@/lib/resend/templates/email-verification.template"
-import { ResetPasswordEmailTemplate } from "@/lib/resend/templates/reset-password.template"
-import { WelcomeEmailTemplate } from "@/lib/resend/templates/welcome.template"
 import { SiteConfig } from "@/lib/site.config"
+import { sendMail } from "@/features/emails/lib/emails.lib"
+import { ContactSubmissionEmailTemplate } from "@/features/emails/templates/contact-submission.template"
+import { EmailVerificationEmailTemplate } from "@/features/emails/templates/email-verification.template"
+import { ResetPasswordEmailTemplate } from "@/features/emails/templates/reset-password.template"
+import { WelcomeEmailTemplate } from "@/features/emails/templates/welcome.template"
 
 export const sendResetPasswordEmailSchema = z.object({
   userFirstname: z.string().trim().min(1, "userFirstname is required"),

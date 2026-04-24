@@ -1,6 +1,6 @@
 import "server-only"
 
-import { getStripeClient } from "@/lib/stripe/stripe"
+import { getStripeClient } from "@/features/billing/lib/stripe"
 
 function getRequiredEnv(
   name: "STRIPE_PRICE_ID_PRO_MONTHLY" | "STRIPE_PRICE_ID_PRO_YEARLY"

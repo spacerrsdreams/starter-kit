@@ -5,8 +5,9 @@ import { WebRoutes } from "@/lib/web.routes"
 import { EditBlogPostForm } from "@/features/blog/components/edit-blog-post-form.client"
 import { getBlogPostById } from "@/features/blog/repositories/blog-posts.repository"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
-import { HeaderNavigationClient } from "@/components/header-navigation.client"
-import { TopGradient } from "@/components/top-gradient"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { TopGradient } from "@/components/ui/top-gradient"
+
 import "@/features/blog/styles/blog-rich-content.css"
 
 type EditBlogPostPageProps = {

@@ -2,9 +2,9 @@
 
 import { useMutation } from "@tanstack/react-query"
 
-import { authClient } from "@/lib/auth/auth-client"
 import { setMessageReactionApi } from "@/features/ai/chat/api/chats.api"
 import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
+import { authClient } from "@/features/auth/lib/auth-client"
 
 type SetMessageReactionInput = {
   chatId: string

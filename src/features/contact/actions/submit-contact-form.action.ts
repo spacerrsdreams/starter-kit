@@ -2,7 +2,7 @@
 
 import "server-only"
 
-import { sendContactSubmissionEmail } from "@/lib/resend/actions"
+import { sendContactSubmissionEmail } from "@/features/emails/lib/emails.actions"
 import { submitContactFormSchema } from "@/features/contact/schemas/contact-submission.schema"
 import type { ContactFormActionState } from "@/features/contact/types/contact-form-action-state.types"
 

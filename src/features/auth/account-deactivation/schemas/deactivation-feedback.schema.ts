@@ -1,6 +1,6 @@
 import z from "zod"
 
-import { deactivationFeedbackCategories } from "@/features/account-deactivation/constants/deactivation-feedback-category.constants"
+import { deactivationFeedbackCategories } from "@/features/auth/account-deactivation/constants/deactivation-feedback-category.constants"
 
 export const submitDeactivationFeedbackSchema = z.object({
   category: z.enum(deactivationFeedbackCategories),

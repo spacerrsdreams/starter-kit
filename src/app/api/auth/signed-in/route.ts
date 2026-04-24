@@ -2,9 +2,9 @@ import "server-only"
 
 import { NextResponse } from "next/server"
 
-import { auth } from "@/lib/auth/auth"
 import { WebRoutes } from "@/lib/web.routes"
 import { parseSafePostAuthRedirectUrl } from "@/features/auth/auth.utils"
+import { auth } from "@/features/auth/lib/auth"
 
 export async function GET(request: Request) {
   const session = await auth.api.getSession({

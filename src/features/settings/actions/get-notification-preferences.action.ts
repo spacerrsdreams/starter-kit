@@ -4,8 +4,8 @@ import "server-only"
 
 import { headers } from "next/headers"
 
-import { auth } from "@/lib/auth/auth"
-import { getAccountNotificationPreferences } from "@/lib/repositories/account-notification-preferences.repository"
+import { auth } from "@/features/auth/lib/auth"
+import { getAccountNotificationPreferences } from "@/features/settings/repositories/account-notification-preferences.repository"
 
 type GetNotificationPreferencesActionResult =
   | {

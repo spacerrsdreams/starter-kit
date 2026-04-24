@@ -8,9 +8,9 @@ import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-action
 import { listBlogPosts } from "@/features/blog/repositories/blog-posts.repository"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
 import { Footer } from "@/components/footer"
-import { HeaderNavigationClient } from "@/components/header-navigation.client"
-import { TopGradient } from "@/components/top-gradient"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
 import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
+import { TopGradient } from "@/components/ui/top-gradient"
 
 const PAGE_SIZE = 9
 

@@ -3,7 +3,7 @@
 import { ChevronLeft, Menu, X } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
-import { authClient } from "@/lib/auth/auth-client"
+import { authClient } from "@/features/auth/lib/auth-client"
 import { getVisibleSettingsNavItems } from "@/features/settings/constants/settings-nav.constants"
 import type {
   SettingsDialogProps,

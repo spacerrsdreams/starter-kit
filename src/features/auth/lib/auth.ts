@@ -6,9 +6,9 @@ import { nextCookies } from "better-auth/next-js"
 import { admin } from "better-auth/plugins"
 import { headers } from "next/headers"
 
-import { MIN_PASSWORD_LENGTH } from "@/lib/auth/auth.schema"
+import { MIN_PASSWORD_LENGTH } from "@/features/auth/lib/auth.schema"
+import { sendEmailVerificationEmail, sendResetPasswordEmail, sendWelcomeEmail } from "@/features/emails/lib/emails.actions"
 import { prisma } from "@/lib/prisma"
-import { sendEmailVerificationEmail, sendResetPasswordEmail, sendWelcomeEmail } from "@/lib/resend/actions"
 import { WebRoutes } from "@/lib/web.routes"
 
 const ThirtyDays = 60 * 60 * 24 * 30
