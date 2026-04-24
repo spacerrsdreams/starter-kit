@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState, type FormEvent } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -51,6 +52,7 @@ export function EditBlogPostForm({
   initialContentHtml,
   initialImageSrc,
 }: EditBlogPostFormProps) {
+  const router = useRouter()
   const updatePostMutation = useMutateUpdateBlogPost()
   const uploadCoverImageMutation = useMutateUploadBlogCoverImage()
 
@@ -131,7 +133,7 @@ export function EditBlogPostForm({
       })
 
       toast.success("Blog post updated.")
-      window.location.assign(WebRoutes.blogPost(parsed.data.slug))
+      router.push(WebRoutes.blogPost(parsed.data.slug))
     } catch (error) {
       if (error instanceof ApiError) {
         toast.error(error.message)

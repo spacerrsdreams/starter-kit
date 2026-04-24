@@ -26,7 +26,7 @@ export const auth = betterAuth({
   ],
   baseURL: process.env.BETTER_AUTH_URL!,
   trustedOrigins: [process.env.BETTER_AUTH_URL!],
-  allowedOrigins: ["sole-capital-typically.ngrok-free.app"],
+  allowedOrigins: [process.env.NGROK_URL!],
   resetPassword: {
     enabled: true,
   },

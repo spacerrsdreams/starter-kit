@@ -2,7 +2,7 @@
 
 import { AlertCircle, LogOut, Settings, User, UserRoundCheck } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
@@ -16,6 +16,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 
 export function MobileBottomNav() {
   const pathname = usePathname()
+  const router = useRouter()
   const { data: session } = authClient.useSession()
   const authModalContext = useAuthRequiredModal()
   const [isPending, startTransition] = useTransition()
@@ -41,7 +42,7 @@ export function MobileBottomNav() {
   const handleStopImpersonation = () => {
     startTransition(async () => {
       await authClient.admin.stopImpersonating()
-      window.location.assign(WebRoutes.dashboard.path)
+      router.push(WebRoutes.dashboard.path)
     })
   }
 

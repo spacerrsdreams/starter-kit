@@ -15,6 +15,7 @@ type PricingPlanCardProps = {
   isLoading: boolean
   onSelect: () => void
   isFeatured?: boolean
+  badgeLabel?: string
   isLastFeatureMuted?: boolean
 }
 
@@ -28,9 +29,11 @@ export function PricingPlanCard({
   isLoading,
   onSelect,
   isFeatured = false,
+  badgeLabel,
   isLastFeatureMuted = false,
 }: PricingPlanCardProps) {
-  const ctaText = isLoading ? "Opening..." : ctaLabel
+  const ctaText = isLoading ? "Loading..." : ctaLabel
+  const resolvedBadgeLabel = badgeLabel ?? (isFeatured ? "MOST POPULAR" : null)
   const slideTransition = {
     type: "tween" as const,
     duration: 0.85,
@@ -45,9 +48,9 @@ export function PricingPlanCard({
         isFeatured ? "border-2 border-black" : "border"
       )}
     >
-      {isFeatured ? (
+      {resolvedBadgeLabel ? (
         <span className="absolute top-0 right-0 rounded-bl-md bg-primary p-2.5 text-xs! font-medium text-white">
-          MOST POPULAR
+          {resolvedBadgeLabel}
         </span>
       ) : null}
 

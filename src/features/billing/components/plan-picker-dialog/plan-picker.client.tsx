@@ -4,6 +4,7 @@ import { Database } from "lucide-react"
 import { useState } from "react"
 
 import { PricingPlanCard } from "@/features/billing/components/plan-picker-dialog/pricing-plan-card.client"
+import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
 import { Chip } from "@/components/ui/chip"
 import { Switch } from "@/components/ui/switch"
 
@@ -18,10 +19,12 @@ export type PlanPickerProps = {
 
 export function PlanPicker({ isBillingLoading, showMainlabel = true, onSelectInterval }: PlanPickerProps) {
   const [isYearly, setIsYearly] = useState(false)
+  const { data: billingSubscription } = useFetchBillingSubscription()
   const starterPrice = isYearly ? 31 : 39
   const ultimatePrice = isYearly ? 63 : 79
   const billedLabel = isYearly ? "yearly" : "monthly"
   const selectedInterval = isYearly ? "yearly" : "monthly"
+  const isSubscribedToPaidPlan = Boolean(billingSubscription?.isPaid)
 
   return (
     <div className="flex h-full flex-col items-center justify-center">
@@ -66,6 +69,7 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onSelectInt
           isLoading={isBillingLoading}
           onSelect={() => onSelectInterval(selectedInterval)}
           isFeatured
+          badgeLabel={isSubscribedToPaidPlan ? "CURRENT" : undefined}
         />
       </div>
     </div>

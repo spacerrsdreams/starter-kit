@@ -217,14 +217,6 @@ export function ChatDashboardSidebar() {
 
   return (
     <>
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton>
-            <LogoSvg className="text-foreground/80!" />
-            <span className="font-medium">Ask AI</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarMenu>
       <SidebarGroupContent className="flex min-h-0 flex-1 pt-1">
         <SidebarMenu className="min-h-0 flex-1 overflow-y-auto">
           <SidebarMenuItem>
@@ -256,9 +248,7 @@ export function ChatDashboardSidebar() {
                 </SidebarMenuButton>
               </CollapsibleTrigger>
             </SidebarMenuItem>
-            <CollapsibleContent>
-              {recentChats.map(renderChatRow)}
-            </CollapsibleContent>
+            <CollapsibleContent>{recentChats.map(renderChatRow)}</CollapsibleContent>
           </Collapsible>
           {chatsQuery.hasNextPage ? (
             <SidebarMenuItem className="px-1 pt-2">

@@ -5,6 +5,7 @@ import { SiteConfig } from "@/lib/site.config"
 import { WebRoutes } from "@/lib/web.routes"
 import { Chat } from "@/features/ai/chat/components/chat"
 import { ChatSessionSkeleton } from "@/features/ai/chat/components/chat-session/chat-session-skeleton"
+import { BillingCheckoutStatusDialog } from "@/features/billing/components/billing-checkout-status-dialog.client"
 import { SeoPageJsonLd } from "@/components/seo/seo-page-json-ld"
 
 const title = "Ask AI"
@@ -48,6 +49,7 @@ export default function DashboardPage() {
           </div>
         }
       >
+        <BillingCheckoutStatusDialog />
         <Chat />
       </Suspense>
     </>

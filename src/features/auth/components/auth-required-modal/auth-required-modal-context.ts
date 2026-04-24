@@ -3,7 +3,7 @@
 import { createContext, useContext, type ReactNode } from "react"
 
 export type AuthRequiredModalContextValue = {
-  openAuthModal: () => void
+  openAuthModal: (options?: { redirectPath?: string }) => void
 }
 
 export type AuthRequiredModalProviderProps = {

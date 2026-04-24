@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -18,6 +19,7 @@ type AdminUsersTableProps = {
 }
 
 export function AdminUsersTable({ currentUserId }: AdminUsersTableProps) {
+  const router = useRouter()
   const [editingUser, setEditingUser] = useState<AdminUserListItem | null>(null)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const usersQuery = useFetchAdminUsers()
@@ -59,7 +61,7 @@ export function AdminUsersTable({ currentUserId }: AdminUsersTableProps) {
     try {
       await impersonateUserMutation.mutateAsync(user.id)
       toast.success("Impersonation started.")
-      window.location.assign("/dashboard")
+      router.push("/dashboard")
     } catch {
       toast.error("Failed to impersonate user.")
     }

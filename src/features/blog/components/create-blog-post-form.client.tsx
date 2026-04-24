@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState, type FormEvent } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -35,6 +36,7 @@ function normalizeSlug(value: string) {
 type FormErrors = Partial<Record<"title" | "slug" | "preview" | "seoKeywords" | "coverImage" | "contentHtml", string>>
 
 export function CreateBlogPostForm() {
+  const router = useRouter()
   const createPostMutation = useMutateCreateBlogPost()
   const uploadCoverImageMutation = useMutateUploadBlogCoverImage()
 
@@ -116,7 +118,7 @@ export function CreateBlogPostForm() {
       })
 
       toast.success("Blog post created.")
-      window.location.assign(WebRoutes.blog.path)
+      router.push(WebRoutes.blog.path)
     } catch (error) {
       if (error instanceof ApiError) {
         toast.error(error.message)

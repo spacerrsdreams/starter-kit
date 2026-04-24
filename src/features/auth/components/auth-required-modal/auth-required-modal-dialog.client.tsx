@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 export type AuthRequiredModalDialogProps = {
   open: boolean
   activeTab: "signin" | "signup" | "forgot"
+  callbackURL: string
   onOpenChange: (open: boolean) => void
   onTabChange: (tab: "signin" | "signup" | "forgot") => void
   onSignInSuccess: () => void

@@ -1,24 +1,18 @@
 "use client"
 
 import { motion } from "motion/react"
+import type { ComponentProps } from "react"
 
-import { authClient } from "@/lib/auth/auth-client"
-import { WebRoutes } from "@/lib/web.routes"
-import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 type WaveGlowButtonProps = {
   label: string
-}
+} & ComponentProps<"button">
 
 const waveGradient =
   "linear-gradient(90deg, rgb(33, 204, 238) 0%, rgb(20, 112, 239) 33.2763%, rgb(105, 39, 218) 68.4697%, rgb(242, 61, 148) 100%)"
 
-export function WaveGlowButton({ label }: WaveGlowButtonProps) {
-  const { data: session, isPending } = authClient.useSession()
-  const { openAuthModal } = useAuthRequiredModal()
-  const dashboardHref = WebRoutes.dashboard.path
-
+export function WaveGlowButton({ label, type = "button", className, ...buttonProps }: WaveGlowButtonProps) {
   const slideTransition = {
     type: "tween" as const,
     duration: 2.85,
@@ -28,16 +22,12 @@ export function WaveGlowButton({ label }: WaveGlowButtonProps) {
 
   return (
     <button
-      type="button"
-      onClick={() => {
-        if (session?.user) {
-          window.location.href = dashboardHref
-        } else {
-          openAuthModal()
-        }
-      }}
-      disabled={isPending}
-      className="group relative inline-flex cursor-pointer flex-col items-center justify-center gap-2 overflow-visible rounded-[100px] bg-[linear-gradient(90deg,rgb(33,204,238)_0%,rgb(20,112,239)_33.2763%,rgb(105,39,218)_68.4697%,rgb(242,61,148)_100%)] pb-px"
+      type={type}
+      {...buttonProps}
+      className={cn(
+        "group relative inline-flex cursor-pointer flex-col items-center justify-center gap-2 overflow-visible rounded-[100px] bg-[linear-gradient(90deg,rgb(33,204,238)_0%,rgb(20,112,239)_33.2763%,rgb(105,39,218)_68.4697%,rgb(242,61,148)_100%)] pb-px",
+        className
+      )}
     >
       <span aria-hidden className="pointer-events-none absolute right-0 -bottom-2 left-0">
         <motion.span

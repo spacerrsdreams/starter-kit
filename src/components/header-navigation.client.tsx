@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { authClient } from "@/lib/auth/auth-client"
@@ -17,6 +18,7 @@ const navLinks = [{ label: "Pricing", href: WebRoutes.pricing.path }] as const
 const HEADER_HIDE_OFFSET = 24
 
 export function HeaderNavigationClient() {
+  const router = useRouter()
   const [isVisible, setIsVisible] = useState(true)
   const { data: session } = authClient.useSession()
   const { openAuthModal } = useAuthRequiredModal()
@@ -69,7 +71,7 @@ export function HeaderNavigationClient() {
                       href={link.href}
                       className="inline-flex h-9 items-center justify-center rounded-lg px-2.5 py-1.5 text-sm font-semibold text-foreground/90 transition-all hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1"
                     >
-                      A{link.label}
+                      {link.label}
                     </Link>
                   </li>
                 ))}
@@ -82,7 +84,7 @@ export function HeaderNavigationClient() {
                 featureStylesEnabled
                 onClick={() => {
                   if (session?.user) {
-                    window.location.href = WebRoutes.dashboard.path
+                    router.push(WebRoutes.dashboard.path)
                   } else {
                     openAuthModal()
                   }

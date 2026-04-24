@@ -8,7 +8,7 @@ CREATE TYPE "MessageReaction" AS ENUM ('like', 'unlike');
 CREATE TYPE "DeactivationFeedbackCategory" AS ENUM ('MISSING_FEATURES', 'TOO_EXPENSIVE', 'TOO_COMPLEX', 'BUGS_OR_PERFORMANCE', 'PRIVACY_CONCERNS', 'SWITCHED_TO_ALTERNATIVE', 'OTHER');
 
 -- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('user', 'admin');
+CREATE TYPE "UserRole" AS ENUM ('user', 'admin', 'moderator');
 
 -- CreateTable
 CREATE TABLE "chat" (
@@ -49,6 +49,22 @@ CREATE TABLE "billing_subscription" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "billing_subscription_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "blog_post" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "preview" TEXT NOT NULL,
+    "seoKeywords" TEXT[],
+    "imageSrc" TEXT NOT NULL,
+    "content" JSONB NOT NULL,
+    "authorId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "blog_post_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -151,6 +167,15 @@ CREATE INDEX "billing_subscription_stripeSubscriptionId_idx" ON "billing_subscri
 CREATE INDEX "billing_subscription_stripeCustomerId_stripeStatus_idx" ON "billing_subscription"("stripeCustomerId", "stripeStatus");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "blog_post_slug_key" ON "blog_post"("slug");
+
+-- CreateIndex
+CREATE INDEX "blog_post_createdAt_idx" ON "blog_post"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "blog_post_authorId_idx" ON "blog_post"("authorId");
+
+-- CreateIndex
 CREATE INDEX "user_deactivatedAt_idx" ON "user"("deactivatedAt");
 
 -- CreateIndex
@@ -179,6 +204,9 @@ ALTER TABLE "message" ADD CONSTRAINT "message_chatId_fkey" FOREIGN KEY ("chatId"
 
 -- AddForeignKey
 ALTER TABLE "billing_subscription" ADD CONSTRAINT "billing_subscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "blog_post" ADD CONSTRAINT "blog_post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;

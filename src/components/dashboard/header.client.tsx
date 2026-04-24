@@ -46,7 +46,7 @@ export function DashboardHeader() {
         await authClient.admin.stopImpersonating()
         await refetchSession()
         router.refresh()
-        window.location.assign(WebRoutes.admin.path)
+        router.push(WebRoutes.admin.path)
       } catch {
         // no-op
       }

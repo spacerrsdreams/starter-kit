@@ -1,6 +1,6 @@
 import { BlurWaveTextAnimation } from "@/components/ui/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/ui/bottom-up-fade.animation"
-import { WaveGlowButton } from "@/components/ui/wave-glow-button"
+import { GetStartedCtaButton } from "@/components/marketing/get-started-cta-button.client"
 
 export function Hero() {
   return (
@@ -20,7 +20,7 @@ export function Hero() {
             The smarter way to manage sales starts with using tools that streamline every step of the process
           </p>
           <div className="mt-10">
-            <WaveGlowButton label="Get Started Now" />
+            <GetStartedCtaButton label="Get Started Now" />
           </div>
         </div>
       </section>

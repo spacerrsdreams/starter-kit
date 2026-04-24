@@ -64,7 +64,7 @@ export async function POST(request: Request) {
     customer: customerId,
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${appBaseUrl}${WebRoutes.dashboard.path}?billing=success`,
-    cancel_url: `${appBaseUrl}/ai?billing=cancelled`,
+    cancel_url: `${appBaseUrl}${WebRoutes.dashboard.path}?billing=failed`,
     client_reference_id: userId,
     metadata: {
       userId,
