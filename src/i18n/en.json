@@ -27,15 +27,15 @@
   },
   "home": {
     "hero": {
-      "badge": "Join +1000 scaling business",
-      "title": "The Smartest Way to Bring Best ROI for Sales",
-      "description": "The smarter way to manage sales starts with using tools that streamline every step of the process",
-      "cta": "Get Started Now"
+      "badge": "Launch your SaaS today",
+      "title": "The only starter kit you'll ever need",
+      "description": "Skip months of boilerplate. Auth, AI, billing, blog, admin — all production-ready. Launch your SaaS in hours, not weeks.",
+      "cta": "Get the kit — $99"
     },
     "header": {
       "allPages": "All Pages",
       "pricing": "Pricing",
-      "cta": "Get Started",
+      "cta": "Get the kit",
       "mobileOpenMenu": "Open menu",
       "mobileCloseMenu": "Close menu",
       "menu": {
@@ -48,33 +48,33 @@
       }
     },
     "trustedMarquee": {
-      "title": "Trusted by 17,000+ founders & business owners"
+      "title": "Trusted by founders who value their time"
     },
     "whyChoose": {
-      "chip": "Power Pack",
-      "title": "Why businesses choose {name}",
-      "description": "Businesses choose {name} because it simplifies the complexity of sales management.",
+      "chip": "Why us",
+      "title": "Every hard decision already made for you",
+      "description": "Stop spending weeks on boilerplate. {name} ships with every best practice baked in — so you can focus on what makes your product unique.",
       "tasksCardTitle": "Today's Task",
       "trafficCardTitle": "Traffic",
-      "salesPreviewAlt": "Sales overview statistics",
+      "salesPreviewAlt": "Dashboard overview",
       "cards": {
         "taskTracking": {
-          "title": "Task & Activity Tracking",
-          "description": "Assign tasks, schedule meetings and track team activities in one clean workflow."
+          "title": "Built-in AI assistant",
+          "description": "Streaming AI chat and a floating widget — ready to use out of the box, no configuration needed."
         },
         "realTimeVisits": {
-          "title": "Real-Time Visits",
-          "description": "Generate detailed reports on sales performance and team productivity instantly."
+          "title": "Analytics from day one",
+          "description": "PostHog is pre-wired. Understand your users from the moment you launch."
         },
         "reportingAnalytics": {
-          "title": "Reporting & Analytics",
-          "description": "Enable seamless communication and file sharing among sales reps."
+          "title": "Admin panel included",
+          "description": "Manage users, impersonate accounts, and control your app — no extra setup required."
         }
       },
       "taskRows": {
-        "designingTeamMeeting": "Designing team meeting",
-        "webflowTeam": "Webflow Team",
-        "framerTeam": "Framer Team"
+        "designingTeamMeeting": "Auth flow ready",
+        "webflowTeam": "Stripe billing wired",
+        "framerTeam": "SEO foundations set"
       },
       "previewLegend": {
         "google": "Google",
@@ -83,154 +83,154 @@
       }
     },
     "keyTools": {
-      "chip": "Key Tools",
-      "title": "AI that moves sales forward & faster",
-      "previewHandle": "@Spacerr",
+      "chip": "Key features",
+      "title": "Everything you need. Nothing you don't.",
+      "previewHandle": "@{name}",
       "sections": {
         "salesAutomation": {
-          "navTitle": "Sales Automation",
-          "title": "Sales Automation",
-          "description": "Automate repetitive tasks like follow-ups, reminders, and data entry to save time and increase efficiency."
+          "navTitle": "AI chat",
+          "title": "AI chat & floating widget",
+          "description": "Streaming AI responses, persistent chat history, message reactions, and a global floating widget — fully built and ready to customize for your product."
         },
         "dealTracking": {
-          "navTitle": "Deal Tracking",
-          "title": "Deal Tracking",
-          "description": "Track every opportunity stage with a clean view of value, probability, and progress in one place."
+          "navTitle": "Auth & billing",
+          "title": "Auth & billing out of the box",
+          "description": "Email and Google OAuth sign-in, session management, Stripe checkout, webhooks, and customer portal — all wired up and production-ready."
         },
         "crmIntegration": {
-          "navTitle": "CRM Integration",
-          "title": "CRM Integration",
-          "description": "Connect your CRM and keep customer context synced across sales workflows without extra manual updates."
+          "navTitle": "Admin & blog",
+          "title": "Admin panel and blog platform",
+          "description": "Manage users, impersonate accounts, and publish blog posts — with role-based access control already in place."
         }
       }
     },
     "coreFeatures": {
-      "chip": "Core Features",
-      "title": "What's inside Salix?",
-      "description": "Businesses choose Salix because it simplifies the complexity of sales management.",
+      "chip": "What's inside",
+      "title": "What's inside {name}?",
+      "description": "Every feature you'd spend weeks building — already done. Just customize and ship.",
       "items": {
         "salesGoalTracking": {
-          "title": "Sales Goal Tracking",
-          "description": "Sales Goal Tracking helps teams stay aligned, focused"
+          "title": "Authentication",
+          "description": "Email, password and Google OAuth — secure, session-based, production-ready."
         },
         "priceManagement": {
-          "title": "Price Management",
-          "description": "Price management helps adjust and control pricing strategies"
+          "title": "Stripe billing",
+          "description": "Checkout, webhooks, customer portal and subscription sync — all handled."
         },
         "salesGamification": {
-          "title": "Sales Gamification",
-          "description": "Sales gamification is the use of game-like elements"
+          "title": "AI assistant",
+          "description": "Streaming chat, floating widget, history and reactions built in."
         },
         "smartForecasting": {
-          "title": "Smart Forecasting",
-          "description": "Smart Forecasting uses real-time data and AI to predict future"
+          "title": "SEO foundations",
+          "description": "Metadata, JSON-LD, sitemap, robots.txt and OG images — all best practices set."
         },
         "salesWorkflows": {
-          "title": "Sales Workflows",
-          "description": "Sales workflows are structured processes that guide your"
+          "title": "Admin panel",
+          "description": "User management, roles, impersonation and moderation out of the box."
         },
         "accessControl": {
-          "title": "Access Control",
-          "description": "Access control ensures that only the right people can view"
+          "title": "Blog platform",
+          "description": "Full blog backend with protected write access for admins and moderators."
         }
       }
     },
     "analytics": {
-      "chip": "Growth Gear",
-      "title": "Advanced analytics & reporting",
-      "description": "Businesses choose Salix because it simplifies the complexity of sales management.",
-      "previewHandle": "@Spacerr",
+      "chip": "Modern stack",
+      "title": "Built with the best 2026 stack",
+      "description": "Next.js App Router, Prisma, Better Auth, Vercel AI SDK, TanStack Query, Zustand, Tailwind, shadcn/ui — every choice is intentional, modern, and production-grade.",
+      "previewHandle": "@{name}",
       "pills": {
-        "integratedPayment": "Integrated Payment",
-        "authorization": "Authorization",
-        "justReadyAi": "Just ready AI"
+        "integratedPayment": "Stripe payments",
+        "authorization": "Better Auth",
+        "justReadyAi": "AI ready"
       }
     },
     "customerReviews": {
-      "chip": "Customer Reviews",
-      "title": "Trusted by 2500+ growing companies worldwide",
+      "chip": "Founders love it",
+      "title": "Built by a developer. Trusted by founders.",
       "stats": {
-        "adminWorkReduced": "Admin work reduced",
-        "revenueBoostPerYear": "Revenue boost per year",
-        "repProductivity": "Rep productivity"
+        "adminWorkReduced": "Hours of boilerplate saved",
+        "revenueBoostPerYear": "Features out of the box",
+        "repProductivity": "Cost to get started"
       },
       "quotes": {
-        "quoteOneText": "\"Salix cut our admin work by more than half. Our team now spends more time closing deals than managing spreadsheets.\"",
-        "quoteOneAuthor": "Shon Taite",
-        "quoteOneRole": "Head of Sales, Grainor",
-        "quoteTwoText": "\"Salix isn't just software - it feels like an extension of our sales team. We're more organized, focused, and efficient.\"",
-        "quoteTwoAuthor": "Mark Demon",
-        "quoteTwoRole": "Co-founder at RevBoost"
+        "quoteOneText": "\"{name} saved me weeks of setup. Auth, billing, AI — everything just worked. I shipped my product in days instead of months.\"",
+        "quoteOneAuthor": "Early access founder",
+        "quoteOneRole": "SaaS builder",
+        "quoteTwoText": "\"The agent rules and SEO foundations alone are worth the price. This kit thinks of everything so I don't have to.\"",
+        "quoteTwoAuthor": "Indie hacker",
+        "quoteTwoRole": "Solo founder"
       }
     },
     "pricing": {
       "chip": "Pricing",
-      "title": "Choose the Perfect Plan",
+      "title": "One price. Yours forever.",
       "monthlyTitle": "Monthly",
       "yearlyTitle": "Yearly",
-      "subtitle": "Perfect for individuals and small teams just getting started",
+      "subtitle": "Pay once. Get lifetime access and all future updates.",
       "billedMonthly": "monthly",
       "billedYearly": "yearly",
       "perMonthPerUser": "/mo/user",
       "billedPrefix": "billed",
-      "cta": "Get Started",
+      "cta": "Get the kit",
       "loading": "Loading...",
       "currentBadge": "CURRENT",
-      "mostPopularBadge": "MOST POPULAR",
-      "whatDoYouGet": "What do you get:",
+      "mostPopularBadge": "BEST VALUE",
+      "whatDoYouGet": "Everything included:",
       "features": {
-        "essentialTools": "Essential tools to get you up",
-        "upToFiveProjects": "Up to 5 projects & reporting",
-        "unlimitedProjects": "Unlimited projects & reporting",
-        "emailSupport": "Email support"
+        "essentialTools": "Full source code — own it forever",
+        "upToFiveProjects": "Lifetime updates via members area",
+        "unlimitedProjects": "Use on unlimited projects",
+        "emailSupport": "Community support"
       },
       "redirectingToCheckout": "Redirecting to checkout..."
     },
     "faq": {
       "chip": "FAQ",
-      "title": "Frequently Asked Questions",
-      "description": "Get answers to common questions here",
+      "title": "Frequently asked questions",
+      "description": "Everything you need to know before you buy",
       "items": {
         "dataSafety": {
-          "question": "Is my data safe on Salix?",
-          "answer": "Yes. We use industry-grade encryption, secure servers, and role-based access controls to protect your data at all times."
+          "question": "What do I actually get when I buy?",
+          "answer": "You get the full source code as a ZIP file, lifetime access to all future updates via your members area, and a production-ready Next.js SaaS with auth, AI, billing, blog, admin, SEO and more already built."
         },
         "gettingStarted": {
-          "question": "How do I get started?",
-          "answer": "Sign up for a trial, connect your sales workspace, and follow the onboarding steps to go live in minutes."
+          "question": "How long does it take to get started?",
+          "answer": "Most developers have a running local environment within an hour. You fill in your environment variables, run two commands to set up the database, and you're live."
         },
         "crmCompatibility": {
-          "question": "Does it work with my CRM?",
-          "answer": "Yes, Salix supports common CRM workflows and integrations to keep your pipeline and customer data in sync."
+          "question": "What does it cost to run per month?",
+          "answer": "Effectively $0 to start. Vercel, Neon, Resend, and PostHog all have generous free tiers. Stripe only charges a percentage on actual revenue. You only pay services when you're making money."
         },
         "salesGoals": {
-          "question": "Can I track sales goals?",
-          "answer": "Absolutely. You can set targets, monitor performance in real time, and review progress across teams and reps."
+          "question": "Can I use this for client projects?",
+          "answer": "Yes. Your license covers unlimited personal and client projects. The only restriction is that you cannot resell or redistribute the source code itself."
         }
       }
     },
     "freeTrial": {
-      "title": "Try {name} Now",
-      "description": "Start taking control of your business today",
-      "cta": "Get Started",
-      "dashboardPreviewAlt": "{name} Dashboard preview"
+      "title": "Ready to ship your SaaS?",
+      "description": "Stop building boilerplate. Start building your product.",
+      "cta": "Get the kit — $99",
+      "dashboardPreviewAlt": "{name} dashboard preview"
     },
     "footer": {
-      "description": "{name} helps teams work faster with practical AI workflows and a modern dashboard.",
+      "description": "{name} is a production-ready SaaS starter kit. Ship faster with auth, AI, billing, blog and admin — all included.",
       "sections": {
         "info": "Info",
         "resources": "Resources",
         "company": "Company"
       },
       "links": {
-        "aiPage": "AI Page",
+        "aiPage": "AI Chat",
         "blog": "Blog",
         "pricing": "Pricing",
-        "contactUs": "Contact Us",
+        "contactUs": "Contact",
         "termsAndConditions": "Terms and Conditions",
         "privacyPolicy": "Privacy Policy"
       },
-      "copyright": "© {year} {name}, Inc. All rights reserved."
+      "copyright": "© {year} {name}. All rights reserved."
     }
   }
 }
