@@ -6,6 +6,7 @@ import {
 import type { DeactivationFeedbackPageProps } from "@/features/auth/account-deactivation/types/deactivation-feedback-page.types"
 import { Button } from "@/components/ui/button"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { GlassPanel } from "@/components/ui/glass-panel"
 import { Textarea } from "@/components/ui/textarea"
 
 const texts = {
@@ -22,21 +23,21 @@ const texts = {
 
 export function DeactivationFeedbackPage({ hasError }: DeactivationFeedbackPageProps) {
   return (
-    <div className="w-full max-w-xl rounded-2xl border bg-background p-6 shadow-sm">
-      <div className="mb-5 space-y-1.5 text-center">
-        <h1 className="flex items-center justify-center gap-2 text-xl font-medium">{texts.title}</h1>
+    <GlassPanel className="w-full max-w-xl" innerClassName="p-6 sm:p-8">
+      <div className="mb-6 space-y-2 text-center">
+        <h1 className="text-2xl font-medium tracking-[-1px] text-foreground">{texts.title}</h1>
         <p className="text-sm text-muted-foreground">{texts.description}</p>
       </div>
-      <form action={submitDeactivationFeedbackAction} className="space-y-4">
+      <form action={submitDeactivationFeedbackAction} className="space-y-5">
         <FieldGroup>
-          <Field>
+          <Field className="space-y-2">
             <FieldLabel htmlFor="category">{texts.categoryLabel}</FieldLabel>
             <select
               id="category"
               name="category"
               required
               defaultValue=""
-              className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+              className="flex h-11 w-full rounded-xl border border-input bg-background px-4 py-2 text-sm shadow-xs transition outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
             >
               <option value="" disabled>
                 {texts.categoryPlaceholder}
@@ -48,7 +49,7 @@ export function DeactivationFeedbackPage({ hasError }: DeactivationFeedbackPageP
               ))}
             </select>
           </Field>
-          <Field>
+          <Field className="space-y-2">
             <FieldLabel htmlFor="reason">{texts.reasonLabel}</FieldLabel>
             <Textarea
               id="reason"
@@ -57,16 +58,20 @@ export function DeactivationFeedbackPage({ hasError }: DeactivationFeedbackPageP
               maxLength={2000}
               required
               placeholder={texts.reasonPlaceholder}
-              className="min-h-32"
+              className="min-h-36 resize-none rounded-xl px-4 py-3"
             />
             <FieldDescription>{texts.reasonHint}</FieldDescription>
           </Field>
           {hasError ? <p className="text-sm text-destructive">{texts.validationError}</p> : null}
-          <Button type="submit" className="w-full">
+          <Button
+            type="submit"
+            featureStylesEnabled
+            className="h-11 w-full rounded-full text-sm font-medium disabled:cursor-not-allowed disabled:opacity-70"
+          >
             {texts.submit}
           </Button>
         </FieldGroup>
       </form>
-    </div>
+    </GlassPanel>
   )
 }
