@@ -5,6 +5,8 @@ import posthog from "posthog-js"
 import type { ReactNode } from "react"
 import { useEffect } from "react"
 
+import { WebRoutes, isPathWithinRoute } from "@/lib/web.routes"
+
 type PostHogProviderProps = {
   children: ReactNode
 }
@@ -14,7 +16,7 @@ const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY
 const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST
 
 function isAdminPath(pathname: string): boolean {
-  return pathname === "/admin" || pathname.startsWith("/admin/")
+  return isPathWithinRoute(pathname, WebRoutes.admin.path)
 }
 
 export function PostHogProvider({ children }: PostHogProviderProps) {

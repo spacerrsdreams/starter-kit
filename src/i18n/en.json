@@ -1,10 +1,236 @@
 {
+  "routes": {
+    "home": "Home",
+    "search": "Search",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "chat": "Chat",
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "blogPost": "Blog Post",
+    "editBlogPost": "Edit Blog Post",
+    "createBlogPost": "Create Blog Post",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "resetPassword": "Reset Password",
+    "contact": "Contact",
+    "feedback": "Feedback",
+    "verifyEmail": "Verify Email",
+    "emailPreferences": "Email Preferences",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  "dashboard": {
+    "newChat": "New Chat",
+    "switchingBack": "Switching back...",
+    "stopImpersonation": "Stop impersonation"
+  },
   "home": {
     "hero": {
       "badge": "Join +1000 scaling business",
       "title": "The Smartest Way to Bring Best ROI for Sales",
       "description": "The smarter way to manage sales starts with using tools that streamline every step of the process",
       "cta": "Get Started Now"
+    },
+    "header": {
+      "allPages": "All Pages",
+      "pricing": "Pricing",
+      "cta": "Get Started",
+      "mobileOpenMenu": "Open menu",
+      "mobileCloseMenu": "Close menu",
+      "menu": {
+        "dashboard": "Dashboard",
+        "marketing": "Marketing",
+        "blog": "Blog",
+        "contact": "Contact",
+        "termsAndConditions": "Terms and Conditions",
+        "privacyPolicy": "Privacy Policy"
+      }
+    },
+    "trustedMarquee": {
+      "title": "Trusted by 17,000+ founders & business owners"
+    },
+    "whyChoose": {
+      "chip": "Power Pack",
+      "title": "Why businesses choose {name}",
+      "description": "Businesses choose {name} because it simplifies the complexity of sales management.",
+      "tasksCardTitle": "Today's Task",
+      "trafficCardTitle": "Traffic",
+      "salesPreviewAlt": "Sales overview statistics",
+      "cards": {
+        "taskTracking": {
+          "title": "Task & Activity Tracking",
+          "description": "Assign tasks, schedule meetings and track team activities in one clean workflow."
+        },
+        "realTimeVisits": {
+          "title": "Real-Time Visits",
+          "description": "Generate detailed reports on sales performance and team productivity instantly."
+        },
+        "reportingAnalytics": {
+          "title": "Reporting & Analytics",
+          "description": "Enable seamless communication and file sharing among sales reps."
+        }
+      },
+      "taskRows": {
+        "designingTeamMeeting": "Designing team meeting",
+        "webflowTeam": "Webflow Team",
+        "framerTeam": "Framer Team"
+      },
+      "previewLegend": {
+        "google": "Google",
+        "facebook": "Facebook",
+        "x": "X"
+      }
+    },
+    "keyTools": {
+      "chip": "Key Tools",
+      "title": "AI that moves sales forward & faster",
+      "previewHandle": "@Spacerr",
+      "sections": {
+        "salesAutomation": {
+          "navTitle": "Sales Automation",
+          "title": "Sales Automation",
+          "description": "Automate repetitive tasks like follow-ups, reminders, and data entry to save time and increase efficiency."
+        },
+        "dealTracking": {
+          "navTitle": "Deal Tracking",
+          "title": "Deal Tracking",
+          "description": "Track every opportunity stage with a clean view of value, probability, and progress in one place."
+        },
+        "crmIntegration": {
+          "navTitle": "CRM Integration",
+          "title": "CRM Integration",
+          "description": "Connect your CRM and keep customer context synced across sales workflows without extra manual updates."
+        }
+      }
+    },
+    "coreFeatures": {
+      "chip": "Core Features",
+      "title": "What's inside Salix?",
+      "description": "Businesses choose Salix because it simplifies the complexity of sales management.",
+      "items": {
+        "salesGoalTracking": {
+          "title": "Sales Goal Tracking",
+          "description": "Sales Goal Tracking helps teams stay aligned, focused"
+        },
+        "priceManagement": {
+          "title": "Price Management",
+          "description": "Price management helps adjust and control pricing strategies"
+        },
+        "salesGamification": {
+          "title": "Sales Gamification",
+          "description": "Sales gamification is the use of game-like elements"
+        },
+        "smartForecasting": {
+          "title": "Smart Forecasting",
+          "description": "Smart Forecasting uses real-time data and AI to predict future"
+        },
+        "salesWorkflows": {
+          "title": "Sales Workflows",
+          "description": "Sales workflows are structured processes that guide your"
+        },
+        "accessControl": {
+          "title": "Access Control",
+          "description": "Access control ensures that only the right people can view"
+        }
+      }
+    },
+    "analytics": {
+      "chip": "Growth Gear",
+      "title": "Advanced analytics & reporting",
+      "description": "Businesses choose Salix because it simplifies the complexity of sales management.",
+      "previewHandle": "@Spacerr",
+      "pills": {
+        "integratedPayment": "Integrated Payment",
+        "authorization": "Authorization",
+        "justReadyAi": "Just ready AI"
+      }
+    },
+    "customerReviews": {
+      "chip": "Customer Reviews",
+      "title": "Trusted by 2500+ growing companies worldwide",
+      "stats": {
+        "adminWorkReduced": "Admin work reduced",
+        "revenueBoostPerYear": "Revenue boost per year",
+        "repProductivity": "Rep productivity"
+      },
+      "quotes": {
+        "quoteOneText": "\"Salix cut our admin work by more than half. Our team now spends more time closing deals than managing spreadsheets.\"",
+        "quoteOneAuthor": "Shon Taite",
+        "quoteOneRole": "Head of Sales, Grainor",
+        "quoteTwoText": "\"Salix isn't just software - it feels like an extension of our sales team. We're more organized, focused, and efficient.\"",
+        "quoteTwoAuthor": "Mark Demon",
+        "quoteTwoRole": "Co-founder at RevBoost"
+      }
+    },
+    "pricing": {
+      "chip": "Pricing",
+      "title": "Choose the Perfect Plan",
+      "monthlyTitle": "Monthly",
+      "yearlyTitle": "Yearly",
+      "subtitle": "Perfect for individuals and small teams just getting started",
+      "billedMonthly": "monthly",
+      "billedYearly": "yearly",
+      "perMonthPerUser": "/mo/user",
+      "billedPrefix": "billed",
+      "cta": "Get Started",
+      "loading": "Loading...",
+      "currentBadge": "CURRENT",
+      "mostPopularBadge": "MOST POPULAR",
+      "whatDoYouGet": "What do you get:",
+      "features": {
+        "essentialTools": "Essential tools to get you up",
+        "upToFiveProjects": "Up to 5 projects & reporting",
+        "unlimitedProjects": "Unlimited projects & reporting",
+        "emailSupport": "Email support"
+      },
+      "redirectingToCheckout": "Redirecting to checkout..."
+    },
+    "faq": {
+      "chip": "FAQ",
+      "title": "Frequently Asked Questions",
+      "description": "Get answers to common questions here",
+      "items": {
+        "dataSafety": {
+          "question": "Is my data safe on Salix?",
+          "answer": "Yes. We use industry-grade encryption, secure servers, and role-based access controls to protect your data at all times."
+        },
+        "gettingStarted": {
+          "question": "How do I get started?",
+          "answer": "Sign up for a trial, connect your sales workspace, and follow the onboarding steps to go live in minutes."
+        },
+        "crmCompatibility": {
+          "question": "Does it work with my CRM?",
+          "answer": "Yes, Salix supports common CRM workflows and integrations to keep your pipeline and customer data in sync."
+        },
+        "salesGoals": {
+          "question": "Can I track sales goals?",
+          "answer": "Absolutely. You can set targets, monitor performance in real time, and review progress across teams and reps."
+        }
+      }
+    },
+    "freeTrial": {
+      "title": "Try {name} Now",
+      "description": "Start taking control of your business today",
+      "cta": "Get Started",
+      "dashboardPreviewAlt": "{name} Dashboard preview"
+    },
+    "footer": {
+      "description": "{name} helps teams work faster with practical AI workflows and a modern dashboard.",
+      "sections": {
+        "info": "Info",
+        "resources": "Resources",
+        "company": "Company"
+      },
+      "links": {
+        "aiPage": "AI Page",
+        "blog": "Blog",
+        "pricing": "Pricing",
+        "contactUs": "Contact Us",
+        "termsAndConditions": "Terms and Conditions",
+        "privacyPolicy": "Privacy Policy"
+      },
+      "copyright": "© {year} {name}, Inc. All rights reserved."
     }
   }
 }

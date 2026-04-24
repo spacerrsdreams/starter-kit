@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   description,
   alternates: {
     canonical: WebRoutes.createBlogPost.withBaseUrl(),
+    languages: {
+      en: WebRoutes.createBlogPost.withBaseUrl(),
+      "x-default": WebRoutes.createBlogPost.withBaseUrl(),
+    },
   },
   robots: {
     index: false,

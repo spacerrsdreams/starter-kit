@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "motion/react"
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 import { useRef } from "react"
 
 import { SiteConfig } from "@/lib/site.config"
@@ -9,6 +10,7 @@ import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animat
 import { useIsMobile } from "@/hooks/use-mobile"
 
 export function DashboardPreviewClient() {
+  const t = useTranslations("home.freeTrial")
   const targetRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
   const { scrollYProgress } = useScroll({
@@ -29,7 +31,7 @@ export function DashboardPreviewClient() {
             <div className="relative aspect-849/510 overflow-hidden rounded-sm border sm:rounded-md">
               <Image
                 src="/assets/dashboard.webp"
-                alt={`${SiteConfig.name} Dashboard preview`}
+                alt={t("dashboardPreviewAlt", { name: SiteConfig.name })}
                 fill
                 sizes="(min-width: 1024px) 960px, 96vw"
                 priority

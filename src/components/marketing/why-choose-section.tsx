@@ -1,24 +1,10 @@
 import { Rocket } from "lucide-react"
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 
 import { SiteConfig } from "@/lib/site.config"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
-
-const whyChooseCards = [
-  {
-    title: "Task & Activity Tracking",
-    description: "Assign tasks, schedule meetings and track team activities in one clean workflow.",
-  },
-  {
-    title: "Real-Time Visits",
-    description: "Generate detailed reports on sales performance and team productivity instantly.",
-  },
-  {
-    title: "Reporting & Analytics",
-    description: "Enable seamless communication and file sharing among sales reps.",
-  },
-] as const
 
 const previewChartBars = [
   { width: "w-[64%]", color: "bg-emerald-500", label: "40%" },
@@ -26,22 +12,20 @@ const previewChartBars = [
   { width: "w-[50%]", color: "bg-primary", label: "20%" },
 ] as const
 
-const previewLegend = [
-  { label: "Google", color: "bg-emerald-500" },
-  { label: "Facebook", color: "bg-accent-1" },
-  { label: "X", color: "bg-primary" },
-] as const
+type TaskRow = {
+  title: string
+  time: string
+}
 
-const taskPreviewRows = [
-  { title: "Designing team meeting", time: "09AM - 10AM" },
-  { title: "Webflow Team", time: "08AM - 11AM" },
-  { title: "Framer Team", time: "11AM - 12AM" },
-] as const
+type PreviewLegend = {
+  label: string
+  color: string
+}
 
-function TaskPreviewCard() {
+function TaskPreviewCard({ taskPreviewRows, title }: { taskPreviewRows: readonly TaskRow[]; title: string }) {
   return (
     <div className="h-full overflow-hidden rounded-lg border border-border/70 bg-secondary/80 p-4">
-      <div className="mb-6 text-sm font-medium text-foreground/80">Today&apos;s Task</div>
+      <div className="mb-6 text-sm font-medium text-foreground/80">{title}</div>
       <div className="space-y-3">
         {taskPreviewRows.map((row) => (
           <div key={row.title} className="rounded-sm border border-border/70 bg-white px-4 py-3">
@@ -66,10 +50,10 @@ function TaskPreviewCard() {
   )
 }
 
-function TrafficPreviewCard() {
+function TrafficPreviewCard({ title, previewLegend }: { title: string; previewLegend: readonly PreviewLegend[] }) {
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border/70 bg-secondary/80 p-4">
-      <div className="text-sm font-medium text-foreground/80">Traffic</div>
+      <div className="text-sm font-medium text-foreground/80">{title}</div>
       <div className="flex flex-1 items-center justify-center py-3">
         <div className="relative w-full max-w-[280px] rounded-xl px-0 pt-2">
           <div className="absolute inset-y-0 right-0 left-0 grid grid-cols-6 gap-0">
@@ -106,12 +90,12 @@ function TrafficPreviewCard() {
   )
 }
 
-function SalesPreviewCard() {
+function SalesPreviewCard({ alt }: { alt: string }) {
   return (
     <div className="h-full overflow-hidden rounded-lg border border-border/70 bg-secondary/80">
       <Image
         src="/assets/statistics.webp"
-        alt="Sales overview statistics"
+        alt={alt}
         width={800}
         height={640}
         className="h-full w-full object-cover object-center"
@@ -120,39 +104,79 @@ function SalesPreviewCard() {
   )
 }
 
-function PreviewByIndex({ index }: { index: number }) {
+function PreviewByIndex({
+  index,
+  taskPreviewRows,
+  taskCardTitle,
+  trafficCardTitle,
+  previewLegend,
+  salesPreviewAlt,
+}: {
+  index: number
+  taskPreviewRows: readonly TaskRow[]
+  taskCardTitle: string
+  trafficCardTitle: string
+  previewLegend: readonly PreviewLegend[]
+  salesPreviewAlt: string
+}) {
   if (index === 0)
     return (
       <div className="flex-1">
-        <TaskPreviewCard />
+        <TaskPreviewCard taskPreviewRows={taskPreviewRows} title={taskCardTitle} />
       </div>
     )
 
   if (index === 1)
     return (
       <div className="flex-1">
-        <TrafficPreviewCard />
+        <TrafficPreviewCard title={trafficCardTitle} previewLegend={previewLegend} />
       </div>
     )
 
   return (
     <div className="flex-1">
-      <SalesPreviewCard />
+      <SalesPreviewCard alt={salesPreviewAlt} />
     </div>
   )
 }
 
 export function WhyChooseSection() {
+  const t = useTranslations("home.whyChoose")
+  const whyChooseCards = [
+    {
+      title: t("cards.taskTracking.title"),
+      description: t("cards.taskTracking.description"),
+    },
+    {
+      title: t("cards.realTimeVisits.title"),
+      description: t("cards.realTimeVisits.description"),
+    },
+    {
+      title: t("cards.reportingAnalytics.title"),
+      description: t("cards.reportingAnalytics.description"),
+    },
+  ] as const
+  const previewLegend = [
+    { label: t("previewLegend.google"), color: "bg-emerald-500" },
+    { label: t("previewLegend.facebook"), color: "bg-accent-1" },
+    { label: t("previewLegend.x"), color: "bg-primary" },
+  ] as const
+  const taskPreviewRows = [
+    { title: t("taskRows.designingTeamMeeting"), time: "09AM - 10AM" },
+    { title: t("taskRows.webflowTeam"), time: "08AM - 11AM" },
+    { title: t("taskRows.framerTeam"), time: "11AM - 12AM" },
+  ] as const
+
   return (
     <section className="mx-auto mt-20 w-full max-w-5xl py-6 md:py-10">
       <BottomUpFadeAnimation>
         <div className="flex flex-col items-center text-center">
-          <Chip Icon={Rocket} title="Power Pack" />
+          <Chip Icon={Rocket} title={t("chip")} />
           <h2 className="mt-6 text-3xl font-medium tracking-[-2.5px] text-foreground md:text-4xl">
-            Why businesses choose {SiteConfig.name}
+            {t("title", { name: SiteConfig.name })}
           </h2>
           <p className="mt-4 max-w-xs text-muted-foreground md:max-w-2xl">
-            Businesses choose {SiteConfig.name} because it simplifies the complexity of sales management.
+            {t("description", { name: SiteConfig.name })}
           </p>
         </div>
       </BottomUpFadeAnimation>
@@ -161,7 +185,14 @@ export function WhyChooseSection() {
         {whyChooseCards.map((card, index) => (
           <BottomUpFadeAnimation key={card.title} delay={0.1 + index * 0.12} className="h-full">
             <article className="flex h-full flex-col gap-4">
-              <PreviewByIndex index={index} />
+              <PreviewByIndex
+                index={index}
+                taskPreviewRows={taskPreviewRows}
+                taskCardTitle={t("tasksCardTitle")}
+                trafficCardTitle={t("trafficCardTitle")}
+                previewLegend={previewLegend}
+                salesPreviewAlt={t("salesPreviewAlt")}
+              />
               <div className="space-y-2 px-1">
                 <h3 className="text-lg font-semibold tracking-tighter text-foreground">{card.title}</h3>
                 <p className="text-sm text-muted-foreground">{card.description}</p>

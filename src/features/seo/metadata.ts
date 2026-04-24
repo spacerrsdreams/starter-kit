@@ -36,6 +36,11 @@ type SeoMetadataConfig = {
 }
 
 export function createMetadata(config: SeoMetadataConfig): Metadata {
+  const languages = {
+    ...(config.alternates.languages ?? {}),
+    "x-default": config.alternates.canonical,
+  }
+
   return {
     metadataBase: new URL(config.baseUrl),
     manifest: config.manifest, // relative is correct here
@@ -50,7 +55,7 @@ export function createMetadata(config: SeoMetadataConfig): Metadata {
     publisher: config.publisher,
     alternates: {
       canonical: config.alternates.canonical,
-      languages: config.alternates.languages,
+      languages,
       types: config.alternates.types,
     },
 

@@ -1,6 +1,8 @@
 import "@/app/globals.css"
 import "lenis/dist/lenis.css"
 
+import { NextIntlClientProvider } from "next-intl"
+import { getMessages } from "next-intl/server"
 import { DM_Sans } from "next/font/google"
 import { Suspense } from "react"
 
@@ -48,6 +50,7 @@ export const metadata = createMetadata({
     canonical: BASE_URL,
     languages: {
       en: BASE_URL,
+      "x-default": BASE_URL,
     },
     types: {
       "application/rss+xml": `${BASE_URL}/rss.xml`,
@@ -118,11 +121,13 @@ export const metadata = createMetadata({
   },
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const messages = await getMessages()
+
   return (
     <html
       lang="en"
@@ -132,23 +137,25 @@ export default function RootLayout({
     >
       <body>
         <Suspense fallback={null}>
-          <ThemeProvider>
-            <SmoothScrollProvider>
-              <QueryClientProviderWrapper>
-                <PostHogProvider>
-                  <AuthRequiredModalProvider>
-                    <TooltipProvider>
-                      {children}
-                      <AiWidgetLazy />
-                      <QuickAccessMenuLazy renderInlineTrigger={false} />
-                      <Toaster position="bottom-right" />
-                      <CookieConsentBannerLazy />
-                    </TooltipProvider>
-                  </AuthRequiredModalProvider>
-                </PostHogProvider>
-              </QueryClientProviderWrapper>
-            </SmoothScrollProvider>
-          </ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
+            <ThemeProvider>
+              <SmoothScrollProvider>
+                <QueryClientProviderWrapper>
+                  <PostHogProvider>
+                    <AuthRequiredModalProvider>
+                      <TooltipProvider>
+                        {children}
+                        <AiWidgetLazy />
+                        <QuickAccessMenuLazy renderInlineTrigger={false} />
+                        <Toaster position="bottom-right" />
+                        <CookieConsentBannerLazy />
+                      </TooltipProvider>
+                    </AuthRequiredModalProvider>
+                  </PostHogProvider>
+                </QueryClientProviderWrapper>
+              </SmoothScrollProvider>
+            </ThemeProvider>
+          </NextIntlClientProvider>
         </Suspense>
       </body>
     </html>

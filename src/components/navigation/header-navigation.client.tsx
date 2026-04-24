@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "motion/react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -14,10 +15,10 @@ import { HeaderPagesMenu } from "@/components/navigation/header-pages-menu"
 import { Button } from "@/components/ui/button"
 import { LogoIcon } from "@/components/ui/icons/logo.icon"
 
-const navLinks = [{ label: "Pricing", href: WebRoutes.pricing.path }] as const
 const HEADER_HIDE_OFFSET = 24
 
 export function HeaderNavigationClient() {
+  const t = useTranslations("home.header")
   const router = useRouter()
   const [isVisible, setIsVisible] = useState(true)
   const { data: session } = authClient.useSession()
@@ -39,6 +40,18 @@ export function HeaderNavigationClient() {
 
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const navLinks = [{ label: t("pricing"), href: WebRoutes.pricing.path }] as const
+
+  const menuLinks = [
+    { title: t("menu.dashboard"), href: WebRoutes.dashboard.path },
+    { title: t("menu.contact"), href: WebRoutes.contact.path },
+    { title: t("menu.marketing"), href: WebRoutes.root.path },
+    { title: t("menu.termsAndConditions"), href: WebRoutes.termsOfService.path },
+    { title: t("menu.blog"), href: WebRoutes.blog.path },
+    { title: t("menu.privacyPolicy"), href: WebRoutes.privacyPolicy.path },
+    { title: t("pricing"), href: WebRoutes.pricing.path },
+  ] as const
 
   return (
     <motion.header
@@ -63,7 +76,7 @@ export function HeaderNavigationClient() {
 
               <ul className="hidden items-center gap-4 md:flex">
                 <li>
-                  <HeaderPagesMenu />
+                  <HeaderPagesMenu menuLinks={menuLinks} />
                 </li>
                 {navLinks.map((link) => (
                   <li key={link.label}>
@@ -90,12 +103,12 @@ export function HeaderNavigationClient() {
                   }
                 }}
               >
-                Get Started
+                {t("cta")}
               </Button>
             </div>
 
             <div className="flex items-center gap-3 md:hidden">
-              <HeaderMobileMenu />
+              <HeaderMobileMenu menuLinks={menuLinks} />
             </div>
           </div>
         </div>

@@ -216,7 +216,10 @@ Exactly one exported React component per .tsx file. Non-exported helper componen
 - English is the default locale and must use non-prefixed URLs.
 - If a URL does not include a locale segment (for example no `/ka`, `/en`, etc.), it is always treated as English (`en`).
 - Do not generate `/en` URLs for default English pages unless explicitly requested later.
+- Always generate `<link rel="alternate" hreflang="x-default" ...>` to the default English non-prefixed URL.
 - This default-locale URL rule exists for cleaner brand presentation, SEO, and user-friendly links.
+- Never localize `admin` routes; keep all `admin` route paths stable and non-localized.
+- Never localize `api` routes; keep all `src/app/api/**` paths and handlers stable and non-localized.
 
 ### Stripe Pricing Sync (Strict)
 

@@ -1,4 +1,5 @@
 import { Activity, BadgeDollarSign, Cpu, Gamepad2, Rocket, ShieldCheck, Workflow, type LucideIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { CoreFeaturesLeftBorderGlow } from "@/components/marketing/core-features-left-border-glow.client"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
@@ -6,44 +7,45 @@ import { Chip } from "@/components/ui/chip"
 
 import { AnimatedSvg } from "../motion/animated-svg.animation"
 
-const coreFeaturesItems: Array<{
-  title: string
-  description: string
-  Icon: LucideIcon
-}> = [
-  {
-    title: "Sales Goal Tracking",
-    description: "Sales Goal Tracking helps teams stay aligned, focused",
-    Icon: Cpu,
-  },
-  {
-    title: "Price Management",
-    description: "Price management helps adjust and control pricing strategies",
-    Icon: BadgeDollarSign,
-  },
-  {
-    title: "Sales Gamification",
-    description: "Sales gamification is the use of game-like elements",
-    Icon: Gamepad2,
-  },
-  {
-    title: "Smart Forecasting",
-    description: "Smart Forecasting uses real-time data and AI to predict future",
-    Icon: Activity,
-  },
-  {
-    title: "Sales Workflows",
-    description: "Sales workflows are structured processes that guide your",
-    Icon: Workflow,
-  },
-  {
-    title: "Access Control",
-    description: "Access control ensures that only the right people can view",
-    Icon: ShieldCheck,
-  },
-]
-
 export function CoreFeaturesDarkSection() {
+  const t = useTranslations("home.coreFeatures")
+  const coreFeaturesItems: Array<{
+    title: string
+    description: string
+    Icon: LucideIcon
+  }> = [
+    {
+      title: t("items.salesGoalTracking.title"),
+      description: t("items.salesGoalTracking.description"),
+      Icon: Cpu,
+    },
+    {
+      title: t("items.priceManagement.title"),
+      description: t("items.priceManagement.description"),
+      Icon: BadgeDollarSign,
+    },
+    {
+      title: t("items.salesGamification.title"),
+      description: t("items.salesGamification.description"),
+      Icon: Gamepad2,
+    },
+    {
+      title: t("items.smartForecasting.title"),
+      description: t("items.smartForecasting.description"),
+      Icon: Activity,
+    },
+    {
+      title: t("items.salesWorkflows.title"),
+      description: t("items.salesWorkflows.description"),
+      Icon: Workflow,
+    },
+    {
+      title: t("items.accessControl.title"),
+      description: t("items.accessControl.description"),
+      Icon: ShieldCheck,
+    },
+  ]
+
   return (
     <section className="w-full overflow-hidden px-4 lg:px-8">
       <div className="rounded-3xl bg-[rgb(24,24,24)]">
@@ -51,13 +53,11 @@ export function CoreFeaturesDarkSection() {
           <CoreFeaturesLeftBorderGlow />
           <BottomUpFadeAnimation>
             <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-              <Chip Icon={Rocket} title="Core Features" variant="dark" />
+              <Chip Icon={Rocket} title={t("chip")} variant="dark" />
               <h2 className="mt-6 text-2xl font-semibold tracking-[-2.5px] text-zinc-100 md:text-4xl">
-                What&apos;s inside Salix?
+                {t("title")}
               </h2>
-              <p className="mt-4 max-w-sm text-background/80">
-                Businesses choose Salix because it simplifies the complexity of sales management.
-              </p>
+              <p className="mt-4 max-w-sm text-background/80">{t("description")}</p>
             </div>
           </BottomUpFadeAnimation>
 

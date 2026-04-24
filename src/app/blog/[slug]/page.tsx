@@ -45,11 +45,17 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     }
   }
 
+  const canonical = WebRoutes.blogPost.withBaseUrl(slug)
+
   return {
     title: post.title,
     description: post.preview,
     alternates: {
-      canonical: WebRoutes.blogPost.withBaseUrl(slug),
+      canonical,
+      languages: {
+        en: canonical,
+        "x-default": canonical,
+      },
     },
   }
 }

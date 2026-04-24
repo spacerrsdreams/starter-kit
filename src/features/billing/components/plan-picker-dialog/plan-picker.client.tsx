@@ -1,14 +1,12 @@
 "use client"
 
 import { Database } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { PricingPlanCard } from "@/features/billing/components/plan-picker-dialog/pricing-plan-card.client"
 import { useFetchBillingProducts } from "@/features/billing/hooks/use-fetch-billing-products"
 import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
 import { Chip } from "@/components/ui/chip"
-
-const MONTHLY_PLAN_FEATURES = ["Essential tools to get you up", "Up to 5 projects & reporting", "Email support"]
-const YEARLY_PLAN_FEATURES = ["Essential tools to get you up", "Unlimited projects & reporting", "Email support"]
 
 export type PlanPickerProps = {
   isBillingLoading: boolean
@@ -17,6 +15,7 @@ export type PlanPickerProps = {
 }
 
 export function PlanPicker({ isBillingLoading, showMainlabel = true, onProductSelect }: PlanPickerProps) {
+  const t = useTranslations("home.pricing")
   const { data: billingProducts } = useFetchBillingProducts()
   const { data: billingSubscription } = useFetchBillingSubscription()
   const monthlyUnitAmount = billingProducts?.monthly.unitAmount
@@ -25,40 +24,43 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onProductSe
   const monthlyPrice = hasStripePrices ? monthlyUnitAmount / 100 : 0
   const yearlyPrice = hasStripePrices ? Math.round((yearlyUnitAmount / 100 / 12) * 100) / 100 : 0
   const isSubscribedToPaidPlan = Boolean(billingSubscription?.isPaid)
+  const monthlyPlanFeatures = [t("features.essentialTools"), t("features.upToFiveProjects"), t("features.emailSupport")]
+  const yearlyPlanFeatures = [t("features.essentialTools"), t("features.unlimitedProjects"), t("features.emailSupport")]
+
   const monthlyBadgeLabel =
-    isSubscribedToPaidPlan && billingSubscription?.currentProduct === "monthly" ? "CURRENT" : undefined
+    isSubscribedToPaidPlan && billingSubscription?.currentProduct === "monthly" ? t("currentBadge") : undefined
   const yearlyBadgeLabel =
-    isSubscribedToPaidPlan && billingSubscription?.currentProduct === "yearly" ? "CURRENT" : undefined
+    isSubscribedToPaidPlan && billingSubscription?.currentProduct === "yearly" ? t("currentBadge") : undefined
 
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <div className="items-center px-5 py-6 text-center sm:px-8 sm:py-7">
-        {showMainlabel === true && <Chip title="Pricing" Icon={Database} />}
+        {showMainlabel === true && <Chip title={t("chip")} Icon={Database} />}
         <h2 className="mt-6 text-2xl leading-3 font-semibold tracking-[-2.5px] text-balance sm:text-5xl">
-          Choose the Perfect Plan
+          {t("title")}
         </h2>
       </div>
 
       <div className="mx-auto flex w-full flex-col items-center justify-center gap-4 md:flex-row">
         <PricingPlanCard
-          title="Monthly"
-          subtitle="Perfect for individuals and small teams just getting started"
+          title={t("monthlyTitle")}
+          subtitle={t("subtitle")}
           price={monthlyPrice}
-          billedLabel="monthly"
-          features={MONTHLY_PLAN_FEATURES}
-          ctaLabel="Get Started"
+          billedLabel={t("billedMonthly")}
+          features={monthlyPlanFeatures}
+          ctaLabel={t("cta")}
           isLoading={isBillingLoading || !hasStripePrices}
           onSelect={() => onProductSelect("monthly")}
           isLastFeatureMuted
           badgeLabel={monthlyBadgeLabel}
         />
         <PricingPlanCard
-          title="Yearly"
-          subtitle="Perfect for individuals and small teams just getting started"
+          title={t("yearlyTitle")}
+          subtitle={t("subtitle")}
           price={yearlyPrice}
-          billedLabel="yearly"
-          features={YEARLY_PLAN_FEATURES}
-          ctaLabel="Get Started"
+          billedLabel={t("billedYearly")}
+          features={yearlyPlanFeatures}
+          ctaLabel={t("cta")}
           isLoading={isBillingLoading || !hasStripePrices}
           onSelect={() => onProductSelect("yearly")}
           isFeatured

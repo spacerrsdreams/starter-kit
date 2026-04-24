@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   description,
   alternates: {
     canonical,
+    languages: {
+      en: canonical,
+      "x-default": canonical,
+    },
   },
   robots: {
     index: false,

@@ -1,4 +1,5 @@
 import { Send } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { Route } from "next"
 import Link from "next/link"
 
@@ -9,19 +10,6 @@ import { FacebookIcon } from "@/components/ui/icons/facebook.icon"
 import { InstagramIcon } from "@/components/ui/icons/instagram.icon"
 import { LinkedInIcon } from "@/components/ui/icons/linkedin.icon"
 import { LogoIcon } from "@/components/ui/icons/logo.icon"
-
-const infoLinks = [
-  { label: "AI Page", href: WebRoutes.dashboard.path },
-  { label: "Blog", href: WebRoutes.blog.path },
-  { label: "Pricing", href: WebRoutes.pricing.path },
-] as const
-
-const resourcesLinks = [{ label: "Contact Us", href: WebRoutes.contact.path }] as const
-
-const companyLinks = [
-  { label: "Terms and Conditions", href: WebRoutes.termsOfService.path },
-  { label: "Privacy Policy", href: WebRoutes.privacyPolicy.path },
-] as const
 
 const socialLinks = [
   { label: "Facebook", href: "#", icon: FacebookIcon },
@@ -60,6 +48,18 @@ export function FooterLinksSection({ title, links }: FooterLinksSectionProps) {
 }
 
 export function Footer() {
+  const t = useTranslations("home.footer")
+  const infoLinks = [
+    { label: t("links.aiPage"), href: WebRoutes.dashboard.path },
+    { label: t("links.blog"), href: WebRoutes.blog.path },
+    { label: t("links.pricing"), href: WebRoutes.pricing.path },
+  ] as const
+  const resourcesLinks = [{ label: t("links.contactUs"), href: WebRoutes.contact.path }] as const
+  const companyLinks = [
+    { label: t("links.termsAndConditions"), href: WebRoutes.termsOfService.path },
+    { label: t("links.privacyPolicy"), href: WebRoutes.privacyPolicy.path },
+  ] as const
+
   return (
     <footer className="bg-white px-6 lg:px-0 dark:bg-background">
       <div className="mx-auto flex w-full max-w-5xl flex-col justify-start gap-12 md:flex-row lg:justify-between">
@@ -70,7 +70,7 @@ export function Footer() {
               <span className="text-3xl font-semibold tracking-tight text-foreground">{SiteConfig.name}</span>
             </Link>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {SiteConfig.name} helps teams work faster with practical AI workflows and a modern dashboard.
+              {t("description", { name: SiteConfig.name })}
             </p>
             <div className="flex items-center gap-3">
               {socialLinks.map((socialLink) => {
@@ -93,13 +93,13 @@ export function Footer() {
 
         <div className="grid grid-cols-1 gap-6 pb-12 sm:grid-cols-2 md:grid-cols-3">
           <BottomUpFadeAnimation delay={0.25}>
-            <FooterLinksSection title="Info" links={infoLinks} />
+            <FooterLinksSection title={t("sections.info")} links={infoLinks} />
           </BottomUpFadeAnimation>
           <BottomUpFadeAnimation delay={0.35}>
-            <FooterLinksSection title="Resources" links={resourcesLinks} />
+            <FooterLinksSection title={t("sections.resources")} links={resourcesLinks} />
           </BottomUpFadeAnimation>
           <BottomUpFadeAnimation delay={0.45}>
-            <FooterLinksSection title="Company" links={companyLinks} />
+            <FooterLinksSection title={t("sections.company")} links={companyLinks} />
           </BottomUpFadeAnimation>
         </div>
       </div>
@@ -107,7 +107,7 @@ export function Footer() {
         <BottomUpFadeAnimation delay={0.55}>
           <div className="mx-auto flex w-full max-w-6xl items-center justify-center p-6 text-sm font-medium text-foreground">
             <p>
-              © {SiteConfig.copyrightYear} {SiteConfig.name}, Inc. All rights reserved.
+              {t("copyright", { year: SiteConfig.copyrightYear, name: SiteConfig.name })}
             </p>
           </div>
         </BottomUpFadeAnimation>

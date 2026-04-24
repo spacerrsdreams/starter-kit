@@ -3,6 +3,7 @@
 import { PlusIcon, UserRoundCheck } from "lucide-react"
 import type { Route } from "next"
 import { usePathname, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useMemo, useTransition } from "react"
 
 import { WebRoutes } from "@/lib/web.routes"
@@ -17,6 +18,7 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export function DashboardHeader() {
+  const t = useTranslations()
   const pathname = usePathname()
   const router = useRouter()
   const { data: session, refetch: refetchSession } = authClient.useSession()
@@ -31,7 +33,7 @@ export function DashboardHeader() {
     : null
   const selectedChatId = activeChatId ?? chatIdFromPath
   const selectedChatTitle = chats.find((chat) => chat.id === selectedChatId)?.title?.trim() || ""
-  const currentLabel = isAskAiRoute ? selectedChatTitle || "New Chat" : (currentRoute?.label ?? "Dashboard")
+  const currentLabel = isAskAiRoute ? selectedChatTitle || t("dashboard.newChat") : t(currentRoute?.labelKey ?? "routes.dashboard")
 
   const handleNewChatClick = () => {
     window.dispatchEvent(new CustomEvent(NEW_CHAT_EVENT_NAME))
@@ -63,7 +65,7 @@ export function DashboardHeader() {
         </div>
         <div className="ml-auto flex items-center gap-1 md:hidden">
           {isAskAiRoute ? (
-            <Button type="button" variant="ghost" size="icon" aria-label="New chat" onClick={handleNewChatClick}>
+            <Button type="button" variant="ghost" size="icon" aria-label={t("dashboard.newChat")} onClick={handleNewChatClick}>
               <PlusIcon className="size-4" />
             </Button>
           ) : null}
@@ -87,7 +89,7 @@ export function DashboardHeader() {
             disabled={isPending}
           >
             <UserRoundCheck className="mr-2 size-4" />
-            {isPending ? "Switching back..." : "Stop impersonation"}
+            {isPending ? t("dashboard.switchingBack") : t("dashboard.stopImpersonation")}
           </Button>
         </div>
       ) : null}

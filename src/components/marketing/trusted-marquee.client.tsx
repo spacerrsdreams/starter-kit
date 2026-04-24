@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "motion/react"
+import { useTranslations } from "next-intl"
 
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 
@@ -13,14 +14,13 @@ const trustedCompanies = [
 ] as const
 
 export function TrustedMarqueeClient() {
+  const t = useTranslations("home.trustedMarquee")
   const marqueeItems = [...trustedCompanies, ...trustedCompanies]
 
   return (
     <BottomUpFadeAnimation>
       <section className="mx-auto mt-18 mb-8 w-full max-w-5xl overflow-hidden border-t border-b border-border/50 py-12 md:mt-30! md:mb-16">
-        <p className="px-4 text-center text-sm font-semibold text-foreground/80 md:text-base">
-          Trusted by 17,000+ founders & business owners
-        </p>
+        <p className="px-4 text-center text-sm font-semibold text-foreground/80 md:text-base">{t("title")}</p>
 
         <div className="relative mt-8 overflow-hidden">
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-linear-to-r from-background to-transparent" />

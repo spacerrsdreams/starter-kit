@@ -13,6 +13,7 @@ import { useMutateDeleteAdminUser } from "@/features/admin/hooks/use-mutate-dele
 import { useMutateImpersonateAdminUser } from "@/features/admin/hooks/use-mutate-impersonate-admin-user"
 import { useMutateUpdateAdminUser } from "@/features/admin/hooks/use-mutate-update-admin-user"
 import type { AdminUserListItem, AdminUserRole } from "@/features/admin/types/admin-users.types"
+import { WebRoutes } from "@/lib/web.routes"
 
 type AdminUsersTableProps = {
   currentUserId: string
@@ -61,7 +62,7 @@ export function AdminUsersTable({ currentUserId }: AdminUsersTableProps) {
     try {
       await impersonateUserMutation.mutateAsync(user.id)
       toast.success("Impersonation started.")
-      router.push("/dashboard")
+      router.push(WebRoutes.dashboard.path)
     } catch {
       toast.error("Failed to impersonate user.")
     }

@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "motion/react"
+import { useTranslations } from "next-intl"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -32,8 +33,9 @@ export function PricingPlanCard({
   badgeLabel,
   isLastFeatureMuted = false,
 }: PricingPlanCardProps) {
-  const ctaText = isLoading ? "Loading..." : ctaLabel
-  const resolvedBadgeLabel = badgeLabel ?? (isFeatured ? "MOST POPULAR" : null)
+  const t = useTranslations("home.pricing")
+  const ctaText = isLoading ? t("loading") : ctaLabel
+  const resolvedBadgeLabel = badgeLabel ?? (isFeatured ? t("mostPopularBadge") : null)
   const slideTransition = {
     type: "tween" as const,
     duration: 0.85,
@@ -61,9 +63,11 @@ export function PricingPlanCard({
 
       <p className="mt-6 space-x-1 leading-none font-medium">
         <span className="align-baseline text-4xl">${price}</span>
-        <span className="text-lg">/mo/user</span>
+        <span className="text-lg">{t("perMonthPerUser")}</span>
       </p>
-      <p className="mt-3 text-sm text-muted-foreground">billed {billedLabel}</p>
+      <p className="mt-3 text-sm text-muted-foreground">
+        {t("billedPrefix")} {billedLabel}
+      </p>
 
       <Button
         asChild
@@ -109,7 +113,7 @@ export function PricingPlanCard({
         </motion.button>
       </Button>
 
-      <p className="mt-8 text-sm font-semibold">What do you get:</p>
+      <p className="mt-8 text-sm font-semibold">{t("whatDoYouGet")}</p>
       <ul className="mt-5 space-y-3">
         {features.map((feature, index) => {
           const isMuted = isLastFeatureMuted && index === features.length - 1

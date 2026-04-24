@@ -1,43 +1,41 @@
 "use client"
 
 import { Sparkles } from "lucide-react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useTranslations } from "next-intl"
+import { useEffect, useRef, useState } from "react"
 
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
 import { Separator } from "../ui/separator"
 
-const keyToolsSections = [
-  {
-    id: "sales-automation",
-    navTitle: "Sales Automation",
-    title: "Sales Automation",
-    description:
-      "Automate repetitive tasks like follow-ups, reminders, and data entry to save time and increase efficiency.",
-  },
-  {
-    id: "deal-tracking",
-    navTitle: "Deal Tracking",
-    title: "Deal Tracking",
-    description: "Track every opportunity stage with a clean view of value, probability, and progress in one place.",
-  },
-  {
-    id: "crm-integration",
-    navTitle: "CRM Integration",
-    title: "CRM Integration",
-    description:
-      "Connect your CRM and keep customer context synced across sales workflows without extra manual updates.",
-  },
-] as const
-
 export function KeyToolsScrollClient() {
+  const t = useTranslations("home.keyTools")
+  const keyToolsSections = [
+    {
+      id: "sales-automation",
+      navTitle: t("sections.salesAutomation.navTitle"),
+      title: t("sections.salesAutomation.title"),
+      description: t("sections.salesAutomation.description"),
+    },
+    {
+      id: "deal-tracking",
+      navTitle: t("sections.dealTracking.navTitle"),
+      title: t("sections.dealTracking.title"),
+      description: t("sections.dealTracking.description"),
+    },
+    {
+      id: "crm-integration",
+      navTitle: t("sections.crmIntegration.navTitle"),
+      title: t("sections.crmIntegration.title"),
+      description: t("sections.crmIntegration.description"),
+    },
+  ] as const
+
   const [activeSectionId, setActiveSectionId] = useState<string>(keyToolsSections[0].id)
   const sectionRefs = useRef<Array<HTMLElement | null>>([])
 
-  const sectionIndexById = useMemo(() => {
-    return new Map(keyToolsSections.map((section, index) => [section.id, index]))
-  }, [])
+  const sectionIndexById = new Map(keyToolsSections.map((section, index) => [section.id, index]))
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -80,10 +78,10 @@ export function KeyToolsScrollClient() {
         <BottomUpFadeAnimation delay={0.05}>
           <aside className="h-fit px-4 lg:sticky lg:top-24 lg:px-0">
             <div className="flex justify-center lg:justify-start">
-              <Chip Icon={Sparkles} title="Key Tools" />
+              <Chip Icon={Sparkles} title={t("chip")} />
             </div>
             <h2 className="mt-6 text-center text-3xl font-medium tracking-[-2.5px] text-foreground/95 md:text-5xl lg:text-start">
-              AI that moves sales forward & faster
+              {t("title")}
             </h2>
 
             <nav className="mt-10 hidden space-y-5 lg:block">
@@ -132,7 +130,7 @@ export function KeyToolsScrollClient() {
                     <div className="rounded-md border border-border/70 bg-secondary/80 p-4">
                       <div className="size-full rounded-md border border-border/70 bg-white">
                         <div className="flex min-h-54 items-center justify-center text-sm font-semibold">
-                          <p>@Spacerr</p>
+                          <p>{t("previewHandle")}</p>
                         </div>
                       </div>
                     </div>

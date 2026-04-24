@@ -1,6 +1,7 @@
 "use client"
 
 import { usePathname, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useCallback, useEffect } from "react"
 
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
@@ -10,6 +11,7 @@ import { useMutateCreateCheckoutSession } from "@/features/billing/hooks/use-mut
 import { SpinnerWithBackdrop } from "@/components/ui/spinner"
 
 export function PlanPickerSectionClient() {
+  const t = useTranslations("home.pricing")
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const { data: session, isPending: isSessionPending } = authClient.useSession()
@@ -60,7 +62,7 @@ export function PlanPickerSectionClient() {
 
   return (
     <section className="w-full px-4 py-0">
-      {isRedirecting ? <SpinnerWithBackdrop label="Redirecting to checkout..." /> : null}
+      {isRedirecting ? <SpinnerWithBackdrop label={t("redirectingToCheckout")} /> : null}
       <PlanPicker
         isBillingLoading={checkoutSessionMutation.isPending || isSessionPending}
         onProductSelect={handleSelectProduct}

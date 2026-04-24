@@ -13,6 +13,7 @@
 - Canonical URLs must always be explicit — never rely on defaults.
 - For i18n projects with English as default, canonical URLs for English must stay non-prefixed (no `/en`).
 - For alternates/language metadata, always generate entries for **all available locales** on every page.
+- Always include `hreflang="x-default"` and point it to the default English canonical URL (non-prefixed).
 - `robots` directives must be set globally in `layout.tsx` and overridden per-page where needed.
 - Structured data (JSON-LD) must be added to every page that qualifies for rich results.
 - OG images must be 1200x630px. Never use a placeholder or missing image.
