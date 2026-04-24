@@ -1,12 +1,10 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 
-import { WebRoutes } from "@/lib/web.routes"
 import { EditBlogPostForm } from "@/features/blog/components/edit-blog-post-form.client"
 import { getBlogPostById } from "@/features/blog/repositories/blog-posts.repository"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
-import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
-import { TopGradient } from "@/components/ui/top-gradient"
+import { WebRoutes } from "@/lib/web.routes"
 
 import "@/features/blog/styles/blog-rich-content.css"
 
@@ -49,26 +47,22 @@ export default async function EditBlogPostPage({ params }: EditBlogPostPageProps
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <TopGradient />
-      <HeaderNavigationClient />
-      <main className="container mx-auto min-h-screen px-4 py-36">
-        <div className="mx-auto w-full max-w-3xl space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-semibold text-foreground">Edit Post</h1>
-            <p className="text-sm text-muted-foreground">Admin can edit and delete. Moderator can edit only.</p>
-          </div>
-          <EditBlogPostForm
-            postId={post.id}
-            initialTitle={post.title}
-            initialSlug={post.slug}
-            initialPreview={post.preview}
-            initialSeoKeywords={post.seoKeywords}
-            initialContentHtml={getBlogContentHtml(post.content)}
-            initialImageSrc={post.imageSrc}
-          />
+    <main className="space-y-6 p-4 md:p-6">
+      <div className="mx-auto w-full max-w-3xl space-y-6">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-semibold text-foreground">Edit Post</h1>
+          <p className="text-sm text-muted-foreground">Admin can edit and delete. Moderator can edit only.</p>
         </div>
-      </main>
-    </div>
+        <EditBlogPostForm
+          postId={post.id}
+          initialTitle={post.title}
+          initialSlug={post.slug}
+          initialPreview={post.preview}
+          initialSeoKeywords={post.seoKeywords}
+          initialContentHtml={getBlogContentHtml(post.content)}
+          initialImageSrc={post.imageSrc}
+        />
+      </div>
+    </main>
   )
 }

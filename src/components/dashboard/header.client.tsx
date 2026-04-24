@@ -27,13 +27,21 @@ export function DashboardHeader() {
   const chatsQuery = useFetchChats()
   const chats = useMemo(() => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [], [chatsQuery.data?.pages])
   const currentRoute = Object.values(WebRoutes).find((route) => "path" in route && route.path === pathname)
-  const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${WebRoutes.dashboard.path}/`)
-  const chatIdFromPath = pathname.startsWith(`${WebRoutes.dashboard.path}/`)
-    ? pathname.slice(`${WebRoutes.dashboard.path}/`.length)
+  const chatRoutePrefix = `${WebRoutes.dashboard.path}/ai`
+  const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${chatRoutePrefix}/`)
+  const isAdminRoute = pathname === WebRoutes.admin.path || pathname.startsWith(`${WebRoutes.admin.path}/`)
+  const chatPathPrefix = `${chatRoutePrefix}/`
+  const chatIdFromPath = pathname.startsWith(chatPathPrefix)
+    ? pathname.slice(chatPathPrefix.length)
     : null
   const selectedChatId = activeChatId ?? chatIdFromPath
   const selectedChatTitle = chats.find((chat) => chat.id === selectedChatId)?.title?.trim() || ""
-  const currentLabel = isAskAiRoute ? selectedChatTitle || t("dashboard.newChat") : t(currentRoute?.labelKey ?? "routes.dashboard")
+  let currentLabel = t(currentRoute?.labelKey ?? "routes.dashboard")
+  if (isAskAiRoute) {
+    currentLabel = selectedChatTitle || t("dashboard.newChat")
+  } else if (isAdminRoute) {
+    currentLabel = t("routes.admin")
+  }
 
   const handleNewChatClick = () => {
     window.dispatchEvent(new CustomEvent(NEW_CHAT_EVENT_NAME))

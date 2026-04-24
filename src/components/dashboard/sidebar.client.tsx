@@ -1,10 +1,12 @@
 "use client"
 
 import { ShieldCheck } from "lucide-react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import * as React from "react"
 
-import { WebRoutes } from "@/lib/web.routes"
+import { isPathWithinRoute, WebRoutes } from "@/lib/web.routes"
 import { ChatDashboardSidebar } from "@/features/ai/chat/components/chat-dashboard-sidebar/chat-dashboard-sidebar.client"
 import { authClient } from "@/features/auth/lib/auth-client"
 import { NavLogo } from "@/components/dashboard/nav-logo"
@@ -20,7 +22,10 @@ import {
 } from "@/components/ui/sidebar"
 
 export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarComponent>) {
+  const t = useTranslations()
+  const pathname = usePathname()
   const { data: session, isPending: isSessionPending } = authClient.useSession()
+  const isAdminRoute = isPathWithinRoute(pathname, WebRoutes.admin.path)
 
   return (
     <SidebarComponent {...props}>
@@ -32,10 +37,10 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
       <SidebarContent>
         <SidebarGroup className="flex min-h-0 flex-1 flex-col space-y-1">
           {session?.user?.role === "admin" && (
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton asChild isActive={isAdminRoute}>
               <Link href={WebRoutes.admin.path}>
                 <ShieldCheck className="size-4.5!" />
-                <span className="font-medium text-sidebar-accent-foreground">Admin</span>
+                <span className="font-medium text-sidebar-accent-foreground">{t("routes.admin")}</span>
               </Link>
             </SidebarMenuButton>
           )}

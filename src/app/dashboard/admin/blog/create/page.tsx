@@ -1,11 +1,9 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
-import { WebRoutes } from "@/lib/web.routes"
 import { CreateBlogPostForm } from "@/features/blog/components/create-blog-post-form.client"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
-import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
-import { TopGradient } from "@/components/ui/top-gradient"
+import { WebRoutes } from "@/lib/web.routes"
 
 import "@/features/blog/styles/blog-rich-content.css"
 
@@ -36,18 +34,14 @@ export default async function CreateBlogPostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <TopGradient />
-      <HeaderNavigationClient />
-      <main className="container mx-auto min-h-screen px-4 py-36">
-        <div className="mx-auto w-full max-w-3xl space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-semibold text-foreground">Create Post</h1>
-            <p className="text-sm text-muted-foreground">Available for admin and moderator accounts.</p>
-          </div>
-          <CreateBlogPostForm />
+    <main className="space-y-6 p-4 md:p-6">
+      <div className="mx-auto w-full max-w-3xl space-y-6">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-semibold text-foreground">Create Post</h1>
+          <p className="text-sm text-muted-foreground">Available for admin and moderator accounts.</p>
         </div>
-      </main>
-    </div>
+        <CreateBlogPostForm />
+      </div>
+    </main>
   )
 }
