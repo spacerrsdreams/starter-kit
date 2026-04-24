@@ -11,11 +11,11 @@ type SettingsDialogStore = {
 
 export const useSettingsDialogStore = create<SettingsDialogStore>((set) => ({
   open: false,
-  section: "account",
+  section: "profile",
   openDialog: (section) =>
     set({
       open: true,
-      section: section ?? "account",
+      section: section ?? "profile",
     }),
   closeDialog: () =>
     set({

@@ -1,4 +1,4 @@
-export type SettingsSectionId = "account" | "notifications" | "appearance" | "legal"
+export type SettingsSectionId = "profile" | "account" | "notifications" | "appearance" | "legal"
 
 export type SettingsDialogProps = {
   open: boolean

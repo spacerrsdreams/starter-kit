@@ -4,6 +4,7 @@ import { Sparkles } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useRef, useState } from "react"
 
+import { SiteConfig } from "@/lib/site.config"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 
@@ -130,7 +131,7 @@ export function KeyToolsScrollClient() {
                     <div className="rounded-md border border-border/70 bg-secondary/80 p-4">
                       <div className="size-full rounded-md border border-border/70 bg-white">
                         <div className="flex min-h-54 items-center justify-center text-sm font-semibold">
-                          <p>{t("previewHandle")}</p>
+                          <p>{t("previewHandle", { name: SiteConfig.name })}</p>
                         </div>
                       </div>
                     </div>

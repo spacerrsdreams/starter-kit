@@ -77,7 +77,7 @@ CREATE TABLE "user" (
     "banReason" TEXT,
     "banExpires" TIMESTAMP(3),
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
-    "notificationsEmailMarketing" BOOLEAN NOT NULL DEFAULT true,
+    "notificationsEmailMarketing" BOOLEAN NOT NULL DEFAULT false,
     "notificationsEmailPersonalized" BOOLEAN NOT NULL DEFAULT true,
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

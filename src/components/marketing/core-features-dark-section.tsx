@@ -1,6 +1,7 @@
 import { Activity, BadgeDollarSign, Cpu, Gamepad2, Rocket, ShieldCheck, Workflow, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 
+import { SiteConfig } from "@/lib/site.config"
 import { CoreFeaturesLeftBorderGlow } from "@/components/marketing/core-features-left-border-glow.client"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
@@ -55,7 +56,7 @@ export function CoreFeaturesDarkSection() {
             <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
               <Chip Icon={Rocket} title={t("chip")} variant="dark" />
               <h2 className="mt-6 text-2xl font-semibold tracking-[-2.5px] text-zinc-100 md:text-4xl">
-                {t("title")}
+                {t("title", { name: SiteConfig.name })}
               </h2>
               <p className="mt-4 max-w-sm text-background/80">{t("description")}</p>
             </div>

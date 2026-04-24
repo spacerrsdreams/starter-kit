@@ -28,7 +28,7 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { SettingsItemIndicator } from "./settings-item-indicator"
 import { SettingsSectionContent } from "./settings-section-content"
 
-export function SettingsDialog({ open, onOpenChange, defaultSection = "account" }: SettingsDialogProps) {
+export function SettingsDialog({ open, onOpenChange, defaultSection = "profile" }: SettingsDialogProps) {
   const isMobile = useIsMobile()
   const [section, setSection] = useState<SettingsSectionId>(defaultSection)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)

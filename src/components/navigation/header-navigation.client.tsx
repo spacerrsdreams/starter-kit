@@ -70,7 +70,7 @@ export function HeaderNavigationClient() {
           <div className="flex min-h-14.5 items-center justify-between gap-4 px-5 py-4">
             <div className="flex items-center gap-8">
               <Link href={WebRoutes.root.path} className="flex items-center gap-2">
-                <LogoIcon size={18} className="bg-accent-1" />
+                <LogoIcon />
                 <span className="text-xl font-semibold tracking-tighter text-foreground">{SiteConfig.name}</span>
               </Link>
 

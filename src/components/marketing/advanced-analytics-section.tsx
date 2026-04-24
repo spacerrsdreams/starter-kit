@@ -1,6 +1,7 @@
 import { Rocket } from "lucide-react"
 import { useTranslations } from "next-intl"
 
+import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
@@ -42,7 +43,7 @@ export function AdvancedAnalyticsSection() {
         <div className="mx-auto mt-8 size-full max-w-4xl rounded-2xl bg-secondary/80 p-4">
           <div className="size-full rounded-xl border bg-white">
             <div className="flex min-h-60 items-center justify-center text-sm font-semibold md:min-h-80 lg:min-h-120">
-              <p>{t("previewHandle")}</p>
+              <p>{t("previewHandle", { name: SiteConfig.name })}</p>
             </div>
           </div>
         </div>

@@ -35,7 +35,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogoSvg } from "@/components/ui/icons/logo.icon"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverAnchor, PopoverContent, PopoverHeader, PopoverTitle } from "@/components/ui/popover"
 import {

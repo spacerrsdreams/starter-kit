@@ -1,4 +1,4 @@
-import { Bell, Palette, Settings, Shield, type LucideIcon } from "lucide-react"
+import { Bell, Palette, Settings, Shield, UserRound, type LucideIcon } from "lucide-react"
 
 import type { SettingsSectionId } from "@/features/settings/types/settings-dialog.types"
 
@@ -10,6 +10,7 @@ export type SettingsNavItem = {
 }
 
 export const settingsNavItems: SettingsNavItem[] = [
+  { id: "profile", label: "Profile", icon: UserRound, requiresAuth: true },
   { id: "account", label: "Account", icon: Settings, requiresAuth: true },
   { id: "notifications", label: "Notifications", icon: Bell, requiresAuth: true },
   { id: "appearance", label: "Appearance", icon: Palette },

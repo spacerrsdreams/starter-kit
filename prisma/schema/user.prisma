@@ -7,7 +7,7 @@ model User {
   banReason                      String?
   banExpires                     DateTime?
   emailVerified                  Boolean                @default(false)
-  notificationsEmailMarketing    Boolean                @default(true)
+  notificationsEmailMarketing    Boolean                @default(false)
   notificationsEmailPersonalized Boolean                @default(true)
   image                          String?
   createdAt                      DateTime               @default(now())

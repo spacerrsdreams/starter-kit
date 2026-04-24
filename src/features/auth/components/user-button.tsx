@@ -28,7 +28,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogoSvg } from "@/components/ui/icons/logo.icon"
+import { LogoIcon, LogoSvg } from "@/components/ui/icons/logo.icon"
 
 function getInitial(email: string): string {
   const trimmed = email.trim()
@@ -155,9 +155,9 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
                 className={`h-10 w-full min-w-0 justify-start gap-2 px-2! py-2! hover:bg-input/50 ${isFreeUser ? "pr-24!" : ""}`}
                 aria-label="Open account menu"
               >
-                <Avatar className="size-7">
-                  <AvatarImage src={user.image ?? undefined} alt={user.name ?? "User"} />
-                  <AvatarFallback>{getInitial(user.email)}</AvatarFallback>
+                <Avatar className="size-7 rounded-sm after:rounded-sm">
+                  <AvatarImage className="rounded-sm" src={user.image ?? undefined} alt={user.name ?? "User"} />
+                  <AvatarFallback className="rounded-sm">{getInitial(user.email)}</AvatarFallback>
                 </Avatar>
                 <div className="grid min-w-0 flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{getDisplayName(user)}</span>
@@ -182,9 +182,9 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
           <DropdownMenuContent align="start" side="top" className="ml-2 w-72 max-w-[calc(100vw-16px)]">
             <DropdownMenuLabel className="py-2">
               <div className="flex items-center gap-3">
-                <Avatar>
-                  <AvatarImage src={user.image ?? undefined} alt={user.name ?? "User"} />
-                  <AvatarFallback>{getInitial(user.email)}</AvatarFallback>
+                <Avatar className="rounded-sm after:rounded-sm">
+                  <AvatarImage className="rounded-sm" src={user.image ?? undefined} alt={user.name ?? "User"} />
+                  <AvatarFallback className="rounded-sm">{getInitial(user.email)}</AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-base font-medium text-foreground">{getDisplayName(user)}</p>
@@ -202,7 +202,7 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
                 {isPaid ? (
                   <CreditCard className="mr-2 h-4 w-4" />
                 ) : (
-                  <LogoSvg className="mr-2 h-4 w-4 text-amber-500!" />
+                  <LogoIcon iconSize={16} containerSize={24} className="bg-accent-1!" />
                 )}
                 {isPaid ? billingLabel : planLabel}
                 <ArrowUpRight className="ml-auto size-4 translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
@@ -230,12 +230,7 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
                 ))}
               </DropdownMenuSubContent>
             </DropdownMenuSub>
-            {isAdmin && !isImpersonating ? (
-              <DropdownMenuItem onClick={handleStartImpersonation} disabled={isPending}>
-                <UserRoundCheck className="mr-2 h-4 w-4" />
-                Impersonate by user ID
-              </DropdownMenuItem>
-            ) : null}
+
             {isImpersonating ? (
               <DropdownMenuItem onClick={handleStopImpersonation} disabled={isPending}>
                 <UserRoundCheck className="mr-2 h-4 w-4" />

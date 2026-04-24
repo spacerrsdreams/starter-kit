@@ -1,6 +1,7 @@
 import { UserStar } from "lucide-react"
 import { useTranslations } from "next-intl"
 
+import { SiteConfig } from "@/lib/site.config"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Chip } from "@/components/ui/chip"
 import { CountUpNumberAnimation } from "@/components/motion/count-up-number.animation"
@@ -35,7 +36,7 @@ export function CustomerReviewsSection() {
         <BottomUpFadeAnimation className="sm:col-span-1 lg:col-span-6" delay={0.1}>
           <article className="h-full rounded-xl border border-foreground/10 bg-foreground p-8 text-background">
             <p className="font-medium md:text-lg">
-              {t("quotes.quoteOneText")}
+              {t("quotes.quoteOneText", { name: SiteConfig.name })}
             </p>
             <div className="mt-8">
               <p className="text-lg font-semibold">{t("quotes.quoteOneAuthor")}</p>

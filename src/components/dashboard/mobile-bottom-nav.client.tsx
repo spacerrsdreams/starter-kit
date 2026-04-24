@@ -75,7 +75,7 @@ export function MobileBottomNav() {
               )}
             >
               <LogoSvg
-                iconSize={20}
+                iconSize={24}
                 className={cn(navIconClassName, isAskAiActive ? "text-white" : "text-muted-foreground")}
               />
             </span>

@@ -13,7 +13,7 @@ function resolveQuickActionSection(action: string | null) {
   }
 
   if (action === "open-settings") {
-    return "account"
+    return "profile"
   }
 
   return null
