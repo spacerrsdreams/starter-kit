@@ -1,10 +1,13 @@
 import type { NextConfig } from "next"
+import createNextIntlPlugin from "next-intl/plugin"
+
+const withNextIntl = createNextIntlPlugin()
 
 const nextConfig: NextConfig = {
   devIndicators: false,
   typedRoutes: true,
   cacheComponents: true,
-  allowedDevOrigins: ["sole-capital-typically.ngrok-free.app"],
+  allowedDevOrigins: [process.env.NGROK_URL!],
   images: {
     remotePatterns: [
       {
@@ -15,4 +18,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+export default withNextIntl(nextConfig)

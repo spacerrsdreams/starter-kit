@@ -211,6 +211,13 @@ Exactly one exported React component per .tsx file. Non-exported helper componen
 - This includes metadata, canonical tags, robots, sitemap, structured data (JSON-LD), OG/Twitter tags/images, indexing behavior, and SEO performance requirements.
 - Do not invent alternate SEO rules if `skills/SEO.md` already defines them; treat that file as authoritative.
 
+### i18n (Strict)
+
+- English is the default locale and must use non-prefixed URLs.
+- If a URL does not include a locale segment (for example no `/ka`, `/en`, etc.), it is always treated as English (`en`).
+- Do not generate `/en` URLs for default English pages unless explicitly requested later.
+- This default-locale URL rule exists for cleaner brand presentation, SEO, and user-friendly links.
+
 ### Stripe Pricing Sync (Strict)
 
 - Never hardcode plan prices in UI or business logic.

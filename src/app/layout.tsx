@@ -47,7 +47,7 @@ export const metadata = createMetadata({
   alternates: {
     canonical: BASE_URL,
     languages: {
-      "en-US": `${BASE_URL}/en-US`,
+      en: BASE_URL,
     },
     types: {
       "application/rss+xml": `${BASE_URL}/rss.xml`,
