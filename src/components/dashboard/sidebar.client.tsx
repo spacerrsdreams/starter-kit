@@ -27,28 +27,21 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
   return (
     <SidebarComponent {...props}>
       <SidebarHeader className="pb-0">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg">
-              <NavLogo />
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <SidebarMenuButton size="lg">
+          <NavLogo />
+        </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="flex min-h-0 flex-1 flex-col space-y-1">
-          {session?.user?.role === "admin" ? (
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href={WebRoutes.admin.path}>
-                    <ShieldCheck className="size-4.5!" />
-                    <span>Admin</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          ) : null}
+          {session?.user?.role === "admin" && (
+            <SidebarMenuButton asChild>
+              <Link href={WebRoutes.admin.path}>
+                <ShieldCheck className="size-4.5!" />
+                <span>Admin</span>
+              </Link>
+            </SidebarMenuButton>
+          )}
+
           <ChatDashboardSidebar />
         </SidebarGroup>
       </SidebarContent>
