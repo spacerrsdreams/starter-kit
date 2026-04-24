@@ -57,7 +57,7 @@ export async function POST(request: Request) {
 
   await upsertCustomerForUser({ userId, customerId })
 
-  const priceId = getStripePriceId(parsed.data.interval)
+  const priceId = getStripePriceId(parsed.data.product)
   const appBaseUrl = BASE_URL
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     client_reference_id: userId,
     metadata: {
       userId,
-      billingInterval: parsed.data.interval,
+      billingProduct: parsed.data.product,
     },
   })
 

@@ -210,3 +210,10 @@ Exactly one exported React component per .tsx file. Non-exported helper componen
 - For anything SEO-related, always read and follow `skills/SEO.md`.
 - This includes metadata, canonical tags, robots, sitemap, structured data (JSON-LD), OG/Twitter tags/images, indexing behavior, and SEO performance requirements.
 - Do not invent alternate SEO rules if `skills/SEO.md` already defines them; treat that file as authoritative.
+
+### Stripe Pricing Sync (Strict)
+
+- Never hardcode plan prices in UI or business logic.
+- Always fetch plan prices from Stripe Price objects on the server using configured Stripe price IDs.
+- Use Stripe-derived values as the single source of truth for displayed pricing and checkout consistency.
+- If Stripe prices are unavailable, disable purchase actions instead of falling back to hardcoded amounts.

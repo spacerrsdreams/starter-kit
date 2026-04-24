@@ -1,6 +1,7 @@
 import { ApiRoutes } from "@/lib/api.routes"
 import { apiRequest } from "@/lib/http-client"
 import type {
+  BillingProductsResponse,
   BillingSubscriptionResponse,
   CreateCheckoutSessionRequest,
   CreateCheckoutSessionResponse,
@@ -10,6 +11,11 @@ import type {
 export async function getBillingSubscriptionApi() {
   const response = await apiRequest<BillingSubscriptionResponse>(ApiRoutes.billing.subscription)
   return response.subscription
+}
+
+export async function getBillingProductsApi() {
+  const response = await apiRequest<BillingProductsResponse>(ApiRoutes.billing.products)
+  return response.products
 }
 
 export async function createCheckoutSessionApi(payload: CreateCheckoutSessionRequest) {

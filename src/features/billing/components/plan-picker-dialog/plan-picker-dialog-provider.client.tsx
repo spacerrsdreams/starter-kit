@@ -25,10 +25,10 @@ export function PlanPickerDialogProvider({ children }: PlanPickerDialogProviderP
   }, [])
 
   const handleSelectProduct = useCallback(
-    (selectedPlan: "monthly" | "yearly") => {
+    (selectedProduct: "monthly" | "yearly") => {
       void (async () => {
         try {
-          const response = await checkoutSessionMutation.mutateAsync({ interval: selectedPlan })
+          const response = await checkoutSessionMutation.mutateAsync({ product: selectedProduct })
           trackBillingEvent({
             type: BILLING_TRACKING_EVENTS.checkoutRedirected,
             source: "sidebar_upgrade_cta",

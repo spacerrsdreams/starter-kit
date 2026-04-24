@@ -4,7 +4,7 @@ import type Stripe from "stripe"
 import { z } from "zod"
 
 import { prisma } from "@/lib/prisma"
-import type { BillingSubscriptionSnapshot } from "@/features/billing/types/billing.types"
+import type { BillingProduct, BillingSubscriptionSnapshot } from "@/features/billing/types/billing.types"
 
 const PaidStripeStatuses = new Set<Stripe.Subscription.Status>(["active", "trialing"])
 const stripeSubscriptionStatusSchema = z.enum([
@@ -22,17 +22,32 @@ function parseStripeSubscriptionStatus(value: string | null): Stripe.Subscriptio
   return stripeSubscriptionStatusSchema.safeParse(value).data ?? null
 }
 
+function parseBillingProduct(stripePriceId: string | null | undefined): BillingProduct | null {
+  if (!stripePriceId) return null
+
+  const yearlyPriceId = process.env.STRIPE_PRICE_ID_PRO_YEARLY
+  const monthlyPriceId = process.env.STRIPE_PRICE_ID_PRO_MONTHLY
+
+  if (stripePriceId === yearlyPriceId) return "yearly"
+  if (stripePriceId === monthlyPriceId) return "monthly"
+
+  return null
+}
+
 function toSnapshot(params: {
   customerId: string | null
+  stripePriceId?: string | null
   subscriptionStatus?: Stripe.Subscription.Status | null
   currentPeriodEnd?: Date | null
 }): BillingSubscriptionSnapshot {
   const subscriptionStatus = params.subscriptionStatus ?? null
   const isPaid = subscriptionStatus ? PaidStripeStatuses.has(subscriptionStatus) : false
+  const currentProduct = isPaid ? parseBillingProduct(params.stripePriceId) : null
 
   return {
     plan: isPaid ? "pro" : "free",
     isPaid,
+    currentProduct,
     subscriptionStatus,
     currentPeriodEnd: params.currentPeriodEnd?.toISOString() ?? null,
     customerId: params.customerId,
@@ -44,6 +59,7 @@ export async function getBillingSubscriptionSnapshot(userId: string): Promise<Bi
     where: { userId },
     select: {
       stripeCustomerId: true,
+      stripePriceId: true,
       stripeStatus: true,
       currentPeriodEnd: true,
     },
@@ -57,6 +73,7 @@ export async function getBillingSubscriptionSnapshot(userId: string): Promise<Bi
 
   return toSnapshot({
     customerId: existing.stripeCustomerId,
+    stripePriceId: existing.stripePriceId,
     subscriptionStatus: parseStripeSubscriptionStatus(existing.stripeStatus),
     currentPeriodEnd: existing.currentPeriodEnd,
   })

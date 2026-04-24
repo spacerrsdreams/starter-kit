@@ -1,12 +1,11 @@
 "use client"
 
 import { Database } from "lucide-react"
-import { useState } from "react"
 
 import { PricingPlanCard } from "@/features/billing/components/plan-picker-dialog/pricing-plan-card.client"
+import { useFetchBillingProducts } from "@/features/billing/hooks/use-fetch-billing-products"
 import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
 import { Chip } from "@/components/ui/chip"
-import { Switch } from "@/components/ui/switch"
 
 const MONTHLY_PLAN_FEATURES = ["Essential tools to get you up", "Up to 5 projects & reporting", "Email support"]
 const YEARLY_PLAN_FEATURES = ["Essential tools to get you up", "Unlimited projects & reporting", "Email support"]
@@ -14,17 +13,22 @@ const YEARLY_PLAN_FEATURES = ["Essential tools to get you up", "Unlimited projec
 export type PlanPickerProps = {
   isBillingLoading: boolean
   showMainlabel?: boolean
-  onProductSelect: (selectedPlan: "monthly" | "yearly") => void
+  onProductSelect: (selectedProduct: "monthly" | "yearly") => void
 }
 
 export function PlanPicker({ isBillingLoading, showMainlabel = true, onProductSelect }: PlanPickerProps) {
-  const [isYearly, setIsYearly] = useState(false)
+  const { data: billingProducts } = useFetchBillingProducts()
   const { data: billingSubscription } = useFetchBillingSubscription()
-  const starterPrice = isYearly ? 31 : 39
-  const ultimatePrice = isYearly ? 63 : 79
-  const billedLabel = isYearly ? "yearly" : "monthly"
-  const selectedPlan = isYearly ? "yearly" : "monthly"
+  const monthlyUnitAmount = billingProducts?.monthly.unitAmount
+  const yearlyUnitAmount = billingProducts?.yearly.unitAmount
+  const hasStripePrices = monthlyUnitAmount !== undefined && yearlyUnitAmount !== undefined
+  const monthlyPrice = hasStripePrices ? monthlyUnitAmount / 100 : 0
+  const yearlyPrice = hasStripePrices ? Math.round((yearlyUnitAmount / 100 / 12) * 100) / 100 : 0
   const isSubscribedToPaidPlan = Boolean(billingSubscription?.isPaid)
+  const monthlyBadgeLabel =
+    isSubscribedToPaidPlan && billingSubscription?.currentProduct === "monthly" ? "CURRENT" : undefined
+  const yearlyBadgeLabel =
+    isSubscribedToPaidPlan && billingSubscription?.currentProduct === "yearly" ? "CURRENT" : undefined
 
   return (
     <div className="flex h-full flex-col items-center justify-center">
@@ -33,43 +37,32 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onProductSe
         <h2 className="mt-6 text-2xl leading-3 font-semibold tracking-[-2.5px] text-balance sm:text-5xl">
           Choose the Perfect Plan
         </h2>
-        <div className="mt-8 flex w-full items-center justify-center gap-3">
-          <span className="text-sm font-semibold">Monthly</span>
-          <Switch
-            checked={isYearly}
-            onCheckedChange={setIsYearly}
-            disabled={isBillingLoading}
-            aria-label="Billing cycle"
-            className="border-border px-2 py-1 data-[size=default]:h-7 data-[size=default]:w-14 data-checked:bg-accent-1 data-checked:**:data-[slot=switch-thumb]:translate-x-6 data-checked:**:data-[slot=switch-thumb]:bg-white data-unchecked:bg-sidebar data-unchecked:**:data-[slot=switch-thumb]:translate-x-0 data-unchecked:**:data-[slot=switch-thumb]:bg-black"
-          />
-          <span className="text-sm font-semibold">Yearly</span>
-          <span className="rounded-full bg-accent-1 px-2.5 py-1 text-xs font-medium text-white">SAVE 20%</span>
-        </div>
       </div>
 
       <div className="mx-auto flex w-full flex-col items-center justify-center gap-4 md:flex-row">
         <PricingPlanCard
-          title="Starter"
+          title="Monthly"
           subtitle="Perfect for individuals and small teams just getting started"
-          price={starterPrice}
-          billedLabel={billedLabel}
+          price={monthlyPrice}
+          billedLabel="monthly"
           features={MONTHLY_PLAN_FEATURES}
           ctaLabel="Get Started"
-          isLoading={isBillingLoading}
-          onSelect={() => onProductSelect(selectedPlan)}
+          isLoading={isBillingLoading || !hasStripePrices}
+          onSelect={() => onProductSelect("monthly")}
           isLastFeatureMuted
+          badgeLabel={monthlyBadgeLabel}
         />
         <PricingPlanCard
-          title="Ultimate"
+          title="Yearly"
           subtitle="Perfect for individuals and small teams just getting started"
-          price={ultimatePrice}
-          billedLabel={billedLabel}
+          price={yearlyPrice}
+          billedLabel="yearly"
           features={YEARLY_PLAN_FEATURES}
           ctaLabel="Get Started"
-          isLoading={isBillingLoading}
-          onSelect={() => onProductSelect(selectedPlan)}
+          isLoading={isBillingLoading || !hasStripePrices}
+          onSelect={() => onProductSelect("yearly")}
           isFeatured
-          badgeLabel={isSubscribedToPaidPlan ? "CURRENT" : undefined}
+          badgeLabel={yearlyBadgeLabel}
         />
       </div>
     </div>

@@ -16,13 +16,13 @@ export function PlanPickerSectionClient() {
   const { openAuthModal } = useAuthRequiredModal()
   const checkoutSessionMutation = useMutateCreateCheckoutSession()
 
-  const selectedPlanFromUrl = searchParams.get("checkoutInterval")
-  const hasValidSelectedPlan = selectedPlanFromUrl === "monthly" || selectedPlanFromUrl === "yearly"
+  const selectedProductFromUrl = searchParams.get("checkoutProduct")
+  const hasValidSelectedProduct = selectedProductFromUrl === "monthly" || selectedProductFromUrl === "yearly"
 
   const startCheckout = useCallback(
-    async (selectedPlan: "monthly" | "yearly") => {
+    async (selectedProduct: "monthly" | "yearly") => {
       try {
-        const { checkoutUrl } = await checkoutSessionMutation.mutateAsync({ interval: selectedPlan })
+        const { checkoutUrl } = await checkoutSessionMutation.mutateAsync({ product: selectedProduct })
         window.location.href = checkoutUrl
       } catch (error) {
         console.error("Failed to start checkout.", error)
@@ -32,31 +32,31 @@ export function PlanPickerSectionClient() {
   )
 
   const handleSelectProduct = useCallback(
-    (selectedPlan: "monthly" | "yearly") => {
+    (selectedProduct: "monthly" | "yearly") => {
       if (isSessionPending) return
 
       if (!session?.user) {
         const redirectPath = `${pathname}?${new URLSearchParams({
           ...Object.fromEntries(searchParams),
-          checkoutInterval: selectedPlan,
+          checkoutProduct: selectedProduct,
         })}`
         openAuthModal({ redirectPath })
         return
       }
 
-      void startCheckout(selectedPlan)
+      void startCheckout(selectedProduct)
     },
     [isSessionPending, session?.user, pathname, searchParams, openAuthModal, startCheckout]
   )
 
   useEffect(() => {
-    if (!hasValidSelectedPlan || isSessionPending || !session?.user) return
-    void startCheckout(selectedPlanFromUrl)
+    if (!hasValidSelectedProduct || isSessionPending || !session?.user) return
+    void startCheckout(selectedProductFromUrl)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasValidSelectedPlan, isSessionPending, selectedPlanFromUrl, session?.user])
+  }, [hasValidSelectedProduct, isSessionPending, selectedProductFromUrl, session?.user])
 
   const isRedirecting =
-    hasValidSelectedPlan && !isSessionPending && (session?.user ? checkoutSessionMutation.isPending : false)
+    hasValidSelectedProduct && !isSessionPending && (session?.user ? checkoutSessionMutation.isPending : false)
 
   return (
     <section className="w-full px-4 py-0">

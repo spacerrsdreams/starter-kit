@@ -4,8 +4,21 @@ export type BillingSubscriptionResponse = {
   subscription: BillingSubscriptionSnapshot
 }
 
+export type BillingProductsResponse = {
+  products: {
+    monthly: {
+      unitAmount: number
+      currency: string
+    }
+    yearly: {
+      unitAmount: number
+      currency: string
+    }
+  }
+}
+
 export type CreateCheckoutSessionRequest = {
-  interval: "monthly" | "yearly"
+  product: "monthly" | "yearly"
 }
 
 export type CreateCheckoutSessionResponse = {

@@ -33,11 +33,12 @@ export function DashboardCommandDialogClient({ open, onOpenChange }: DashboardCo
   const openSettingsDialog = useSettingsDialogStore((state) => state.openDialog)
   const viewerRole = session?.user?.role
 
-  const handleAction = (actionId?: DashboardCommandActionId) => {
+  const handleAction = async (actionId?: DashboardCommandActionId) => {
     if (!actionId) return
 
     if (actionId === "logout") {
-      void authClient.signOut()
+      await authClient.signOut()
+      router.refresh()
       return
     }
 
@@ -85,7 +86,7 @@ export function DashboardCommandDialogClient({ open, onOpenChange }: DashboardCo
                     }
 
                     if (item.kind === "action") {
-                      handleAction(item.actionId)
+                      void handleAction(item.actionId)
                     }
 
                     onOpenChange(false)

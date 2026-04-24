@@ -19,9 +19,9 @@ export function PricingContentPage() {
   const checkoutSessionMutation = useMutateCreateCheckoutSession()
 
   const handleSelectProduct = useCallback(
-    (selectedPlan: "monthly" | "yearly") => {
+    (selectedProduct: "monthly" | "yearly") => {
       const nextSearchParams = new URLSearchParams(searchParams.toString())
-      nextSearchParams.set("checkoutInterval", selectedPlan)
+      nextSearchParams.set("checkoutProduct", selectedProduct)
       const redirectPath = `${pathname}?${nextSearchParams.toString()}`
       const callbackURL = `${ApiRoutes.authSignedIn}?${new URLSearchParams({ next: redirectPath }).toString()}`
 
@@ -32,7 +32,7 @@ export function PricingContentPage() {
 
       void (async () => {
         try {
-          const response = await checkoutSessionMutation.mutateAsync({ interval: selectedPlan })
+          const response = await checkoutSessionMutation.mutateAsync({ product: selectedProduct })
           window.location.href = response.checkoutUrl
         } catch (error) {
           console.error("Failed to start checkout from pricing page.", error)

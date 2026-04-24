@@ -11,6 +11,7 @@ export const ApiRoutes = {
   accountSendVerificationEmail: "/api/account/send-verification-email",
   billing: {
     subscription: "/api/billing/subscription",
+    products: "/api/billing/products",
     checkoutSession: "/api/billing/checkout-session",
     portalSession: "/api/billing/portal-session",
     webhook: "/api/billing/webhook",
