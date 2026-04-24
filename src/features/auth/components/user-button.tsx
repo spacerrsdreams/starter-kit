@@ -1,7 +1,17 @@
 "use client"
 
 import type { User } from "better-auth"
-import { ArrowUpRight, CircleHelp, CreditCard, FileText, Info, LogOut, Settings, UserRoundCheck } from "lucide-react"
+import {
+  ArrowUpRight,
+  CircleHelp,
+  CreditCard,
+  FileText,
+  Info,
+  LogOut,
+  Settings,
+  SparklesIcon,
+  UserRoundCheck,
+} from "lucide-react"
 import Link from "next/link"
 import { useState, useTransition, type MouseEvent } from "react"
 import { toast } from "sonner"
@@ -199,11 +209,7 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
                 onClick={isPaid ? handleManageBilling : handleUpgradeClick}
                 disabled={isPaid ? isBillingLoading : planPickerDialog?.isPlanPickerCheckoutLoading}
               >
-                {isPaid ? (
-                  <CreditCard className="mr-2 h-4 w-4" />
-                ) : (
-                  <LogoIcon iconSize={16} containerSize={24} className="bg-accent-1!" />
-                )}
+                {isPaid ? <CreditCard className="mr-2 h-4 w-4" /> : <SparklesIcon className="mr-2 h-4 w-4" />}
                 {isPaid ? billingLabel : planLabel}
                 <ArrowUpRight className="ml-auto size-4 translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
               </DropdownMenuItem>
@@ -214,13 +220,13 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
               <ArrowUpRight className="ml-auto size-4 translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
             </DropdownMenuItem>
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger className="group text-base">
+              <DropdownMenuSubTrigger className="group cursor-pointer text-base">
                 <CircleHelp className="mr-2 h-4 w-4" />
                 Help
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent className="w-64">
                 {helpLinks.map((item) => (
-                  <DropdownMenuItem key={item.label} asChild className="group text-base">
+                  <DropdownMenuItem key={item.label} asChild className="group">
                     <Link href={item.href}>
                       <item.icon className="mr-2 h-4 w-4" />
                       <span>{item.label}</span>
