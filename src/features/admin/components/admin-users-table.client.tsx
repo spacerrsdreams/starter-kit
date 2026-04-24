@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useLocale } from "next-intl"
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -21,6 +22,7 @@ type AdminUsersTableProps = {
 
 export function AdminUsersTable({ currentUserId }: AdminUsersTableProps) {
   const router = useRouter()
+  const locale = useLocale()
   const [editingUser, setEditingUser] = useState<AdminUserListItem | null>(null)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const usersQuery = useFetchAdminUsers()
@@ -84,6 +86,7 @@ export function AdminUsersTable({ currentUserId }: AdminUsersTableProps) {
     updateUserMutation.isPending || deleteUserMutation.isPending || impersonateUserMutation.isPending
   const columns = getAdminUsersColumns({
     currentUserId,
+    locale,
     isPendingAction,
     onEditUser: (user) => {
       setEditingUser(user)
@@ -99,7 +102,7 @@ export function AdminUsersTable({ currentUserId }: AdminUsersTableProps) {
 
   return (
     <>
-      <AdminUsersDataTable columns={columns} data={usersQuery.data.users} totalUsers={usersQuery.data.totalUsers} />
+      <AdminUsersDataTable columns={columns} data={usersQuery.data.users} />
       <AdminUserEditDialog
         open={isEditDialogOpen}
         user={editingUser}

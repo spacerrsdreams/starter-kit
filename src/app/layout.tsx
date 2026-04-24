@@ -10,6 +10,7 @@ import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
 import { AiWidgetLazy } from "@/features/ai/widget/components/ai-widget-lazy.client"
 import { AuthRequiredModalProvider } from "@/features/auth/components/auth-required-modal/auth-required-modal-provider.client"
+import { UserActivityTracker } from "@/features/auth/components/user-activity-tracker.client"
 import { createMetadata } from "@/features/seo/metadata"
 import { CookieConsentBannerLazy } from "@/components/cookies/cookie-consent-banner-lazy.client"
 import { QuickAccessMenuLazy } from "@/components/quick-access-menu/quick-access-menu-lazy.client"
@@ -145,6 +146,7 @@ export default async function RootLayout({
                     <AuthRequiredModalProvider>
                       <TooltipProvider>
                         {children}
+                        <UserActivityTracker />
                         <AiWidgetLazy />
                         <QuickAccessMenuLazy renderInlineTrigger={false} />
                         <Toaster position="bottom-right" />

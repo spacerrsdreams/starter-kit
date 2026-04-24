@@ -10,6 +10,8 @@ export type AdminUserListItem = {
   email: string
   role: AdminUserRole
   createdAt: string
+  lastActiveAt: string | null
+  deactivatedAt: string | null
   subscriptionStatus: AdminUserSubscriptionStatus
 }
 

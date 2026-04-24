@@ -8,6 +8,9 @@ export const ApiRoutes = {
     setMessageReaction: (chatId: string, messageId: string) => `/api/chats/${chatId}/messages/${messageId}/reaction`,
   },
   authSignedIn: "/api/auth/signed-in",
+  account: {
+    activity: "/api/account/activity",
+  },
   accountSendVerificationEmail: "/api/account/send-verification-email",
   billing: {
     subscription: "/api/billing/subscription",

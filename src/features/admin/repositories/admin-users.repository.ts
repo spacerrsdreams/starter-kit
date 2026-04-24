@@ -19,6 +19,16 @@ export async function listAdminUsers(): Promise<AdminUsersListResponse> {
         email: true,
         role: true,
         createdAt: true,
+        deactivatedAt: true,
+        sessions: {
+          select: {
+            updatedAt: true,
+          },
+          orderBy: {
+            updatedAt: "desc",
+          },
+          take: 1,
+        },
         billingSubscription: {
           select: {
             stripeStatus: true,
@@ -37,6 +47,8 @@ export async function listAdminUsers(): Promise<AdminUsersListResponse> {
       email: user.email,
       role: user.role,
       createdAt: user.createdAt.toISOString(),
+      lastActiveAt: user.sessions[0]?.updatedAt.toISOString() ?? null,
+      deactivatedAt: user.deactivatedAt?.toISOString() ?? null,
       subscriptionStatus: mapSubscriptionStatus(user.billingSubscription?.stripeStatus),
     })),
   }

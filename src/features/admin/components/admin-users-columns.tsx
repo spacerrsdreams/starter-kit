@@ -11,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 type AdminUsersColumnActions = {
   currentUserId: string
+  locale: string
   isPendingAction: boolean
   onEditUser: (user: AdminUserListItem) => void
   onDeleteUser: (userId: string) => void
@@ -38,18 +39,30 @@ function getInitials(name: string) {
     .join("")
 }
 
-function formatCreatedAt(createdAt: string) {
+function formatCreatedAt(createdAt: string, locale: string) {
   const date = new Date(createdAt)
-  return new Intl.DateTimeFormat(undefined, {
-    year: "numeric",
-    month: "2-digit",
+  const formatted = new Intl.DateTimeFormat(locale, {
     day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-    timeZoneName: "short",
+    month: "short",
+    year: "numeric",
   }).format(date)
+  return formatted.replace(/^(\d{2}\s\w{3})\s(\d{4})$/, "$1, $2")
+}
+
+function formatLastSeen(lastActiveAt: string | null, locale: string) {
+  if (!lastActiveAt) {
+    return "Never"
+  }
+
+  return formatCreatedAt(lastActiveAt, locale)
+}
+
+function formatDeactivatedAt(deactivatedAt: string | null, locale: string) {
+  if (!deactivatedAt) {
+    return "No"
+  }
+
+  return `Yes (${formatCreatedAt(deactivatedAt, locale)})`
 }
 
 export function getAdminUsersColumns(actions: AdminUsersColumnActions): ColumnDef<AdminUserListItem>[] {
@@ -86,7 +99,73 @@ export function getAdminUsersColumns(actions: AdminUsersColumnActions): ColumnDe
     {
       accessorKey: "createdAt",
       header: "Created At",
-      cell: ({ row }) => formatCreatedAt(row.original.createdAt),
+      cell: ({ row }) => formatCreatedAt(row.original.createdAt, actions.locale),
+    },
+    {
+      accessorKey: "lastActiveAt",
+      header: "Last Seen At",
+      filterFn: (row, columnId, filterValue) => {
+        const value = row.getValue(columnId) as string | null
+        const filter = String(filterValue ?? "all")
+
+        if (filter === "all") {
+          return true
+        }
+
+        if (filter === "never") {
+          return value === null
+        }
+
+        if (!value) {
+          return false
+        }
+
+        const seenAt = new Date(value).getTime()
+        if (Number.isNaN(seenAt)) {
+          return false
+        }
+
+        const now = Date.now()
+        const oneDayMs = 24 * 60 * 60 * 1000
+
+        if (filter === "today") {
+          return now - seenAt <= oneDayMs
+        }
+
+        if (filter === "week") {
+          return now - seenAt <= 7 * oneDayMs
+        }
+
+        if (filter === "month") {
+          return now - seenAt <= 30 * oneDayMs
+        }
+
+        return true
+      },
+      cell: ({ row }) => formatLastSeen(row.original.lastActiveAt, actions.locale),
+    },
+    {
+      accessorKey: "deactivatedAt",
+      header: "Deactivated",
+      filterFn: (row, columnId, filterValue) => {
+        const value = row.getValue(columnId) as string | null
+        const filter = String(filterValue ?? "all")
+
+        if (filter === "all") {
+          return true
+        }
+
+        if (filter === "deactivated") {
+          return value !== null
+        }
+
+        if (filter === "active") {
+          return value === null
+        }
+
+        return true
+      },
+      cell: ({ row }) => formatDeactivatedAt(row.original.deactivatedAt, actions.locale),
     },
     {
       accessorKey: "subscriptionStatus",

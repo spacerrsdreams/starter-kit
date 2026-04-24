@@ -61,7 +61,10 @@ export function ChatDashboardSidebar() {
     [chatsQuery.data?.pages]
   )
 
-  const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${WebRoutes.dashboard.path}/`)
+  const chatRoutePrefix = `${WebRoutes.dashboard.path}/ai`
+  const isAskAiRoute =
+    pathname === WebRoutes.dashboard.path || pathname === chatRoutePrefix || pathname.startsWith(`${chatRoutePrefix}/`)
+
   const savedChats = useMemo(() => chats.filter((chat) => chat.isSaved), [chats])
   const recentChats = useMemo(() => chats.filter((chat) => !chat.isSaved), [chats])
 
