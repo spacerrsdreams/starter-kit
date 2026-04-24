@@ -16,9 +16,9 @@ import { signInWithGoogleAction, signUpWithEmailAndPasswordAction } from "@/feat
 import { signUpWithEmailAndPasswordSchema } from "@/features/auth/lib/auth.schema"
 import { updateNotificationPreferencesAction } from "@/features/settings/actions/update-notification-preferences.action"
 import { Button } from "@/components/ui/button"
-import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field"
 import { GoogleIcon } from "@/components/ui/icons/google.icon"
+import { LogoIcon } from "@/components/ui/icons/logo.icon"
 import { Input } from "@/components/ui/input"
 
 interface SignUpFormProps {
@@ -251,10 +251,15 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn, callbackURL }: SignUpF
 
   return (
     <div className="space-y-3">
-      <DialogHeader>
-        <DialogTitle className="text-center">{texts.signUpTitle.replace("{name}", SiteConfig.name)}</DialogTitle>
-        <DialogDescription className="text-center"> {texts.signUpDescription}</DialogDescription>
-      </DialogHeader>
+      <div className="space-y-1 text-center">
+        <div className="mb-4 flex items-center justify-center">
+          <LogoIcon iconSize={28} containerSize={38} />
+        </div>
+        <h1 className="text-2xl font-medium tracking-[-1px] text-foreground">
+          {texts.signUpTitle.replace("{name}", SiteConfig.name)}
+        </h1>
+        <p className="text-sm text-muted-foreground">{texts.signUpDescription}</p>
+      </div>
       <div>{formBody}</div>
     </div>
   )

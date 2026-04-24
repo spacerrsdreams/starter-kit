@@ -20,9 +20,9 @@ import {
 } from "@/features/auth/lib/auth.actions"
 import { signInWithEmailAndPasswordSchema } from "@/features/auth/lib/auth.schema"
 import { Button } from "@/components/ui/button"
-import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field"
 import { GoogleIcon } from "@/components/ui/icons/google.icon"
+import { LogoIcon } from "@/components/ui/icons/logo.icon"
 import { Input } from "@/components/ui/input"
 
 interface SignInFormProps {
@@ -291,10 +291,15 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
 
   return (
     <div className="space-y-3">
-      <DialogHeader>
-        <DialogTitle className="text-center">{texts.signInTitle.replace("{name}", SiteConfig.name)}</DialogTitle>
-        <DialogDescription className="text-center"> {texts.signInDescription}</DialogDescription>
-      </DialogHeader>
+      <div className="space-y-1 text-center">
+        <div className="mb-4 flex items-center justify-center">
+          <LogoIcon iconSize={28} containerSize={38} />
+        </div>
+        <h1 className="text-2xl font-medium tracking-[-1px] text-foreground">
+          {texts.signInTitle.replace("{name}", SiteConfig.name)}
+        </h1>
+        <p className="text-sm text-muted-foreground">{texts.signInDescription}</p>
+      </div>
       {formContent}
       {reactivateDialog}
     </div>
