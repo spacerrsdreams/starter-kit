@@ -1,5 +1,5 @@
-import Image from "next/image"
 import { useTranslations } from "next-intl"
+import Image from "next/image"
 
 import { SiteConfig } from "@/lib/site.config"
 import { GetStartedCtaButton } from "@/components/marketing/get-started-cta-button.client"
@@ -18,8 +18,10 @@ export function FreeTrialCtaSection({ className }: FreeTrialCtaSectionProps) {
       <BottomUpFadeAnimation delay={0.25}>
         <div className="relative mx-auto w-full max-w-4xl lg:overflow-hidden lg:pb-16">
           <div className="flex flex-col items-center px-4 text-center lg:hidden">
-            <LogoIcon size={28} className="bg-accent-1" />
-            <h2 className="mt-4 text-2xl font-semibold tracking-[-2.5px] sm:text-4xl">{t("title", { name: SiteConfig.name })}</h2>
+            <LogoIcon iconSize={28} containerSize={36} className="bg-accent-1" />
+            <h2 className="mt-4 text-2xl font-semibold tracking-[-2.5px] sm:text-4xl">
+              {t("title", { name: SiteConfig.name })}
+            </h2>
             <p className="mt-4 text-sm text-muted-foreground sm:text-base">{t("description")}</p>
             <div className="mt-8">
               <GetStartedCtaButton label={t("cta")} />
@@ -41,7 +43,7 @@ export function FreeTrialCtaSection({ className }: FreeTrialCtaSectionProps) {
           <div className="pointer-events-none absolute inset-0 z-10 hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.19)_32%,rgba(255,255,255,1)_55%,rgba(255,255,255,1)_89%)] lg:block" />
 
           <div className="absolute bottom-0 left-1/2 z-20 hidden w-full max-w-[640px] -translate-x-1/2 flex-col items-center px-4 text-center lg:flex">
-            <LogoIcon size={28} className="bg-accent-1" />
+            <LogoIcon iconSize={42} containerSize={54} className="bg-accent-1" />
 
             <h2 className="mt-4 text-4xl font-semibold tracking-[-2.5px]">{t("title", { name: SiteConfig.name })}</h2>
             <p className="mt-4 text-base text-muted-foreground">{t("description")}</p>

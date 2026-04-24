@@ -1,6 +1,6 @@
 import { Send } from "lucide-react"
-import { useTranslations } from "next-intl"
 import { Route } from "next"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 
 import { SiteConfig } from "@/lib/site.config"
@@ -66,8 +66,8 @@ export function Footer() {
         <BottomUpFadeAnimation delay={0.15}>
           <div className="space-y-5">
             <Link href={WebRoutes.root.path} className="flex items-center gap-3">
-              <LogoIcon size={24} className="bg-accent-1" />
-              <span className="text-3xl font-semibold tracking-tight text-foreground">{SiteConfig.name}</span>
+              <LogoIcon iconSize={32} containerSize={36} className="bg-accent-1" />
+              <span className="text-3xl font-semibold tracking-tighter text-foreground">{SiteConfig.name}</span>
             </Link>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
               {t("description", { name: SiteConfig.name })}
@@ -106,9 +106,7 @@ export function Footer() {
       <div className="mx-auto mt-6 border-t border-border/75 py-6">
         <BottomUpFadeAnimation delay={0.55}>
           <div className="mx-auto flex w-full max-w-6xl items-center justify-center p-6 text-sm font-medium text-foreground">
-            <p>
-              {t("copyright", { year: SiteConfig.copyrightYear, name: SiteConfig.name })}
-            </p>
+            <p>{t("copyright", { year: SiteConfig.copyrightYear, name: SiteConfig.name })}</p>
           </div>
         </BottomUpFadeAnimation>
       </div>
