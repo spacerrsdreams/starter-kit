@@ -13,13 +13,13 @@ import {
   UserRoundCheck,
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState, useTransition, type MouseEvent } from "react"
 import { toast } from "sonner"
 
 import { WebRoutes } from "@/lib/web.routes"
 import { authClient } from "@/features/auth/lib/auth-client"
 import type { UserButtonProps } from "@/features/auth/types/user-button.types"
-import { usePlanPickerDialog } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog-context"
 import { BILLING_TRACKING_EVENTS } from "@/features/billing/constants/billing-tracking.constants"
 import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
 import { useMutateCreatePortalSession } from "@/features/billing/hooks/use-mutate-create-portal-session"
@@ -57,9 +57,9 @@ function getDisplayName(user: User): string {
 }
 
 export function UserButton({ user, isAdmin = false, isImpersonating = false }: UserButtonProps) {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const planPickerDialog = usePlanPickerDialog()
   const subscriptionQuery = useFetchBillingSubscription()
   const portalSessionMutation = useMutateCreatePortalSession()
   const hasResolvedBillingStatus = subscriptionQuery.isSuccess
@@ -115,7 +115,7 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
   }
 
   const handleUpgradeClick = () => {
-    planPickerDialog?.openPlanPickerDialog()
+    router.push(WebRoutes.pricing.path)
     trackBillingEvent({
       type: BILLING_TRACKING_EVENTS.ctaClicked,
       source: "sidebar_upgrade_cta",
@@ -207,7 +207,7 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
               <DropdownMenuItem
                 className="group text-base"
                 onClick={isPaid ? handleManageBilling : handleUpgradeClick}
-                disabled={isPaid ? isBillingLoading : planPickerDialog?.isPlanPickerCheckoutLoading}
+                disabled={isPaid ? isBillingLoading : false}
               >
                 {isPaid ? <CreditCard className="mr-2 h-4 w-4" /> : <SparklesIcon className="mr-2 h-4 w-4" />}
                 {isPaid ? billingLabel : planLabel}
