@@ -15,8 +15,8 @@ import {
 import { requestPasswordResetAction } from "@/features/auth/lib/auth.actions"
 import { requestPasswordResetSchema } from "@/features/auth/lib/auth.schema"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { LogoIcon } from "@/components/ui/icons/logo.icon"
 import { Input } from "@/components/ui/input"
 
 const texts = {
@@ -103,89 +103,91 @@ export function RequestPasswordResetForm() {
   const cardDescription = isDeactivated ? null : emailSent ? texts.emailSentDescription : texts.requestResetDescription
 
   return (
-    <Card
-      className={
-        isDeactivated
-          ? "flex w-full max-w-full min-w-full flex-col gap-2 rounded-none border-0 py-6 shadow-none sm:rounded-xl sm:border md:max-w-md md:min-w-0 md:flex-initial"
-          : "flex h-screen min-h-0 w-full max-w-full min-w-full flex-col justify-center gap-2 rounded-none border-0 shadow-none sm:justify-start sm:rounded-xl sm:border md:h-auto md:max-w-md md:min-w-0 md:flex-initial"
-      }
-    >
-      <CardHeader>
-        <CardTitle className="text-xl font-bold">{texts.resetPasswordTitle}</CardTitle>
-        {cardDescription && <CardDescription>{cardDescription}</CardDescription>}
-      </CardHeader>
-      <CardContent>
-        {isDeactivated ? (
-          <div className="flex min-h-0 flex-col items-center gap-3 text-center">
-            <p className="text-sm text-muted-foreground">{ACCOUNT_DEACTIVATED_RESET_PASSWORD_MESSAGE}</p>
-            <Link
-              href={WebRoutes.signIn.path}
-              className="inline-flex font-medium text-primary underline underline-offset-2"
-            >
-              {texts.signInToReactivate}
-            </Link>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <FieldGroup>
-              <div className="flex flex-col items-center gap-2 text-center text-sm">
-                {requestErrorLabel && <p className="text-red-500">{requestErrorLabel}</p>}
-              </div>
-              {!emailSent && (
-                <>
-                  <Field data-invalid={Boolean(form.formState.errors.email)}>
-                    <FieldLabel htmlFor="email">{texts.email}</FieldLabel>
-                    <Input
-                      id="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      placeholder={texts.emailPlaceholder}
-                      aria-invalid={Boolean(form.formState.errors.email)}
-                      {...form.register("email", {
-                        onChange: () => {
-                          if (requestErrorCode) setRequestErrorCode(null)
-                        },
-                      })}
-                    />
-                    {form.formState.errors.email?.message && (
-                      <FieldError errors={[{ message: form.formState.errors.email.message }]} />
-                    )}
-                  </Field>
-                  <Field>
-                    <Button type="submit" isLoading={isLoading} disabled={isLoading} aria-label={texts.sendResetEmail}>
-                      {texts.resetPasswordButton}
-                    </Button>
-                  </Field>
-                </>
-              )}
-              {emailSent && (
+    <div className="space-y-5">
+      <div className="space-y-1 text-center">
+        <div className="mb-4 flex items-center justify-center">
+          <LogoIcon iconSize={28} containerSize={38} />
+        </div>
+        <h1 className="text-2xl font-medium tracking-[-1px] text-foreground">{texts.resetPasswordTitle}</h1>
+        {cardDescription ? <p className="text-sm text-muted-foreground">{cardDescription}</p> : null}
+      </div>
+      {isDeactivated ? (
+        <div className="flex min-h-0 flex-col items-center gap-3 text-center">
+          <p className="text-sm text-muted-foreground">{ACCOUNT_DEACTIVATED_RESET_PASSWORD_MESSAGE}</p>
+          <Link
+            href={WebRoutes.signIn.path}
+            className="inline-flex font-medium text-primary underline underline-offset-2"
+          >
+            {texts.signInToReactivate}
+          </Link>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <FieldGroup className="gap-4">
+            <div className="flex flex-col items-center gap-2 text-center text-sm">
+              {requestErrorLabel && <p className="text-red-500">{requestErrorLabel}</p>}
+            </div>
+            {!emailSent && (
+              <>
+                <Field data-invalid={Boolean(form.formState.errors.email)}>
+                  <FieldLabel htmlFor="email">{texts.email}</FieldLabel>
+                  <Input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    placeholder={texts.emailPlaceholder}
+                    aria-invalid={Boolean(form.formState.errors.email)}
+                    className="h-11 rounded-xl px-4"
+                    {...form.register("email", {
+                      onChange: () => {
+                        if (requestErrorCode) setRequestErrorCode(null)
+                      },
+                    })}
+                  />
+                  {form.formState.errors.email?.message && (
+                    <FieldError errors={[{ message: form.formState.errors.email.message }]} />
+                  )}
+                </Field>
                 <Field>
                   <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => void handleResend()}
-                    isLoading={resendLoading}
-                    disabled={resendTimer > 0 || resendLoading}
-                    aria-label={
-                      resendTimer > 0 ? `${texts.resendAria} in ${formatTime(resendTimer)}` : texts.resendAria
-                    }
+                    type="submit"
+                    isLoading={isLoading}
+                    disabled={isLoading}
+                    aria-label={texts.sendResetEmail}
+                    featureStylesEnabled
+                    className="h-11 w-full rounded-full text-sm font-medium"
                   >
-                    {resendTimer > 0 ? `Resend in ${formatTime(resendTimer)}` : texts.resendEmail}
+                    {texts.resetPasswordButton}
                   </Button>
                 </Field>
-              )}
-              <FieldDescription className="flex items-center justify-center gap-2 text-center text-sm">
-                <span>{texts.rememberPassword}</span>
-                <Link className="text-xs underline" href={WebRoutes.signIn.path}>
-                  {texts.signIn}
-                </Link>
-              </FieldDescription>
-            </FieldGroup>
-          </form>
-        )}
-      </CardContent>
-    </Card>
+              </>
+            )}
+            {emailSent && (
+              <Field>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => void handleResend()}
+                  isLoading={resendLoading}
+                  disabled={resendTimer > 0 || resendLoading}
+                  aria-label={resendTimer > 0 ? `${texts.resendAria} in ${formatTime(resendTimer)}` : texts.resendAria}
+                  className="h-11 w-full rounded-full"
+                >
+                  {resendTimer > 0 ? `Resend in ${formatTime(resendTimer)}` : texts.resendEmail}
+                </Button>
+              </Field>
+            )}
+            <FieldDescription className="flex items-center justify-center gap-2 text-center text-sm">
+              <span>{texts.rememberPassword}</span>
+              <Link className="text-xs underline underline-offset-2" href={WebRoutes.signIn.path}>
+                {texts.signIn}
+              </Link>
+            </FieldDescription>
+          </FieldGroup>
+        </form>
+      )}
+    </div>
   )
 }
 

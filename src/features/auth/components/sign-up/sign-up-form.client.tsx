@@ -127,8 +127,9 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn, callbackURL }: SignUpF
             disabled={isSubmitDisabled}
             onClick={handleSignUpWithGoogle}
             aria-label={texts.signUpWithGoogle}
+            className="h-11 rounded-xl"
           >
-            <GoogleIcon />
+            <GoogleIcon className="size-4" />
             <span>{texts.signUpWithGoogle}</span>
           </Button>
         </Field>
@@ -141,6 +142,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn, callbackURL }: SignUpF
             autoComplete="email"
             placeholder={texts.emailPlaceholder}
             required
+            className="h-11 rounded-xl px-4"
             {...form.register("email", { onChange: clearErrorCode })}
           />
           {form.formState.errors.email?.message && (
@@ -166,7 +168,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn, callbackURL }: SignUpF
               type={passwordVisible ? "text" : "password"}
               autoComplete="new-password"
               required
-              className="pr-10"
+              className="h-11 rounded-xl px-4 pr-10"
               {...form.register("password", { onChange: clearErrorCode })}
             />
             <Button
@@ -194,7 +196,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn, callbackURL }: SignUpF
               type={passwordVisible ? "text" : "password"}
               autoComplete="new-password"
               required
-              className="pr-10"
+              className="h-11 rounded-xl px-4 pr-10"
               {...form.register("confirmPassword", { onChange: clearErrorCode })}
             />
             <Button
@@ -215,11 +217,12 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn, callbackURL }: SignUpF
         </Field>
         <Field>
           <Button
-            className="font-bold"
+            className="h-11 w-full rounded-full text-sm font-medium"
             type="submit"
             isLoading={isLoading}
             disabled={isSubmitDisabled}
             aria-label={texts.signUp}
+            featureStylesEnabled
           >
             {texts.signUp}
           </Button>

@@ -173,8 +173,9 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
             disabled={isFormLoading || googleLoading}
             onClick={handleSignInWithGoogle}
             aria-label={texts.signInWithGoogle}
+            className="h-11 rounded-xl"
           >
-            <GoogleIcon />
+            <GoogleIcon className="size-4" />
             <span className="">{texts.signInWithGoogle}</span>
           </Button>
         </Field>
@@ -191,6 +192,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
             placeholder={texts.emailPlaceholder}
             aria-invalid={Boolean(form.formState.errors.email)}
             required
+              className="h-11 rounded-xl px-4"
             {...form.register("email", {
               onChange: () => {
                 if (errorCode) setErrorCode(null)
@@ -230,7 +232,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
               autoComplete="current-password"
               placeholder="**********"
               required
-              className="pr-10"
+              className="h-11 rounded-xl px-4 pr-10"
               {...form.register("password", {
                 onChange: () => {
                   if (errorCode) setErrorCode(null)
@@ -254,11 +256,12 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
         <div className="py-1" />
         <Field>
           <Button
-            className="font-bold"
+            className="h-11 w-full rounded-full text-sm font-medium"
             type="submit"
             isLoading={isFormLoading}
             disabled={isFormLoading || googleLoading}
             aria-label={texts.signIn}
+            featureStylesEnabled
           >
             {texts.signIn}
           </Button>
