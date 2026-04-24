@@ -15,8 +15,8 @@ import {
 import * as React from "react"
 
 import type { AdminUserListItem } from "@/features/admin/types/admin-users.types"
+import { AdminUsersStatsCards } from "./admin-users-stats-cards"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -115,40 +115,12 @@ export function AdminUsersDataTable({ columns, data }: AdminUsersDataTableProps)
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-muted-foreground">Total users</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-semibold">{stats.totalUsers}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-muted-foreground">Active users (seen in 30 days)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-semibold">{stats.activeUsers}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-muted-foreground">Subscribed users</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-semibold">{stats.subscribedUsers}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-muted-foreground">Deactivated accounts</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-semibold">{stats.deactivatedUsers}</p>
-          </CardContent>
-        </Card>
-      </div>
+      <AdminUsersStatsCards
+        totalUsers={stats.totalUsers}
+        activeUsers={stats.activeUsers}
+        subscribedUsers={stats.subscribedUsers}
+        deactivatedUsers={stats.deactivatedUsers}
+      />
 
       <div className="flex flex-wrap items-center justify-end gap-2">
         <Input
