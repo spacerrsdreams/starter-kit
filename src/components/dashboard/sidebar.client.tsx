@@ -15,9 +15,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
-  SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
 
@@ -37,7 +35,7 @@ export function Sidebar({ ...props }: React.ComponentProps<typeof SidebarCompone
             <SidebarMenuButton asChild>
               <Link href={WebRoutes.admin.path}>
                 <ShieldCheck className="size-4.5!" />
-                <span>Admin</span>
+                <span className="font-medium text-sidebar-accent-foreground">Admin</span>
               </Link>
             </SidebarMenuButton>
           )}
