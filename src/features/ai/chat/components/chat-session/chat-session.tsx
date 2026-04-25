@@ -45,6 +45,19 @@ type ChatSessionProps = {
   onConversationUpdated: () => void
 }
 
+const WELCOME_TEXT_OPTIONS = [
+  "Where should we begin?",
+  "What can I help you with today?",
+  "Ready when you are",
+  "What's on your mind?",
+  "Hey what's up?",
+] as const
+
+const getRandomWelcomeText = () => {
+  const randomIndex = Math.floor(Math.random() * WELCOME_TEXT_OPTIONS.length)
+  return WELCOME_TEXT_OPTIONS[randomIndex]
+}
+
 export function ChatSession({
   sessionClientId,
   isAuthenticated = true,
@@ -69,6 +82,7 @@ export function ChatSession({
     {}
   )
   const [messageTimesById, setMessageTimesById] = useState<Record<string, number>>({})
+  const [welcomeText] = useState(getRandomWelcomeText)
 
   useEffect(() => {
     transportApi.setChatId(initialDbChatId)
@@ -340,9 +354,7 @@ export function ChatSession({
             >
               <LogoIcon iconSize={28} containerSize={42} className="bg-primary" />
               <div className={cn("space-y-2", compactMode && "mx-auto w-full max-w-sm")}>
-                <h3 className="text-2xl leading-tight tracking-[-1px] text-balance md:text-4xl">
-                  Where should we begin?
-                </h3>
+                <h3 className="text-2xl leading-tight tracking-[-1px] text-balance md:text-4xl">{welcomeText}</h3>
               </div>
             </ConversationEmptyState>
           )}

@@ -1,17 +1,26 @@
 "use client"
 
-import { AlertCircle, LogOut, Settings, User, UserRoundCheck } from "lucide-react"
+import {
+  AlertCircle,
+  BookMarked,
+  CircleDollarSign,
+  LogOut,
+  MessageCircle,
+  Settings,
+  ShieldCheck,
+  User,
+  UserRoundCheck,
+} from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 
 import { cn } from "@/lib/utils"
-import { WebRoutes } from "@/lib/web.routes"
+import { isPathWithinRoute, WebRoutes } from "@/lib/web.routes"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
 import { authClient } from "@/features/auth/lib/auth-client"
 import { SettingsDialog } from "@/features/settings/components/settings-dialog/settings-dialog"
 import { Button } from "@/components/ui/button"
-import { LogoSvg } from "@/components/ui/icons/logo.icon"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 export function MobileBottomNav() {
@@ -24,8 +33,12 @@ export function MobileBottomNav() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const user = session?.user
 
-  const askAiPath = WebRoutes.dashboard.path
-  const isAskAiActive = pathname === askAiPath || pathname.startsWith(`${askAiPath}/`)
+  const chatPath = WebRoutes.dashboard.path
+  const isChatActive = isPathWithinRoute(pathname, chatPath)
+  const isAdminActive = isPathWithinRoute(pathname, WebRoutes.admin.path)
+  const isBlogActive = isPathWithinRoute(pathname, WebRoutes.blog.path)
+  const isPricingActive = isPathWithinRoute(pathname, WebRoutes.pricing.path)
+  const hasAdminAccess = session?.user?.role === "admin"
 
   const navIconClassName = "size-5 shrink-0"
 
@@ -64,28 +77,99 @@ export function MobileBottomNav() {
       <div className="safe-area-bottom flex w-full flex-row items-center py-1">
         <div className="flex min-w-0 flex-1 justify-center">
           <Link
-            href={askAiPath}
-            aria-label="Ask AI"
+            href={chatPath}
+            aria-label="Chat"
             className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
           >
             <span
               className={cn(
                 "inline-flex h-9 w-9 items-center justify-center rounded-sm",
-                isAskAiActive && "bg-primary text-white"
+                isChatActive && "bg-primary text-white"
               )}
             >
-              <LogoSvg
-                iconSize={24}
-                className={cn(navIconClassName, isAskAiActive ? "text-white" : "text-muted-foreground")}
-              />
+              <MessageCircle className={cn(navIconClassName, isChatActive ? "text-white" : "text-muted-foreground")} />
             </span>
             <span
               className={cn(
                 "max-w-full truncate text-xs leading-none font-semibold",
-                isAskAiActive ? "text-primary" : "text-muted-foreground"
+                isChatActive ? "text-primary" : "text-muted-foreground"
               )}
             >
-              Ask AI
+              Chat
+            </span>
+          </Link>
+        </div>
+        {hasAdminAccess ? (
+          <div className="flex min-w-0 flex-1 justify-center">
+            <Link
+              href={WebRoutes.admin.path}
+              aria-label="Admin"
+              className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
+            >
+              <span
+                className={cn(
+                  "inline-flex h-9 w-9 items-center justify-center rounded-sm",
+                  isAdminActive && "bg-primary text-white"
+                )}
+              >
+                <ShieldCheck className={cn(navIconClassName, isAdminActive ? "text-white" : "text-muted-foreground")} />
+              </span>
+              <span
+                className={cn(
+                  "max-w-full truncate text-xs leading-none font-semibold",
+                  isAdminActive ? "text-primary" : "text-muted-foreground"
+                )}
+              >
+                Admin
+              </span>
+            </Link>
+          </div>
+        ) : null}
+        <div className="flex min-w-0 flex-1 justify-center">
+          <Link
+            href={WebRoutes.blog.path}
+            aria-label="Blog"
+            className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
+          >
+            <span
+              className={cn(
+                "inline-flex h-9 w-9 items-center justify-center rounded-sm",
+                isBlogActive && "bg-primary text-white"
+              )}
+            >
+              <BookMarked className={cn(navIconClassName, isBlogActive ? "text-white" : "text-muted-foreground")} />
+            </span>
+            <span
+              className={cn(
+                "max-w-full truncate text-xs leading-none font-semibold",
+                isBlogActive ? "text-primary" : "text-muted-foreground"
+              )}
+            >
+              Blog
+            </span>
+          </Link>
+        </div>
+        <div className="flex min-w-0 flex-1 justify-center">
+          <Link
+            href={WebRoutes.pricing.path}
+            aria-label="Pricing"
+            className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
+          >
+            <span
+              className={cn(
+                "inline-flex h-9 w-9 items-center justify-center rounded-sm",
+                isPricingActive && "bg-primary text-white"
+              )}
+            >
+              <CircleDollarSign className={cn(navIconClassName, isPricingActive ? "text-white" : "text-muted-foreground")} />
+            </span>
+            <span
+              className={cn(
+                "max-w-full truncate text-xs leading-none font-semibold",
+                isPricingActive ? "text-primary" : "text-muted-foreground"
+              )}
+            >
+              Pricing
             </span>
           </Link>
         </div>
