@@ -26,7 +26,7 @@ import { getSessionUserId } from "@/features/auth/lib/auth"
 
 export const maxDuration = 300
 
-const CHAT_MODEL_ID = "anthropic/claude-3.7-sonnet"
+const CHAT_MODEL_ID = "deepseek/deepseek-v4-flash"
 const CONTEXT_BUDGET_MAX_CHARS = 20_000
 const CONTEXT_BUDGET_RECENT_WINDOW_SIZE = 20
 const PER_TURN_COST_CAP_USD = 0.02

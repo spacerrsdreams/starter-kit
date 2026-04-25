@@ -1,7 +1,7 @@
 "use client"
 
 import { ChatStatus, FileUIPart } from "ai"
-import { memo, useCallback, useState } from "react"
+import { memo, useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
@@ -56,12 +56,21 @@ const AttachmentItem = memo(({ attachment, onRemove }: AttachmentItemProps) => {
 
 AttachmentItem.displayName = "AttachmentItem"
 
-const PromptInputAttachmentsDisplay = () => {
+interface PromptInputAttachmentsDisplayProps {
+  onHasAttachmentsChange: (hasAttachments: boolean) => void
+}
+
+const PromptInputAttachmentsDisplay = ({ onHasAttachmentsChange }: PromptInputAttachmentsDisplayProps) => {
   const attachments = usePromptInputAttachments()
 
   const handleRemove = useCallback((id: string) => attachments.remove(id), [attachments])
+  const hasAttachments = attachments.files.length > 0
 
-  if (attachments.files.length === 0) {
+  useEffect(() => {
+    onHasAttachmentsChange(hasAttachments)
+  }, [hasAttachments, onHasAttachmentsChange])
+
+  if (!hasAttachments) {
     return null
   }
 
@@ -89,8 +98,12 @@ export function ChatInputForm({
   status,
   multilineByDefault = false,
 }: ChatInputFormProps) {
-  const [isMultiline, setIsMultiline] = useState(multilineByDefault)
-  const shouldRenderMultiline = multilineByDefault || isMultiline
+  const [isMultilineByContent, setIsMultilineByContent] = useState(multilineByDefault)
+  const [hasAttachments, setHasAttachments] = useState(false)
+  const shouldRenderMultiline = multilineByDefault || hasAttachments || isMultilineByContent
+  const handleHasAttachmentsChange = useCallback((nextHasAttachments: boolean) => {
+    setHasAttachments(nextHasAttachments)
+  }, [])
 
   const handleAttachmentError = useCallback(
     (err: { code: "max_files" | "max_file_size" | "accept"; message: string }) => {
@@ -108,7 +121,7 @@ export function ChatInputForm({
   )
 
   const handleTextareaHeight = useCallback((textarea: HTMLTextAreaElement) => {
-    setIsMultiline(textarea.scrollHeight > 44)
+    setIsMultilineByContent(textarea.scrollHeight > 44)
   }, [])
 
   return (
@@ -124,11 +137,11 @@ export function ChatInputForm({
             throw new Error("Input is locked while response is streaming")
           }
           await onSubmit(message)
-          setIsMultiline(multilineByDefault)
+          setIsMultilineByContent(multilineByDefault)
         }}
         inputGroupClassName="min-h-14 rounded-xl md:rounded-[1.75rem] border bg-background shadow-sm"
       >
-        <PromptInputAttachmentsDisplay />
+        <PromptInputAttachmentsDisplay onHasAttachmentsChange={handleHasAttachmentsChange} />
         <PromptInputBody className="min-w-0">
           <PromptInputTextarea
             className={cn("max-h-56 min-h-0 pr-4 pl-2 text-base leading-6", shouldRenderMultiline && "pl-4")}

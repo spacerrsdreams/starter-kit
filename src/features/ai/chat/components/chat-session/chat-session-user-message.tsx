@@ -2,7 +2,8 @@
 
 import { Check, Copy, RefreshCcw } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
@@ -10,12 +11,46 @@ import type { ChatSessionUserMessageProps } from "@/features/ai/chat/types/chat-
 import { Attachment, AttachmentInfo, AttachmentPreview, Attachments } from "@/components/ai-elements/attachments"
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
 
 export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, onRetry }: ChatSessionUserMessageProps) {
   const t = useTranslations()
   const [isCopied, setIsCopied] = useState(false)
   const [isRetrying, setIsRetrying] = useState(false)
+  const [previewImage, setPreviewImage] = useState<{
+    url: string
+    name: string
+    width?: number
+    height?: number
+  } | null>(null)
+  const [viewportSize, setViewportSize] = useState({ width: 1200, height: 900 })
   const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const previewFrame = useMemo(() => {
+    const maxWidth = viewportSize.width * 0.96
+    const maxHeight = viewportSize.height * 0.9
+
+    if (!previewImage?.width || !previewImage?.height) {
+      return {
+        width: maxWidth,
+        height: maxHeight,
+      }
+    }
+
+    const ratio = previewImage.width / previewImage.height
+    let width = maxWidth
+    let height = width / ratio
+
+    if (height > maxHeight) {
+      height = maxHeight
+      width = height * ratio
+    }
+
+    return {
+      width,
+      height,
+    }
+  }, [previewImage?.height, previewImage?.width, viewportSize.height, viewportSize.width])
 
   useEffect(() => {
     return () => {
@@ -25,11 +60,48 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
     }
   }, [])
 
+  useEffect(() => {
+    const updateViewport = () => {
+      setViewportSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+
+    updateViewport()
+    window.addEventListener("resize", updateViewport)
+    return () => {
+      window.removeEventListener("resize", updateViewport)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!previewImage || (previewImage.width && previewImage.height)) {
+      return
+    }
+
+    const imageElement = new window.Image()
+    imageElement.onload = () => {
+      setPreviewImage((currentImage) => {
+        if (!currentImage || currentImage.url !== previewImage.url) {
+          return currentImage
+        }
+
+        return {
+          ...currentImage,
+          width: imageElement.naturalWidth,
+          height: imageElement.naturalHeight,
+        }
+      })
+    }
+    imageElement.src = previewImage.url
+  }, [previewImage])
+
   return (
     <Message from={message.role} className="w-fit max-w-[min(100%,32rem)] justify-end">
-      <MessageContent className="min-w-0 flex-col gap-3">
-        {message.parts.some((part) => part.type === "file") ? (
-          <Attachments className="max-w-full justify-end" variant="inline">
+      {message.parts.some((part) => part.type === "file") && (
+        <div className="mb-0 flex w-full">
+          <Attachments className="w-fit pt-0 pl-0" variant="inline">
             {message.parts.map((part, partIndex) => {
               if (part.type !== "file") {
                 return null
@@ -39,16 +111,40 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
                 ...part,
                 id: `${message.id}-file-${partIndex}`,
               }
+              const isImageFile = part.mediaType.startsWith("image/")
+
+              if (!isImageFile) {
+                return (
+                  <Attachment data={fileData} key={fileData.id}>
+                    <AttachmentPreview />
+                    <AttachmentInfo />
+                  </Attachment>
+                )
+              }
 
               return (
-                <Attachment data={fileData} key={fileData.id}>
-                  <AttachmentPreview />
-                  <AttachmentInfo />
-                </Attachment>
+                <button
+                  key={fileData.id}
+                  type="button"
+                  className="flex w-fit justify-end rounded-lg text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  onClick={() => {
+                    setPreviewImage({
+                      url: fileData.url,
+                      name: fileData.filename ?? "Image attachment",
+                    })
+                  }}
+                >
+                  <Attachment data={fileData}>
+                    <AttachmentPreview />
+                    <AttachmentInfo />
+                  </Attachment>
+                </button>
               )
             })}
           </Attachments>
-        ) : null}
+        </div>
+      )}
+      <MessageContent className="min-w-0 flex-col gap-3">
         {message.parts.map((part, partIndex) => {
           if (part.type !== "text") {
             return null
@@ -129,6 +225,29 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
           ) : null}
         </div>
       </div>
+      <Dialog open={previewImage !== null} onOpenChange={(nextOpen) => !nextOpen && setPreviewImage(null)}>
+        <DialogContent
+          className="w-fit p-2 max-sm:inset-auto max-sm:h-auto max-sm:w-fit max-sm:max-w-[96vw] max-sm:-translate-x-1/2 max-sm:-translate-y-1/2 max-sm:rounded-xl sm:max-w-[96vw] max-sm:[&>div]:max-w-none"
+          closeButtonClassName="top-4 right-4 bg-background"
+        >
+          <DialogTitle className="sr-only">{previewImage?.name ?? "Image preview"}</DialogTitle>
+          <DialogDescription className="sr-only">Expanded image preview</DialogDescription>
+          {previewImage && (
+            <div
+              className="relative max-h-[90dvh] max-w-[96vw] overflow-hidden rounded-xl"
+              style={{ width: previewFrame.width, height: previewFrame.height }}
+            >
+              <Image
+                src={previewImage.url}
+                alt={previewImage.name}
+                fill
+                className="rounded-xl object-contain"
+                sizes="96vw"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </Message>
   )
 }
