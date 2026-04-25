@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { GlassPanel } from "@/components/ui/glass-panel"
 
 type PricingPlanCardProps = {
   title: string
@@ -44,14 +45,9 @@ export function PricingPlanCard({
   const ctaLineClass = "flex h-5 min-h-5 w-full shrink-0 items-center justify-center whitespace-nowrap leading-none"
 
   return (
-    <div
-      className={cn(
-        "relative w-90 max-w-90 overflow-hidden rounded-lg bg-sidebar px-10 py-8",
-        isFeatured ? "border-2 border-black" : "border"
-      )}
-    >
+    <GlassPanel className="relative w-90 max-w-90" innerClassName="relative h-full">
       {resolvedBadgeLabel ? (
-        <span className="absolute top-0 right-0 rounded-bl-md bg-primary p-2.5 text-xs! font-medium text-white">
+        <span className="absolute top-0 right-0 rounded-bl-md bg-primary px-3 py-2 text-xs! font-medium text-white">
           {resolvedBadgeLabel}
         </span>
       ) : null}
@@ -77,8 +73,8 @@ export function PricingPlanCard({
         disabled={isLoading}
         onClick={onSelect}
         className={cn(
-          "relative mt-6 h-14 w-full min-w-0 overflow-hidden rounded-full border border-black/50 px-5.5! py-3 text-sm font-medium",
-          isFeatured ? "border-black bg-black text-white" : "bg-transparent"
+          "relative mt-6 h-14 w-full min-w-0 overflow-hidden rounded-full border px-5.5! py-3 text-sm font-medium",
+          isFeatured ? "border-black bg-black text-white" : "border-border/70 bg-background/60"
         )}
       >
         <motion.button
@@ -93,7 +89,7 @@ export function PricingPlanCard({
             aria-hidden
             className={cn(
               "pointer-events-none absolute top-1 right-3 left-3 h-1/3 rounded-full bg-linear-to-b",
-              isFeatured ? "from-white/14 to-transparent" : "from-white/10 to-transparent"
+              isFeatured ? "from-white/14 to-transparent" : "from-white/8 to-transparent"
             )}
           />
           <span className="sr-only">{ctaText}</span>
@@ -125,6 +121,6 @@ export function PricingPlanCard({
           )
         })}
       </ul>
-    </div>
+    </GlassPanel>
   )
 }
