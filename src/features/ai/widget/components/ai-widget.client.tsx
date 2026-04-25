@@ -3,10 +3,10 @@
 import { useQueryClient } from "@tanstack/react-query"
 import type { UIMessage } from "ai"
 import { PlusIcon, XIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { ChatSession } from "@/features/ai/chat/components/chat-session/chat-session"
+import { CHAT_EXAMPLE_PROMPTS } from "@/features/ai/chat/constants/chat-example-prompts.constants"
 import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-detail"
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
@@ -14,7 +14,6 @@ import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-
 import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
 import { AiWidgetHistoryDropdown } from "@/features/ai/widget/components/ai-widget-history-dropdown"
 import type { AiWidgetProps } from "@/features/ai/widget/types/ai-widget.types"
-import { shouldHideAiWidget } from "@/features/ai/widget/utils/should-hide-ai-widget.utils"
 import { authClient } from "@/features/auth/lib/auth-client"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
 import { Button } from "@/components/ui/button"
@@ -22,11 +21,8 @@ import { LogoSvg } from "@/components/ui/icons/logo.icon"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Spinner } from "@/components/ui/spinner"
 
-import { CHAT_EXAMPLE_PROMPTS } from "../../chat/constants/chat-example-prompts.constants"
-
 export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
   const queryClient = useQueryClient()
-  const pathname = usePathname()
   const [open, setOpen] = useState(defaultOpen)
   const [activeChatId, setActiveChatId] = useState<string | null>(null)
   const [sessionClientId, setSessionClientId] = useState("")
@@ -83,10 +79,6 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
   const handleNewChat = () => {
     setActiveChatId(null)
     setSessionClientId(crypto.randomUUID())
-  }
-
-  if (isSessionPending || shouldHideAiWidget(pathname)) {
-    return null
   }
 
   return (
