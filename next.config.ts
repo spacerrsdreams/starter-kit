@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   typedRoutes: true,
   cacheComponents: true,
-  allowedDevOrigins: [process.env.NGROK_URL!],
   images: {
     remotePatterns: [
       {

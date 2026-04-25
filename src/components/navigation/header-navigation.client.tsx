@@ -47,6 +47,7 @@ export function HeaderNavigationClient() {
     { title: t("menu.dashboard"), href: WebRoutes.dashboard.path },
     { title: t("menu.contact"), href: WebRoutes.contact.path },
     { title: t("menu.marketing"), href: WebRoutes.root.path },
+    { title: t("menu.integrations"), href: WebRoutes.integrations.path },
     { title: t("menu.termsAndConditions"), href: WebRoutes.termsOfService.path },
     { title: t("menu.blog"), href: WebRoutes.blog.path },
     { title: t("menu.privacyPolicy"), href: WebRoutes.privacyPolicy.path },

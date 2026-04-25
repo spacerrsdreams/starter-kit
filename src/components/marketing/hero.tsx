@@ -1,8 +1,13 @@
+import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
+import Link from "next/link"
 
+import { WebRoutes } from "@/lib/web.routes"
 import { GetStartedCtaButton } from "@/components/marketing/get-started-cta-button.client"
 import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
+
+import { Button } from "../ui/button"
 
 export function Hero() {
   const t = useTranslations("home.hero")
@@ -21,7 +26,13 @@ export function Hero() {
             />
           </div>
           <p className="mt-8 max-w-lg leading-relaxed tracking-tight text-foreground/90">{t("description")}</p>
-          <div className="mt-10">
+          <div className="mt-10 flex flex-col gap-4">
+            <Button asChild variant="outline" className="gap-2 rounded-full py-6.5!">
+              <Link href={WebRoutes.dashboard.path}>
+                {t("dashboardCta")}
+                <ArrowRightIcon className="size-4" />
+              </Link>
+            </Button>
             <GetStartedCtaButton label={t("cta")} />
           </div>
         </div>

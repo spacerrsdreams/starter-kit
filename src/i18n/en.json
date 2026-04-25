@@ -3,15 +3,18 @@
     "home": "Home",
     "search": "Search",
     "dashboard": "Dashboard",
+    "marketing": "Marketing",
     "admin": "Admin",
     "chat": "Chat",
     "pricing": "Pricing",
+    "integrations": "Integrations",
     "blog": "Blog",
     "blogPost": "Blog Post",
     "editBlogPost": "Edit Blog Post",
     "createBlogPost": "Create Blog Post",
     "signIn": "Sign In",
     "signUp": "Sign Up",
+    "forgotPassword": "Forgot Password",
     "resetPassword": "Reset Password",
     "contact": "Contact",
     "feedback": "Feedback",
@@ -30,7 +33,8 @@
       "badge": "Launch your SaaS today",
       "title": "The only starter kit you'll ever need",
       "description": "Skip months of boilerplate. Auth, AI, billing, blog, admin — all production-ready. Launch your SaaS in hours, not weeks.",
-      "cta": "See the Dashboard"
+      "dashboardCta": "See the dashboard",
+      "cta": "Get the kit - $99"
     },
     "header": {
       "allPages": "All Pages",
@@ -41,7 +45,9 @@
       "menu": {
         "dashboard": "Dashboard",
         "marketing": "Marketing",
+        "integrations": "Integrations",
         "blog": "Blog",
+        "pricing": "Pricing",
         "contact": "Contact",
         "termsAndConditions": "Terms and Conditions",
         "privacyPolicy": "Privacy Policy"
@@ -80,6 +86,61 @@
         "google": "Google",
         "facebook": "Facebook",
         "x": "X"
+      }
+    },
+    "integrations": {
+      "chip": "Integrations",
+      "title": "Plug into a stack developers already trust",
+      "description": "Your starter kit is wired with the modern tools you need to ship, scale, and maintain with confidence.",
+      "items": {
+        "nextjs": {
+          "title": "Next.js",
+          "description": "App Router foundation with server-first patterns and production-grade performance."
+        },
+        "typescript": {
+          "title": "TypeScript",
+          "description": "Strict type safety across your app for faster development and fewer runtime bugs."
+        },
+        "prisma": {
+          "title": "Prisma",
+          "description": "Type-safe database access and schema-driven workflows that stay easy to maintain."
+        },
+        "neon": {
+          "title": "Neon Postgres",
+          "description": "Serverless Postgres setup optimized for modern SaaS workloads and smooth scaling."
+        },
+        "betterAuth": {
+          "title": "Better Auth",
+          "description": "Session-based auth with social login and secure flows, ready from day one."
+        },
+        "tanstack": {
+          "title": "TanStack Query",
+          "description": "Reliable data fetching, caching, and mutation patterns built for great UX."
+        },
+        "tailwind": {
+          "title": "Tailwind CSS",
+          "description": "Utility-first styling that keeps UI development fast and consistent."
+        },
+        "shadcn": {
+          "title": "shadcn/ui",
+          "description": "Composable UI components you can fully control and customize for your brand."
+        },
+        "stripe": {
+          "title": "Stripe",
+          "description": "Payments, subscriptions, and billing workflows integrated for SaaS monetization."
+        },
+        "resend": {
+          "title": "Resend",
+          "description": "Transactional email delivery for authentication, onboarding, and notifications."
+        },
+        "vercelAiSdk": {
+          "title": "Vercel AI SDK",
+          "description": "Unified primitives for streaming and building production-grade AI experiences in Next.js."
+        },
+        "posthog": {
+          "title": "PostHog",
+          "description": "Product analytics and event tracking to understand behavior and improve conversions."
+        }
       }
     },
     "keyTools": {
@@ -226,11 +287,90 @@
         "aiPage": "AI Chat",
         "blog": "Blog",
         "pricing": "Pricing",
+        "integrations": "Integrations",
         "contactUs": "Contact",
         "termsAndConditions": "Terms and Conditions",
         "privacyPolicy": "Privacy Policy"
       },
       "copyright": "© {year} {name}. All rights reserved."
+    }
+  },
+  "auth": {
+    "dialog": {
+      "signInRequired": "Sign in required",
+      "createYourAccount": "Create your account",
+      "resetYourPassword": "Reset your password"
+    },
+    "signIn": {
+      "title": "Sign in to {name}",
+      "description": "Sign in to your account to continue",
+      "submit": "Sign in",
+      "withGoogle": "Sign in with Google",
+      "withApple": "Sign in with Apple",
+      "orContinueWith": "Or continue with",
+      "email": "Email",
+      "emailPlaceholder": "example@gmail.com",
+      "password": "Password",
+      "passwordPlaceholder": "**********",
+      "forgotPassword": "Forgot password",
+      "noAccountSignUp": "Don't have an account?",
+      "signUp": "Sign up",
+      "emailNotVerified": "Email not verified",
+      "emailNotVerifiedHint": "Please verify your email to sign in",
+      "genericError": "An error occurred, please try again",
+      "hidePassword": "Hide password",
+      "showPassword": "Show password"
+    },
+    "signUp": {
+      "title": "Sign up for {name}",
+      "description": "Sign up to continue",
+      "submit": "Sign up",
+      "withGoogle": "Sign up with Google",
+      "signIn": "Sign in",
+      "or": "Or",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Create a password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "**********",
+      "hidePassword": "Hide password",
+      "showPassword": "Show password",
+      "genericError": "An error occurred, please try again",
+      "userAlreadyExists": "An account with this email already exists",
+      "termsPrefix": "By continuing, you agree to our",
+      "termsSuffix": "and",
+      "termsOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy",
+      "alreadyHaveAccount": "Already have an account?"
+    },
+    "requestPasswordReset": {
+      "title": "Reset password",
+      "requestDescription": "Enter your email to receive a password reset link.",
+      "emailSentDescription": "If an account exists, we sent you an email with reset instructions.",
+      "signInToReactivate": "Sign in to reactivate",
+      "email": "Email",
+      "emailPlaceholder": "example@gmail.com",
+      "sendResetEmailAria": "Send reset email",
+      "submit": "Send reset link",
+      "resendAria": "Resend reset email",
+      "resend": "Resend email",
+      "resendIn": "Resend in {time}",
+      "rememberPassword": "Remember your password?",
+      "signIn": "Sign in",
+      "invalidEmailError": "Invalid email address.",
+      "genericError": "An error occurred, please try again."
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "description": "Choose a new password for your account.",
+      "newPassword": "New password",
+      "newPasswordPlaceholder": "Enter your new password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Re-enter your new password",
+      "submit": "Reset password",
+      "rememberPassword": "Remember your password?",
+      "signIn": "Sign in"
     }
   }
 }

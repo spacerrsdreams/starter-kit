@@ -90,7 +90,6 @@ This file lists the pages and product capabilities currently implemented in the 
 2. Stripe customer portal session support.
 3. Subscription status endpoint and repository-backed billing state.
 4. Stripe webhook handling for subscription lifecycle sync.
-5. ngrok local webhook tunneling support for Stripe testing (default `3000` Next.js port, optional custom port via `PORT` env).
 
 ### Contact and account lifecycle
 
@@ -132,3 +131,4 @@ This file lists the pages and product capabilities currently implemented in the 
 14. Stripe
 15. Resend
 16. Vercel
+17. Posthog

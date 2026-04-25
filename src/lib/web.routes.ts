@@ -124,6 +124,7 @@ export const WebRoutes = {
   admin: createRoute("routes.admin", "/dashboard/admin"),
   chat: createDynamicRoute("routes.chat", "/dashboard/ai/:id", (chatId) => `/dashboard/ai/${chatId}`),
   pricing: createRoute("routes.pricing", "/pricing"),
+  integrations: createRoute("routes.integrations", "/integrations"),
   blog: createRoute("routes.blog", "/blog"),
   blogPost: createDynamicRoute("routes.blogPost", "/blog/:slug", (slug) => `/blog/${slug}`),
   editBlogPost: createDynamicRoute(
@@ -147,6 +148,7 @@ export function getHeaderPageLinks() {
   return [
     { titleKey: "home.header.menu.dashboard", href: WebRoutes.dashboard.path },
     { titleKey: "home.header.menu.marketing", href: WebRoutes.root.path },
+    { titleKey: "home.header.menu.integrations", href: WebRoutes.integrations.path },
     { titleKey: "home.header.menu.blog", href: WebRoutes.blog.path },
     { titleKey: "home.header.pricing", href: WebRoutes.pricing.path },
   ] as const
@@ -172,6 +174,7 @@ export function getHeaderMenuLinks() {
     headerPageLinks[2],
     headerCompanyLinks[2],
     headerPageLinks[3],
+    headerPageLinks[4],
   ] as const
 }
 

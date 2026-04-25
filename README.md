@@ -154,3 +154,5 @@ Open: [http://localhost:3000](http://localhost:3000)
 
 - This repo uses Bun for install and scripts.
 - If Google auth redirect fails, make sure `BETTER_AUTH_URL`, origin, and redirect URI match your current environment (local or production).
+
+stripe listen --forward-to localhost:3000/api/billing/webhook

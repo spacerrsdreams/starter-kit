@@ -55,6 +55,24 @@ export function AdminUsersTable({ currentUserId }: AdminUsersTableProps) {
     }
   }
 
+  const handleChangeUserRole = async (user: AdminUserListItem, nextRole: AdminUserRole) => {
+    if (user.role === nextRole) {
+      return
+    }
+
+    const confirmed = window.confirm(`Change ${user.email} role from ${user.role} to ${nextRole}?`)
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      await updateUserMutation.mutateAsync({ userId: user.id, role: nextRole })
+      toast.success("Role updated.")
+    } catch {
+      toast.error("Failed to update role.")
+    }
+  }
+
   const handleImpersonateUser = async (user: AdminUserListItem) => {
     const confirmed = window.confirm(`You are about to impersonate ${user.email}. Continue?`)
     if (!confirmed) {
@@ -94,6 +112,9 @@ export function AdminUsersTable({ currentUserId }: AdminUsersTableProps) {
     },
     onDeleteUser: (userId) => {
       void handleDeleteUser(userId)
+    },
+    onChangeRole: (user, nextRole) => {
+      void handleChangeUserRole(user, nextRole)
     },
     onImpersonateUser: (user) => {
       void handleImpersonateUser(user)

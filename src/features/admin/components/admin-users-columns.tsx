@@ -4,6 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, Pencil, Trash2, UserRoundCheck } from "lucide-react"
 
 import type { AdminUserListItem, AdminUserSubscriptionStatus } from "@/features/admin/types/admin-users.types"
+import { AdminUserRoleCell } from "@/features/admin/components/admin-user-role-cell.client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -15,6 +16,7 @@ type AdminUsersColumnActions = {
   isPendingAction: boolean
   onEditUser: (user: AdminUserListItem) => void
   onDeleteUser: (userId: string) => void
+  onChangeRole: (user: AdminUserListItem, nextRole: AdminUserListItem["role"]) => void
   onImpersonateUser: (user: AdminUserListItem) => void
 }
 
@@ -86,7 +88,17 @@ export function getAdminUsersColumns(actions: AdminUsersColumnActions): ColumnDe
     {
       accessorKey: "role",
       header: "Role",
-      cell: ({ row }) => <span className="capitalize">{row.original.role}</span>,
+      cell: ({ row }) => {
+        const user = row.original
+        const isSelf = user.id === actions.currentUserId
+        return (
+          <AdminUserRoleCell
+            role={user.role}
+            disabled={actions.isPendingAction || isSelf}
+            onChangeRole={(nextRole) => actions.onChangeRole(user, nextRole)}
+          />
+        )
+      },
     },
     {
       accessorKey: "createdAt",

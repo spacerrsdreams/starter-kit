@@ -6,6 +6,7 @@ import { DashboardPreviewClient } from "@/components/marketing/dashboard-preview
 import { FaqSectionClient } from "@/components/marketing/faq-section.client"
 import { FreeTrialCtaSection } from "@/components/marketing/free-trial-cta-section"
 import { Hero } from "@/components/marketing/hero"
+import { IntegrationsSection } from "@/components/marketing/integrations-section"
 import { KeyToolsScrollClient } from "@/components/marketing/key-tools-scroll.client"
 import { PlanPickerSectionClient } from "@/components/marketing/plan-picker-section.client"
 import { TrustedMarqueeClient } from "@/components/marketing/trusted-marquee.client"
@@ -25,6 +26,7 @@ export default function DashboardPage() {
             <DashboardPreviewClient />
             <TrustedMarqueeClient />
             <WhyChooseSection />
+            <IntegrationsSection />
             <KeyToolsScrollClient />
           </div>
           <CoreFeaturesDarkSection />

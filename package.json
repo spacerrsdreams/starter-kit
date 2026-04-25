@@ -19,14 +19,14 @@
     "start": "next start",
     "start:prod": "bun run build && bun run start",
     "lint": "tsc --noEmit && eslint",
-    "ngrok": "dotenv -e .env.local -- node scripts/run-ngrok.js",
     "env:push:development": "node scripts/vercel-env-push.js .env.development development",
     "env:push:preview": "node scripts/vercel-env-push.js .env.development preview",
     "env:push:all-pre-production": "bun env:push:development && bun env:push:preview",
     "env:push:production": "node scripts/vercel-env-push.js .env.production production",
     "env:push:one": "node scripts/vercel-env-push.js",
     "color:to-oklch": "node scripts/color-to-oklch.js",
-    "create-starter-kit-app": "node packages/create-starter-kit-app/bin/create-starter-kit-app.js"
+    "create-starter-kit-app": "node packages/create-starter-kit-app/bin/create-starter-kit-app.js",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/api/billing/webhook"
   },
   "dependencies": {
     "@ai-sdk/react": "^3.0.170",
@@ -74,6 +74,7 @@
     "react-day-picker": "^9.14.0",
     "react-dom": "19.2.5",
     "react-hook-form": "^7.73.1",
+    "react-icons": "^5.6.0",
     "react-resizable-panels": "^4.10.0",
     "recharts": "3.8.1",
     "resend": "^6.12.2",

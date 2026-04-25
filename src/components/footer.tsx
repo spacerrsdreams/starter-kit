@@ -53,6 +53,7 @@ export function Footer() {
     { label: t("links.aiPage"), href: WebRoutes.dashboard.path },
     { label: t("links.blog"), href: WebRoutes.blog.path },
     { label: t("links.pricing"), href: WebRoutes.pricing.path },
+    { label: t("links.integrations"), href: WebRoutes.integrations.path },
   ] as const
   const resourcesLinks = [{ label: t("links.contactUs"), href: WebRoutes.contact.path }] as const
   const companyLinks = [

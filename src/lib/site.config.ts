@@ -1,4 +1,4 @@
-const SiteName = "StarterKit"
+const SiteName = "Spacerr"
 
 export const SiteConfig = {
   name: SiteName,

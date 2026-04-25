@@ -60,7 +60,7 @@ function Button({
 
   let slotChildren = children
   if (!asChild && isLoading) {
-    slotChildren = <Spinner className="text-white!" />
+    slotChildren = <Spinner />
   }
 
   return (
