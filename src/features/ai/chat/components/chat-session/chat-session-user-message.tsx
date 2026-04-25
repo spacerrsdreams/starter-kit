@@ -27,8 +27,9 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
   const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const previewFrame = useMemo(() => {
-    const maxWidth = viewportSize.width * 0.96
-    const maxHeight = viewportSize.height * 0.9
+    const dialogPadding = 16
+    const maxWidth = Math.max(viewportSize.width * 0.96 - dialogPadding, 0)
+    const maxHeight = Math.max(viewportSize.height * 0.9 - dialogPadding, 0)
 
     if (!previewImage?.width || !previewImage?.height) {
       return {
@@ -227,8 +228,8 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
       </div>
       <Dialog open={previewImage !== null} onOpenChange={(nextOpen) => !nextOpen && setPreviewImage(null)}>
         <DialogContent
-          className="w-fit p-2 max-sm:inset-auto max-sm:h-auto max-sm:w-fit max-sm:max-w-[96vw] max-sm:-translate-x-1/2 max-sm:-translate-y-1/2 max-sm:rounded-xl sm:max-w-[96vw] max-sm:[&>div]:max-w-none"
-          closeButtonClassName="top-4 right-4 bg-background"
+          className="w-fit p-2 max-sm:inset-auto max-sm:top-1/2 max-sm:right-auto max-sm:bottom-auto max-sm:left-1/2 max-sm:block max-sm:h-auto max-sm:w-fit max-sm:max-w-[96vw] max-sm:-translate-x-1/2 max-sm:-translate-y-1/2 max-sm:rounded-xl sm:max-w-[96vw] max-sm:[&>div]:max-w-none"
+          closeButtonClassName="top-4 right-4 bg-background dark:bg-sidebar"
         >
           <DialogTitle className="sr-only">{previewImage?.name ?? "Image preview"}</DialogTitle>
           <DialogDescription className="sr-only">Expanded image preview</DialogDescription>
