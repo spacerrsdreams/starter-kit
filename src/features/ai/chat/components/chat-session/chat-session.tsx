@@ -7,14 +7,13 @@ import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
 import { AssistantThinkingIndicator } from "@/features/ai/chat/components/chat-session/assistant-thinking-indicator"
-import { ChatExamplePrompts } from "@/features/ai/chat/components/chat-session/chat-example-prompts"
+import { ChatInputForm } from "@/features/ai/chat/components/chat-session/chat-input-form"
 import { ChatSessionAssistantMessage } from "@/features/ai/chat/components/chat-session/chat-session-assistant-message"
 import { ChatSessionUserMessage } from "@/features/ai/chat/components/chat-session/chat-session-user-message"
 import { useMutateCreateChat } from "@/features/ai/chat/hooks/use-mutate-create-chat"
 import { useMutateMessageReaction } from "@/features/ai/chat/hooks/use-mutate-message-reaction"
 import { useChatAuthRequiredStore } from "@/features/ai/chat/store/chat-auth-required.store"
 import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
-import type { ChatSessionProps } from "@/features/ai/chat/types/chat-session.types"
 import { getMessageReaction } from "@/features/ai/chat/utils/chat-message-reaction.utils"
 import { getMessageFileParts, getMessageTextContent } from "@/features/ai/chat/utils/chat-session-message.utils"
 import { createStableChatTransport } from "@/features/ai/chat/utils/stable-chat-transport"
@@ -34,15 +33,23 @@ import { Button } from "@/components/ui/button"
 import { LogoIcon, LogoSvg } from "@/components/ui/icons/logo.icon"
 import { useIsMobile } from "@/hooks/use-mobile"
 
-import { ChatInputForm } from "./chat-input-form"
+type ChatSessionProps = {
+  sessionClientId: string
+  isAuthenticated?: boolean
+  initialMessages: UIMessage[]
+  initialDbChatId: string | null
+  examplePrompts?: readonly string[]
+  examplePromptsLayout?: "default" | "single-column"
+  compactMode?: boolean
+  onChatCreated: (id: string) => void
+  onConversationUpdated: () => void
+}
 
 export function ChatSession({
   sessionClientId,
   isAuthenticated = true,
   initialMessages,
   initialDbChatId,
-  examplePrompts,
-  examplePromptsLayout = "default",
   compactMode = false,
   onChatCreated,
   onConversationUpdated,
@@ -298,7 +305,12 @@ export function ChatSession({
   }, [planPickerDialog])
 
   return (
-    <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
+    <div
+      className={cn(
+        "top-auto left-auto flex h-full min-h-0 w-auto flex-1 translate-x-0 flex-col overflow-hidden",
+        messages.length === 0 && "absolute top-[30%] left-1/2 w-full -translate-x-1/2"
+      )}
+    >
       {messages.length === 0 && showUpgradePill ? (
         <div className="shrink-0 px-4 pt-2">
           <div className="flex justify-center">
@@ -315,23 +327,25 @@ export function ChatSession({
           </div>
         </div>
       ) : null}
-      <Conversation className="min-h-0 flex-1 overflow-hidden">
+      <Conversation className={cn("min-h-0 overflow-hidden", messages.length === 0 ? "flex-none" : "flex-1")}>
         <ConversationContent
-          className={cn("flex min-h-0 flex-col", messages.length === 0 ? "h-full justify-center" : undefined)}
+          className={cn(
+            "flex min-h-0 flex-col",
+            messages.length === 0 ? "h-auto justify-center px-2 pt-0 pb-0 sm:px-0" : undefined
+          )}
         >
-          {messages.length === 0 ? (
+          {messages.length === 0 && (
             <ConversationEmptyState
               className={cn("min-h-0 flex-1 gap-2", compactMode && "w-full items-center justify-center text-center")}
             >
               <LogoIcon iconSize={28} containerSize={42} className="bg-primary" />
               <div className={cn("space-y-2", compactMode && "mx-auto w-full max-w-sm")}>
-                <h3 className="text-sm font-medium">How can I help you?</h3>
-                <p className={cn("max-w-md text-sm text-muted-foreground", compactMode && "mx-auto")}>
-                  Chat with AI, keep history, and resume any previous conversation.
-                </p>
+                <h3 className="text-2xl leading-tight tracking-[-1px] text-balance md:text-4xl">
+                  Where should we begin?
+                </h3>
               </div>
             </ConversationEmptyState>
-          ) : null}
+          )}
 
           {messages.map((message, index) => {
             if (message.role === "assistant") {
@@ -382,17 +396,12 @@ export function ChatSession({
         <ConversationScrollButton />
       </Conversation>
 
-      <div className={cn("shrink-0 px-4 pt-3 pb-1 sm:pb-4.5", messages.length === 0 ? "pt-2" : undefined)}>
-        {messages.length === 0 ? (
-          <ChatExamplePrompts
-            disabled={isGenerating || createChatMutation.isPending}
-            prompts={examplePrompts}
-            layout={examplePromptsLayout}
-            onSelect={(text) => {
-              void handleSubmit({ files: [], text })
-            }}
-          />
-        ) : null}
+      <div
+        className={cn(
+          "shrink-0 px-4 pt-3 pb-1 sm:pb-4.5",
+          messages.length === 0 ? "mx-auto mt-4 w-full max-w-3xl pb-4 md:mt-10 md:pb-0" : "mx-auto w-full max-w-3xl"
+        )}
+      >
         <ChatInputForm isInputLocked={isGenerating} onStop={stop} onSubmit={handleSubmit} status={status} />
       </div>
     </div>

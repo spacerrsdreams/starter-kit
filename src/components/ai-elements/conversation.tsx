@@ -43,7 +43,7 @@ export const ConversationEmptyState = ({
   ...props
 }: ConversationEmptyStateProps) => (
   <div
-    className={cn("flex size-full flex-col items-center justify-center gap-3 p-8 text-center", className)}
+    className={cn("flex size-full flex-col items-center justify-center gap-3 p-8 pb-0 text-center", className)}
     {...props}
   >
     {children ?? (

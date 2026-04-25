@@ -161,8 +161,8 @@ export function Chat({ initialChatId = null }: ChatProps) {
     isAuthenticated && Boolean(activeChatId) && hydratedFromServer && chatDetailQuery.isPending
 
   return (
-    <div className="flex h-[calc(100dvh-57px-4.5rem)] min-h-0 md:h-[calc(100dvh-57px)]">
-      <main className="mx-auto flex min-h-0 max-w-3xl flex-1 flex-col">
+    <div className="flex h-[calc(100dvh-57px-4.5rem)] min-h-0 bg-sidebar-surface-primary md:h-[calc(100dvh-57px)]">
+      <main className="mx-auto flex min-h-0 max-w-3xl flex-1 flex-col pt-0 md:pt-8">
         {waitingForChatDetail ? (
           <ChatSessionSkeleton />
         ) : (

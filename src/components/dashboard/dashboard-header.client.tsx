@@ -2,8 +2,8 @@
 
 import { PlusIcon, UserRoundCheck } from "lucide-react"
 import type { Route } from "next"
-import { usePathname, useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
+import { usePathname, useRouter } from "next/navigation"
 import { useMemo, useTransition } from "react"
 
 import { WebRoutes } from "@/lib/web.routes"
@@ -31,9 +31,7 @@ export function DashboardHeader() {
   const isAskAiRoute = pathname === WebRoutes.dashboard.path || pathname.startsWith(`${chatRoutePrefix}/`)
   const isAdminRoute = pathname === WebRoutes.admin.path || pathname.startsWith(`${WebRoutes.admin.path}/`)
   const chatPathPrefix = `${chatRoutePrefix}/`
-  const chatIdFromPath = pathname.startsWith(chatPathPrefix)
-    ? pathname.slice(chatPathPrefix.length)
-    : null
+  const chatIdFromPath = pathname.startsWith(chatPathPrefix) ? pathname.slice(chatPathPrefix.length) : null
   const selectedChatId = activeChatId ?? chatIdFromPath
   const selectedChatTitle = chats.find((chat) => chat.id === selectedChatId)?.title?.trim() || ""
   let currentLabel = t(currentRoute?.labelKey ?? "routes.dashboard")
@@ -64,7 +62,7 @@ export function DashboardHeader() {
   }
 
   return (
-    <header className="flex h-[57px] shrink-0 items-center gap-2">
+    <header className="flex h-[57px] shrink-0 items-center gap-2 bg-sidebar-surface-primary">
       <div className="flex flex-1 items-center gap-2 px-3">
         <SidebarTrigger className="hidden md:inline-flex" />
         <Separator orientation="vertical" className="mr-2 hidden md:block data-vertical:h-4 data-vertical:self-auto" />
@@ -73,7 +71,13 @@ export function DashboardHeader() {
         </div>
         <div className="ml-auto flex items-center gap-1 md:hidden">
           {isAskAiRoute ? (
-            <Button type="button" variant="ghost" size="icon" aria-label={t("dashboard.newChat")} onClick={handleNewChatClick}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={t("dashboard.newChat")}
+              onClick={handleNewChatClick}
+            >
               <PlusIcon className="size-4" />
             </Button>
           ) : null}
