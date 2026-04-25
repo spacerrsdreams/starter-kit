@@ -1,6 +1,7 @@
 "use client"
 
 import { Check, Copy, RefreshCcw } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
@@ -11,6 +12,7 @@ import { Message, MessageContent, MessageResponse } from "@/components/ai-elemen
 import { Button } from "@/components/ui/button"
 
 export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, onRetry }: ChatSessionUserMessageProps) {
+  const t = useTranslations()
   const [isCopied, setIsCopied] = useState(false)
   const [isRetrying, setIsRetrying] = useState(false)
   const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -67,7 +69,7 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
             type="button"
             variant="ghost"
             className="size-7"
-            aria-label="Copy message"
+            aria-label={t("aiChat.session.actions.copyMessage")}
             onClick={() => {
               void (async () => {
                 try {
@@ -76,7 +78,7 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
                     clearTimeout(copyResetTimeoutRef.current)
                   }
                   setIsCopied(true)
-                  toast.success("Copied")
+                  toast.success(t("aiChat.session.actions.copied"))
                   copyResetTimeoutRef.current = setTimeout(() => {
                     setIsCopied(false)
                     copyResetTimeoutRef.current = null
@@ -109,7 +111,7 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
               type="button"
               variant="ghost"
               className="size-7"
-              aria-label="Retry from this message"
+              aria-label={t("aiChat.session.actions.retryFromMessage")}
               disabled={isRetrying}
               onClick={() => {
                 void (async () => {

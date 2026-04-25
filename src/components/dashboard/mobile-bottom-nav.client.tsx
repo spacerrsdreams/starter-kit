@@ -12,6 +12,7 @@ import {
   UserRoundCheck,
 } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { usePathname, useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 
@@ -24,6 +25,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 export function MobileBottomNav() {
+  const t = useTranslations()
   const pathname = usePathname()
   const router = useRouter()
   const { data: session } = authClient.useSession()
@@ -59,7 +61,7 @@ export function MobileBottomNav() {
     })
   }
 
-  const userInitials = (user?.name ?? "User")
+  const userInitials = (user?.name ?? t("dashboard.mobileBottomNav.userFallback"))
     .split(" ")
     .filter(Boolean)
     .slice(0, 2)
@@ -67,7 +69,9 @@ export function MobileBottomNav() {
     .join("")
   const isImpersonating = Boolean(session?.session?.impersonatedBy)
   const needsAttention = isImpersonating || user?.emailVerified !== true
-  const attentionTitle = isImpersonating ? "Impersonation active" : "Action needed"
+  const attentionTitle = isImpersonating
+    ? t("dashboard.mobileBottomNav.impersonationActive")
+    : t("dashboard.mobileBottomNav.actionNeeded")
 
   return (
     <nav
@@ -78,7 +82,7 @@ export function MobileBottomNav() {
         <div className="flex min-w-0 flex-1 justify-center">
           <Link
             href={chatPath}
-            aria-label="Chat"
+            aria-label={t("routes.chat")}
             className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
           >
             <span
@@ -95,7 +99,7 @@ export function MobileBottomNav() {
                 isChatActive ? "text-primary" : "text-muted-foreground"
               )}
             >
-              Chat
+              {t("routes.chat")}
             </span>
           </Link>
         </div>
@@ -103,7 +107,7 @@ export function MobileBottomNav() {
           <div className="flex min-w-0 flex-1 justify-center">
             <Link
               href={WebRoutes.admin.path}
-              aria-label="Admin"
+              aria-label={t("routes.admin")}
               className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
             >
               <span
@@ -120,7 +124,7 @@ export function MobileBottomNav() {
                   isAdminActive ? "text-primary" : "text-muted-foreground"
                 )}
               >
-                Admin
+                {t("routes.admin")}
               </span>
             </Link>
           </div>
@@ -128,7 +132,7 @@ export function MobileBottomNav() {
         <div className="flex min-w-0 flex-1 justify-center">
           <Link
             href={WebRoutes.blog.path}
-            aria-label="Blog"
+            aria-label={t("routes.blog")}
             className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
           >
             <span
@@ -145,14 +149,14 @@ export function MobileBottomNav() {
                 isBlogActive ? "text-primary" : "text-muted-foreground"
               )}
             >
-              Blog
+              {t("routes.blog")}
             </span>
           </Link>
         </div>
         <div className="flex min-w-0 flex-1 justify-center">
           <Link
             href={WebRoutes.pricing.path}
-            aria-label="Pricing"
+            aria-label={t("routes.pricing")}
             className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
           >
             <span
@@ -169,7 +173,7 @@ export function MobileBottomNav() {
                 isPricingActive ? "text-primary" : "text-muted-foreground"
               )}
             >
-              Pricing
+              {t("routes.pricing")}
             </span>
           </Link>
         </div>
@@ -181,13 +185,13 @@ export function MobileBottomNav() {
                   <button
                     type="button"
                     className="relative flex min-w-0 flex-col items-center justify-center gap-1.5 px-1 py-1 transition-colors"
-                    aria-label="Account"
+                    aria-label={t("dashboard.mobileBottomNav.account")}
                   >
                     <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl">
                       <User className={cn(navIconClassName, "text-muted-foreground")} />
                     </span>
                     <span className="max-w-full truncate text-xs leading-none font-semibold text-muted-foreground">
-                      Account
+                      {t("dashboard.mobileBottomNav.account")}
                     </span>
                     {needsAttention && (
                       <span
@@ -208,7 +212,7 @@ export function MobileBottomNav() {
                 </SheetTrigger>
                 <SheetContent side="bottom">
                   <SheetHeader className="shrink-0 border-b border-border px-4 py-3">
-                    <SheetTitle className="text-lg">Account</SheetTitle>
+                    <SheetTitle className="text-lg">{t("dashboard.mobileBottomNav.account")}</SheetTitle>
                   </SheetHeader>
                   <div className="flex flex-1 flex-col gap-1 px-4">
                     <div className="mb-2 flex items-center gap-3 rounded-lg text-muted-foreground">
@@ -216,7 +220,9 @@ export function MobileBottomNav() {
                         {userInitials}
                       </div>
                       <div className="min-w-0 flex-1 truncate">
-                        <p className="truncate font-medium text-foreground">{user?.name ?? "User"}</p>
+                        <p className="truncate font-medium text-foreground">
+                          {user?.name ?? t("dashboard.mobileBottomNav.userFallback")}
+                        </p>
                         {user?.email && <p className="truncate text-xs">{user.email}</p>}
                       </div>
                     </div>
@@ -232,7 +238,9 @@ export function MobileBottomNav() {
                           <span className="absolute inset-0 -z-10 rounded-lg bg-destructive animation-duration-[2s]" />
                         ) : null}
                         <UserRoundCheck className="size-4 shrink-0 text-white!" />
-                        <span>{isPending ? "Switching back..." : "Stop impersonation"}</span>
+                        <span>
+                          {isPending ? t("dashboard.switchingBack") : t("dashboard.stopImpersonation")}
+                        </span>
                       </Button>
                     ) : null}
 
@@ -248,11 +256,11 @@ export function MobileBottomNav() {
                       }}
                     >
                       <Settings className="size-4 shrink-0" />
-                      <span className="font-medium">Settings</span>
+                      <span className="font-medium">{t("dashboard.mobileBottomNav.settings")}</span>
                       {!isImpersonating && needsAttention && (
                         <span className="ml-auto flex items-center gap-1.5 text-xs font-medium text-amber-600">
                           <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
-                          Action needed
+                          {t("dashboard.mobileBottomNav.actionNeeded")}
                         </span>
                       )}
                     </Button>
@@ -263,7 +271,9 @@ export function MobileBottomNav() {
                       disabled={isPending}
                     >
                       <LogOut className="size-4 shrink-0" />
-                      <span className="font-medium">{isPending ? "Logging out..." : "Log out"}</span>
+                      <span className="font-medium">
+                        {isPending ? t("dashboard.mobileBottomNav.loggingOut") : t("dashboard.mobileBottomNav.logOut")}
+                      </span>
                     </Button>
                   </div>
                 </SheetContent>
@@ -275,13 +285,13 @@ export function MobileBottomNav() {
               type="button"
               onClick={handleSignInClick}
               className="flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg px-1 py-1 transition-colors"
-              aria-label="Sign in"
+              aria-label={t("routes.signIn")}
             >
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl">
                 <User className={cn(navIconClassName, "text-muted-foreground")} />
               </span>
               <span className="max-w-full truncate text-xs leading-none font-semibold text-muted-foreground">
-                Account
+                {t("dashboard.mobileBottomNav.account")}
               </span>
             </button>
           )}

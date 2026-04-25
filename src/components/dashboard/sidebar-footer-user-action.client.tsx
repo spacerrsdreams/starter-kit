@@ -2,6 +2,7 @@
 
 import { Settings, SparklesIcon } from "lucide-react"
 import dynamic from "next/dynamic"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
@@ -31,6 +32,7 @@ type SidebarFooterUserActionProps = {
 }
 
 export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFooterUserActionProps) {
+  const t = useTranslations()
   const authModalContext = useAuthRequiredModal()
   const planPickerDialog = usePlanPickerDialog()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
@@ -51,7 +53,7 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
             disabled={planPickerDialog?.isPlanPickerCheckoutLoading}
           >
             <SparklesIcon className="mr-2.5 size-4" />
-            See plans and pricing
+            {t("dashboard.sidebarFooter.seePlansAndPricing")}
           </Button>
           <Button
             type="button"
@@ -60,19 +62,19 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
             onClick={() => setIsSettingsOpen(true)}
           >
             <Settings className="mr-2.5 size-4" />
-            Settings
+            {t("dashboard.mobileBottomNav.settings")}
           </Button>
           <HelpPopover />
         </div>
 
         <div className="border-t border-sidebar-border p-4 pb-3">
-          <h3 className="text-sm font-semibold text-sidebar-foreground">Get responses tailored to you</h3>
+          <h3 className="text-sm font-semibold text-sidebar-foreground">{t("dashboard.sidebarFooter.title")}</h3>
           <p className="mt-3 text-sm text-muted-foreground">
-            Log in to get answers based on
+            {t("dashboard.sidebarFooter.descriptionLine1")}
             <br />
-            saved chats, plus create images
+            {t("dashboard.sidebarFooter.descriptionLine2")}
             <br />
-            and upload files.
+            {t("dashboard.sidebarFooter.descriptionLine3")}
           </p>
           <Button
             type="button"
@@ -80,7 +82,7 @@ export function SidebarFooterUserAction({ isSessionPending, session }: SidebarFo
             className="mt-5 h-11 w-full rounded-full border-sidebar-border bg-background text-[14px] font-semibold text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
             onClick={() => authModalContext?.openAuthModal()}
           >
-            Log in
+            {t("dashboard.sidebarFooter.logIn")}
           </Button>
         </div>
 

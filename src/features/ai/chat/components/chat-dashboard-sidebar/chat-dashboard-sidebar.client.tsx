@@ -3,6 +3,7 @@
 import { ChevronRight, EllipsisIcon, Pencil, PlusIcon, Star, Trash2Icon } from "lucide-react"
 import { Route } from "next"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { usePathname, useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
@@ -46,6 +47,7 @@ import {
 } from "@/components/ui/sidebar"
 
 export function ChatDashboardSidebar() {
+  const t = useTranslations()
   const pathname = usePathname()
   const router = useRouter()
   const { isMobile, setOpenMobile } = useSidebar()
@@ -79,14 +81,14 @@ export function ChatDashboardSidebar() {
       setRenamingChatId(null)
       setRenameTitle("")
     } catch {
-      toast.error("Could not rename chat")
+      toast.error(t("aiChat.sidebar.errors.couldNotRenameChat"))
     }
   }
 
   const renderChatRow = (chat: ChatListItem) => {
     const chatPath = WebRoutes.chat(chat.id)
     const isActive = pathname === chatPath || (pathname === WebRoutes.dashboard.path && activeChatId === chat.id)
-    const label = chat.title?.trim() || "Untitled chat"
+    const label = chat.title?.trim() || t("aiChat.sidebar.untitledChat")
 
     return (
       <SidebarMenuItem key={chat.id}>
@@ -122,7 +124,7 @@ export function ChatDashboardSidebar() {
                 size="icon"
                 variant="ghost"
                 className="z-10 size-5 cursor-pointer group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 md:opacity-0"
-                aria-label="Chat actions"
+                aria-label={t("aiChat.sidebar.chatActions")}
                 disabled={deleteChatMutation.isPending || updateChatMutation.isPending}
               >
                 <EllipsisIcon className="size-4" />
@@ -136,12 +138,12 @@ export function ChatDashboardSidebar() {
                     try {
                       await updateChatMutation.mutateAsync({ chatId: chat.id, isSaved: !chat.isSaved })
                     } catch {
-                      toast.error("Could not update saved status")
+                      toast.error(t("aiChat.sidebar.errors.couldNotUpdateSavedStatus"))
                     }
                   }}
                 >
                   <Star className={cn(chat.isSaved ? "fill-current text-amber-500" : undefined)} />
-                  {chat.isSaved ? "Remove from saved" : "Save chat"}
+                  {chat.isSaved ? t("aiChat.sidebar.removeFromSaved") : t("aiChat.sidebar.saveChat")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={(event) => {
@@ -151,7 +153,7 @@ export function ChatDashboardSidebar() {
                   }}
                 >
                   <Pencil />
-                  Rename chat
+                  {t("aiChat.sidebar.renameChat")}
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
@@ -163,7 +165,7 @@ export function ChatDashboardSidebar() {
                   }}
                 >
                   <Trash2Icon />
-                  Delete chat
+                  {t("aiChat.sidebar.deleteChat")}
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -183,7 +185,7 @@ export function ChatDashboardSidebar() {
           </PopoverAnchor>
           <PopoverContent align="start" side="bottom" className="w-80">
             <PopoverHeader>
-              <PopoverTitle>Rename chat</PopoverTitle>
+              <PopoverTitle>{t("aiChat.sidebar.renameChat")}</PopoverTitle>
             </PopoverHeader>
             <form
               className="space-y-2"
@@ -200,7 +202,7 @@ export function ChatDashboardSidebar() {
               />
               <div className="flex justify-end">
                 <Button type="submit" size="sm" disabled={updateChatMutation.isPending || !renameTitle.trim()}>
-                  Save
+                  {t("aiChat.sidebar.save")}
                 </Button>
               </div>
             </form>
@@ -227,14 +229,14 @@ export function ChatDashboardSidebar() {
                 <div className="rounded-full bg-muted-foreground/15 p-1 font-medium">
                   <PlusIcon className="size-4" />
                 </div>
-                <span>New Chat</span>
+                <span>{t("dashboard.newChat")}</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
           {savedChats.length > 0 ? (
             <>
               <SidebarMenuItem className="px-2 pt-3 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
-                Saved chats
+                {t("aiChat.sidebar.savedChats")}
               </SidebarMenuItem>
               {savedChats.map(renderChatRow)}
             </>
@@ -244,7 +246,7 @@ export function ChatDashboardSidebar() {
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton>
                   <span className="text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase">
-                    Recents
+                    {t("aiChat.sidebar.recents")}
                   </span>
                   <ChevronRight className="ml-auto transition-transform group-data-[state=open]/recents-collapsible:rotate-90" />
                 </SidebarMenuButton>
@@ -263,7 +265,7 @@ export function ChatDashboardSidebar() {
                   void chatsQuery.fetchNextPage()
                 }}
               >
-                {chatsQuery.isFetchingNextPage ? "Loading..." : "Load more"}
+                {chatsQuery.isFetchingNextPage ? t("aiChat.sidebar.loading") : t("aiChat.sidebar.loadMore")}
               </Button>
             </SidebarMenuItem>
           ) : null}
@@ -279,13 +281,13 @@ export function ChatDashboardSidebar() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this chat?</AlertDialogTitle>
+            <AlertDialogTitle>{t("aiChat.sidebar.deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. The chat and all of its messages will be permanently deleted.
+              {t("aiChat.sidebar.deleteDialog.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteChatMutation.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={deleteChatMutation.isPending}>{t("aiChat.sidebar.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant="destructive"
               disabled={deleteChatMutation.isPending}
@@ -309,7 +311,7 @@ export function ChatDashboardSidebar() {
                 })()
               }}
             >
-              {deleteChatMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteChatMutation.isPending ? t("aiChat.sidebar.deleting") : t("aiChat.sidebar.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

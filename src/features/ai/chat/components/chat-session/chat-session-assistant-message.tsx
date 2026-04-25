@@ -2,6 +2,7 @@
 
 import { Check, Copy, RefreshCcw, ThumbsDown, ThumbsUp } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
+import { useTranslations } from "next-intl"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
@@ -29,6 +30,7 @@ export function ChatSessionAssistantMessage({
   onToggleUnlike,
   onSubmitUnlikeFeedback,
 }: ChatSessionAssistantMessageProps) {
+  const t = useTranslations()
   const [isCopied, setIsCopied] = useState(false)
   const [isRetrying, setIsRetrying] = useState(false)
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
@@ -86,7 +88,7 @@ export function ChatSessionAssistantMessage({
               type="button"
               variant="ghost"
               className="size-7"
-              aria-label="Copy message"
+              aria-label={t("aiChat.session.actions.copyMessage")}
               onClick={() => {
                 void (async () => {
                   try {
@@ -95,7 +97,7 @@ export function ChatSessionAssistantMessage({
                       clearTimeout(copyResetTimeoutRef.current)
                     }
                     setIsCopied(true)
-                    toast.success("Copied")
+                    toast.success(t("aiChat.session.actions.copied"))
                     copyResetTimeoutRef.current = setTimeout(() => {
                       setIsCopied(false)
                       copyResetTimeoutRef.current = null
@@ -136,7 +138,7 @@ export function ChatSessionAssistantMessage({
                     type="button"
                     variant="ghost"
                     className="size-7"
-                    aria-label="Like message"
+                    aria-label={t("aiChat.session.actions.likeMessage")}
                     onClick={() => {
                       void onToggleLike()
                     }}
@@ -145,13 +147,19 @@ export function ChatSessionAssistantMessage({
                   </Button>
                   <Popover open={isFeedbackOpen} onOpenChange={setIsFeedbackOpen}>
                     <PopoverTrigger asChild>
-                      <Button size="icon" type="button" variant="ghost" className="size-7" aria-label="Unlike message">
+                      <Button
+                        size="icon"
+                        type="button"
+                        variant="ghost"
+                        className="size-7"
+                        aria-label={t("aiChat.session.actions.unlikeMessage")}
+                      >
                         <ThumbsDown className="size-4" />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent align="start" className="w-72">
                       <PopoverHeader>
-                        <PopoverTitle>Tell us what was wrong</PopoverTitle>
+                        <PopoverTitle>{t("aiChat.session.feedback.title")}</PopoverTitle>
                       </PopoverHeader>
                       <form
                         className="space-y-2"
@@ -159,7 +167,7 @@ export function ChatSessionAssistantMessage({
                           event.preventDefault()
                           const trimmedFeedback = feedbackText.trim()
                           if (!trimmedFeedback) {
-                            toast.error("Please add feedback")
+                            toast.error(t("aiChat.session.feedback.addFeedbackError"))
                             return
                           }
                           void (async () => {
@@ -176,13 +184,13 @@ export function ChatSessionAssistantMessage({
                         <Textarea
                           value={feedbackText}
                           onChange={(event) => setFeedbackText(event.target.value)}
-                          placeholder="Tell us why this response wasn't useful"
+                          placeholder={t("aiChat.session.feedback.placeholder")}
                           maxLength={500}
                           rows={3}
                         />
                         <div className="flex justify-end">
                           <Button type="submit" size="sm">
-                            Submit
+                            {t("aiChat.session.feedback.submit")}
                           </Button>
                         </div>
                       </form>
@@ -205,7 +213,7 @@ export function ChatSessionAssistantMessage({
                     type="button"
                     variant="secondary"
                     className="size-7"
-                    aria-label="Remove like"
+                    aria-label={t("aiChat.session.actions.removeLike")}
                     onClick={() => {
                       void onToggleLike()
                     }}
@@ -229,7 +237,7 @@ export function ChatSessionAssistantMessage({
                     type="button"
                     variant="secondary"
                     className="size-7"
-                    aria-label="Remove unlike"
+                    aria-label={t("aiChat.session.actions.removeUnlike")}
                     onClick={() => {
                       void onToggleUnlike()
                     }}
@@ -245,7 +253,7 @@ export function ChatSessionAssistantMessage({
                 type="button"
                 variant="ghost"
                 className="size-7"
-                aria-label="Retry from this message"
+                aria-label={t("aiChat.session.actions.retryFromMessage")}
                 disabled={isRetrying}
                 onClick={() => {
                   void (async () => {

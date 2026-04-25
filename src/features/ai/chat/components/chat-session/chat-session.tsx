@@ -2,6 +2,7 @@
 
 import { useChat } from "@ai-sdk/react"
 import type { FileUIPart, UIMessage } from "ai"
+import { useTranslations } from "next-intl"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
@@ -45,17 +46,9 @@ type ChatSessionProps = {
   onConversationUpdated: () => void
 }
 
-const WELCOME_TEXT_OPTIONS = [
-  "Where should we begin?",
-  "What can I help you with today?",
-  "Ready when you are",
-  "What's on your mind?",
-  "Hey what's up?",
-] as const
-
-const getRandomWelcomeText = () => {
-  const randomIndex = Math.floor(Math.random() * WELCOME_TEXT_OPTIONS.length)
-  return WELCOME_TEXT_OPTIONS[randomIndex]
+const getRandomWelcomeText = (options: readonly string[]) => {
+  const randomIndex = Math.floor(Math.random() * options.length)
+  return options[randomIndex] ?? ""
 }
 
 export function ChatSession({
@@ -67,6 +60,7 @@ export function ChatSession({
   onChatCreated,
   onConversationUpdated,
 }: ChatSessionProps) {
+  const t = useTranslations()
   const isMobile = useIsMobile()
   const [transportApi] = useState(() => createStableChatTransport())
   const createChatMutation = useMutateCreateChat()
@@ -82,7 +76,18 @@ export function ChatSession({
     {}
   )
   const [messageTimesById, setMessageTimesById] = useState<Record<string, number>>({})
-  const [welcomeText] = useState(getRandomWelcomeText)
+  const welcomeTextOptions = useMemo(
+    () =>
+      [
+        t("aiChat.session.welcome.whereToBegin"),
+        t("aiChat.session.welcome.helpToday"),
+        t("aiChat.session.welcome.readyWhenYouAre"),
+        t("aiChat.session.welcome.onYourMind"),
+        t("aiChat.session.welcome.heyWhatsUp"),
+      ] as const,
+    [t]
+  )
+  const [welcomeText] = useState(() => getRandomWelcomeText(welcomeTextOptions))
 
   useEffect(() => {
     transportApi.setChatId(initialDbChatId)
@@ -178,25 +183,25 @@ export function ChatSession({
           ...current,
           [message.id]: previousReaction,
         }))
-        toast.error("Could not save reaction")
+        toast.error(t("aiChat.session.errors.couldNotSaveReaction"))
       }
     },
-    [getReactionForMessage, isAuthenticated, messageReactionMutation, transportApi]
+    [getReactionForMessage, isAuthenticated, messageReactionMutation, t, transportApi]
   )
 
   const handleMessageCopy = useCallback(async (message: UIMessage) => {
     const text = getMessageTextContent(message)
     if (!text) {
-      toast.error("Nothing to copy")
+      toast.error(t("aiChat.session.errors.nothingToCopy"))
       return
     }
     try {
       await navigator.clipboard.writeText(text)
     } catch {
-      toast.error("Could not copy message")
+      toast.error(t("aiChat.session.errors.couldNotCopyMessage"))
       throw new Error("copy-failed")
     }
-  }, [])
+  }, [t])
 
   const retryFromUserMessage = useCallback(
     async (userMessage: UIMessage) => {
@@ -336,7 +341,7 @@ export function ChatSession({
               disabled={planPickerDialog?.isPlanPickerCheckoutLoading}
             >
               <LogoSvg className="mr-1 size-3.5 text-violet-600!" />
-              Get Plus
+              {t("aiChat.session.getPlus")}
             </Button>
           </div>
         </div>

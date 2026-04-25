@@ -26,7 +26,24 @@
   "dashboard": {
     "newChat": "New Chat",
     "switchingBack": "Switching back...",
-    "stopImpersonation": "Stop impersonation"
+    "stopImpersonation": "Stop impersonation",
+    "mobileBottomNav": {
+      "account": "Account",
+      "settings": "Settings",
+      "logOut": "Log out",
+      "loggingOut": "Logging out...",
+      "actionNeeded": "Action needed",
+      "impersonationActive": "Impersonation active",
+      "userFallback": "User"
+    },
+    "sidebarFooter": {
+      "seePlansAndPricing": "See plans and pricing",
+      "title": "Get responses tailored to you",
+      "descriptionLine1": "Log in to get answers based on",
+      "descriptionLine2": "saved chats, plus create images",
+      "descriptionLine3": "and upload files.",
+      "logIn": "Log in"
+    }
   },
   "home": {
     "hero": {
@@ -374,6 +391,62 @@
       "submit": "Reset password",
       "rememberPassword": "Remember your password?",
       "signIn": "Sign in"
+    }
+  },
+  "aiChat": {
+    "sidebar": {
+      "untitledChat": "Untitled chat",
+      "chatActions": "Chat actions",
+      "saveChat": "Save chat",
+      "removeFromSaved": "Remove from saved",
+      "renameChat": "Rename chat",
+      "deleteChat": "Delete chat",
+      "save": "Save",
+      "savedChats": "Saved chats",
+      "recents": "Recents",
+      "loading": "Loading...",
+      "loadMore": "Load more",
+      "cancel": "Cancel",
+      "deleting": "Deleting...",
+      "delete": "Delete",
+      "deleteDialog": {
+        "title": "Delete this chat?",
+        "description": "This action cannot be undone. The chat and all of its messages will be permanently deleted."
+      },
+      "errors": {
+        "couldNotRenameChat": "Could not rename chat",
+        "couldNotUpdateSavedStatus": "Could not update saved status"
+      }
+    },
+    "session": {
+      "getPlus": "Get Plus",
+      "actions": {
+        "copyMessage": "Copy message",
+        "copied": "Copied",
+        "retryFromMessage": "Retry from this message",
+        "likeMessage": "Like message",
+        "unlikeMessage": "Unlike message",
+        "removeLike": "Remove like",
+        "removeUnlike": "Remove unlike"
+      },
+      "feedback": {
+        "title": "Tell us what was wrong",
+        "addFeedbackError": "Please add feedback",
+        "placeholder": "Tell us why this response wasn't useful",
+        "submit": "Submit"
+      },
+      "welcome": {
+        "whereToBegin": "Where should we begin?",
+        "helpToday": "What can I help you with today?",
+        "readyWhenYouAre": "Ready when you are",
+        "onYourMind": "What's on your mind?",
+        "heyWhatsUp": "Hey what's up?"
+      },
+      "errors": {
+        "couldNotSaveReaction": "Could not save reaction",
+        "nothingToCopy": "Nothing to copy",
+        "couldNotCopyMessage": "Could not copy message"
+      }
     }
   }
 }
