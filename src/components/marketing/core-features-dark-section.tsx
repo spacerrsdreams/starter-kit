@@ -50,7 +50,7 @@ export function CoreFeaturesDarkSection() {
   return (
     <section className="w-full overflow-hidden px-4 lg:px-8">
       <div className="rounded-3xl bg-[rgb(24,24,24)]">
-        <div className="relative mx-auto max-w-[1200px] overflow-hidden border border-r border-l border-border/5 px-6 py-12 md:px-10 md:py-30">
+        <div className="relative container mx-auto overflow-hidden border border-r border-l border-border/5 px-6 py-12 md:px-10 md:py-30">
           <CoreFeaturesLeftBorderGlow />
           <BottomUpFadeAnimation>
             <div className="mx-auto flex max-w-3xl flex-col items-center text-center">

@@ -44,13 +44,16 @@
       "mobileCloseMenu": "Close menu",
       "menu": {
         "dashboard": "Dashboard",
-        "marketing": "Marketing",
+        "landing": "Landing",
+        "marketing": "Landing",
         "integrations": "Integrations",
         "blog": "Blog",
         "pricing": "Pricing",
+        "pricingV2": "Pricing V2",
         "contact": "Contact",
         "termsAndConditions": "Terms and Conditions",
-        "privacyPolicy": "Privacy Policy"
+        "privacyPolicy": "Privacy Policy",
+        "notFound": "404"
       }
     },
     "trustedMarquee": {
@@ -226,7 +229,7 @@
     },
     "pricing": {
       "chip": "Pricing",
-      "title": "One price. Yours forever.",
+      "title": "Choose the Perfect Plan",
       "monthlyTitle": "Monthly",
       "yearlyTitle": "Yearly",
       "subtitle": "Pay once. Get lifetime access and all future updates.",

@@ -1,13 +1,15 @@
 "use client"
 
 import { motion } from "motion/react"
+import { Route } from "next"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { SiteConfig } from "@/lib/site.config"
-import { WebRoutes } from "@/lib/web.routes"
+import { WebRoutes, isPathWithinRoute } from "@/lib/web.routes"
+import { cn } from "@/lib/utils"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
 import { authClient } from "@/features/auth/lib/auth-client"
 import { HeaderMobileMenu } from "@/components/navigation/header-mobile-menu"
@@ -19,6 +21,7 @@ const HEADER_HIDE_OFFSET = 24
 
 export function HeaderNavigationClient() {
   const t = useTranslations("home.header")
+  const pathname = usePathname()
   const router = useRouter()
   const [isVisible, setIsVisible] = useState(true)
   const { data: session } = authClient.useSession()
@@ -43,16 +46,32 @@ export function HeaderNavigationClient() {
 
   const navLinks = [{ label: t("pricing"), href: WebRoutes.pricing.path }] as const
 
-  const menuLinks = [
-    { title: t("menu.dashboard"), href: WebRoutes.dashboard.path },
-    { title: t("menu.contact"), href: WebRoutes.contact.path },
-    { title: t("menu.marketing"), href: WebRoutes.root.path },
-    { title: t("menu.integrations"), href: WebRoutes.integrations.path },
-    { title: t("menu.termsAndConditions"), href: WebRoutes.termsOfService.path },
-    { title: t("menu.blog"), href: WebRoutes.blog.path },
-    { title: t("menu.privacyPolicy"), href: WebRoutes.privacyPolicy.path },
-    { title: t("pricing"), href: WebRoutes.pricing.path },
+  const menuSections = [
+    {
+      links: [
+        { title: t("menu.landing"), href: WebRoutes.root.path },
+        { title: t("menu.dashboard"), href: WebRoutes.dashboard.path },
+        { title: t("menu.blog"), href: WebRoutes.blog.path },
+      ],
+    },
+    {
+      links: [
+        { title: t("pricing"), href: WebRoutes.pricing.path },
+        { title: t("menu.pricingV2"), href: "/pricing-v2" as Route },
+        { title: t("menu.integrations"), href: WebRoutes.integrations.path },
+      ],
+    },
+    {
+      links: [
+        { title: t("menu.contact"), href: WebRoutes.contact.path },
+        { title: t("menu.termsAndConditions"), href: WebRoutes.termsOfService.path },
+        { title: t("menu.privacyPolicy"), href: WebRoutes.privacyPolicy.path },
+        { title: t("menu.notFound"), href: "/definitely-not-existing-page" as Route },
+      ],
+    },
   ] as const
+
+  const menuLinks = menuSections.flatMap((section) => section.links)
 
   return (
     <motion.header
@@ -77,13 +96,16 @@ export function HeaderNavigationClient() {
 
               <ul className="hidden items-center gap-4 md:flex">
                 <li>
-                  <HeaderPagesMenu menuLinks={menuLinks} />
+                  <HeaderPagesMenu menuSections={menuSections} />
                 </li>
                 {navLinks.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="inline-flex h-9 items-center justify-center rounded-lg px-2.5 py-1.5 text-sm font-semibold text-foreground/90 transition-all hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1"
+                      className={cn(
+                        "inline-flex h-9 items-center justify-center rounded-lg px-2.5 py-1.5 text-sm font-semibold transition-all hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1",
+                        isPathWithinRoute(pathname, link.href) ? "text-primary" : "text-foreground/90"
+                      )}
                     >
                       {link.label}
                     </Link>

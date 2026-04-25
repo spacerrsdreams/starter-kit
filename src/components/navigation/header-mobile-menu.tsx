@@ -4,7 +4,11 @@ import { Menu, X } from "lucide-react"
 import { Route } from "next"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
+
+import { isPathWithinRoute } from "@/lib/web.routes"
+import { cn } from "@/lib/utils"
 
 type HeaderMenuLink = {
   title: string
@@ -17,6 +21,7 @@ type HeaderMobileMenuProps = {
 
 export function HeaderMobileMenu({ menuLinks }: HeaderMobileMenuProps) {
   const t = useTranslations("home.header")
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -39,7 +44,10 @@ export function HeaderMobileMenu({ menuLinks }: HeaderMobileMenuProps) {
                 <Link
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="block rounded-md px-2 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/60"
+                  className={cn(
+                    "block rounded-md px-2 py-2.5 text-sm font-medium transition-colors hover:bg-muted/60",
+                    isPathWithinRoute(pathname, link.href) ? "text-primary" : "text-foreground"
+                  )}
                 >
                   {link.title}
                 </Link>

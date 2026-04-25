@@ -36,7 +36,7 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onProductSe
     <div className="flex h-full flex-col items-center justify-center">
       <div className="items-center px-5 py-6 text-center sm:px-8 sm:py-7">
         {showMainlabel === true && <Chip title={t("chip")} Icon={Database} />}
-        <h2 className="mt-6 text-2xl leading-3 font-semibold tracking-[-2.5px] text-balance sm:text-5xl">
+        <h2 className="mt-6 mb-8 text-2xl leading-3 font-semibold tracking-[-2.5px] text-balance sm:text-5xl">
           {t("title")}
         </h2>
       </div>

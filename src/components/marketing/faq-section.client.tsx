@@ -3,8 +3,8 @@
 import { CircleHelp } from "lucide-react"
 import { useTranslations } from "next-intl"
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Chip } from "@/components/ui/chip"
 
 export function FaqSectionClient() {
@@ -44,9 +44,7 @@ export function FaqSectionClient() {
               <h2 className="text-center text-2xl font-semibold tracking-[-2.5px] text-foreground md:text-5xl lg:text-start">
                 {t("title")}
               </h2>
-              <p className="text-center text-base text-foreground/80 lg:text-start">
-                {t("description")}
-              </p>
+              <p className="text-center text-base text-foreground/80 lg:text-start">{t("description")}</p>
             </div>
           </div>
         </BottomUpFadeAnimation>
@@ -57,7 +55,7 @@ export function FaqSectionClient() {
               <AccordionItem
                 key={item.id}
                 value={item.id}
-                className="rounded-xl border border-border/70 px-4 py-2 transition-colors duration-200 data-[state=open]:bg-secondary/80"
+                className="rounded-xl border border-border/70 px-4 py-2 transition-colors duration-200 data-[state=open]:bg-sidebar"
               >
                 <AccordionTrigger className="text-lg font-medium">{item.question}</AccordionTrigger>
                 <AccordionContent className="text-base">{item.answer}</AccordionContent>

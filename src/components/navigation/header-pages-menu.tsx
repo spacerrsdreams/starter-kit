@@ -1,9 +1,12 @@
 "use client"
 
-import Link from "next/link"
-import { useTranslations } from "next-intl"
-
 import { Route } from "next"
+import { useTranslations } from "next-intl"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+import { isPathWithinRoute } from "@/lib/web.routes"
+import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -18,12 +21,17 @@ type HeaderMenuLink = {
   href: Route
 }
 
-type HeaderPagesMenuProps = {
-  menuLinks: readonly HeaderMenuLink[]
+type HeaderMenuSection = {
+  links: readonly HeaderMenuLink[]
 }
 
-export function HeaderPagesMenu({ menuLinks }: HeaderPagesMenuProps) {
+type HeaderPagesMenuProps = {
+  menuSections: readonly HeaderMenuSection[]
+}
+
+export function HeaderPagesMenu({ menuSections }: HeaderPagesMenuProps) {
   const t = useTranslations("home.header")
+  const pathname = usePathname()
 
   return (
     <NavigationMenu viewport={false}>
@@ -31,15 +39,24 @@ export function HeaderPagesMenu({ menuLinks }: HeaderPagesMenuProps) {
         <NavigationMenuItem>
           <NavigationMenuTrigger className="font-semibold text-foreground/90">{t("allPages")}</NavigationMenuTrigger>
           <NavigationMenuContent className="top-14! rounded-2xl bg-background p-0">
-            <ul className="grid w-100 grid-cols-2 gap-x-1 gap-y-1 px-2 py-4">
-              {menuLinks.map((link) => (
-                <li key={link.title}>
-                  <NavigationMenuLink asChild className="">
-                    <Link href={link.href}>{link.title}</Link>
-                  </NavigationMenuLink>
-                </li>
+            <div className="grid w-lg grid-cols-2 gap-x-3 px-2 py-4 lg:grid-cols-3">
+              {menuSections.map((section, sectionIndex) => (
+                <ul key={`section-${sectionIndex}`} className="space-y-1">
+                  {section.links.map((link) => (
+                    <li key={link.title}>
+                      <NavigationMenuLink asChild className="py-2">
+                        <Link
+                          className={cn("font-medium", isPathWithinRoute(pathname, link.href) && "text-primary")}
+                          href={link.href}
+                        >
+                          {link.title}
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  ))}
+                </ul>
               ))}
-            </ul>
+            </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
