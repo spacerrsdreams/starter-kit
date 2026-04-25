@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 
 import { DeactivationFeedbackPage } from "@/features/auth/account-deactivation/components/deactivation-feedback-page"
-import { Footer } from "@/components/footer"
+import { Footer } from "@/components/footer/footer"
 import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
 import { Spinner } from "@/components/ui/spinner"
 import { TopGradient } from "@/components/ui/top-gradient"

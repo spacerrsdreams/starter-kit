@@ -1,14 +1,14 @@
+import { DEFAULT_LOCALE, LOCALES } from "@/i18n/locales"
 import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { z } from "zod"
 
-import { DEFAULT_LOCALE, LOCALES } from "@/i18n/locales"
 import { WebRoutes } from "@/lib/web.routes"
 import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-actions-menu.client"
 import { getBlogPostBySlug } from "@/features/blog/repositories/blog-posts.repository"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
-import { Footer } from "@/components/footer"
+import { Footer } from "@/components/footer/footer"
 import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
 import { TopGradient } from "@/components/ui/top-gradient"
 

@@ -1,4 +1,4 @@
-import { Footer } from "@/components/footer"
+import { Footer } from "@/components/footer/footer"
 import { IntegrationsSection } from "@/components/marketing/integrations-section"
 import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
 import { TopGradient } from "@/components/ui/top-gradient"

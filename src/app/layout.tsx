@@ -8,7 +8,6 @@ import { Suspense } from "react"
 
 import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
-import { AiWidgetLazy } from "@/features/ai/widget/components/ai-widget-lazy.client"
 import { AuthRequiredModalProvider } from "@/features/auth/components/auth-required-modal/auth-required-modal-provider.client"
 import { UserActivityTracker } from "@/features/auth/components/user-activity-tracker.client"
 import { createMetadata } from "@/features/seo/metadata"
@@ -147,7 +146,7 @@ export default async function RootLayout({
                       <TooltipProvider>
                         {children}
                         <UserActivityTracker />
-                        <AiWidgetLazy />
+
                         <QuickAccessMenuLazy renderInlineTrigger={false} />
                         <Toaster position="bottom-right" />
                         <CookieConsentBannerLazy />

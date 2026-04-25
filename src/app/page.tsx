@@ -1,18 +1,37 @@
-import { Footer } from "@/components/footer"
-import { AdvancedAnalyticsSection } from "@/components/marketing/advanced-analytics-section"
-import { CoreFeaturesDarkSection } from "@/components/marketing/core-features-dark-section"
-import { CustomerReviewsSection } from "@/components/marketing/customer-reviews-section"
+import dynamic from "next/dynamic"
+
 import { DashboardPreviewClient } from "@/components/marketing/dashboard-preview.client"
-import { FaqSectionClient } from "@/components/marketing/faq-section.client"
-import { FreeTrialCtaSection } from "@/components/marketing/free-trial-cta-section"
 import { Hero } from "@/components/marketing/hero"
 import { IntegrationsSection } from "@/components/marketing/integrations-section"
-import { KeyToolsScrollClient } from "@/components/marketing/key-tools-scroll.client"
-import { PlanPickerSectionClient } from "@/components/marketing/plan-picker-section.client"
-import { TrustedMarqueeClient } from "@/components/marketing/trusted-marquee.client"
 import { WhyChooseSection } from "@/components/marketing/why-choose-section"
 import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
 import { TopGradient } from "@/components/ui/top-gradient"
+
+const TrustedMarqueeClient = dynamic(() =>
+  import("@/components/marketing/trusted-marquee.client").then((module) => module.TrustedMarqueeClient)
+)
+const KeyToolsScrollClient = dynamic(() =>
+  import("@/components/marketing/key-tools-scroll.client").then((module) => module.KeyToolsScrollClient)
+)
+const CoreFeaturesDarkSection = dynamic(() =>
+  import("@/components/marketing/core-features-dark-section").then((module) => module.CoreFeaturesDarkSection)
+)
+const AdvancedAnalyticsSection = dynamic(() =>
+  import("@/components/marketing/advanced-analytics-section").then((module) => module.AdvancedAnalyticsSection)
+)
+const CustomerReviewsSection = dynamic(() =>
+  import("@/components/marketing/customer-reviews-section").then((module) => module.CustomerReviewsSection)
+)
+const PlanPickerSectionClient = dynamic(() =>
+  import("@/components/marketing/plan-picker-section.client").then((module) => module.PlanPickerSectionClient)
+)
+const FaqSectionClient = dynamic(() =>
+  import("@/components/marketing/faq-section.client").then((module) => module.FaqSectionClient)
+)
+const FreeTrialCtaSection = dynamic(() =>
+  import("@/components/marketing/free-trial-cta-section").then((module) => module.FreeTrialCtaSection)
+)
+const Footer = dynamic(() => import("@/components/footer/footer").then((module) => module.Footer))
 
 export default function DashboardPage() {
   return (

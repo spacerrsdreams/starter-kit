@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { WebRoutes } from "@/lib/web.routes"
-import { Footer } from "@/components/footer"
+import { Footer } from "@/components/footer/footer"
 import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
