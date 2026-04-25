@@ -156,3 +156,7 @@ Open: [http://localhost:3000](http://localhost:3000)
 - If Google auth redirect fails, make sure `BETTER_AUTH_URL`, origin, and redirect URI match your current environment (local or production).
 
 stripe listen --forward-to localhost:3000/api/billing/webhook
+
+Shipfast — ~$199
+Makerkit — $149–$299
+Supastarter — $299+

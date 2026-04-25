@@ -79,10 +79,18 @@ interface ChatInputFormProps {
   onStop: () => void
   isInputLocked: boolean
   status: ChatStatus
+  multilineByDefault?: boolean
 }
 
-export function ChatInputForm({ onSubmit, onStop, isInputLocked, status }: ChatInputFormProps) {
-  const [isMultiline, setIsMultiline] = useState(false)
+export function ChatInputForm({
+  onSubmit,
+  onStop,
+  isInputLocked,
+  status,
+  multilineByDefault = false,
+}: ChatInputFormProps) {
+  const [isMultiline, setIsMultiline] = useState(multilineByDefault)
+  const shouldRenderMultiline = multilineByDefault || isMultiline
 
   const handleAttachmentError = useCallback(
     (err: { code: "max_files" | "max_file_size" | "accept"; message: string }) => {
@@ -116,20 +124,28 @@ export function ChatInputForm({ onSubmit, onStop, isInputLocked, status }: ChatI
             throw new Error("Input is locked while response is streaming")
           }
           await onSubmit(message)
-          setIsMultiline(false)
+          setIsMultiline(multilineByDefault)
         }}
-        inputGroupClassName="min-h-14 rounded-[1.75rem] border bg-background shadow-sm"
+        inputGroupClassName="min-h-14 rounded-xl md:rounded-[1.75rem] border bg-background shadow-sm"
       >
         <PromptInputAttachmentsDisplay />
         <PromptInputBody className="min-w-0">
           <PromptInputTextarea
-            className={cn("max-h-56 min-h-0 pr-4 pl-2 text-base leading-6", isMultiline && "pl-4")}
-            onChange={(event) => handleTextareaHeight(event.currentTarget)}
-            onInput={(event) => handleTextareaHeight(event.currentTarget)}
+            className={cn("max-h-56 min-h-0 pr-4 pl-2 text-base leading-6", shouldRenderMultiline && "pl-4")}
+            onChange={(event) => {
+              if (!multilineByDefault) {
+                handleTextareaHeight(event.currentTarget)
+              }
+            }}
+            onInput={(event) => {
+              if (!multilineByDefault) {
+                handleTextareaHeight(event.currentTarget)
+              }
+            }}
             placeholder="Ask anything"
           />
         </PromptInputBody>
-        {isMultiline && (
+        {shouldRenderMultiline && (
           <PromptInputFooter className="justify-between px-2 pt-0 pb-2">
             <PromptInputTools>
               <PromptInputActionMenu>
@@ -144,7 +160,7 @@ export function ChatInputForm({ onSubmit, onStop, isInputLocked, status }: ChatI
           </PromptInputFooter>
         )}
 
-        {!isMultiline && (
+        {!shouldRenderMultiline && (
           <>
             <InputGroupAddon align="inline-start" className="items-end gap-1.5 pr-0 pl-2">
               <PromptInputTools>

@@ -62,6 +62,7 @@ export function ChatSession({
 }: ChatSessionProps) {
   const t = useTranslations()
   const isMobile = useIsMobile()
+  const isCompactChatLayout = isMobile || compactMode
   const [transportApi] = useState(() => createStableChatTransport())
   const createChatMutation = useMutateCreateChat()
   const messageReactionMutation = useMutateMessageReaction()
@@ -189,19 +190,22 @@ export function ChatSession({
     [getReactionForMessage, isAuthenticated, messageReactionMutation, t, transportApi]
   )
 
-  const handleMessageCopy = useCallback(async (message: UIMessage) => {
-    const text = getMessageTextContent(message)
-    if (!text) {
-      toast.error(t("aiChat.session.errors.nothingToCopy"))
-      return
-    }
-    try {
-      await navigator.clipboard.writeText(text)
-    } catch {
-      toast.error(t("aiChat.session.errors.couldNotCopyMessage"))
-      throw new Error("copy-failed")
-    }
-  }, [t])
+  const handleMessageCopy = useCallback(
+    async (message: UIMessage) => {
+      const text = getMessageTextContent(message)
+      if (!text) {
+        toast.error(t("aiChat.session.errors.nothingToCopy"))
+        return
+      }
+      try {
+        await navigator.clipboard.writeText(text)
+      } catch {
+        toast.error(t("aiChat.session.errors.couldNotCopyMessage"))
+        throw new Error("copy-failed")
+      }
+    },
+    [t]
+  )
 
   const retryFromUserMessage = useCallback(
     async (userMessage: UIMessage) => {
@@ -312,7 +316,7 @@ export function ChatSession({
     [isGenerating, isAuthenticated, setPendingPrompt, openAuthModal, sendAuthorizedMessage]
   )
 
-  const showUpgradePill = isMobile && isAuthenticated && subscriptionQuery.isSuccess && !isPaid
+  const showUpgradePill = isAuthenticated && subscriptionQuery.isSuccess && !isPaid
 
   const handleUpgradeClick = useCallback(() => {
     planPickerDialog?.openPlanPickerDialog()
@@ -323,104 +327,123 @@ export function ChatSession({
     })
   }, [planPickerDialog])
 
+  let inputContainerLayoutClass = "mx-auto w-full max-w-3xl"
+  if (messages.length === 0 && compactMode) {
+    inputContainerLayoutClass = "mx-auto mt-auto w-full max-w-3xl pb-2 md:pb-0"
+  } else if (messages.length === 0) {
+    inputContainerLayoutClass = "mx-auto mt-4 w-full max-w-3xl pb-2 md:mt-10 md:pb-0"
+  }
+
   return (
-    <div
-      className={cn(
-        "top-auto left-auto flex h-full min-h-0 w-auto flex-1 translate-x-0 flex-col overflow-hidden",
-        messages.length === 0 && "absolute top-[30%] left-1/2 w-full -translate-x-1/2"
-      )}
-    >
+    <>
       {messages.length === 0 && showUpgradePill ? (
-        <div className="shrink-0 px-4 pt-2">
-          <div className="flex justify-center">
-            <Button
-              type="button"
-              variant="secondary"
-              className="h-8 rounded-full bg-violet-100 px-3 text-xs leading-4 font-semibold text-violet-900 hover:bg-violet-200 dark:bg-violet-500/20 dark:text-violet-200 dark:hover:bg-violet-500/30"
-              onClick={handleUpgradeClick}
-              disabled={planPickerDialog?.isPlanPickerCheckoutLoading}
-            >
-              <LogoSvg className="mr-1 size-3.5 text-violet-600!" />
-              {t("aiChat.session.getPlus")}
-            </Button>
-          </div>
+        <div className="absolute top-16 left-1/2 z-50 -translate-x-1/2">
+          <Button
+            type="button"
+            variant="secondary"
+            className="h-8 rounded-full bg-violet-100 px-3 text-xs leading-4 font-semibold text-violet-900 hover:bg-violet-200 dark:bg-violet-500/20 dark:text-violet-200 dark:hover:bg-violet-500/30"
+            onClick={handleUpgradeClick}
+            disabled={planPickerDialog?.isPlanPickerCheckoutLoading}
+          >
+            <LogoSvg className="mr-1 size-3.5 text-violet-600!" />
+            {t("aiChat.session.getPlus")}
+          </Button>
         </div>
       ) : null}
-      <Conversation className={cn("min-h-0 overflow-hidden", messages.length === 0 ? "flex-none" : "flex-1")}>
-        <ConversationContent
-          className={cn(
-            "flex min-h-0 flex-col",
-            messages.length === 0 ? "h-auto justify-center px-2 pt-0 pb-0 sm:px-0" : undefined
-          )}
-        >
-          {messages.length === 0 && (
-            <ConversationEmptyState
-              className={cn("min-h-0 flex-1 gap-2", compactMode && "w-full items-center justify-center text-center")}
-            >
-              <LogoIcon iconSize={28} containerSize={42} className="bg-primary" />
-              <div className={cn("space-y-2", compactMode && "mx-auto w-full max-w-sm")}>
-                <h3 className="text-2xl leading-tight tracking-[-1px] text-balance md:text-4xl">{welcomeText}</h3>
-              </div>
-            </ConversationEmptyState>
-          )}
-
-          {messages.map((message, index) => {
-            if (message.role === "assistant") {
-              const reaction = getReactionForMessage(message)
-              const canRetry = !isGenerating && message.id === latestMessageId
-              return (
-                <ChatSessionAssistantMessage
-                  key={message.id}
-                  message={message}
-                  isAnimating={status === "streaming" && index === lastIndex}
-                  canRetry={canRetry}
-                  showActionsByDefault={!isGenerating && message.id === latestAssistantMessageId}
-                  reaction={reaction}
-                  onCopy={() => handleMessageCopy(message)}
-                  onRetry={() => retryFromAssistantMessage(message)}
-                  onToggleLike={() => updateMessageReaction(message, reaction === "like" ? null : "like")}
-                  onToggleUnlike={() => updateMessageReaction(message, reaction === "unlike" ? null : "unlike")}
-                  onSubmitUnlikeFeedback={(feedbackText) => updateMessageReaction(message, "unlike", feedbackText)}
-                />
-              )
-            }
-
-            if (message.role !== "user") {
-              return null
-            }
-
-            const canRetry = !isGenerating && message.id === latestMessageId
-            return (
-              <ChatSessionUserMessage
-                key={message.id}
-                message={message}
-                canRetry={canRetry}
-                timeLabel={getMessageTimeLabel(message.id)}
-                onCopy={() => handleMessageCopy(message)}
-                onRetry={() => retryFromUserMessage(message)}
-              />
-            )
-          })}
-
-          {status === "submitted" ? (
-            <Message from="assistant">
-              <MessageContent>
-                <AssistantThinkingIndicator />
-              </MessageContent>
-            </Message>
-          ) : null}
-        </ConversationContent>
-        <ConversationScrollButton />
-      </Conversation>
-
       <div
         className={cn(
-          "shrink-0 px-4 pt-3 pb-1 sm:pb-4.5",
-          messages.length === 0 ? "mx-auto mt-4 w-full max-w-3xl pb-4 md:mt-10 md:pb-0" : "mx-auto w-full max-w-3xl"
+          "top-auto left-auto flex h-full min-h-0 w-auto flex-1 flex-col overflow-hidden",
+          messages.length === 0 && !isCompactChatLayout && "absolute top-[30%] left-1/2 w-full -translate-x-1/2"
         )}
       >
-        <ChatInputForm isInputLocked={isGenerating} onStop={stop} onSubmit={handleSubmit} status={status} />
+        <Conversation
+          className={cn(
+            "min-h-0 overflow-hidden",
+            messages.length === 0 && !isCompactChatLayout ? "flex-none" : "flex-1"
+          )}
+        >
+          <ConversationContent
+            className={cn(
+              "flex min-h-0 flex-col",
+              messages.length === 0 ? "h-full justify-center px-2 pt-0 pb-0 sm:px-0" : undefined
+            )}
+          >
+            {messages.length === 0 && (
+              <ConversationEmptyState
+                className={cn("min-h-0 flex-1 gap-2", compactMode && "w-full items-center justify-center text-center")}
+              >
+                <LogoIcon iconSize={28} containerSize={42} className="bg-primary" />
+                <div className={cn("space-y-2", compactMode && "mx-auto w-full max-w-sm")}>
+                  <h3 className="text-2xl leading-tight tracking-[-1px] text-balance md:text-4xl">{welcomeText}</h3>
+                </div>
+              </ConversationEmptyState>
+            )}
+
+            {messages.map((message, index) => {
+              if (message.role === "assistant") {
+                const reaction = getReactionForMessage(message)
+                const canRetry = !isGenerating && message.id === latestMessageId
+                return (
+                  <ChatSessionAssistantMessage
+                    key={message.id}
+                    message={message}
+                    isAnimating={status === "streaming" && index === lastIndex}
+                    canRetry={canRetry}
+                    showActionsByDefault={!isGenerating && message.id === latestAssistantMessageId}
+                    reaction={reaction}
+                    onCopy={() => handleMessageCopy(message)}
+                    onRetry={() => retryFromAssistantMessage(message)}
+                    onToggleLike={() => updateMessageReaction(message, reaction === "like" ? null : "like")}
+                    onToggleUnlike={() => updateMessageReaction(message, reaction === "unlike" ? null : "unlike")}
+                    onSubmitUnlikeFeedback={(feedbackText) => updateMessageReaction(message, "unlike", feedbackText)}
+                  />
+                )
+              }
+
+              if (message.role !== "user") {
+                return null
+              }
+
+              const canRetry = !isGenerating && message.id === latestMessageId
+              return (
+                <ChatSessionUserMessage
+                  key={message.id}
+                  message={message}
+                  canRetry={canRetry}
+                  timeLabel={getMessageTimeLabel(message.id)}
+                  onCopy={() => handleMessageCopy(message)}
+                  onRetry={() => retryFromUserMessage(message)}
+                />
+              )
+            })}
+
+            {status === "submitted" ? (
+              <Message from="assistant">
+                <MessageContent>
+                  <AssistantThinkingIndicator />
+                </MessageContent>
+              </Message>
+            ) : null}
+          </ConversationContent>
+          <ConversationScrollButton />
+        </Conversation>
+
+        <div
+          className={cn(
+            "shrink-0 px-2 pt-3 pb-1 sm:pb-4.5",
+            isMobile && "pb-[calc(env(safe-area-inset-bottom)+0.5rem)]",
+            inputContainerLayoutClass
+          )}
+        >
+          <ChatInputForm
+            isInputLocked={isGenerating}
+            onStop={stop}
+            onSubmit={handleSubmit}
+            status={status}
+            multilineByDefault={isCompactChatLayout}
+          />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
