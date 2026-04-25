@@ -14,9 +14,9 @@ import {
   SiVercel,
 } from "react-icons/si"
 
+import { SectionHeading } from "@/components/section-heading"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Chip } from "@/components/ui/chip"
 
 type IntegrationCard = {
   key: string
@@ -44,13 +44,14 @@ export function IntegrationsSection() {
   return (
     <section className="mx-auto mt-20 w-full max-w-5xl py-6 md:py-10">
       <BottomUpFadeAnimation>
-        <div className="flex flex-col items-center text-center">
-          <Chip Icon={PlugZap} title={t("chip")} />
-          <h2 className="mt-6 px-4 text-3xl font-medium tracking-[-2.5px] text-foreground md:text-4xl lg:px-0">
-            {t("title")}
-          </h2>
-          <p className="mt-4 max-w-xs text-muted-foreground md:max-w-2xl">{t("description")}</p>
-        </div>
+        <SectionHeading
+          chipIcon={PlugZap}
+          chipText={t("chip")}
+          title={t("title")}
+          description={t("description")}
+          titleClassName="px-4 lg:px-0"
+          descriptionClassName="max-w-xs text-muted-foreground md:max-w-2xl"
+        />
       </BottomUpFadeAnimation>
 
       <div className="mt-10 grid gap-6 px-4 md:grid-cols-2 lg:grid-cols-3 lg:px-0">

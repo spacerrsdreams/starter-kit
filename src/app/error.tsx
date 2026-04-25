@@ -24,7 +24,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
             <h1 className="text-[220px] leading-none font-semibold tracking-tight text-black md:text-[280px]">
               4<span className="text-accent-1">0</span>4
             </h1>
-            <h2 className="-mt-3 text-4xl font-bold text-foreground">Sorry! Something went wrong...</h2>
+            <h2 className="-mt-3 text-6xl font-bold text-foreground">Sorry! Something went wrong...</h2>
             <p className="mt-4 max-w-xl text-xl text-foreground">
               If the problem persists, please contact{" "}
               <Link href={WebRoutes.contact.path}>

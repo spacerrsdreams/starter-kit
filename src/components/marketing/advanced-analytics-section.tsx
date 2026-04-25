@@ -3,8 +3,8 @@ import { useTranslations } from "next-intl"
 
 import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
+import { SectionHeading } from "@/components/section-heading"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
-import { Chip } from "@/components/ui/chip"
 
 export function AdvancedAnalyticsSection() {
   const t = useTranslations("home.analytics")
@@ -14,11 +14,14 @@ export function AdvancedAnalyticsSection() {
     <section className="w-full px-4 py-14 md:py-28">
       <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
         <BottomUpFadeAnimation>
-          <Chip Icon={Rocket} title={t("chip")} />
-          <h2 className="mt-6 text-3xl font-medium tracking-[-2.5px] text-foreground md:text-5xl">
-            {t("title")}
-          </h2>
-          <p className="mx-auto mt-4 max-w-md text-foreground/80">{t("description")}</p>
+          <SectionHeading
+            chipIcon={Rocket}
+            chipText={t("chip")}
+            title={t("title")}
+            description={t("description")}
+            titleClassName="md:text-5xl"
+            descriptionClassName="mx-auto max-w-md"
+          />
         </BottomUpFadeAnimation>
 
         <BottomUpFadeAnimation delay={0.08}>

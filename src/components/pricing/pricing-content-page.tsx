@@ -49,7 +49,6 @@ export function PricingContentPage() {
     <main className="mx-auto w-full max-w-5xl px-4 py-30 sm:px-6 md:py-45">
       <PlanPicker
         isBillingLoading={checkoutSessionMutation.isPending || isSessionPending}
-        showMainlabel={false}
         onProductSelect={handleSelectProduct}
       />
     </main>

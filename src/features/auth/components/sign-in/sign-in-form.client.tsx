@@ -133,6 +133,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
     })
   }
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const emailValue = form.watch("email")
 
   const handleSignInWithGoogle = () => {
@@ -192,7 +193,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
             placeholder={texts.emailPlaceholder}
             aria-invalid={Boolean(form.formState.errors.email)}
             required
-              className="h-11 rounded-xl px-4"
+            className="h-11 rounded-xl px-4"
             {...form.register("email", {
               onChange: () => {
                 if (errorCode) setErrorCode(null)

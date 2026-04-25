@@ -1,6 +1,6 @@
 "use client"
 
-import { BookMarked, BookOpen, ShieldCheck } from "lucide-react"
+import { BookMarked, ShieldCheck } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { usePathname } from "next/navigation"

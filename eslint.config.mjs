@@ -7,6 +7,11 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   ...tanstackQuery.configs["flat/recommended"],
+  {
+    settings: {
+      react: { version: "19" },
+    },
+  },
 
   globalIgnores([
     // Default ignores of eslint-config-next:

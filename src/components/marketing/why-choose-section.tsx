@@ -1,10 +1,10 @@
 import { Rocket } from "lucide-react"
-import Image from "next/image"
 import { useTranslations } from "next-intl"
+import Image from "next/image"
 
 import { SiteConfig } from "@/lib/site.config"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
-import { Chip } from "@/components/ui/chip"
+import { SectionHeading } from "@/components/section-heading"
 
 const previewChartBars = [
   { width: "w-[64%]", color: "bg-emerald-500", label: "40%" },
@@ -170,15 +170,13 @@ export function WhyChooseSection() {
   return (
     <section className="mx-auto mt-20 w-full max-w-5xl py-6 md:py-10">
       <BottomUpFadeAnimation>
-        <div className="flex flex-col items-center text-center">
-          <Chip Icon={Rocket} title={t("chip")} />
-          <h2 className="mt-6 text-3xl font-medium tracking-[-2.5px] text-foreground md:text-4xl">
-            {t("title", { name: SiteConfig.name })}
-          </h2>
-          <p className="mt-4 max-w-xs text-muted-foreground md:max-w-2xl">
-            {t("description", { name: SiteConfig.name })}
-          </p>
-        </div>
+        <SectionHeading
+          chipIcon={Rocket}
+          chipText={t("chip")}
+          title={t("title", { name: SiteConfig.name })}
+          description={t("description", { name: SiteConfig.name })}
+          descriptionClassName="max-w-xs text-muted-foreground md:max-w-2xl"
+        />
       </BottomUpFadeAnimation>
 
       <div className="mt-10 grid gap-6 px-4 md:auto-rows-fr md:grid-cols-2 lg:grid-cols-3 lg:px-0">

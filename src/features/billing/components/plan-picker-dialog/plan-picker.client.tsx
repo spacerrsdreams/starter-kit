@@ -3,10 +3,10 @@
 import { Database } from "lucide-react"
 import { useTranslations } from "next-intl"
 
+import { SectionHeading } from "@/components/section-heading"
 import { PricingPlanCard } from "@/features/billing/components/plan-picker-dialog/pricing-plan-card.client"
 import { useFetchBillingProducts } from "@/features/billing/hooks/use-fetch-billing-products"
 import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
-import { Chip } from "@/components/ui/chip"
 
 export type PlanPickerProps = {
   isBillingLoading: boolean
@@ -35,10 +35,18 @@ export function PlanPicker({ isBillingLoading, showMainlabel = true, onProductSe
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <div className="items-center px-5 py-6 text-center sm:px-8 sm:py-7">
-        {showMainlabel === true && <Chip title={t("chip")} Icon={Database} />}
-        <h2 className="mt-6 mb-8 text-2xl leading-3 font-semibold tracking-[-2.5px] text-balance sm:text-5xl">
-          {t("title")}
-        </h2>
+        {showMainlabel === true ? (
+          <SectionHeading
+            chipIcon={Database}
+            chipText={t("chip")}
+            title={t("title")}
+            titleClassName="mb-8 text-2xl leading-3 font-semibold text-balance sm:text-5xl"
+          />
+        ) : (
+          <h2 className="mt-6 mb-8 text-2xl leading-3 font-semibold tracking-[-2.5px] text-balance sm:text-5xl">
+            {t("title")}
+          </h2>
+        )}
       </div>
 
       <div className="mx-auto flex w-full flex-col items-center justify-center gap-4 md:flex-row">

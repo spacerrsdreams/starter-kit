@@ -15,7 +15,6 @@ import {
 import * as React from "react"
 
 import type { AdminUserListItem } from "@/features/admin/types/admin-users.types"
-import { AdminUsersStatsCards } from "./admin-users-stats-cards"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -28,6 +27,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
+import { AdminUsersStatsCards } from "./admin-users-stats-cards"
 
 type AdminUsersDataTableProps = {
   columns: ColumnDef<AdminUserListItem>[]
@@ -90,6 +91,7 @@ export function AdminUsersDataTable({ columns, data }: AdminUsersDataTableProps)
     }
   }, [filteredByTimeRange])
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: filteredByTimeRange,
     columns,

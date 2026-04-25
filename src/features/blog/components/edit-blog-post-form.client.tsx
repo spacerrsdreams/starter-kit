@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState, type FormEvent } from "react"
 import { toast } from "sonner"
@@ -246,7 +247,14 @@ export function EditBlogPostForm({
       <section className="space-y-4 rounded-xl border border-border bg-background p-6">
         <h2 className="text-2xl font-semibold text-foreground">Preview</h2>
         <article className="space-y-4">
-          <img src={effectivePreviewImage} alt={title || "Blog preview cover"} className="h-56 w-full rounded-lg object-cover" />
+          <Image
+            src={effectivePreviewImage}
+            alt={title || "Blog preview cover"}
+            width={1200}
+            height={448}
+            unoptimized
+            className="h-56 w-full rounded-lg object-cover"
+          />
           <div className="space-y-2">
             <h3 className="text-3xl font-bold text-foreground">{title || "Post title preview"}</h3>
             <p className="text-sm text-muted-foreground">{preview || "Post description preview"}</p>

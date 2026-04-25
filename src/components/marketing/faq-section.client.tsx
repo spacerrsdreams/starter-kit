@@ -3,9 +3,9 @@
 import { CircleHelp } from "lucide-react"
 import { useTranslations } from "next-intl"
 
+import { SectionHeading } from "@/components/section-heading"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Chip } from "@/components/ui/chip"
 
 export function FaqSectionClient() {
   const t = useTranslations("home.faq")
@@ -37,15 +37,15 @@ export function FaqSectionClient() {
       <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2 lg:gap-10">
         <BottomUpFadeAnimation>
           <div className="min-w-0">
-            <div className="flex justify-center lg:justify-start">
-              <Chip Icon={CircleHelp} title={t("chip")} />
-            </div>
-            <div className="space-y-2 pt-6 lg:space-y-6">
-              <h2 className="text-center text-2xl font-semibold tracking-[-2.5px] text-foreground md:text-5xl lg:text-start">
-                {t("title")}
-              </h2>
-              <p className="text-center text-base text-foreground/80 lg:text-start">{t("description")}</p>
-            </div>
+            <SectionHeading
+              className="items-center lg:items-start lg:text-start"
+              chipIcon={CircleHelp}
+              chipText={t("chip")}
+              title={t("title")}
+              description={t("description")}
+              titleClassName="text-center text-2xl font-semibold md:text-5xl lg:text-start"
+              descriptionClassName="text-center text-base lg:text-start"
+            />
           </div>
         </BottomUpFadeAnimation>
 

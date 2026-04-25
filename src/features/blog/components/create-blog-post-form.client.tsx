@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState, type FormEvent } from "react"
 import { toast } from "sonner"
@@ -244,9 +245,12 @@ export function CreateBlogPostForm() {
         <h2 className="text-2xl font-semibold text-foreground">Preview</h2>
         <article className="space-y-4">
           {coverImagePreviewUrl ? (
-            <img
+            <Image
               src={coverImagePreviewUrl}
               alt={title || "Blog preview cover"}
+              width={1200}
+              height={448}
+              unoptimized
               className="h-56 w-full rounded-lg object-cover"
             />
           ) : null}

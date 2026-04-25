@@ -112,6 +112,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn, callbackURL }: SignUpF
   } else if (errorCode) {
     errorMessage = texts.genericError
   }
+  // eslint-disable-next-line react-hooks/incompatible-library
   const emailValue = form.watch("email")
   const isSubmitDisabled = isLoading || googleLoading
 

@@ -5,8 +5,8 @@ import { useTranslations } from "next-intl"
 import { useEffect, useRef, useState } from "react"
 
 import { SiteConfig } from "@/lib/site.config"
+import { SectionHeading } from "@/components/section-heading"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
-import { Chip } from "@/components/ui/chip"
 
 import { Separator } from "../ui/separator"
 
@@ -78,12 +78,13 @@ export function KeyToolsScrollClient() {
       <div className="grid gap-4 lg:grid-cols-[40%_60%] lg:gap-12">
         <BottomUpFadeAnimation delay={0.05}>
           <aside className="h-fit px-4 lg:sticky lg:top-24 lg:px-0">
-            <div className="flex justify-center lg:justify-start">
-              <Chip Icon={Sparkles} title={t("chip")} />
-            </div>
-            <h2 className="mt-6 text-center text-3xl font-medium tracking-[-2.5px] text-foreground/95 md:text-5xl lg:text-start">
-              {t("title")}
-            </h2>
+            <SectionHeading
+              className="items-center lg:items-start lg:text-start"
+              chipIcon={Sparkles}
+              chipText={t("chip")}
+              title={t("title")}
+              titleClassName="text-center text-3xl text-foreground/95 md:text-5xl lg:text-start"
+            />
 
             <nav className="mt-10 hidden space-y-5 lg:block">
               {keyToolsSections.map((section) => {

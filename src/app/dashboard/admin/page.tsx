@@ -1,11 +1,9 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { redirect } from "next/navigation"
 
 import { WebRoutes } from "@/lib/web.routes"
 import { AdminUsersTable } from "@/features/admin/components/admin-users-table.client"
 import { getAdminSession } from "@/features/admin/utils/get-admin-session.server"
-import { Button } from "@/components/ui/button"
 
 const title = "Admin"
 const description = "Manage users and account access."

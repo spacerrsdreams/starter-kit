@@ -3,8 +3,8 @@ import { useTranslations } from "next-intl"
 
 import { SiteConfig } from "@/lib/site.config"
 import { CoreFeaturesLeftBorderGlow } from "@/components/marketing/core-features-left-border-glow.client"
+import { SectionHeading } from "@/components/section-heading"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
-import { Chip } from "@/components/ui/chip"
 
 import { AnimatedSvg } from "../motion/animated-svg.animation"
 
@@ -53,13 +53,16 @@ export function CoreFeaturesDarkSection() {
         <div className="relative container mx-auto overflow-hidden border border-r border-l border-border/5 px-6 py-12 md:px-10 md:py-30">
           <CoreFeaturesLeftBorderGlow />
           <BottomUpFadeAnimation>
-            <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-              <Chip Icon={Rocket} title={t("chip")} variant="dark" />
-              <h2 className="mt-6 text-2xl font-semibold tracking-[-2.5px] text-zinc-100 md:text-4xl">
-                {t("title", { name: SiteConfig.name })}
-              </h2>
-              <p className="mt-4 max-w-sm text-background/80">{t("description")}</p>
-            </div>
+            <SectionHeading
+              className="mx-auto max-w-3xl"
+              chipIcon={Rocket}
+              chipText={t("chip")}
+              chipVariant="dark"
+              title={t("title", { name: SiteConfig.name })}
+              description={t("description")}
+              titleClassName="text-2xl font-semibold text-zinc-100 md:text-4xl"
+              descriptionClassName="max-w-sm text-background/80"
+            />
           </BottomUpFadeAnimation>
 
           <div className="mx-auto mt-18 grid max-w-5xl gap-4 md:grid-cols-2 lg:grid-cols-3">

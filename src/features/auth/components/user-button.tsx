@@ -15,11 +15,9 @@ import {
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState, useTransition, type MouseEvent } from "react"
-import { toast } from "sonner"
 
 import { WebRoutes } from "@/lib/web.routes"
 import { authClient } from "@/features/auth/lib/auth-client"
-import type { UserButtonProps } from "@/features/auth/types/user-button.types"
 import { BILLING_TRACKING_EVENTS } from "@/features/billing/constants/billing-tracking.constants"
 import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
 import { useMutateCreatePortalSession } from "@/features/billing/hooks/use-mutate-create-portal-session"
@@ -38,7 +36,12 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogoIcon, LogoSvg } from "@/components/ui/icons/logo.icon"
+
+export type UserButtonProps = {
+  user: User
+  isAdmin?: boolean
+  isImpersonating?: boolean
+}
 
 function getInitial(email: string): string {
   const trimmed = email.trim()
@@ -56,7 +59,25 @@ function getDisplayName(user: User): string {
   return emailName || "User"
 }
 
-export function UserButton({ user, isAdmin = false, isImpersonating = false }: UserButtonProps) {
+const helpLinks = [
+  {
+    label: "Help Center",
+    href: WebRoutes.contact.path,
+    icon: CircleHelp,
+  },
+  {
+    label: "Terms of Service",
+    href: WebRoutes.termsOfService.path,
+    icon: FileText,
+  },
+  {
+    label: "Privacy Policy",
+    href: WebRoutes.privacyPolicy.path,
+    icon: Info,
+  },
+] as const
+
+export function UserButton({ user, isImpersonating = false }: UserButtonProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
@@ -99,21 +120,6 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
     })
   }
 
-  const handleStartImpersonation = () => {
-    const userId = window.prompt("Enter the target user ID to impersonate")
-    if (!userId?.trim()) {
-      return
-    }
-
-    startTransition(async () => {
-      try {
-        await authClient.admin.impersonateUser({ userId: userId.trim() })
-      } catch {
-        toast.error("Failed to impersonate user.")
-      }
-    })
-  }
-
   const handleUpgradeClick = () => {
     router.push(WebRoutes.pricing.path)
     trackBillingEvent({
@@ -129,23 +135,6 @@ export function UserButton({ user, isAdmin = false, isImpersonating = false }: U
     handleUpgradeClick()
   }
 
-  const helpLinks = [
-    {
-      label: "Help Center",
-      href: WebRoutes.contact.path,
-      icon: CircleHelp,
-    },
-    {
-      label: "Terms of Service",
-      href: WebRoutes.termsOfService.path,
-      icon: FileText,
-    },
-    {
-      label: "Privacy Policy",
-      href: WebRoutes.privacyPolicy.path,
-      icon: Info,
-    },
-  ] as const
   const planLabel = isPaid ? "Manage plan" : "Upgrade plan"
   const billingLabel = isBillingLoading ? "Opening billing..." : planLabel
   let planStatusLabel = ""

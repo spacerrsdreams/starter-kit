@@ -2,8 +2,8 @@ import { UserStar } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { SiteConfig } from "@/lib/site.config"
+import { SectionHeading } from "@/components/section-heading"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
-import { Chip } from "@/components/ui/chip"
 import { CountUpNumberAnimation } from "@/components/motion/count-up-number.animation"
 
 export function CustomerReviewsSection() {
@@ -12,12 +12,13 @@ export function CustomerReviewsSection() {
   return (
     <section className="w-full px-4 py-14 md:py-20 lg:px-8">
       <BottomUpFadeAnimation>
-        <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
-          <Chip Icon={UserStar} title={t("chip")} />
-          <h2 className="mt-6 text-3xl font-semibold tracking-[-2.5px] text-foreground md:text-4xl">
-            {t("title")}
-          </h2>
-        </div>
+        <SectionHeading
+          className="mx-auto max-w-4xl"
+          chipIcon={UserStar}
+          chipText={t("chip")}
+          title={t("title")}
+          titleClassName="font-semibold"
+        />
       </BottomUpFadeAnimation>
 
       <div className="mx-auto mt-10 grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
