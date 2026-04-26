@@ -20,20 +20,22 @@ type ChatProps = {
 }
 
 export function Chat({ initialChatId = null }: ChatProps) {
+  const requiresExistingChatBootstrap = Boolean(initialChatId)
   const { data: session, isPending: isSessionPending } = authClient.useSession()
   const isAuthenticated = Boolean(session?.user)
   const isGuestResolved = !isSessionPending && !isAuthenticated
   const queryClient = useQueryClient()
   const chatsQuery = useFetchChats()
 
-  const [routingReady, setRoutingReady] = useState(false)
+  const [routingReady, setRoutingReady] = useState(!requiresExistingChatBootstrap)
   const [activeChatId, setActiveChatId] = useState<string | null>(initialChatId)
-  const [sessionClientId, setSessionClientId] = useState("")
+  const [sessionClientId, setSessionClientId] = useState(() => initialChatId ?? crypto.randomUUID())
   const bootstrapModeRef = useRef<"guest" | "authenticated" | null>(null)
   const ignoredInitialChatIdRef = useRef(false)
   const hasRefetchedChatsForSessionRef = useRef(false)
   const setNavigationActiveChatId = useChatNavigationStore((state) => state.setActiveChatId)
   const chatDetailQuery = useFetchChatDetail(activeChatId)
+
   const replaceAddressBarPath = (path: string) => {
     if (window.location.pathname === path) {
       return
@@ -55,7 +57,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
       }
       bootstrapModeRef.current = "guest"
       setActiveChatId(null)
-      setSessionClientId(crypto.randomUUID())
+      setSessionClientId((current) => current || crypto.randomUUID())
       setRoutingReady(true)
       return
     }
@@ -79,7 +81,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
       }
 
       setActiveChatId(null)
-      setSessionClientId(crypto.randomUUID())
+      setSessionClientId((current) => current || crypto.randomUUID())
       setRoutingReady(true)
     })
   }, [
@@ -149,7 +151,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
     )
   }
 
-  if (isSessionPending || !routingReady || !sessionClientId) {
+  if (!sessionClientId || (requiresExistingChatBootstrap && (isSessionPending || !routingReady))) {
     return (
       <div className="flex h-[calc(100dvh-57px-4.5rem)] min-h-0 md:h-[calc(100dvh-57px)]">
         <main className="mx-auto flex min-h-0 max-w-3xl flex-1 flex-col">

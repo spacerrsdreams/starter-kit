@@ -1,5 +1,6 @@
 import "server-only"
 
+import { get } from "@vercel/blob"
 import {
   consumeStream,
   convertToModelMessages,
@@ -36,6 +37,72 @@ const generateChatMessageId = createIdGenerator({
   prefix: "msg",
   size: 16,
 })
+
+function getAttachmentPathname(providerMetadata: unknown): string | null {
+  if (!providerMetadata || typeof providerMetadata !== "object") {
+    return null
+  }
+
+  const storage = (providerMetadata as { storage?: unknown }).storage
+  if (!storage || typeof storage !== "object") {
+    return null
+  }
+
+  const pathname = (storage as { pathname?: unknown }).pathname
+  if (typeof pathname !== "string") {
+    return null
+  }
+
+  const normalizedPathname = pathname.trim()
+  return normalizedPathname ? normalizedPathname : null
+}
+
+async function toModelReadyMessages(messages: UIMessage[]): Promise<UIMessage[]> {
+  return Promise.all(
+    messages.map(async (message) => {
+      const parts = await Promise.all(
+        message.parts.map(async (part) => {
+          if (part.type !== "file") {
+            return part
+          }
+
+          const pathname = getAttachmentPathname(part.providerMetadata)
+          if (!pathname) {
+            return part
+          }
+
+          try {
+            const blobResult = await get(pathname, {
+              access: "private",
+            })
+            if (!blobResult?.blob) {
+              return part
+            }
+
+            const contentType = blobResult.blob.contentType || part.mediaType || "application/octet-stream"
+            const bytes = await new Response(blobResult.stream).arrayBuffer()
+            return {
+              ...part,
+              mediaType: contentType,
+              url: `data:${contentType};base64,${Buffer.from(bytes).toString("base64")}`,
+            }
+          } catch (error) {
+            console.error("Failed to resolve private chat attachment for model input", {
+              pathname,
+              error,
+            })
+            return part
+          }
+        })
+      )
+
+      return {
+        ...message,
+        parts,
+      }
+    })
+  )
+}
 
 export async function POST(req: Request) {
   const userId = await getSessionUserId()
@@ -105,7 +172,7 @@ export async function POST(req: Request) {
   const result = streamText({
     model: CHAT_MODEL_ID,
     system: systemPrompt,
-    messages: await convertToModelMessages(budgetedContext.messagesForModel),
+    messages: await convertToModelMessages(await toModelReadyMessages(budgetedContext.messagesForModel)),
     tools: chatTools,
     maxOutputTokens: MAX_OUTPUT_TOKENS,
     stopWhen: stepCountIs(5),

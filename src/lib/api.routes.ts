@@ -1,5 +1,9 @@
 export const ApiRoutes = {
   chat: "/api/chat",
+  chatAttachments: {
+    upload: "/api/chat/attachments",
+    read: (pathname: string) => `/api/chat/attachments?pathname=${encodeURIComponent(pathname)}`,
+  },
   chats: {
     list: "/api/chats",
     create: "/api/chats",

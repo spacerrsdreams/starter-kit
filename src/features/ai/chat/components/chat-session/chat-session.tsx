@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react"
 import type { FileUIPart, UIMessage } from "ai"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
@@ -13,6 +13,7 @@ import { ChatSessionAssistantMessage } from "@/features/ai/chat/components/chat-
 import { ChatSessionUserMessage } from "@/features/ai/chat/components/chat-session/chat-session-user-message"
 import { useMutateCreateChat } from "@/features/ai/chat/hooks/use-mutate-create-chat"
 import { useMutateMessageReaction } from "@/features/ai/chat/hooks/use-mutate-message-reaction"
+import { useMutateUploadChatAttachment } from "@/features/ai/chat/hooks/use-mutate-upload-chat-attachment"
 import { useChatAuthRequiredStore } from "@/features/ai/chat/store/chat-auth-required.store"
 import type { ChatMessageReaction } from "@/features/ai/chat/types/chat.types"
 import { getMessageReaction } from "@/features/ai/chat/utils/chat-message-reaction.utils"
@@ -46,9 +47,17 @@ type ChatSessionProps = {
   onConversationUpdated: () => void
 }
 
-const getRandomWelcomeText = (options: readonly string[]) => {
-  const randomIndex = Math.floor(Math.random() * options.length)
-  return options[randomIndex] ?? ""
+const getWelcomeTextForSession = (options: readonly string[], sessionClientId: string) => {
+  if (options.length === 0) {
+    return ""
+  }
+  let hash = 0
+  for (let index = 0; index < sessionClientId.length; index += 1) {
+    hash = (hash << 5) - hash + sessionClientId.charCodeAt(index)
+    hash |= 0
+  }
+  const normalizedHash = Math.abs(hash)
+  return options[normalizedHash % options.length] ?? ""
 }
 
 export function ChatSession({
@@ -61,10 +70,12 @@ export function ChatSession({
   onConversationUpdated,
 }: ChatSessionProps) {
   const t = useTranslations()
+  const locale = useLocale()
   const isMobile = useIsMobile()
   const isCompactChatLayout = isMobile || compactMode
   const [transportApi] = useState(() => createStableChatTransport())
   const createChatMutation = useMutateCreateChat()
+  const uploadChatAttachmentMutation = useMutateUploadChatAttachment()
   const messageReactionMutation = useMutateMessageReaction()
   const isSendInFlightRef = useRef(false)
   const wasGeneratingRef = useRef(false)
@@ -88,7 +99,10 @@ export function ChatSession({
       ] as const,
     [t]
   )
-  const [welcomeText] = useState(() => getRandomWelcomeText(welcomeTextOptions))
+  const welcomeText = useMemo(
+    () => getWelcomeTextForSession(welcomeTextOptions, sessionClientId),
+    [sessionClientId, welcomeTextOptions]
+  )
 
   useEffect(() => {
     transportApi.setChatId(initialDbChatId)
@@ -159,6 +173,31 @@ export function ChatSession({
       }
     },
     [createChatMutation, isGenerating, onChatCreated, sendMessage, transportApi]
+  )
+
+  const uploadAttachments = useCallback(
+    async (files: FileUIPart[]): Promise<FileUIPart[]> => {
+      if (files.length === 0) {
+        return files
+      }
+
+      return Promise.all(
+        files.map(async (file) => {
+          const uploaded = await uploadChatAttachmentMutation.mutateAsync(file)
+          return {
+            ...file,
+            providerMetadata: {
+              ...file.providerMetadata,
+              storage: {
+                pathname: uploaded.pathname,
+              },
+            },
+            url: uploaded.url,
+          }
+        })
+      )
+    },
+    [uploadChatAttachmentMutation]
   )
 
   const updateMessageReaction = useCallback(
@@ -265,13 +304,14 @@ export function ChatSession({
     }
     return null
   }, [messages])
+
   const timeFormatter = useMemo(
     () =>
-      new Intl.DateTimeFormat(undefined, {
+      new Intl.DateTimeFormat(locale, {
         hour: "numeric",
         minute: "2-digit",
       }),
-    []
+    [locale]
   )
   const getMessageTimeLabel = useCallback(
     (messageId: string) => {
@@ -311,9 +351,14 @@ export function ChatSession({
         openAuthModal()
         return
       }
-      await sendAuthorizedMessage(normalizedText, files)
+      try {
+        const uploadedFiles = await uploadAttachments(files)
+        await sendAuthorizedMessage(normalizedText, uploadedFiles)
+      } catch {
+        toast.error("Could not upload attachment. Please try again.")
+      }
     },
-    [isGenerating, isAuthenticated, setPendingPrompt, openAuthModal, sendAuthorizedMessage]
+    [isGenerating, isAuthenticated, setPendingPrompt, openAuthModal, sendAuthorizedMessage, uploadAttachments]
   )
 
   const showUpgradePill = isAuthenticated && subscriptionQuery.isSuccess && !isPaid

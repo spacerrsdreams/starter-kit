@@ -15,6 +15,7 @@ export function getMessageFileParts(message: UIMessage): FileUIPart[] {
       type: "file",
       filename: part.filename,
       mediaType: part.mediaType,
+      providerMetadata: part.providerMetadata,
       url: part.url,
     }))
 }
