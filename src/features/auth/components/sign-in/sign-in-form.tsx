@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Eye, EyeOff } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { usePathname, useSearchParams } from "next/navigation"
-import { useState, useTransition } from "react"
+import { useEffect, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import z from "zod"
 
@@ -13,6 +13,7 @@ import { buildPostAuthCallbackUrl } from "@/features/auth/components/sign-in/sig
 import { getSignInErrorMessageKey } from "@/features/auth/components/sign-in/sign-in-form.utils"
 import { SignInReactivateDialog } from "@/features/auth/components/sign-in/sign-in-reactivate-dialog"
 import { ACCOUNT_DEACTIVATED, UNKNOWN_ERROR_CODE } from "@/features/auth/constants"
+import { useSignInUiState } from "@/features/auth/hooks/use-sign-in-ui-state"
 import { authClient } from "@/features/auth/lib/auth-client"
 import {
   reactivateAndSignInAction,
@@ -54,19 +55,64 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
     errorGeneric: t("auth.signIn.genericError"),
     hidePassword: t("auth.signIn.hidePassword"),
     showPassword: t("auth.signIn.showPassword"),
+    twoFactorTitle: t("auth.signIn.twoFactor.title"),
+    twoFactorDescription: t("auth.signIn.twoFactor.description"),
+    twoFactorCodeLabel: t("auth.signIn.twoFactor.codeLabel"),
+    twoFactorCodePlaceholder: t("auth.signIn.twoFactor.codePlaceholder"),
+    twoFactorBackupCodeLabel: t("auth.signIn.twoFactor.backupCodeLabel"),
+    twoFactorBackupCodePlaceholder: t("auth.signIn.twoFactor.backupCodePlaceholder"),
+    twoFactorUseBackupCode: t("auth.signIn.twoFactor.useBackupCode"),
+    twoFactorUseAuthenticatorCode: t("auth.signIn.twoFactor.useAuthenticatorCode"),
+    twoFactorVerify: t("auth.signIn.twoFactor.verify"),
+    twoFactorVerifying: t("auth.signIn.twoFactor.verifying"),
+    twoFactorInvalidCode: t("auth.signIn.twoFactor.invalidCode"),
+    lastUsed: t("auth.signIn.lastUsed"),
   }
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const { refetch: refetchSession } = authClient.useSession()
-  const [googleLoading, setGoogleLoading] = useState(false)
-  const [passkeyLoading, setPasskeyLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [errorCode, setErrorCode] = useState<string | null>(null)
-  const [reactivateOpen, setReactivateOpen] = useState(false)
-  const [reactivateError, setReactivateError] = useState<string | null>(null)
+  const { ui, patchUi } = useSignInUiState()
+  const lastUsedLoginMethod = authClient.getLastUsedLoginMethod()
   const [isPending, startTransition] = useTransition()
   const [isReactivatePending, startReactivateTransition] = useTransition()
+
+  useEffect(() => {
+    let cancelled = false
+
+    const detectPasskeyAvailability = async () => {
+      if (typeof window === "undefined" || typeof window.PublicKeyCredential === "undefined") {
+        if (!cancelled) {
+          patchUi({ canUsePasskeyOnDevice: false })
+        }
+        return
+      }
+
+      try {
+        const isConditionalMediationAvailable =
+          typeof window.PublicKeyCredential.isConditionalMediationAvailable === "function" &&
+          (await window.PublicKeyCredential.isConditionalMediationAvailable())
+
+        if (!cancelled) {
+          patchUi({ canUsePasskeyOnDevice: isConditionalMediationAvailable })
+        }
+
+        if (isConditionalMediationAvailable) {
+          await authClient.signIn.passkey({ autoFill: true })
+        }
+      } catch {
+        if (!cancelled) {
+          patchUi({ canUsePasskeyOnDevice: false })
+        }
+      }
+    }
+
+    void detectPasskeyAvailability()
+
+    return () => {
+      cancelled = true
+    }
+  }, [patchUi])
 
   const buildCallbackUrl = (): string =>
     callbackURL ??
@@ -86,7 +132,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
   })
 
   const handleSubmit = form.handleSubmit((values) => {
-    setErrorCode(null)
+    patchUi({ errorCode: null, twoFactorError: null })
 
     startTransition(async () => {
       const result = await signInWithEmailAndPasswordAction({
@@ -102,10 +148,15 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
         return
       }
 
+      if (result.code === "TWO_FACTOR_REQUIRED") {
+        patchUi({ isTwoFactorRequired: true, twoFactorCode: "" })
+        return
+      }
+
       if (result.code === ACCOUNT_DEACTIVATED) {
-        setReactivateOpen(true)
+        patchUi({ reactivateOpen: true })
       } else {
-        setErrorCode(result.code ?? UNKNOWN_ERROR_CODE)
+        patchUi({ errorCode: result.code ?? UNKNOWN_ERROR_CODE })
       }
     })
   })
@@ -114,8 +165,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
     const { email, password } = form.getValues()
 
     if (!email || !password) return
-    setErrorCode(null)
-    setReactivateError(null)
+    patchUi({ errorCode: null, reactivateError: null })
 
     startReactivateTransition(async () => {
       const result = await reactivateAndSignInAction({
@@ -127,13 +177,25 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
 
       if (result.ok) {
         await refetchSession()
-        setReactivateOpen(false)
+        patchUi({ reactivateOpen: false })
         onSuccess()
         return
       }
 
-      setReactivateError(texts.errorGeneric)
-      setErrorCode(result.code ?? UNKNOWN_ERROR_CODE)
+      if (result.code === "TWO_FACTOR_REQUIRED") {
+        patchUi({
+          reactivateOpen: false,
+          isTwoFactorRequired: true,
+          twoFactorCode: "",
+          twoFactorError: null,
+        })
+        return
+      }
+
+      patchUi({
+        reactivateError: texts.errorGeneric,
+        errorCode: result.code ?? UNKNOWN_ERROR_CODE,
+      })
     })
   }
 
@@ -141,21 +203,24 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
   const emailValue = form.watch("email")
 
   const handleSignInWithGoogle = () => {
-    setGoogleLoading(true)
+    patchUi({ isTwoFactorRequired: false, googleLoading: true })
     startTransition(async () => {
       try {
         await signInWithGoogleAction(buildCallbackUrl())
       } catch {
         /* OAuth redirect */
       } finally {
-        setGoogleLoading(false)
+        patchUi({ googleLoading: false })
       }
     })
   }
 
   const handleSignInWithPasskey = () => {
-    setErrorCode(null)
-    setPasskeyLoading(true)
+    patchUi({
+      isTwoFactorRequired: false,
+      errorCode: null,
+      passkeyLoading: true,
+    })
     startTransition(async () => {
       try {
         await authClient.signIn.passkey({
@@ -165,14 +230,14 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
               onSuccess()
             },
             onError: (ctx) => {
-              setErrorCode(ctx.error.code ?? UNKNOWN_ERROR_CODE)
+              patchUi({ errorCode: ctx.error.code ?? UNKNOWN_ERROR_CODE })
             },
           },
         })
       } catch {
-        setErrorCode(UNKNOWN_ERROR_CODE)
+        patchUi({ errorCode: UNKNOWN_ERROR_CODE })
       } finally {
-        setPasskeyLoading(false)
+        patchUi({ passkeyLoading: false })
       }
     })
   }
@@ -180,43 +245,84 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
   const isFormLoading = isPending
   const isReactivateLoading = isReactivatePending
 
+  const handleVerifyTwoFactor = () => {
+    if (ui.isVerifyingTwoFactor || ui.twoFactorCode.trim().length === 0) {
+      return
+    }
+
+    patchUi({ twoFactorError: null, isVerifyingTwoFactor: true })
+
+    startTransition(async () => {
+      try {
+        if (ui.isUsingBackupCode) {
+          await authClient.twoFactor.verifyBackupCode({
+            code: ui.twoFactorCode.trim(),
+          })
+        } else {
+          await authClient.twoFactor.verifyTotp({
+            code: ui.twoFactorCode.trim(),
+          })
+        }
+
+        await refetchSession()
+        onSuccess()
+      } catch {
+        patchUi({ twoFactorError: texts.twoFactorInvalidCode })
+      } finally {
+        patchUi({ isVerifyingTwoFactor: false })
+      }
+    })
+  }
+
   const formContent = (
     <form onSubmit={handleSubmit}>
       <FieldGroup className="gap-4">
         <div className="flex flex-col items-center gap-2 text-center">
-          {errorCode === "EMAIL_NOT_VERIFIED" && (
+          {ui.errorCode === "EMAIL_NOT_VERIFIED" && (
             <div className="flex w-full flex-col gap-2 rounded-lg border border-border bg-muted/50 p-4">
               <p className="text-sm font-medium text-foreground">{texts.emailNotVerified}</p>
               <p className="text-xs text-balance text-muted-foreground">{texts.emailNotVerifiedHint}</p>
             </div>
           )}
-          {errorCode && errorCode !== "EMAIL_NOT_VERIFIED" && errorCode !== ACCOUNT_DEACTIVATED && (
-            <p className="text-red-500">{getSignInErrorMessageKey(errorCode)}</p>
+          {ui.errorCode && ui.errorCode !== "EMAIL_NOT_VERIFIED" && ui.errorCode !== ACCOUNT_DEACTIVATED && (
+            <p className="text-red-500">{getSignInErrorMessageKey(ui.errorCode)}</p>
           )}
         </div>
         <Field className="flex flex-col gap-2 pt-2">
+          {ui.canUsePasskeyOnDevice && (
+            <Button
+              variant="outline"
+              type="button"
+              isLoading={ui.passkeyLoading}
+              disabled={isFormLoading || ui.googleLoading || ui.passkeyLoading}
+              onClick={handleSignInWithPasskey}
+              aria-label={texts.signInWithPasskey}
+              className="h-11 rounded-xl"
+            >
+              <span className="">{texts.signInWithPasskey}</span>
+              {lastUsedLoginMethod === "passkey" && (
+                <span className="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                  {texts.lastUsed}
+                </span>
+              )}
+            </Button>
+          )}
           <Button
             variant="outline"
             type="button"
-            isLoading={passkeyLoading}
-            disabled={isFormLoading || googleLoading || passkeyLoading}
-            onClick={handleSignInWithPasskey}
-            aria-label={texts.signInWithPasskey}
-            className="h-11 rounded-xl"
-          >
-            <span className="">{texts.signInWithPasskey}</span>
-          </Button>
-          <Button
-            variant="outline"
-            type="button"
-            isLoading={googleLoading}
-            disabled={isFormLoading || googleLoading || passkeyLoading}
+            isLoading={ui.googleLoading}
+            disabled={isFormLoading || ui.googleLoading || ui.passkeyLoading}
             onClick={handleSignInWithGoogle}
             aria-label={texts.signInWithGoogle}
             className="h-11 rounded-xl"
           >
             <GoogleIcon className="size-4" />
             <span className="">{texts.signInWithGoogle}</span>
+            {lastUsedLoginMethod === "google" && (
+              <span className="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                {texts.lastUsed}
+              </span>
+            )}
           </Button>
         </Field>
         <FieldSeparator className="my-1">{texts.orContinueWith}</FieldSeparator>
@@ -235,7 +341,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
             className="h-11 rounded-xl px-4"
             {...form.register("email", {
               onChange: () => {
-                if (errorCode) setErrorCode(null)
+                if (ui.errorCode) patchUi({ errorCode: null })
               },
             })}
           />
@@ -267,7 +373,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
           <div className="relative">
             <Input
               id="password"
-              type={showPassword ? "text" : "password"}
+              type={ui.showPassword ? "text" : "password"}
               aria-invalid={Boolean(form.formState.errors.password)}
               autoComplete="current-password webauthn"
               placeholder="**********"
@@ -275,18 +381,18 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
               className="h-11 rounded-xl px-4 pr-10"
               {...form.register("password", {
                 onChange: () => {
-                  if (errorCode) setErrorCode(null)
+                  if (ui.errorCode) patchUi({ errorCode: null })
                 },
               })}
             />
             <button
               type="button"
-              onClick={() => setShowPassword((v) => !v)}
+              onClick={() => patchUi({ showPassword: !ui.showPassword })}
               className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-              aria-label={showPassword ? texts.hidePassword : texts.showPassword}
+              aria-label={ui.showPassword ? texts.hidePassword : texts.showPassword}
               tabIndex={-1}
             >
-              {showPassword ? <EyeOff className="size-4" aria-hidden /> : <Eye className="size-4" aria-hidden />}
+              {ui.showPassword ? <EyeOff className="size-4" aria-hidden /> : <Eye className="size-4" aria-hidden />}
             </button>
           </div>
           {form.formState.errors.password?.message && (
@@ -299,11 +405,16 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
             className="h-11 w-full rounded-full text-sm font-medium"
             type="submit"
             isLoading={isFormLoading}
-            disabled={isFormLoading || googleLoading || passkeyLoading}
+            disabled={isFormLoading || ui.googleLoading || ui.passkeyLoading}
             aria-label={texts.signIn}
             featureStylesEnabled
           >
             {texts.signIn}
+            {lastUsedLoginMethod === "email" && (
+              <span className="ml-2 inline-flex items-center rounded-full bg-background/90 px-2 py-0.5 text-[10px] font-medium text-foreground">
+                {texts.lastUsed}
+              </span>
+            )}
           </Button>
         </Field>
 
@@ -321,14 +432,71 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
     </form>
   )
 
+  const twoFactorContent = (
+    <div className="space-y-4">
+      <div className="space-y-1 text-center">
+        <h2 className="text-base font-medium text-foreground">{texts.twoFactorTitle}</h2>
+        <p className="text-sm text-muted-foreground">{texts.twoFactorDescription}</p>
+      </div>
+      <FieldGroup className="gap-3">
+        {ui.twoFactorError && <p className="text-sm text-destructive">{ui.twoFactorError}</p>}
+        <Field>
+          <FieldLabel htmlFor="two-factor-code" className="ml-0.5">
+            {ui.isUsingBackupCode ? texts.twoFactorBackupCodeLabel : texts.twoFactorCodeLabel}
+          </FieldLabel>
+          <Input
+            id="two-factor-code"
+            value={ui.twoFactorCode}
+            onChange={(event) => {
+              patchUi({ twoFactorCode: event.target.value })
+              if (ui.twoFactorError) {
+                patchUi({ twoFactorError: null })
+              }
+            }}
+            autoComplete="one-time-code"
+            placeholder={ui.isUsingBackupCode ? texts.twoFactorBackupCodePlaceholder : texts.twoFactorCodePlaceholder}
+            className="h-11 rounded-xl px-4"
+          />
+        </Field>
+        <Field>
+          <Button
+            type="button"
+            className="h-11 w-full rounded-full text-sm font-medium"
+            onClick={handleVerifyTwoFactor}
+            isLoading={ui.isVerifyingTwoFactor}
+            disabled={ui.isVerifyingTwoFactor || ui.twoFactorCode.trim().length === 0}
+            featureStylesEnabled
+          >
+            {ui.isVerifyingTwoFactor ? texts.twoFactorVerifying : texts.twoFactorVerify}
+          </Button>
+        </Field>
+        <FieldDescription className="flex items-center justify-center pt-1 text-center text-xs">
+          <button
+            type="button"
+            className="cursor-pointer text-primary underline underline-offset-2"
+            onClick={() => {
+              patchUi({
+                isUsingBackupCode: !ui.isUsingBackupCode,
+                twoFactorCode: "",
+                twoFactorError: null,
+              })
+            }}
+          >
+            {ui.isUsingBackupCode ? texts.twoFactorUseAuthenticatorCode : texts.twoFactorUseBackupCode}
+          </button>
+        </FieldDescription>
+      </FieldGroup>
+    </div>
+  )
+
   const reactivateDialog = (
     <SignInReactivateDialog
-      open={reactivateOpen}
-      onOpenChange={setReactivateOpen}
+      open={ui.reactivateOpen}
+      onOpenChange={(open) => patchUi({ reactivateOpen: open })}
       isReactivateLoading={isReactivateLoading}
-      reactivateError={reactivateError}
+      reactivateError={ui.reactivateError}
       onConfirm={handleReactivateConfirm}
-      onReactivateReset={() => setReactivateError(null)}
+      onReactivateReset={() => patchUi({ reactivateError: null })}
     />
   )
 
@@ -338,12 +506,10 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
         <div className="mb-4 flex items-center justify-center">
           <LogoIcon iconSize={28} containerSize={38} />
         </div>
-        <h1 className="text-2xl font-medium tracking-[-1px] text-foreground">
-          {texts.signInTitle}
-        </h1>
+        <h1 className="text-2xl font-medium tracking-[-1px] text-foreground">{texts.signInTitle}</h1>
         <p className="text-sm text-muted-foreground">{texts.signInDescription}</p>
       </div>
-      {formContent}
+      {ui.isTwoFactorRequired ? twoFactorContent : formContent}
       {reactivateDialog}
     </div>
   )

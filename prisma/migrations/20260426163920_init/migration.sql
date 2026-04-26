@@ -5,6 +5,9 @@ CREATE TYPE "MessageRole" AS ENUM ('user', 'assistant', 'system');
 CREATE TYPE "MessageReaction" AS ENUM ('like', 'unlike');
 
 -- CreateEnum
+CREATE TYPE "BlogPostLocale" AS ENUM ('EN', 'DE');
+
+-- CreateEnum
 CREATE TYPE "DeactivationFeedbackCategory" AS ENUM ('MISSING_FEATURES', 'TOO_EXPENSIVE', 'TOO_COMPLEX', 'BUGS_OR_PERFORMANCE', 'PRIVACY_CONCERNS', 'SWITCHED_TO_ALTERNATIVE', 'OTHER');
 
 -- CreateEnum
@@ -56,6 +59,7 @@ CREATE TABLE "blog_post" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
+    "locale" "BlogPostLocale" NOT NULL DEFAULT 'EN',
     "preview" TEXT NOT NULL,
     "seoKeywords" TEXT[],
     "imageSrc" TEXT NOT NULL,
@@ -73,13 +77,12 @@ CREATE TABLE "user" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "role" "UserRole" NOT NULL DEFAULT 'user',
-    "banned" BOOLEAN NOT NULL DEFAULT false,
-    "banReason" TEXT,
-    "banExpires" TIMESTAMP(3),
+    "twoFactorEnabled" BOOLEAN NOT NULL DEFAULT false,
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "notificationsEmailMarketing" BOOLEAN NOT NULL DEFAULT false,
     "notificationsEmailPersonalized" BOOLEAN NOT NULL DEFAULT true,
     "image" TEXT,
+    "lastActiveAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deactivatedAt" TIMESTAMP(3),
@@ -134,6 +137,34 @@ CREATE TABLE "verification" (
 );
 
 -- CreateTable
+CREATE TABLE "passkey" (
+    "id" TEXT NOT NULL,
+    "name" TEXT,
+    "publicKey" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "credentialID" TEXT NOT NULL,
+    "counter" INTEGER NOT NULL,
+    "deviceType" TEXT NOT NULL,
+    "backedUp" BOOLEAN NOT NULL,
+    "transports" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "aaguid" TEXT,
+
+    CONSTRAINT "passkey_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "twoFactor" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "secret" TEXT NOT NULL,
+    "backupCodes" TEXT NOT NULL,
+    "verified" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "twoFactor_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "deactivation_feedback" (
     "id" TEXT NOT NULL,
     "category" "DeactivationFeedbackCategory" NOT NULL,
@@ -167,13 +198,16 @@ CREATE INDEX "billing_subscription_stripeSubscriptionId_idx" ON "billing_subscri
 CREATE INDEX "billing_subscription_stripeCustomerId_stripeStatus_idx" ON "billing_subscription"("stripeCustomerId", "stripeStatus");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "blog_post_slug_key" ON "blog_post"("slug");
-
--- CreateIndex
 CREATE INDEX "blog_post_createdAt_idx" ON "blog_post"("createdAt");
 
 -- CreateIndex
 CREATE INDEX "blog_post_authorId_idx" ON "blog_post"("authorId");
+
+-- CreateIndex
+CREATE INDEX "blog_post_locale_createdAt_idx" ON "blog_post"("locale", "createdAt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "blog_post_slug_locale_key" ON "blog_post"("slug", "locale");
 
 -- CreateIndex
 CREATE INDEX "user_deactivatedAt_idx" ON "user"("deactivatedAt");
@@ -192,6 +226,15 @@ CREATE INDEX "account_userId_idx" ON "account"("userId");
 
 -- CreateIndex
 CREATE INDEX "verification_identifier_idx" ON "verification"("identifier");
+
+-- CreateIndex
+CREATE INDEX "passkey_userId_idx" ON "passkey"("userId");
+
+-- CreateIndex
+CREATE INDEX "passkey_credentialID_idx" ON "passkey"("credentialID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "twoFactor_userId_key" ON "twoFactor"("userId");
 
 -- CreateIndex
 CREATE INDEX "deactivation_feedback_userId_idx" ON "deactivation_feedback"("userId");
@@ -213,6 +256,12 @@ ALTER TABLE "session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "account" ADD CONSTRAINT "account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "passkey" ADD CONSTRAINT "passkey_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "twoFactor" ADD CONSTRAINT "twoFactor_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "deactivation_feedback" ADD CONSTRAINT "deactivation_feedback_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;

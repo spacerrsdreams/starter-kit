@@ -214,6 +214,18 @@ Exactly one exported React component per .tsx file. Non-exported helper componen
 - Validate persisted JSON with Zod before use.
 - Wait for hydration completion before trusting persisted values for routing/bootstrap behavior.
 
+### React Local State Management (Strict)
+
+- Avoid "many `useState` in one component" patterns that make flows hard to reason about.
+- If a component has multiple related UI flags/fields (rough guideline: ~5+ local state keys), prefer one of:
+  - a compounded object state with a patch helper, or
+  - a dedicated local helper hook under the feature `hooks/` folder, or
+  - a feature Zustand store when state is shared across components/routes or requires persistence.
+- Choose the smallest scope that fits:
+  - single-component state -> compounded state or helper hook,
+  - cross-component/shared state -> Zustand store.
+- Keep transition/loading state colocated with the flow it belongs to; avoid scattering state setters across unrelated branches.
+
 ### Zod Validation (Client + Server)
 
 - Any **form validation** or **backend validation** should use Zod, including on the client.

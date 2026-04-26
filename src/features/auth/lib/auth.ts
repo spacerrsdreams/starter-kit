@@ -4,10 +4,9 @@ import { passkey } from "@better-auth/passkey"
 import { betterAuth, User } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { nextCookies } from "better-auth/next-js"
-import { admin } from "better-auth/plugins"
+import { admin, lastLoginMethod, twoFactor } from "better-auth/plugins"
 import { headers } from "next/headers"
 
-import { ClientEnv } from "@/lib/env.client"
 import { ServerEnv } from "@/lib/env.server"
 import { prisma } from "@/lib/prisma"
 import { WebRoutes } from "@/lib/web.routes"
@@ -31,13 +30,17 @@ export const auth = betterAuth({
       adminRole: "admin",
     }),
     passkey({
-      rpName: ClientEnv.NEXT_PUBLIC_SITE_NAME,
+      rpName: ServerEnv.NEXT_PUBLIC_SITE_NAME,
       rpID: ServerEnv.BETTER_AUTH_PASSKEY_RP_ID,
-      origin: ServerEnv.BETTER_AUTH_PASSKEY_ORIGIN,
+      origin: ServerEnv.NEXT_PUBLIC_DOMAIN,
     }),
+    twoFactor({
+      issuer: ServerEnv.NEXT_PUBLIC_SITE_NAME,
+    }),
+    lastLoginMethod(),
   ],
-  baseURL: ServerEnv.BETTER_AUTH_URL,
-  trustedOrigins: [ServerEnv.BETTER_AUTH_URL],
+  baseURL: ServerEnv.NEXT_PUBLIC_DOMAIN,
+  trustedOrigins: [ServerEnv.NEXT_PUBLIC_DOMAIN],
   resetPassword: {
     enabled: true,
   },

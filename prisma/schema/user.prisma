@@ -6,6 +6,7 @@ model User {
   banned                         Boolean                @default(false)
   banReason                      String?
   banExpires                     DateTime?
+  twoFactorEnabled               Boolean                @default(false)
   emailVerified                  Boolean                @default(false)
   notificationsEmailMarketing    Boolean                @default(false)
   notificationsEmailPersonalized Boolean                @default(true)
@@ -17,6 +18,7 @@ model User {
   sessions                       Session[]
   accounts                       Account[]
   passkeys                       Passkey[]
+  twoFactors                     TwoFactor[]
   chats                          Chat[]
   billingSubscription            BillingSubscription?
   deactivationFeedbacks          DeactivationFeedback[]
@@ -93,6 +95,18 @@ model Passkey {
   @@index([userId])
   @@index([credentialID])
   @@map("passkey")
+}
+
+model TwoFactor {
+  id          String   @id
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  secret      String
+  backupCodes String
+  verified    Boolean  @default(false)
+
+  @@unique([userId])
+  @@map("twoFactor")
 }
 
 model DeactivationFeedback {

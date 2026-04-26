@@ -343,7 +343,21 @@
       "emailNotVerifiedHint": "Please verify your email to sign in",
       "genericError": "An error occurred, please try again",
       "hidePassword": "Hide password",
-      "showPassword": "Show password"
+      "showPassword": "Show password",
+      "lastUsed": "Last used",
+      "twoFactor": {
+        "title": "Two-factor verification",
+        "description": "Enter the code from your authenticator app to finish signing in.",
+        "codeLabel": "Authenticator code",
+        "codePlaceholder": "123456",
+        "backupCodeLabel": "Backup code",
+        "backupCodePlaceholder": "XXXX-XXXX",
+        "useBackupCode": "Use a backup code instead",
+        "useAuthenticatorCode": "Use authenticator code instead",
+        "verify": "Verify code",
+        "verifying": "Verifying...",
+        "invalidCode": "Invalid code. Please try again."
+      }
     },
     "signUp": {
       "title": "Sign up for {name}",
@@ -424,6 +438,9 @@
       "passkey": {
         "title": "Passkey",
         "description": "Add a passkey to sign in faster with biometrics or security keys.",
+        "status": {
+          "added": "Passkey added"
+        },
         "actions": {
           "adding": "Adding passkey...",
           "add": "Add passkey"
@@ -432,6 +449,50 @@
           "addedPlatform": "Passkey added successfully with this device authenticator.",
           "noPlatformFallback": "No platform authenticator found. Use your phone/security key to finish passkey setup.",
           "crossDeviceLocalhost": "Cross-device passkey setup on localhost often fails. Use a real HTTPS domain (or tunnel) and try again."
+        }
+      },
+      "password": {
+        "title": "Password",
+        "description": "Manage your sign-in password for email and password authentication.",
+        "actions": {
+          "set": "Set password",
+          "change": "Change password",
+          "sending": "Sending reset link...",
+          "resendIn": "Resend in {time}"
+        },
+        "messages": {
+          "linkSent": "Password reset link sent to your email.",
+          "sendFailed": "Could not send password reset link. Please try again."
+        }
+      },
+      "twoFactor": {
+        "title": "Two-factor authentication",
+        "description": "Protect your account with an authenticator app and backup codes.",
+        "status": {
+          "enabled": "Two-factor authentication is enabled.",
+          "disabled": "Two-factor authentication is disabled."
+        },
+        "passwordPlaceholder": "Enter your password to continue",
+        "codePlaceholder": "Enter 6-digit authenticator code",
+        "actions": {
+          "enable": "Enable 2FA",
+          "enabling": "Enabling 2FA...",
+          "confirmEnable": "Continue",
+          "verify": "Verify setup",
+          "verifying": "Verifying...",
+          "disable": "Disable 2FA",
+          "disabling": "Disabling 2FA...",
+          "confirmDisable": "Continue"
+        },
+        "messages": {
+          "scanReady": "Setup is ready. Add this account to your authenticator app and verify a code.",
+          "scanInstruction": "Copy this setup URI into your authenticator app:",
+          "backupCodes": "Save these backup codes in a secure place:",
+          "enabled": "Two-factor authentication enabled.",
+          "disabled": "Two-factor authentication disabled.",
+          "invalidCode": "Invalid code. Please try again.",
+          "enableFailed": "Could not start two-factor setup. Please check your password and try again.",
+          "disableFailed": "Could not disable two-factor authentication. Please check your password and try again."
         }
       },
       "deactivate": {

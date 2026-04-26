@@ -9,7 +9,7 @@ import { redirect } from "next/navigation"
 
 import { ApiRoutes } from "@/lib/api.routes"
 import { auth } from "@/features/auth/lib/auth"
-import type { AuthEmbeddedOnlySuccess, AuthRedirectSuccess } from "@/features/auth/types/auth.types"
+import type { AuthEmbeddedOnlySuccess, AuthRedirectSuccess, AuthTwoFactorRequired } from "@/features/auth/types/auth.types"
 import { getAuthApiErrorCode } from "@/features/auth/lib/auth-utils"
 import { reactivateDeactivatedAccountWithDetail } from "@/features/auth/lib/auth.repository"
 import {
@@ -70,8 +70,9 @@ export async function signInWithEmailAndPasswordAction(input: SignInWithEmailAnd
 
   const { email, password, callbackURL, embedded } = parsed.data
 
+  let signInResult: Awaited<ReturnType<typeof auth.api.signInEmail>>
   try {
-    await auth.api.signInEmail({
+    signInResult = await auth.api.signInEmail({
       body: {
         email,
         password,
@@ -81,6 +82,19 @@ export async function signInWithEmailAndPasswordAction(input: SignInWithEmailAnd
     })
   } catch (error: unknown) {
     return { ok: false, code: getAuthApiErrorCode(error) }
+  }
+
+  if ("twoFactorRedirect" in signInResult && signInResult.twoFactorRedirect) {
+    const twoFactorMethods =
+      "twoFactorMethods" in signInResult && Array.isArray(signInResult["twoFactorMethods"])
+        ? signInResult["twoFactorMethods"]
+        : []
+
+    return {
+      ok: false,
+      code: "TWO_FACTOR_REQUIRED",
+      twoFactorMethods,
+    } satisfies AuthTwoFactorRequired
   }
 
   if (embedded) {
@@ -105,8 +119,9 @@ export async function reactivateAndSignInAction(input: ReactivateAndSignInAction
     return { ok: false, code: "INVALID_EMAIL_OR_PASSWORD" }
   }
 
+  let signInResult: Awaited<ReturnType<typeof auth.api.signInEmail>>
   try {
-    await auth.api.signInEmail({
+    signInResult = await auth.api.signInEmail({
       body: {
         email,
         password,
@@ -116,6 +131,19 @@ export async function reactivateAndSignInAction(input: ReactivateAndSignInAction
     })
   } catch (error: unknown) {
     return { ok: false, code: getAuthApiErrorCode(error) }
+  }
+
+  if ("twoFactorRedirect" in signInResult && signInResult.twoFactorRedirect) {
+    const twoFactorMethods =
+      "twoFactorMethods" in signInResult && Array.isArray(signInResult["twoFactorMethods"])
+        ? signInResult["twoFactorMethods"]
+        : []
+
+    return {
+      ok: false,
+      code: "TWO_FACTOR_REQUIRED",
+      twoFactorMethods,
+    } satisfies AuthTwoFactorRequired
   }
 
   if (embedded) {

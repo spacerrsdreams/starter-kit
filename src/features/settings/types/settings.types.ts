@@ -5,7 +5,9 @@ export type SettingsSectionId = "profile" | "account" | "notifications" | "appea
 
 export type SettingsMobileView = "list" | "section"
 
-export type SettingsAccountSessionUser = Pick<User, "email" | "emailVerified">
+export type SettingsAccountSessionUser = Pick<User, "email" | "emailVerified"> & {
+  twoFactorEnabled?: boolean
+}
 export type SendEmailVerificationActionErrorCode = "UNAUTHORIZED" | "INVALID_INPUT" | "RATE_LIMITED" | "FAILED"
 
 export type SettingsNavItem = {

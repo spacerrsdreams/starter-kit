@@ -1,4 +1,9 @@
 export type AuthActionFailure = { ok: false; code: string }
+export type AuthTwoFactorRequired = {
+  ok: false
+  code: "TWO_FACTOR_REQUIRED"
+  twoFactorMethods: string[]
+}
 
 /** After email/password sign-in when cookies are set; client should `refetch()` then `router.push(redirectTo)`. */
 export type AuthRedirectSuccess = { ok: true; redirectTo: string }
