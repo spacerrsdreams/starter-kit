@@ -1,6 +1,6 @@
 "use client"
 
-import { CheckCircle2, Mail, ShieldAlert, UserX } from "lucide-react"
+import { CheckCircle2, KeyRound, Mail, ShieldAlert, UserX } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -36,6 +36,8 @@ export function SettingsAccountSection() {
   const [hasSentVerification, setHasSentVerification] = useState(false)
   const [resendCooldown, setResendCooldown] = useState(0)
   const [verificationError, setVerificationError] = useState<string | null>(null)
+  const [isAddingPasskey, setIsAddingPasskey] = useState(false)
+  const [passkeyMessage, setPasskeyMessage] = useState<string | null>(null)
 
   useEffect(() => {
     if (resendCooldown <= 0) return
@@ -84,6 +86,28 @@ export function SettingsAccountSection() {
 
     setVerificationError(getEmailVerificationErrorMessage(result.code))
     setIsSendingVerification(false)
+  }
+
+  const handleAddPasskey = async () => {
+    if (isAddingPasskey) {
+      return
+    }
+
+    setPasskeyMessage(null)
+    setIsAddingPasskey(true)
+
+    await authClient.passkey.addPasskey({
+      fetchOptions: {
+        onSuccess: () => {
+          setPasskeyMessage("Passkey added successfully.")
+        },
+        onError: (ctx) => {
+          setPasskeyMessage(ctx.error.message)
+        },
+      },
+    })
+
+    setIsAddingPasskey(false)
   }
 
   let verificationButtonLabel: string
@@ -140,6 +164,28 @@ export function SettingsAccountSection() {
               {verificationError && <p className="text-sm text-destructive">{verificationError}</p>}
             </div>
           )}
+        </div>
+      </SettingsAccountSectionLayout>
+
+      <Separator />
+
+      <SettingsAccountSectionLayout
+        icon={KeyRound}
+        title="Passkey"
+        description="Add a passkey to sign in faster with biometrics or security keys."
+      >
+        <div className="flex flex-col gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="w-fit rounded-xl"
+            onClick={() => void handleAddPasskey()}
+            disabled={isAddingPasskey}
+          >
+            {isAddingPasskey ? "Adding passkey..." : "Add passkey"}
+          </Button>
+          {passkeyMessage && <p className="text-sm text-muted-foreground">{passkeyMessage}</p>}
         </div>
       </SettingsAccountSectionLayout>
 

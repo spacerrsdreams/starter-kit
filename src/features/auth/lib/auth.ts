@@ -1,11 +1,14 @@
 import "server-only"
 
+import { passkey } from "@better-auth/passkey"
 import { betterAuth, User } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { nextCookies } from "better-auth/next-js"
 import { admin } from "better-auth/plugins"
 import { headers } from "next/headers"
 
+import { ClientEnv } from "@/lib/env.client"
+import { ServerEnv } from "@/lib/env.server"
 import { prisma } from "@/lib/prisma"
 import { WebRoutes } from "@/lib/web.routes"
 import { MIN_PASSWORD_LENGTH } from "@/features/auth/lib/auth.schema"
@@ -27,16 +30,21 @@ export const auth = betterAuth({
       defaultRole: "user",
       adminRole: "admin",
     }),
+    passkey({
+      rpName: ClientEnv.NEXT_PUBLIC_SITE_NAME,
+      rpID: ServerEnv.BETTER_AUTH_PASSKEY_RP_ID,
+      origin: ServerEnv.BETTER_AUTH_PASSKEY_ORIGIN,
+    }),
   ],
-  baseURL: process.env.BETTER_AUTH_URL!,
-  trustedOrigins: [process.env.BETTER_AUTH_URL!],
+  baseURL: ServerEnv.BETTER_AUTH_URL,
+  trustedOrigins: [ServerEnv.BETTER_AUTH_URL],
   resetPassword: {
     enabled: true,
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: ServerEnv.GOOGLE_CLIENT_ID,
+      clientSecret: ServerEnv.GOOGLE_CLIENT_SECRET,
     },
   },
   expiresIn: ThirtyDays,

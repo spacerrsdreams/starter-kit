@@ -1,6 +1,6 @@
 import { Route } from "next"
 
-export const baseUrl = process.env.NEXT_PUBLIC_DOMAIN!
+import { ClientEnv } from "@/lib/env.client"
 
 type RouteDefinition = {
   labelKey: string
@@ -11,7 +11,7 @@ type RouteDefinition = {
 type DynamicRouteDefinition<T extends string> = {
   labelKey: string
   pattern: string
-  withBaseUrl: (param: T) => string
+  withBaseUrl: (param: T) => string;
   (param: T): Route
 }
 
@@ -87,11 +87,11 @@ function createRoute(labelKey: string, path: string): RouteDefinition {
     },
     withBaseUrl: () => {
       const localizedPath = withLocalePrefix(path)
-      if (!baseUrl) {
+      if (!ClientEnv.NEXT_PUBLIC_DOMAIN) {
         return localizedPath
       }
 
-      return `${baseUrl.replace(/\/$/, "")}${localizedPath}`
+      return `${ClientEnv.NEXT_PUBLIC_DOMAIN.replace(/\/$/, "")}${localizedPath}`
     },
   }
 }
@@ -107,11 +107,11 @@ function createDynamicRoute<T extends string>(
   routeFn.withBaseUrl = (param: T) => {
     const localizedPath = routeFn(param)
 
-    if (!baseUrl) {
+    if (!ClientEnv.NEXT_PUBLIC_DOMAIN) {
       return localizedPath
     }
 
-    return `${baseUrl.replace(/\/$/, "")}${localizedPath}`
+    return `${ClientEnv.NEXT_PUBLIC_DOMAIN.replace(/\/$/, "")}${localizedPath}`
   }
 
   return routeFn

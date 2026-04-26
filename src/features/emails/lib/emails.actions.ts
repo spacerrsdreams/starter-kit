@@ -2,6 +2,7 @@ import "server-only"
 
 import { z } from "zod"
 
+import { ServerEnv } from "@/lib/env.server"
 import { SiteConfig } from "@/lib/site.config"
 import { sendMail } from "@/features/emails/lib/emails.lib"
 import { ContactSubmissionEmailTemplate } from "@/features/emails/templates/contact-submission.template"
@@ -86,7 +87,7 @@ export async function sendContactSubmissionEmail(props: SendContactSubmissionEma
     throw new Error(`Invalid sendContactSubmissionEmail props: ${parsed.error.message}`)
   }
 
-  const supportEmail = process.env.SUPPORT_EMAIL
+  const supportEmail = ServerEnv.SUPPORT_EMAIL
   if (!supportEmail) {
     throw new Error("SUPPORT_EMAIL is not configured. Please add SUPPORT_EMAIL to your .env file.")
   }

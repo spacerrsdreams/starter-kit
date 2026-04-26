@@ -5,15 +5,16 @@ import posthog from "posthog-js"
 import type { ReactNode } from "react"
 import { useEffect } from "react"
 
+import { ClientEnv } from "@/lib/env.client"
 import { WebRoutes, isPathWithinRoute } from "@/lib/web.routes"
 
 type PostHogProviderProps = {
   children: ReactNode
 }
 
-const ANALYTICS_TOGGLE = process.env.NEXT_PUBLIC_ANALYTICS_TRACKING
-const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY
-const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST
+const ANALYTICS_TOGGLE = ClientEnv.NEXT_PUBLIC_ANALYTICS_TRACKING
+const POSTHOG_KEY = ClientEnv.NEXT_PUBLIC_POSTHOG_KEY
+const POSTHOG_HOST = ClientEnv.NEXT_PUBLIC_POSTHOG_HOST
 
 function isAdminPath(pathname: string): boolean {
   return isPathWithinRoute(pathname, WebRoutes.admin.path)

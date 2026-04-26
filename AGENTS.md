@@ -233,6 +233,15 @@ Exactly one exported React component per .tsx file. Non-exported helper componen
 - **No disabled security defaults**: Do not disable SSL/TLS validation, CORS protections, or CSP headers without an explicit, documented reason.
 - **Dependency hygiene**: Do not add new dependencies for functionality already available in the existing stack. If a new dependency is needed, note it explicitly in the response for human review.
 
+### Environment Variables (Strict)
+
+- Never read `process.env.*` directly outside `src/lib/env.server.ts` and `src/lib/env.client.ts`.
+- Server/runtime modules must import env from `ServerEnv` (`@/lib/env.server`).
+- Client/browser modules must import env from `ClientEnv` (`@/lib/env.client`).
+- Add new env keys in the appropriate env module first, validate required keys there, and expose typed exports.
+- Required env validation must fail fast and include missing key names in the error message.
+- When adding a new env key, add it to `.env.example` in the same change.
+
 ### UI and Styling (Strict)
 
 - Do not edit `src/components/ui/` or `src/components/ai-elements/` (treat as read-only vendor-like libs).

@@ -2,13 +2,14 @@ import "server-only"
 
 import { z } from "zod"
 
+import { ServerEnv } from "@/lib/env.server"
 import { prisma } from "@/lib/prisma"
-import type { BillingProduct, BillingSubscriptionSnapshot } from "@/features/billing/types/billing.types"
 import type {
   BillingSnapshotInput,
   StripeSubscriptionStatus,
   UpdateSubscriptionFromStripeParams,
 } from "@/features/billing/types/billing.server.types"
+import type { BillingProduct, BillingSubscriptionSnapshot } from "@/features/billing/types/billing.types"
 
 const PaidStripeStatuses = new Set<StripeSubscriptionStatus>(["active", "trialing"])
 const stripeSubscriptionStatusSchema = z.enum([
@@ -29,8 +30,8 @@ function parseStripeSubscriptionStatus(value: string | null): StripeSubscription
 function parseBillingProduct(stripePriceId: string | null | undefined): BillingProduct | null {
   if (!stripePriceId) return null
 
-  const yearlyPriceId = process.env.STRIPE_PRICE_ID_PRO_YEARLY
-  const monthlyPriceId = process.env.STRIPE_PRICE_ID_PRO_MONTHLY
+  const yearlyPriceId = ServerEnv.STRIPE_PRICE_ID_PRO_YEARLY
+  const monthlyPriceId = ServerEnv.STRIPE_PRICE_ID_PRO_MONTHLY
 
   if (stripePriceId === yearlyPriceId) return "yearly"
   if (stripePriceId === monthlyPriceId) return "monthly"

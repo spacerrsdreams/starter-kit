@@ -35,6 +35,7 @@ interface SignInFormProps {
 const texts = {
   signIn: "Sign in",
   signInWithGoogle: "Sign in with Google",
+  signInWithPasskey: "Sign in with Passkey",
   signInWithApple: "Sign in with Apple",
   orContinueWith: "Or continue with",
   email: "Email",
@@ -57,6 +58,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
   const searchParams = useSearchParams()
   const { refetch: refetchSession } = authClient.useSession()
   const [googleLoading, setGoogleLoading] = useState(false)
+  const [passkeyLoading, setPasskeyLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [errorCode, setErrorCode] = useState<string | null>(null)
   const [reactivateOpen, setReactivateOpen] = useState(false)
@@ -149,6 +151,30 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
     })
   }
 
+  const handleSignInWithPasskey = () => {
+    setErrorCode(null)
+    setPasskeyLoading(true)
+    startTransition(async () => {
+      try {
+        await authClient.signIn.passkey({
+          fetchOptions: {
+            onSuccess: async () => {
+              await refetchSession()
+              onSuccess()
+            },
+            onError: (ctx) => {
+              setErrorCode(ctx.error.code ?? UNKNOWN_ERROR_CODE)
+            },
+          },
+        })
+      } catch {
+        setErrorCode(UNKNOWN_ERROR_CODE)
+      } finally {
+        setPasskeyLoading(false)
+      }
+    })
+  }
+
   const isFormLoading = isPending
   const isReactivateLoading = isReactivatePending
 
@@ -170,8 +196,19 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
           <Button
             variant="outline"
             type="button"
+            isLoading={passkeyLoading}
+            disabled={isFormLoading || googleLoading || passkeyLoading}
+            onClick={handleSignInWithPasskey}
+            aria-label={texts.signInWithPasskey}
+            className="h-11 rounded-xl"
+          >
+            <span className="">{texts.signInWithPasskey}</span>
+          </Button>
+          <Button
+            variant="outline"
+            type="button"
             isLoading={googleLoading}
-            disabled={isFormLoading || googleLoading}
+            disabled={isFormLoading || googleLoading || passkeyLoading}
             onClick={handleSignInWithGoogle}
             aria-label={texts.signInWithGoogle}
             className="h-11 rounded-xl"
@@ -189,7 +226,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
           <Input
             id="email"
             type="email"
-            autoComplete="email"
+            autoComplete="email webauthn"
             placeholder={texts.emailPlaceholder}
             aria-invalid={Boolean(form.formState.errors.email)}
             required
@@ -207,7 +244,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
         <Input
           type="text"
           name="username"
-          autoComplete="username"
+          autoComplete="username webauthn"
           value={emailValue ?? ""}
           tabIndex={-1}
           aria-hidden="true"
@@ -230,7 +267,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
               id="password"
               type={showPassword ? "text" : "password"}
               aria-invalid={Boolean(form.formState.errors.password)}
-              autoComplete="current-password"
+              autoComplete="current-password webauthn"
               placeholder="**********"
               required
               className="h-11 rounded-xl px-4 pr-10"
@@ -260,7 +297,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
             className="h-11 w-full rounded-full text-sm font-medium"
             type="submit"
             isLoading={isFormLoading}
-            disabled={isFormLoading || googleLoading}
+            disabled={isFormLoading || googleLoading || passkeyLoading}
             aria-label={texts.signIn}
             featureStylesEnabled
           >

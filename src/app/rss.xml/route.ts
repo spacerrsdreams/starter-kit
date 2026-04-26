@@ -1,4 +1,5 @@
 import { SiteConfig } from "@/lib/site.config"
+import { ServerEnv } from "@/lib/env.server"
 import { WebRoutes } from "@/lib/web.routes"
 import { listBlogPosts } from "@/features/blog/repositories/blog-posts.repository"
 
@@ -18,7 +19,7 @@ function toRfc2822Date(value: Date): string {
 }
 
 export async function GET() {
-  const domain = process.env.NEXT_PUBLIC_DOMAIN?.replace(/\/$/, "") ?? ""
+  const domain = ServerEnv.NEXT_PUBLIC_DOMAIN.replace(/\/$/, "")
   const feedUrl = `${domain}/rss.xml`
   const siteUrl = WebRoutes.root.withBaseUrl()
   const blogUrl = WebRoutes.blog.withBaseUrl()

@@ -2,12 +2,13 @@ import "server-only"
 
 import { NextResponse } from "next/server"
 
+import { ServerEnv } from "@/lib/env.server"
 import { getSessionUserId } from "@/features/auth/lib/auth"
 import { getStripeClient } from "@/features/billing/lib/stripe"
 import { getBillingSubscriptionByUserId } from "@/features/billing/repositories/billing.repository"
 
 function getAppBaseUrl() {
-  return process.env.NEXT_PUBLIC_DOMAIN?.replace(/\/$/, "") ?? "http://localhost:3000"
+  return ServerEnv.NEXT_PUBLIC_DOMAIN.replace(/\/$/, "")
 }
 
 export async function POST() {

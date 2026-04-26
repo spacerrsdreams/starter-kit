@@ -3,6 +3,7 @@ import "server-only"
 import { NextResponse } from "next/server"
 import type Stripe from "stripe"
 
+import { ServerEnv } from "@/lib/env.server"
 import { prisma } from "@/lib/prisma"
 import { WebRoutes } from "@/lib/web.routes"
 import { getSessionUserId } from "@/features/auth/lib/auth"
@@ -14,8 +15,6 @@ import {
 } from "@/features/billing/repositories/billing.repository"
 import { createCheckoutSessionSchema } from "@/features/billing/schemas/create-checkout-session.schema"
 import { getStripePriceId } from "@/features/billing/utils/get-stripe-price-id.utils"
-
-const BASE_URL = process.env.NEXT_PUBLIC_DOMAIN!
 
 function getSubscriptionCurrentPeriodEnd(subscription: Stripe.Subscription) {
   const currentPeriodEnd = subscription.items.data[0]?.current_period_end
@@ -58,7 +57,7 @@ export async function POST(request: Request) {
   await upsertCustomerForUser({ userId, customerId })
 
   const priceId = getStripePriceId(parsed.data.product)
-  const appBaseUrl = BASE_URL
+  const appBaseUrl = ServerEnv.NEXT_PUBLIC_DOMAIN
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
     customer: customerId,

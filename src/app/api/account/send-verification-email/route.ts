@@ -3,9 +3,10 @@ import "server-only"
 import { createEmailVerificationToken } from "better-auth/api"
 import { NextResponse } from "next/server"
 
-import { sendEmailVerificationEmail } from "@/features/emails/lib/emails.actions"
+import { ServerEnv } from "@/lib/env.server"
 import { checkVerificationEmailRatelimit } from "@/lib/ratelimit"
 import { auth } from "@/features/auth/lib/auth"
+import { sendEmailVerificationEmail } from "@/features/emails/lib/emails.actions"
 
 const noIndexHeaders = {
   "X-Robots-Tag": "noindex, nofollow, noarchive, nosnippet",
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
     )
   }
 
-  const secret = process.env.BETTER_AUTH_SECRET
+  const secret = ServerEnv.BETTER_AUTH_SECRET
 
   if (!secret) {
     return NextResponse.json(
@@ -56,30 +57,11 @@ export async function POST(req: Request) {
     )
   }
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_DOMAIN ??
-    process.env.BETTER_AUTH_URL ??
-    (() => {
-      try {
-        const url = new URL(req.url)
-        return `${url.protocol}//${url.host}`
-      } catch {
-        return ""
-      }
-    })()
-
-  if (!baseUrl) {
-    return NextResponse.json(
-      { error: "Server configuration error", code: "MISSING_BASE_URL" },
-      { status: 500, headers: noIndexHeaders }
-    )
-  }
-
   const body = (await req.json().catch(() => ({}))) as { callbackURL?: string; locale?: string }
   const callbackURL =
     typeof body.callbackURL === "string" && body.callbackURL.length > 0
       ? body.callbackURL
-      : `${baseUrl.replace(/\/$/, "")}/?emailVerified=1`
+      : `${ServerEnv.NEXT_PUBLIC_DOMAIN.replace(/\/$/, "")}/?emailVerified=1`
 
   try {
     const token = await createEmailVerificationToken(
@@ -89,7 +71,7 @@ export async function POST(req: Request) {
       VERIFICATION_TOKEN_EXPIRY_SEC
     )
     const encodedCallback = encodeURIComponent(callbackURL)
-    const verifyUrl = `${baseUrl.replace(/\/$/, "")}/api/auth/verify-email?token=${token}&callbackURL=${encodedCallback}`
+    const verifyUrl = `${ServerEnv.NEXT_PUBLIC_DOMAIN.replace(/\/$/, "")}/api/auth/verify-email?token=${token}&callbackURL=${encodedCallback}`
 
     await sendEmailVerificationEmail({
       to: session.user.email,

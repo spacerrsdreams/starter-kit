@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
 
-const baseUrl = process.env.NEXT_PUBLIC_DOMAIN!
+import { ServerEnv } from "@/lib/env.server"
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -11,6 +11,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/dashboard/ai/", "/dashboard/admin/", "/admin/"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${ServerEnv.NEXT_PUBLIC_DOMAIN}/sitemap.xml`,
   }
 }

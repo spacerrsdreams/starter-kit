@@ -1,4 +1,6 @@
-const SiteName = "Spacerr"
+import { ClientEnv } from "@/lib/env.client"
+
+const SiteName = ClientEnv.NEXT_PUBLIC_SITE_NAME
 
 export const SiteConfig = {
   name: SiteName,

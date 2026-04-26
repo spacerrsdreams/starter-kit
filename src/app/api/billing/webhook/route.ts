@@ -3,6 +3,7 @@ import "server-only"
 import { NextResponse } from "next/server"
 import type Stripe from "stripe"
 
+import { ServerEnv } from "@/lib/env.server"
 import { getStripeClient } from "@/features/billing/lib/stripe"
 import {
   getBillingSubscriptionByCustomerId,
@@ -62,7 +63,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 }
 
 export async function POST(request: Request) {
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+  const webhookSecret = ServerEnv.STRIPE_WEBHOOK_SECRET
   if (!webhookSecret) {
     return NextResponse.json({ error: "Missing STRIPE_WEBHOOK_SECRET" }, { status: 500 })
   }

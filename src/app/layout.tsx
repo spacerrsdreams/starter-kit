@@ -6,6 +6,7 @@ import { getMessages } from "next-intl/server"
 import { DM_Sans } from "next/font/google"
 import { Suspense } from "react"
 
+import { ServerEnv } from "@/lib/env.server"
 import { SiteConfig } from "@/lib/site.config"
 import { cn } from "@/lib/utils"
 import { AuthRequiredModalProvider } from "@/features/auth/components/auth-required-modal/auth-required-modal-provider"
@@ -27,10 +28,8 @@ const dmSans = DM_Sans({
   preload: true,
 })
 
-const BASE_URL = process.env.NEXT_PUBLIC_DOMAIN!
-
 export const metadata = createMetadata({
-  baseUrl: BASE_URL,
+  baseUrl: ServerEnv.NEXT_PUBLIC_DOMAIN,
   manifest: "/site.webmanifest",
   title: {
     default: SiteConfig.name,
@@ -47,13 +46,13 @@ export const metadata = createMetadata({
   creator: SiteConfig.creator,
   publisher: SiteConfig.name,
   alternates: {
-    canonical: BASE_URL,
+    canonical: ServerEnv.NEXT_PUBLIC_DOMAIN,
     languages: {
-      en: BASE_URL,
-      "x-default": BASE_URL,
+      en: ServerEnv.NEXT_PUBLIC_DOMAIN,
+      "x-default": ServerEnv.NEXT_PUBLIC_DOMAIN,
     },
     types: {
-      "application/rss+xml": `${BASE_URL}/rss.xml`,
+      "application/rss+xml": `${ServerEnv.NEXT_PUBLIC_DOMAIN}/rss.xml`,
     },
   },
   robots: {
@@ -72,20 +71,20 @@ export const metadata = createMetadata({
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: BASE_URL,
+    url: ServerEnv.NEXT_PUBLIC_DOMAIN,
     title: SiteConfig.ogTitle,
     description: SiteConfig.ogDescription,
     siteName: SiteConfig.name,
     images: [
       {
-        url: `${BASE_URL}/opengraph-image.png`,
+        url: `${ServerEnv.NEXT_PUBLIC_DOMAIN}/opengraph-image.png`,
         width: 1200,
         height: 630,
         alt: SiteConfig.name,
         type: "image/png",
       },
       {
-        url: `${BASE_URL}/opengraph-image-square.png`,
+        url: `${ServerEnv.NEXT_PUBLIC_DOMAIN}/opengraph-image-square.png`,
         width: 600,
         height: 600,
         alt: SiteConfig.name,
@@ -97,7 +96,7 @@ export const metadata = createMetadata({
     card: "summary_large_image",
     title: SiteConfig.ogTitle,
     description: SiteConfig.ogDescription,
-    images: [`${BASE_URL}/opengraph-image.png`],
+    images: [`${ServerEnv.NEXT_PUBLIC_DOMAIN}/opengraph-image.png`],
     creator: SiteConfig.twitterCreator,
     site: SiteConfig.twitterCreator,
   },

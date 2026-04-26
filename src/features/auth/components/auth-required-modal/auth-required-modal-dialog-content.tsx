@@ -4,7 +4,7 @@ import type { AuthRequiredModalDialogProps } from "@/features/auth/components/au
 import { RequestPasswordResetEmbeddedForm } from "@/features/auth/components/reset-password/request-password-reset-embedded-form"
 import { SignInForm } from "@/features/auth/components/sign-in/sign-in-form"
 import { SignUpForm } from "@/features/auth/components/sign-up/sign-up-form"
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 
 export function AuthRequiredModalDialogContent({
@@ -21,11 +21,17 @@ export function AuthRequiredModalDialogContent({
     signup: "Create your account",
     forgot: "Reset your password",
   } as const
+  const dialogDescriptionByTab = {
+    signin: "Sign in to continue with this action.",
+    signup: "Create an account to continue with this action.",
+    forgot: "Reset your password and return to sign in.",
+  } as const
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogTitle className="sr-only">{dialogTitleByTab[activeTab]}</DialogTitle>
+        <DialogDescription className="sr-only">{dialogDescriptionByTab[activeTab]}</DialogDescription>
         <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as "signin" | "signup" | "forgot")}>
           <TabsContent value="signin" className="mt-0">
             <SignInForm

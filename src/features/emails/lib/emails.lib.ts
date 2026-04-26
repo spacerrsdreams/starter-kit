@@ -1,10 +1,11 @@
 import "server-only"
 
 import { Resend } from "resend"
+import { ServerEnv } from "@/lib/env.server"
 import type { SendMailOptions } from "@/features/emails/types/emails.types"
 
 export const getResend = () => {
-  const apiKey = process.env.RESEND_API_KEY
+  const apiKey = ServerEnv.RESEND_API_KEY
 
   if (!apiKey) return null
 
@@ -23,7 +24,7 @@ export async function sendMail(options: SendMailOptions): Promise<void> {
   }
 
   const { error } = await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL!,
+    from: ServerEnv.RESEND_FROM_EMAIL,
     to: options.to,
     subject: options.subject,
     react: options.react,
