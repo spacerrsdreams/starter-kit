@@ -1,11 +1,10 @@
 import "server-only"
 
-import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
 import { deleteChat, getChatWithMessages, updateChatMetadata } from "@/features/ai/chat/repositories/chat.repository"
-import { auth } from "@/features/auth/lib/auth"
+import { getSessionUserId } from "@/features/auth/lib/auth"
 
 type RouteContext = {
   params: Promise<{ chatId: string }>
@@ -19,11 +18,6 @@ const updateChatSchema = z
   .refine((data) => data.title !== undefined || data.isSaved !== undefined, {
     message: "Nothing to update",
   })
-
-async function getSessionUserId() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  return session?.user?.id ?? null
-}
 
 export async function GET(_req: Request, context: RouteContext) {
   const userId = await getSessionUserId()

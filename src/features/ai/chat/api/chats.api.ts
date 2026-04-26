@@ -20,6 +20,10 @@ export async function createChatApi(): Promise<CreateChatResponse> {
   return apiRequest<CreateChatResponse>(ApiRoutes.chats.create, { method: "POST" })
 }
 
+export async function prepareChatApi(): Promise<CreateChatResponse> {
+  return apiRequest<CreateChatResponse>(ApiRoutes.chats.prepare, { method: "POST" })
+}
+
 export async function getChatApi(id: string): Promise<GetChatResponse> {
   return apiRequest<GetChatResponse>(ApiRoutes.chats.get(id))
 }

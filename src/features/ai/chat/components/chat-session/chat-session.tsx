@@ -13,6 +13,7 @@ import { ChatSessionAssistantMessage } from "@/features/ai/chat/components/chat-
 import { ChatSessionUserMessage } from "@/features/ai/chat/components/chat-session/chat-session-user-message"
 import { useMutateCreateChat } from "@/features/ai/chat/hooks/use-mutate-create-chat"
 import { useMutateMessageReaction } from "@/features/ai/chat/hooks/use-mutate-message-reaction"
+import { useMutatePrepareChat } from "@/features/ai/chat/hooks/use-mutate-prepare-chat"
 import { useMutateUploadChatAttachment } from "@/features/ai/chat/hooks/use-mutate-upload-chat-attachment"
 import { useChatAuthRequiredStore } from "@/features/ai/chat/store/chat-auth-required.store"
 import type { ChatMessageReaction } from "@/features/ai/chat/types/chat.types"
@@ -75,10 +76,12 @@ export function ChatSession({
   const isCompactChatLayout = isMobile || compactMode
   const [transportApi] = useState(() => createStableChatTransport())
   const createChatMutation = useMutateCreateChat()
+  const prepareChatMutation = useMutatePrepareChat()
   const uploadChatAttachmentMutation = useMutateUploadChatAttachment()
   const messageReactionMutation = useMutateMessageReaction()
   const isSendInFlightRef = useRef(false)
   const wasGeneratingRef = useRef(false)
+  const prepareChatPromiseRef = useRef<Promise<string | null> | null>(null)
   const { openAuthModal } = useAuthRequiredModal()
   const planPickerDialog = usePlanPickerDialog()
   const subscriptionQuery = useFetchBillingSubscription()
@@ -160,10 +163,40 @@ export function ChatSession({
       }
       isSendInFlightRef.current = true
       try {
+        const ensurePreparedChat = async () => {
+          const existingChatId = transportApi.getChatId()
+          if (existingChatId) {
+            return existingChatId
+          }
+
+          if (prepareChatPromiseRef.current) {
+            return prepareChatPromiseRef.current
+          }
+
+          const pendingPreparation = (async () => {
+            try {
+              const prepared = await prepareChatMutation.mutateAsync()
+              transportApi.setChatId(prepared.id)
+              onChatCreated(prepared.id)
+              return prepared.id
+            } catch {
+              return null
+            } finally {
+              prepareChatPromiseRef.current = null
+            }
+          })()
+
+          prepareChatPromiseRef.current = pendingPreparation
+          return pendingPreparation
+        }
+
         if (!transportApi.getChatId()) {
-          const created = await createChatMutation.mutateAsync()
-          transportApi.setChatId(created.id)
-          onChatCreated(created.id)
+          const preparedChatId = await ensurePreparedChat()
+          if (!preparedChatId) {
+            const created = await createChatMutation.mutateAsync()
+            transportApi.setChatId(created.id)
+            onChatCreated(created.id)
+          }
         }
         void sendMessage({ files, text: normalizedText })
         return true
@@ -172,7 +205,7 @@ export function ChatSession({
         return false
       }
     },
-    [createChatMutation, isGenerating, onChatCreated, sendMessage, transportApi]
+    [createChatMutation, isGenerating, onChatCreated, prepareChatMutation, sendMessage, transportApi]
   )
 
   const uploadAttachments = useCallback(
@@ -361,6 +394,26 @@ export function ChatSession({
     [isGenerating, isAuthenticated, setPendingPrompt, openAuthModal, sendAuthorizedMessage, uploadAttachments]
   )
 
+  const handleFirstKeyStroke = useCallback(() => {
+    if (!isAuthenticated || transportApi.getChatId() || prepareChatMutation.isPending || prepareChatPromiseRef.current) {
+      return
+    }
+
+    const pendingPreparation = (async () => {
+      try {
+        const prepared = await prepareChatMutation.mutateAsync()
+        transportApi.setChatId(prepared.id)
+        onChatCreated(prepared.id)
+      } catch {
+        // Intentionally swallow prepare errors and keep submit fallback path.
+      } finally {
+        prepareChatPromiseRef.current = null
+      }
+    })()
+
+    prepareChatPromiseRef.current = pendingPreparation.then(() => transportApi.getChatId())
+  }, [isAuthenticated, onChatCreated, prepareChatMutation, transportApi])
+
   const showUpgradePill = isAuthenticated && subscriptionQuery.isSuccess && !isPaid
 
   const handleUpgradeClick = useCallback(() => {
@@ -487,6 +540,7 @@ export function ChatSession({
             onStop={stop}
             onSubmit={handleSubmit}
             status={status}
+            onFirstKeyStroke={handleFirstKeyStroke}
             multilineByDefault={isCompactChatLayout}
           />
         </div>

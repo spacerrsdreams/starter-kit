@@ -1,18 +1,12 @@
 import "server-only"
 
-import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 
 import { createChat, listChats } from "@/features/ai/chat/repositories/chat.repository"
-import { auth } from "@/features/auth/lib/auth"
+import { getSessionUserId } from "@/features/auth/lib/auth"
 
 const DEFAULT_LIMIT = 15
 const MAX_LIMIT = 30
-
-async function getSessionUserId() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  return session?.user?.id ?? null
-}
 
 export async function GET(req: Request) {
   const userId = await getSessionUserId()

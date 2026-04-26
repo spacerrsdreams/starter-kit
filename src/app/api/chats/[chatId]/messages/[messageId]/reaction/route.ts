@@ -1,11 +1,10 @@
 import "server-only"
 
-import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
 import { updateMessageReaction } from "@/features/ai/chat/repositories/chat.repository"
-import { auth } from "@/features/auth/lib/auth"
+import { getSessionUserId } from "@/features/auth/lib/auth"
 
 type RouteContext = {
   params: Promise<{ chatId: string; messageId: string }>
@@ -19,11 +18,6 @@ const requestSchema = z
   .refine((data) => data.reaction !== "unlike" || Boolean(data.feedbackText?.trim()), {
     message: "Feedback text is required for unlike reaction",
   })
-
-async function getSessionUserId() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  return session?.user?.id ?? null
-}
 
 export async function PATCH(req: Request, context: RouteContext) {
   const userId = await getSessionUserId()

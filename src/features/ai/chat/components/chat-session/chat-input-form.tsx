@@ -88,6 +88,7 @@ interface ChatInputFormProps {
   onStop: () => void
   isInputLocked: boolean
   status: ChatStatus
+  onFirstKeyStroke?: () => void
   multilineByDefault?: boolean
 }
 
@@ -96,6 +97,7 @@ export function ChatInputForm({
   onStop,
   isInputLocked,
   status,
+  onFirstKeyStroke,
   multilineByDefault = false,
 }: ChatInputFormProps) {
   const [isMultilineByContent, setIsMultilineByContent] = useState(multilineByDefault)
@@ -148,7 +150,11 @@ export function ChatInputForm({
           className={cn("max-h-56 min-h-0 pr-4 pl-2 text-base leading-6", shouldRenderMultiline && "pl-4")}
           value={draft}
           onChange={(event) => {
-            setDraft(event.currentTarget.value)
+            const nextDraft = event.currentTarget.value
+            if (draft.length === 0 && nextDraft.length > 0) {
+              onFirstKeyStroke?.()
+            }
+            setDraft(nextDraft)
             if (!multilineByDefault) {
               handleTextareaHeight(event.currentTarget)
             }

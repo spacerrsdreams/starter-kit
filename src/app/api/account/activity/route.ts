@@ -2,25 +2,23 @@ import "server-only"
 
 import { NextResponse } from "next/server"
 
-import { auth } from "@/features/auth/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { getSessionUserId } from "@/features/auth/lib/auth"
 
 const noIndexHeaders = {
   "X-Robots-Tag": "noindex, nofollow, noarchive, nosnippet",
 }
 
-export async function POST(request: Request) {
-  const session = await auth.api.getSession({
-    headers: request.headers,
-  })
+export async function POST() {
+  const userId = await getSessionUserId()
 
-  if (!session?.user?.id) {
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: noIndexHeaders })
   }
 
   await prisma.user.update({
     where: {
-      id: session.user.id,
+      id: userId,
     },
     data: {
       lastActiveAt: new Date(),

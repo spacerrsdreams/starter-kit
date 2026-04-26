@@ -7,6 +7,7 @@ export const ApiRoutes = {
   chats: {
     list: "/api/chats",
     create: "/api/chats",
+    prepare: "/api/chats/prepare",
     get: (chatId: string) => `/api/chats/${chatId}`,
     delete: (chatId: string) => `/api/chats/${chatId}`,
     setMessageReaction: (chatId: string, messageId: string) => `/api/chats/${chatId}/messages/${messageId}/reaction`,
