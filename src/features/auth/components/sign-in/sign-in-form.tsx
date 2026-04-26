@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Eye, EyeOff } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { usePathname, useSearchParams } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
@@ -32,28 +33,29 @@ interface SignInFormProps {
   callbackURL?: string
 }
 
-const texts = {
-  signIn: "Sign in",
-  signInWithGoogle: "Sign in with Google",
-  signInWithPasskey: "Sign in with Passkey",
-  signInWithApple: "Sign in with Apple",
-  orContinueWith: "Or continue with",
-  email: "Email",
-  emailPlaceholder: "example@gmail.com",
-  password: "Password",
-  forgotPassword: "Forgot password",
-  noAccountSignUp: "Don't have an account? ",
-  signUp: "Sign up",
-  signInTitle: "Sign in to {name}",
-  signInDescription: "Sign in to your account to continue",
-  emailNotVerified: "Email not verified",
-  emailNotVerifiedHint: "Please verify your email to sign in",
-  errorGeneric: "An error occurred, please try again",
-  hidePassword: "Hide password",
-  showPassword: "Show password",
-}
-
 export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, callbackURL }: SignInFormProps) {
+  const t = useTranslations()
+  const texts = {
+    signIn: t("auth.signIn.submit"),
+    signInWithGoogle: t("auth.signIn.withGoogle"),
+    signInWithPasskey: t("auth.signIn.withPasskey"),
+    signInWithApple: t("auth.signIn.withApple"),
+    orContinueWith: t("auth.signIn.orContinueWith"),
+    email: t("auth.signIn.email"),
+    emailPlaceholder: t("auth.signIn.emailPlaceholder"),
+    password: t("auth.signIn.password"),
+    forgotPassword: t("auth.signIn.forgotPassword"),
+    noAccountSignUp: `${t("auth.signIn.noAccountSignUp")} `,
+    signUp: t("auth.signIn.signUp"),
+    signInTitle: t("auth.signIn.title", { name: SiteConfig.name }),
+    signInDescription: t("auth.signIn.description"),
+    emailNotVerified: t("auth.signIn.emailNotVerified"),
+    emailNotVerifiedHint: t("auth.signIn.emailNotVerifiedHint"),
+    errorGeneric: t("auth.signIn.genericError"),
+    hidePassword: t("auth.signIn.hidePassword"),
+    showPassword: t("auth.signIn.showPassword"),
+  }
+
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const { refetch: refetchSession } = authClient.useSession()
@@ -337,7 +339,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp, onForgotPassword, call
           <LogoIcon iconSize={28} containerSize={38} />
         </div>
         <h1 className="text-2xl font-medium tracking-[-1px] text-foreground">
-          {texts.signInTitle.replace("{name}", SiteConfig.name)}
+          {texts.signInTitle}
         </h1>
         <p className="text-sm text-muted-foreground">{texts.signInDescription}</p>
       </div>

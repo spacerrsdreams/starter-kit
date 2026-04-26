@@ -1,6 +1,7 @@
 "use client"
 
 import type { AuthRequiredModalDialogProps } from "@/features/auth/components/auth-required-modal/auth-required-modal-dialog"
+import { useTranslations } from "next-intl"
 import { RequestPasswordResetEmbeddedForm } from "@/features/auth/components/reset-password/request-password-reset-embedded-form"
 import { SignInForm } from "@/features/auth/components/sign-in/sign-in-form"
 import { SignUpForm } from "@/features/auth/components/sign-up/sign-up-form"
@@ -16,15 +17,16 @@ export function AuthRequiredModalDialogContent({
   onSignInSuccess,
   onSignUpSuccess,
 }: AuthRequiredModalDialogProps) {
+  const t = useTranslations()
   const dialogTitleByTab = {
-    signin: "Sign in required",
-    signup: "Create your account",
-    forgot: "Reset your password",
+    signin: t("auth.dialog.signInRequired"),
+    signup: t("auth.dialog.createYourAccount"),
+    forgot: t("auth.dialog.resetYourPassword"),
   } as const
   const dialogDescriptionByTab = {
-    signin: "Sign in to continue with this action.",
-    signup: "Create an account to continue with this action.",
-    forgot: "Reset your password and return to sign in.",
+    signin: t("auth.dialog.signInRequiredDescription"),
+    signup: t("auth.dialog.createYourAccountDescription"),
+    forgot: t("auth.dialog.resetYourPasswordDescription"),
   } as const
 
   return (

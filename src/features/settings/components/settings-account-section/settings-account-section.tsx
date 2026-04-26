@@ -1,6 +1,7 @@
 "use client"
 
 import { CheckCircle2, KeyRound, Mail, ShieldAlert, UserX } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -27,6 +28,7 @@ import { Separator } from "@/components/ui/separator"
 import { SettingsAccountSectionLayout } from "./settings-account-section-layout"
 
 export function SettingsAccountSection() {
+  const t = useTranslations()
   const router = useRouter()
   const { data: session } = authClient.useSession()
   const user = session?.user as SettingsAccountSessionUser | undefined
@@ -56,14 +58,14 @@ export function SettingsAccountSection() {
 
   const getEmailVerificationErrorMessage = (code: SendEmailVerificationActionErrorCode): string => {
     if (code === "RATE_LIMITED") {
-      return "Too many attempts. Please wait a minute and try again."
+      return t("settings.account.email.errors.rateLimited")
     }
 
     if (code === "UNAUTHORIZED") {
-      return "Please sign in again to verify your email."
+      return t("settings.account.email.errors.unauthorized")
     }
 
-    return "Failed to send verification email. Please try again."
+    return t("settings.account.email.errors.sendFailed")
   }
 
   const handleSendVerification = async () => {
@@ -96,12 +98,33 @@ export function SettingsAccountSection() {
     setPasskeyMessage(null)
     setIsAddingPasskey(true)
 
+    const hasPlatformAuthenticator =
+      typeof window !== "undefined" &&
+      typeof window.PublicKeyCredential !== "undefined" &&
+      typeof window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === "function" &&
+      (await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())
+
     await authClient.passkey.addPasskey({
+      authenticatorAttachment: hasPlatformAuthenticator ? "platform" : "cross-platform",
       fetchOptions: {
         onSuccess: () => {
-          setPasskeyMessage("Passkey added successfully.")
+          setPasskeyMessage(
+            hasPlatformAuthenticator
+              ? t("settings.account.passkey.messages.addedPlatform")
+              : t("settings.account.passkey.messages.noPlatformFallback")
+          )
         },
         onError: (ctx) => {
+          const isCrossDeviceLocalhost =
+            !hasPlatformAuthenticator && typeof window !== "undefined" && window.location.hostname === "localhost"
+
+          if (isCrossDeviceLocalhost) {
+            setPasskeyMessage(
+              t("settings.account.passkey.messages.crossDeviceLocalhost")
+            )
+            return
+          }
+
           setPasskeyMessage(ctx.error.message)
         },
       },
@@ -112,35 +135,39 @@ export function SettingsAccountSection() {
 
   let verificationButtonLabel: string
   if (isSendingVerification) {
-    verificationButtonLabel = "Sending..."
+    verificationButtonLabel = t("settings.account.email.actions.sending")
   } else if (resendCooldown > 0) {
-    verificationButtonLabel = `Resend verification in ${formatResendTime(resendCooldown)}`
+    verificationButtonLabel = t("settings.account.email.actions.resendIn", {
+      time: formatResendTime(resendCooldown),
+    })
   } else if (hasSentVerification) {
-    verificationButtonLabel = "Resend verification email"
+    verificationButtonLabel = t("settings.account.email.actions.resend")
   } else {
-    verificationButtonLabel = "Send verification email"
+    verificationButtonLabel = t("settings.account.email.actions.send")
   }
 
   return (
     <div className="flex flex-col gap-6 pt-4">
       <SettingsAccountSectionLayout
         icon={Mail}
-        title="Email address"
-        description="Your account email used for sign-in and notifications."
+        title={t("settings.account.email.title")}
+        description={t("settings.account.email.description")}
         hasWarning={!isEmailVerified}
       >
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-medium text-foreground">{user?.email ?? "No email found"}</span>
+            <span className="text-sm font-medium text-foreground">
+              {user?.email ?? t("settings.account.email.noEmailFound")}
+            </span>
             {isEmailVerified ? (
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-600">
                 <CheckCircle2 className="h-3 w-3" />
-                Email verified
+                {t("settings.account.email.verified")}
               </span>
             ) : (
               <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-xs font-medium text-amber-600">
                 <ShieldAlert className="h-3 w-3" />
-                Email not verified
+                {t("settings.account.email.notVerified")}
               </span>
             )}
           </div>
@@ -149,8 +176,8 @@ export function SettingsAccountSection() {
             <div className="flex flex-col gap-2">
               {hasSentVerification && (
                 <>
-                  <p className="text-sm text-muted-foreground">Verification email sent. Please check your inbox.</p>
-                  <p className="text-sm text-muted-foreground">If you do not see it, check your spam or junk folder.</p>
+                  <p className="text-sm text-muted-foreground">{t("settings.account.email.messages.sent")}</p>
+                  <p className="text-sm text-muted-foreground">{t("settings.account.email.messages.checkSpam")}</p>
                 </>
               )}
               <Button
@@ -171,8 +198,8 @@ export function SettingsAccountSection() {
 
       <SettingsAccountSectionLayout
         icon={KeyRound}
-        title="Passkey"
-        description="Add a passkey to sign in faster with biometrics or security keys."
+        title={t("settings.account.passkey.title")}
+        description={t("settings.account.passkey.description")}
       >
         <div className="flex flex-col gap-2">
           <Button
@@ -183,7 +210,7 @@ export function SettingsAccountSection() {
             onClick={() => void handleAddPasskey()}
             disabled={isAddingPasskey}
           >
-            {isAddingPasskey ? "Adding passkey..." : "Add passkey"}
+            {isAddingPasskey ? t("settings.account.passkey.actions.adding") : t("settings.account.passkey.actions.add")}
           </Button>
           {passkeyMessage && <p className="text-sm text-muted-foreground">{passkeyMessage}</p>}
         </div>
@@ -193,8 +220,8 @@ export function SettingsAccountSection() {
 
       <SettingsAccountSectionLayout
         icon={UserX}
-        title="Deactivate account"
-        description={`If you deactivate your account, your personal identifiers and records will be retained for 30 days and then permanently removed from our active systems. This action is final and ensures your data is no longer stored or processed by ${SiteConfig.name}, except where retention is required by law.`}
+        title={t("settings.account.deactivate.title")}
+        description={t("settings.account.deactivate.description", { name: SiteConfig.name })}
       >
         <Button
           type="button"
@@ -204,23 +231,22 @@ export function SettingsAccountSection() {
           onClick={() => setIsDeactivateDialogOpen(true)}
         >
           <UserX className="mr-2 h-3.5 w-3.5" />
-          Deactivate account
+          {t("settings.account.deactivate.action")}
         </Button>
         <Dialog open={isDeactivateDialogOpen} onOpenChange={setIsDeactivateDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Deactivate account?</DialogTitle>
+              <DialogTitle>{t("settings.account.deactivate.dialog.title")}</DialogTitle>
               <DialogDescription>
-                You will be asked to submit a feedback form first. Your account will only be deactivated after feedback
-                is submitted.
+                {t("settings.account.deactivate.dialog.description")}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsDeactivateDialogOpen(false)}>
-                Cancel
+                {t("settings.account.deactivate.dialog.cancel")}
               </Button>
               <Button type="button" variant="destructive" onClick={handleConfirmDeactivate}>
-                Yes, deactivate
+                {t("settings.account.deactivate.dialog.confirm")}
               </Button>
             </DialogFooter>
           </DialogContent>

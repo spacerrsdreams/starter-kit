@@ -319,13 +319,17 @@
     "dialog": {
       "signInRequired": "Sign in required",
       "createYourAccount": "Create your account",
-      "resetYourPassword": "Reset your password"
+      "resetYourPassword": "Reset your password",
+      "signInRequiredDescription": "Sign in to continue with this action.",
+      "createYourAccountDescription": "Create an account to continue with this action.",
+      "resetYourPasswordDescription": "Reset your password and return to sign in."
     },
     "signIn": {
       "title": "Sign in to {name}",
       "description": "Sign in to your account to continue",
       "submit": "Sign in",
       "withGoogle": "Sign in with Google",
+      "withPasskey": "Sign in with Passkey",
       "withApple": "Sign in with Apple",
       "orContinueWith": "Or continue with",
       "email": "Email",
@@ -391,6 +395,56 @@
       "submit": "Reset password",
       "rememberPassword": "Remember your password?",
       "signIn": "Sign in"
+    }
+  },
+  "settings": {
+    "account": {
+      "email": {
+        "title": "Email address",
+        "description": "Your account email used for sign-in and notifications.",
+        "noEmailFound": "No email found",
+        "verified": "Email verified",
+        "notVerified": "Email not verified",
+        "messages": {
+          "sent": "Verification email sent. Please check your inbox.",
+          "checkSpam": "If you do not see it, check your spam or junk folder."
+        },
+        "actions": {
+          "sending": "Sending...",
+          "resendIn": "Resend verification in {time}",
+          "resend": "Resend verification email",
+          "send": "Send verification email"
+        },
+        "errors": {
+          "rateLimited": "Too many attempts. Please wait a minute and try again.",
+          "unauthorized": "Please sign in again to verify your email.",
+          "sendFailed": "Failed to send verification email. Please try again."
+        }
+      },
+      "passkey": {
+        "title": "Passkey",
+        "description": "Add a passkey to sign in faster with biometrics or security keys.",
+        "actions": {
+          "adding": "Adding passkey...",
+          "add": "Add passkey"
+        },
+        "messages": {
+          "addedPlatform": "Passkey added successfully with this device authenticator.",
+          "noPlatformFallback": "No platform authenticator found. Use your phone/security key to finish passkey setup.",
+          "crossDeviceLocalhost": "Cross-device passkey setup on localhost often fails. Use a real HTTPS domain (or tunnel) and try again."
+        }
+      },
+      "deactivate": {
+        "title": "Deactivate account",
+        "description": "If you deactivate your account, your personal identifiers and records will be retained for 30 days and then permanently removed from our active systems. This action is final and ensures your data is no longer stored or processed by {name}, except where retention is required by law.",
+        "action": "Deactivate account",
+        "dialog": {
+          "title": "Deactivate account?",
+          "description": "You will be asked to submit a feedback form first. Your account will only be deactivated after feedback is submitted.",
+          "cancel": "Cancel",
+          "confirm": "Yes, deactivate"
+        }
+      }
     }
   },
   "aiChat": {
