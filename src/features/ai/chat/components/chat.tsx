@@ -13,7 +13,6 @@ import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-deta
 import { getChatsQueryKey, useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
 import { authClient } from "@/features/auth/lib/auth-client"
-import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
 
 type ChatProps = {
   initialChatId?: string | null
@@ -170,25 +169,23 @@ export function Chat({ initialChatId = null }: ChatProps) {
         {waitingForChatDetail ? (
           <ChatSessionSkeleton />
         ) : (
-          <PromptInputProvider>
-            <ChatSession
-              key={sessionClientId}
-              sessionClientId={sessionClientId}
-              isAuthenticated={isAuthenticated}
-              initialDbChatId={activeChatId}
-              initialMessages={initialMessages}
-              onChatCreated={(id) => {
-                setActiveChatId(id)
-                replaceAddressBarPath(WebRoutes.chat(id))
-              }}
-              onConversationUpdated={() => {
-                if (!hasRefetchedChatsForSessionRef.current) {
-                  hasRefetchedChatsForSessionRef.current = true
-                  void queryClient.invalidateQueries({ queryKey: getChatsQueryKey() })
-                }
-              }}
-            />
-          </PromptInputProvider>
+          <ChatSession
+            key={sessionClientId}
+            sessionClientId={sessionClientId}
+            isAuthenticated={isAuthenticated}
+            initialDbChatId={activeChatId}
+            initialMessages={initialMessages}
+            onChatCreated={(id) => {
+              setActiveChatId(id)
+              replaceAddressBarPath(WebRoutes.chat(id))
+            }}
+            onConversationUpdated={() => {
+              if (!hasRefetchedChatsForSessionRef.current) {
+                hasRefetchedChatsForSessionRef.current = true
+                void queryClient.invalidateQueries({ queryKey: getChatsQueryKey() })
+              }
+            }}
+          />
         )}
       </main>
     </div>

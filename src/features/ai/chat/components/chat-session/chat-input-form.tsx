@@ -5,6 +5,7 @@ import { memo, useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
+import { useChatDraftStore } from "@/features/ai/chat/store/chat-draft.store"
 import {
   Attachment,
   AttachmentInfo,
@@ -21,7 +22,6 @@ import {
   PromptInputActionMenuTrigger,
   PromptInputBody,
   PromptInputFooter,
-  PromptInputProvider,
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
@@ -100,6 +100,7 @@ export function ChatInputForm({
 }: ChatInputFormProps) {
   const [isMultilineByContent, setIsMultilineByContent] = useState(multilineByDefault)
   const [hasAttachments, setHasAttachments] = useState(false)
+  const { draft, setDraft, clearDraft } = useChatDraftStore((state) => state)
   const shouldRenderMultiline = multilineByDefault || hasAttachments || isMultilineByContent
   const handleHasAttachmentsChange = useCallback((nextHasAttachments: boolean) => {
     setHasAttachments(nextHasAttachments)
@@ -125,41 +126,59 @@ export function ChatInputForm({
   }, [])
 
   return (
-    <PromptInputProvider>
-      <PromptInput
-        globalDrop
-        maxFileSize={MAX_ATTACHMENT_FILE_BYTES}
-        maxFiles={MAX_ATTACHMENT_FILES}
-        multiple
-        onError={handleAttachmentError}
-        onSubmit={async (message) => {
-          if (isInputLocked) {
-            throw new Error("Input is locked while response is streaming")
-          }
-          await onSubmit(message)
-          setIsMultilineByContent(multilineByDefault)
-        }}
-        inputGroupClassName="min-h-14 rounded-xl md:rounded-[1.75rem] border bg-background shadow-sm"
-      >
-        <PromptInputAttachmentsDisplay onHasAttachmentsChange={handleHasAttachmentsChange} />
-        <PromptInputBody className="min-w-0">
-          <PromptInputTextarea
-            className={cn("max-h-56 min-h-0 pr-4 pl-2 text-base leading-6", shouldRenderMultiline && "pl-4")}
-            onChange={(event) => {
-              if (!multilineByDefault) {
-                handleTextareaHeight(event.currentTarget)
-              }
-            }}
-            onInput={(event) => {
-              if (!multilineByDefault) {
-                handleTextareaHeight(event.currentTarget)
-              }
-            }}
-            placeholder="Ask anything"
-          />
-        </PromptInputBody>
-        {shouldRenderMultiline && (
-          <PromptInputFooter className="justify-between px-2 pt-0 pb-2">
+    <PromptInput
+      globalDrop
+      maxFileSize={MAX_ATTACHMENT_FILE_BYTES}
+      maxFiles={MAX_ATTACHMENT_FILES}
+      multiple
+      onError={handleAttachmentError}
+      onSubmit={async (message) => {
+        if (isInputLocked) {
+          throw new Error("Input is locked while response is streaming")
+        }
+        await onSubmit(message)
+        clearDraft()
+        setIsMultilineByContent(multilineByDefault)
+      }}
+      inputGroupClassName="min-h-14 rounded-xl md:rounded-[1.75rem] border bg-background shadow-sm"
+    >
+      <PromptInputAttachmentsDisplay onHasAttachmentsChange={handleHasAttachmentsChange} />
+      <PromptInputBody className="min-w-0">
+        <PromptInputTextarea
+          className={cn("max-h-56 min-h-0 pr-4 pl-2 text-base leading-6", shouldRenderMultiline && "pl-4")}
+          value={draft}
+          onChange={(event) => {
+            setDraft(event.currentTarget.value)
+            if (!multilineByDefault) {
+              handleTextareaHeight(event.currentTarget)
+            }
+          }}
+          onInput={(event) => {
+            if (!multilineByDefault) {
+              handleTextareaHeight(event.currentTarget)
+            }
+          }}
+          placeholder="Ask anything"
+        />
+      </PromptInputBody>
+      {shouldRenderMultiline && (
+        <PromptInputFooter className="justify-between px-2 pt-0 pb-2">
+          <PromptInputTools>
+            <PromptInputActionMenu>
+              <PromptInputActionMenuTrigger />
+              <PromptInputActionMenuContent className="w-56">
+                <PromptInputActionAddAttachments />
+                <PromptInputActionAddScreenshot />
+              </PromptInputActionMenuContent>
+            </PromptInputActionMenu>
+          </PromptInputTools>
+          <PromptInputSubmit onStop={onStop} status={status} />
+        </PromptInputFooter>
+      )}
+
+      {!shouldRenderMultiline && (
+        <>
+          <InputGroupAddon align="inline-start" className="items-end gap-1.5 pr-0 pl-2">
             <PromptInputTools>
               <PromptInputActionMenu>
                 <PromptInputActionMenuTrigger />
@@ -169,29 +188,12 @@ export function ChatInputForm({
                 </PromptInputActionMenuContent>
               </PromptInputActionMenu>
             </PromptInputTools>
+          </InputGroupAddon>
+          <InputGroupAddon align="inline-end" className="items-end gap-1.5 pr-4 pb-2">
             <PromptInputSubmit onStop={onStop} status={status} />
-          </PromptInputFooter>
-        )}
-
-        {!shouldRenderMultiline && (
-          <>
-            <InputGroupAddon align="inline-start" className="items-end gap-1.5 pr-0 pl-2">
-              <PromptInputTools>
-                <PromptInputActionMenu>
-                  <PromptInputActionMenuTrigger />
-                  <PromptInputActionMenuContent className="w-56">
-                    <PromptInputActionAddAttachments />
-                    <PromptInputActionAddScreenshot />
-                  </PromptInputActionMenuContent>
-                </PromptInputActionMenu>
-              </PromptInputTools>
-            </InputGroupAddon>
-            <InputGroupAddon align="inline-end" className="items-end gap-1.5 pr-4 pb-2">
-              <PromptInputSubmit onStop={onStop} status={status} />
-            </InputGroupAddon>
-          </>
-        )}
-      </PromptInput>
-    </PromptInputProvider>
+          </InputGroupAddon>
+        </>
+      )}
+    </PromptInput>
   )
 }

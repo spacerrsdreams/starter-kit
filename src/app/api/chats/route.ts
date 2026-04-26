@@ -7,7 +7,7 @@ import { createChat, listChats } from "@/features/ai/chat/repositories/chat.repo
 import { auth } from "@/features/auth/lib/auth"
 
 const DEFAULT_LIMIT = 15
-const MAX_LIMIT = 15
+const MAX_LIMIT = 30
 
 async function getSessionUserId() {
   const session = await auth.api.getSession({ headers: await headers() })

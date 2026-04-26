@@ -5,7 +5,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { listChatsApi } from "@/features/ai/chat/api/chats.api"
 import { authClient } from "@/features/auth/lib/auth-client"
 
-const PAGE_LIMIT = 15
+const PAGE_LIMIT = 30
 export const chatsQueryKey = "chat.list"
 
 export const getChatsQueryKey = () => [chatsQueryKey] as const

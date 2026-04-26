@@ -20,6 +20,12 @@ export type ChatNavigationStore = {
   setActiveChatId: (chatId: string | null) => void
 }
 
+export type ChatDraftStore = {
+  draft: string
+  setDraft: (draft: string) => void
+  clearDraft: () => void
+}
+
 export type ChatCitationSource = {
   sourceId: string
   url: string

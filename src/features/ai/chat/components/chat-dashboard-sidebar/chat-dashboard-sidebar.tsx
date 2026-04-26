@@ -5,7 +5,7 @@ import { Route } from "next"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useMemo, useState } from "react"
+import { useMemo, useRef, useState, type UIEvent } from "react"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
@@ -56,8 +56,10 @@ export function ChatDashboardSidebar() {
   const [renameTitle, setRenameTitle] = useState("")
   const activeChatId = useChatNavigationStore((state) => state.activeChatId)
   const chatsQuery = useFetchChats()
+  const { hasNextPage, isFetchingNextPage, fetchNextPage } = chatsQuery
   const deleteChatMutation = useMutateDeleteChat()
   const updateChatMutation = useMutateUpdateChat()
+  const sidebarMenuRef = useRef<HTMLUListElement | null>(null)
   const chats = useMemo<ChatListItem[]>(
     () => chatsQuery.data?.pages.flatMap((page) => page.chats) ?? [],
     [chatsQuery.data?.pages]
@@ -220,10 +222,27 @@ export function ChatDashboardSidebar() {
     }
   }
 
+  const handleSidebarScroll = (event: UIEvent<HTMLElement>) => {
+    if (!hasNextPage || isFetchingNextPage) {
+      return
+    }
+
+    const target = event.currentTarget
+    const remainingScrollDistance = target.scrollHeight - target.scrollTop - target.clientHeight
+
+    if (remainingScrollDistance <= 96) {
+      void fetchNextPage()
+    }
+  }
+
   return (
     <>
-      <SidebarGroupContent className="flex min-h-0 flex-1">
-        <SidebarMenu className="min-h-0 flex-1 gap-1 overflow-y-auto">
+      <SidebarGroupContent className="flex min-h-0 flex-1 overflow-hidden">
+        <SidebarMenu
+          ref={sidebarMenuRef}
+          className="h-full min-h-0 flex-1 gap-1 overflow-y-auto"
+          onScroll={handleSidebarScroll}
+        >
           <SidebarMenuItem>
             <SidebarMenuButton isActive={isNewChatActive} asChild onClick={handleStartNewChat} className="pl-1">
               <div role="button" className="flex w-full cursor-pointer items-center gap-2">
@@ -255,21 +274,6 @@ export function ChatDashboardSidebar() {
             </SidebarMenuItem>
             <CollapsibleContent>{recentChats.map(renderChatRow)}</CollapsibleContent>
           </Collapsible>
-          {chatsQuery.hasNextPage ? (
-            <SidebarMenuItem className="px-1 pt-2">
-              <Button
-                type="button"
-                variant="ghost"
-                className="h-8 w-full justify-start text-xs text-muted-foreground"
-                disabled={chatsQuery.isFetchingNextPage}
-                onClick={() => {
-                  void chatsQuery.fetchNextPage()
-                }}
-              >
-                {chatsQuery.isFetchingNextPage ? t("aiChat.sidebar.loading") : t("aiChat.sidebar.loadMore")}
-              </Button>
-            </SidebarMenuItem>
-          ) : null}
         </SidebarMenu>
       </SidebarGroupContent>
       <AlertDialog
