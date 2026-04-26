@@ -13,7 +13,7 @@ import {
 } from "@/i18n/locales"
 import { ApiError } from "@/lib/http-client"
 import { WebRoutes } from "@/lib/web.routes"
-import { BlogContentEditor } from "@/features/blog/components/blog-content-editor.client"
+import { BlogContentEditor } from "@/features/blog/components/blog-content-editor"
 import { useMutateUpdateBlogPost } from "@/features/blog/hooks/use-mutate-update-blog-post"
 import { useMutateUploadBlogCoverImage } from "@/features/blog/hooks/use-mutate-upload-blog-cover-image"
 import { Button } from "@/components/ui/button"

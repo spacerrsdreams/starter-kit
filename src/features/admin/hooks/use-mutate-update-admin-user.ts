@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { updateAdminUserApi } from "@/features/admin/api/admin-users.api"
-import { adminQueryKeys } from "@/features/admin/constants/admin-query-keys"
+import { getAdminUsersQueryKey } from "@/features/admin/hooks/use-fetch-admin-users"
 import type { AdminUserRole } from "@/features/admin/types/admin.types"
 
 type UpdateAdminUserVariables = {
@@ -18,7 +18,7 @@ export function useMutateUpdateAdminUser() {
   return useMutation({
     mutationFn: ({ userId, ...body }: UpdateAdminUserVariables) => updateAdminUserApi(userId, body),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: adminQueryKeys.users() })
+      void queryClient.invalidateQueries({ queryKey: getAdminUsersQueryKey() })
     },
   })
 }

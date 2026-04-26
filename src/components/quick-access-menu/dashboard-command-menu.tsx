@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 
 const DashboardCommandDialogClient = dynamic(
   () =>
-    import("@/components/quick-access-menu/dashboard-command-dialog.client").then(
+    import("@/components/quick-access-menu/dashboard-command-dialog").then(
       (module) => module.DashboardCommandDialogClient
     ),
   { ssr: false }

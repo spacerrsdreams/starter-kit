@@ -5,7 +5,7 @@ import { useEffect } from "react"
 
 import { WebRoutes } from "@/lib/web.routes"
 import { Footer } from "@/components/footer/footer"
-import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation"
 import { Button } from "@/components/ui/button"
 import { TopGradient } from "@/components/ui/top-gradient"
 

@@ -14,7 +14,7 @@ export type AuthRequiredModalDialogProps = {
 
 export const AuthRequiredModalDialogLazy = dynamic<AuthRequiredModalDialogProps>(
   () =>
-    import("@/features/auth/components/auth-required-modal/auth-required-modal-dialog-content.client").then(
+    import("@/features/auth/components/auth-required-modal/auth-required-modal-dialog-content").then(
       (module) => module.AuthRequiredModalDialogContent
     ),
   {

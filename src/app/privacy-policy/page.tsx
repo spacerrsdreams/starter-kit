@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer/footer"
 import { LegalSectionBlock } from "@/components/legal/legal-section-block"
 import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
-import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation"
 import { TopGradient } from "@/components/ui/top-gradient"
 
 export default function PrivacyPolicyPage() {

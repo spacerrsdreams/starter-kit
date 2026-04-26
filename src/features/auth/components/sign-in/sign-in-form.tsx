@@ -10,7 +10,7 @@ import z from "zod"
 import { SiteConfig } from "@/lib/site.config"
 import { buildPostAuthCallbackUrl } from "@/features/auth/components/sign-in/sign-in-callback.utils"
 import { getSignInErrorMessageKey } from "@/features/auth/components/sign-in/sign-in-form.utils"
-import { SignInReactivateDialog } from "@/features/auth/components/sign-in/sign-in-reactivate-dialog.client"
+import { SignInReactivateDialog } from "@/features/auth/components/sign-in/sign-in-reactivate-dialog"
 import { ACCOUNT_DEACTIVATED, UNKNOWN_ERROR_CODE } from "@/features/auth/constants"
 import { authClient } from "@/features/auth/lib/auth-client"
 import {

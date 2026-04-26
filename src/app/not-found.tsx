@@ -4,7 +4,7 @@ import { WebRoutes } from "@/lib/web.routes"
 import { Footer } from "@/components/footer/footer"
 import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
-import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation"
 import { Button } from "@/components/ui/button"
 import { TopGradient } from "@/components/ui/top-gradient"
 

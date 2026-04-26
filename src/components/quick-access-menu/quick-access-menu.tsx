@@ -2,7 +2,7 @@
 
 import { Search } from "lucide-react"
 
-import { DashboardCommandMenu } from "@/components/quick-access-menu/dashboard-command-menu.client"
+import { DashboardCommandMenu } from "@/components/quick-access-menu/dashboard-command-menu"
 import { Button } from "@/components/ui/button"
 
 type QuickAccessMenuProps = {

@@ -7,9 +7,8 @@ import { useEffect, useMemo, useRef, useState } from "react"
 
 import { ChatSession } from "@/features/ai/chat/components/chat-session/chat-session"
 import { CHAT_EXAMPLE_PROMPTS } from "@/features/ai/chat/constants/chat-example-prompts.constants"
-import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-detail"
-import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
+import { getChatsQueryKey, useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-chat"
 import type { ChatListItem } from "@/features/ai/chat/types/chat.types"
 import { AiWidgetHistoryDropdown } from "@/features/ai/widget/components/ai-widget-history-dropdown"
@@ -188,7 +187,7 @@ export function AiWidget({ defaultOpen = false }: AiWidgetProps) {
                   onConversationUpdated={() => {
                     if (!hasRefetchedChatsForSessionRef.current) {
                       hasRefetchedChatsForSessionRef.current = true
-                      void queryClient.invalidateQueries({ queryKey: chatQueryKeys.chats() })
+                      void queryClient.invalidateQueries({ queryKey: getChatsQueryKey() })
                     }
                   }}
                 />

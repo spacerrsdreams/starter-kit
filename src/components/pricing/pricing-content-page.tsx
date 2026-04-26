@@ -7,7 +7,7 @@ import { useCallback } from "react"
 import { ApiRoutes } from "@/lib/api.routes"
 import { useAuthRequiredModal } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
 import { authClient } from "@/features/auth/lib/auth-client"
-import { PlanPicker } from "@/features/billing/components/plan-picker-dialog/plan-picker.client"
+import { PlanPicker } from "@/features/billing/components/plan-picker-dialog/plan-picker"
 import { useMutateCreateCheckoutSession } from "@/features/billing/hooks/use-mutate-create-checkout-session"
 
 export function PricingContentPage() {

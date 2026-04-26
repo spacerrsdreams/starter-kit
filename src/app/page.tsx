@@ -1,17 +1,17 @@
 import dynamic from "next/dynamic"
 
-import { DashboardPreviewClient } from "@/components/marketing/dashboard-preview.client"
+import { DashboardPreviewClient } from "@/components/marketing/dashboard-preview"
 import { Hero } from "@/components/marketing/hero"
 import { IntegrationsSection } from "@/components/marketing/integrations-section"
 import { WhyChooseSection } from "@/components/marketing/why-choose-section"
-import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation"
 import { TopGradient } from "@/components/ui/top-gradient"
 
 const TrustedMarqueeClient = dynamic(() =>
-  import("@/components/marketing/trusted-marquee.client").then((module) => module.TrustedMarqueeClient)
+  import("@/components/marketing/trusted-marquee").then((module) => module.TrustedMarqueeClient)
 )
 const KeyToolsScrollClient = dynamic(() =>
-  import("@/components/marketing/key-tools-scroll.client").then((module) => module.KeyToolsScrollClient)
+  import("@/components/marketing/key-tools-scroll").then((module) => module.KeyToolsScrollClient)
 )
 const CoreFeaturesDarkSection = dynamic(() =>
   import("@/components/marketing/core-features-dark-section").then((module) => module.CoreFeaturesDarkSection)
@@ -23,10 +23,10 @@ const CustomerReviewsSection = dynamic(() =>
   import("@/components/marketing/customer-reviews-section").then((module) => module.CustomerReviewsSection)
 )
 const PlanPickerSectionClient = dynamic(() =>
-  import("@/components/marketing/plan-picker-section.client").then((module) => module.PlanPickerSectionClient)
+  import("@/components/marketing/plan-picker-section").then((module) => module.PlanPickerSectionClient)
 )
 const FaqSectionClient = dynamic(() =>
-  import("@/components/marketing/faq-section.client").then((module) => module.FaqSectionClient)
+  import("@/components/marketing/faq-section").then((module) => module.FaqSectionClient)
 )
 const FreeTrialCtaSection = dynamic(() =>
   import("@/components/marketing/free-trial-cta-section").then((module) => module.FreeTrialCtaSection)

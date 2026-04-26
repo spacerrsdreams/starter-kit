@@ -5,12 +5,12 @@ import Link from "next/link"
 import { z } from "zod"
 
 import { WebRoutes } from "@/lib/web.routes"
-import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-actions-menu.client"
+import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-actions-menu"
 import { listBlogPosts } from "@/features/blog/repositories/blog-posts.repository"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
 import { Footer } from "@/components/footer/footer"
 import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
-import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation"
 import { TopGradient } from "@/components/ui/top-gradient"
 
 const PAGE_SIZE = 9

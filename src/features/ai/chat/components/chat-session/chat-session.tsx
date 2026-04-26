@@ -22,7 +22,7 @@ import { useAuthRequiredModal } from "@/features/auth/components/auth-required-m
 import { usePlanPickerDialog } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog-context"
 import { BILLING_TRACKING_EVENTS } from "@/features/billing/constants/billing-tracking.constants"
 import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
-import { trackBillingEvent } from "@/features/billing/utils/track-billing-event.client"
+import { trackBillingEvent } from "@/features/billing/utils/track-billing-event"
 import {
   Conversation,
   ConversationContent,

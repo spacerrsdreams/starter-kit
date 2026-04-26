@@ -8,10 +8,9 @@ import { ApiError } from "@/lib/http-client"
 import { WebRoutes } from "@/lib/web.routes"
 import { ChatSession } from "@/features/ai/chat/components/chat-session/chat-session"
 import { ChatSessionSkeleton } from "@/features/ai/chat/components/chat-session/chat-session-skeleton"
-import { chatQueryKeys } from "@/features/ai/chat/constants/chat-query-keys"
 import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event.constants"
 import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-detail"
-import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
+import { getChatsQueryKey, useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
 import { authClient } from "@/features/auth/lib/auth-client"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
@@ -183,7 +182,7 @@ export function Chat({ initialChatId = null }: ChatProps) {
               onConversationUpdated={() => {
                 if (!hasRefetchedChatsForSessionRef.current) {
                   hasRefetchedChatsForSessionRef.current = true
-                  void queryClient.invalidateQueries({ queryKey: chatQueryKeys.chats() })
+                  void queryClient.invalidateQueries({ queryKey: getChatsQueryKey() })
                 }
               }}
             />

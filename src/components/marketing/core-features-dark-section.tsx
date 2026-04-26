@@ -2,7 +2,7 @@ import { Activity, BadgeDollarSign, Cpu, Gamepad2, Rocket, ShieldCheck, Workflow
 import { useTranslations } from "next-intl"
 
 import { SiteConfig } from "@/lib/site.config"
-import { CoreFeaturesLeftBorderGlow } from "@/components/marketing/core-features-left-border-glow.client"
+import { CoreFeaturesLeftBorderGlow } from "@/components/marketing/core-features-left-border-glow"
 import { SectionHeading } from "@/components/section-heading"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 

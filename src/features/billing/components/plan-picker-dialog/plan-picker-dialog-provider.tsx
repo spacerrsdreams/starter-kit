@@ -3,10 +3,10 @@
 import { useCallback, useMemo, useState } from "react"
 
 import { PlanPickerDialogContext } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog-context"
-import { PlanPickerDialog } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog.client"
+import { PlanPickerDialog } from "@/features/billing/components/plan-picker-dialog/plan-picker-dialog"
 import { BILLING_TRACKING_EVENTS } from "@/features/billing/constants/billing-tracking.constants"
 import { useMutateCreateCheckoutSession } from "@/features/billing/hooks/use-mutate-create-checkout-session"
-import { trackBillingEvent } from "@/features/billing/utils/track-billing-event.client"
+import { trackBillingEvent } from "@/features/billing/utils/track-billing-event"
 
 type PlanPickerDialogProviderProps = {
   children: React.ReactNode

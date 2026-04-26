@@ -1,6 +1,6 @@
 import { Footer } from "@/components/footer/footer"
 import { IntegrationsSection } from "@/components/marketing/integrations-section"
-import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation"
 import { TopGradient } from "@/components/ui/top-gradient"
 
 export default function IntegrationsPage() {

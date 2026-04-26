@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { deleteAdminUserApi } from "@/features/admin/api/admin-users.api"
-import { adminQueryKeys } from "@/features/admin/constants/admin-query-keys"
+import { getAdminUsersQueryKey } from "@/features/admin/hooks/use-fetch-admin-users"
 
 export function useMutateDeleteAdminUser() {
   const queryClient = useQueryClient()
@@ -11,7 +11,7 @@ export function useMutateDeleteAdminUser() {
   return useMutation({
     mutationFn: deleteAdminUserApi,
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: adminQueryKeys.users() })
+      void queryClient.invalidateQueries({ queryKey: getAdminUsersQueryKey() })
     },
   })
 }

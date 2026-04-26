@@ -1,7 +1,7 @@
 import { Quote } from "lucide-react"
 import Image from "next/image"
 
-import { ContactFormClient } from "@/features/contact/components/contact-form.client"
+import { ContactFormClient } from "@/features/contact/components/contact-form"
 import { FreeTrialCtaSection } from "@/components/marketing/free-trial-cta-section"
 import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"

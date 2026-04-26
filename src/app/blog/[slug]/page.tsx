@@ -5,11 +5,11 @@ import { notFound } from "next/navigation"
 import { z } from "zod"
 
 import { WebRoutes } from "@/lib/web.routes"
-import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-actions-menu.client"
+import { BlogPostActionsMenu } from "@/features/blog/components/blog-post-actions-menu"
 import { getBlogPostBySlug } from "@/features/blog/repositories/blog-posts.repository"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
 import { Footer } from "@/components/footer/footer"
-import { HeaderNavigationClient } from "@/components/navigation/header-navigation.client"
+import { HeaderNavigationClient } from "@/components/navigation/header-navigation"
 import { TopGradient } from "@/components/ui/top-gradient"
 
 import "@/features/blog/styles/blog-rich-content.css"

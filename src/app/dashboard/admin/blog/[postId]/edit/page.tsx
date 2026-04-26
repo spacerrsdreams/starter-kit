@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 
-import { EditBlogPostForm } from "@/features/blog/components/edit-blog-post-form.client"
+import { EditBlogPostForm } from "@/features/blog/components/edit-blog-post-form"
 import { getBlogPostById } from "@/features/blog/repositories/blog-posts.repository"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
 import { WebRoutes } from "@/lib/web.routes"

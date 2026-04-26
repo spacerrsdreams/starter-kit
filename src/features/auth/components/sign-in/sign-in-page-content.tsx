@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 
 import { WebRoutes } from "@/lib/web.routes"
-import { SignInForm } from "@/features/auth/components/sign-in/sign-in-form.client"
+import { SignInForm } from "@/features/auth/components/sign-in/sign-in-form"
 import { GlassPanel } from "@/components/ui/glass-panel"
 
 export function SignInPageContent() {

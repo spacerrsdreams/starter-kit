@@ -5,7 +5,7 @@ import { TextStyle } from "@tiptap/extension-text-style"
 import { EditorContent, useEditor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 
-import { TiptapFloatingMenu } from "@/components/tiptap/tiptap-floating-menu.client"
+import { TiptapFloatingMenu } from "@/components/tiptap/tiptap-floating-menu"
 
 type TiptapEditorProps = {
   id: string

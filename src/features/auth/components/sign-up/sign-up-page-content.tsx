@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 
 import { WebRoutes } from "@/lib/web.routes"
-import { SignUpForm } from "@/features/auth/components/sign-up/sign-up-form.client"
+import { SignUpForm } from "@/features/auth/components/sign-up/sign-up-form"
 import { GlassPanel } from "@/components/ui/glass-panel"
 
 export function SignUpPageContent() {

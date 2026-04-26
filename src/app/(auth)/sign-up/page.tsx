@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
 import { WebRoutes } from "@/lib/web.routes"
-import { SignUpPageContent } from "@/features/auth/components/sign-up/sign-up-page-content.client"
+import { SignUpPageContent } from "@/features/auth/components/sign-up/sign-up-page-content"
 import { auth } from "@/features/auth/lib/auth"
 import { Spinner } from "@/components/ui/spinner"
 

@@ -4,7 +4,7 @@ import { Database } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { SectionHeading } from "@/components/section-heading"
-import { PricingPlanCard } from "@/features/billing/components/plan-picker-dialog/pricing-plan-card.client"
+import { PricingPlanCard } from "@/features/billing/components/plan-picker-dialog/pricing-plan-card"
 import { useFetchBillingProducts } from "@/features/billing/hooks/use-fetch-billing-products"
 import { useFetchBillingSubscription } from "@/features/billing/hooks/use-fetch-billing-subscription"
 

@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { authClient } from "@/features/auth/lib/auth-client"
 import { updateNotificationPreferencesAction } from "@/features/settings/actions/update-notification-preferences.action"
-import { settingsQueryKeys } from "@/features/settings/constants/settings-query-keys"
+import { getAccountNotificationPreferencesQueryKey } from "@/features/settings/hooks/use-fetch-notification-preferences"
 import type {
   NotificationPreferences,
   UpdateNotificationPreferencesInput,
@@ -23,15 +23,15 @@ export function useMutateNotificationPreferences() {
     },
     onMutate: async (patch) => {
       await queryClient.cancelQueries({
-        queryKey: settingsQueryKeys.accountNotificationPreferences,
+        queryKey: getAccountNotificationPreferencesQueryKey(),
       })
 
       const previous = queryClient.getQueryData<NotificationPreferences>(
-        settingsQueryKeys.accountNotificationPreferences
+        getAccountNotificationPreferencesQueryKey()
       )
 
       if (previous) {
-        queryClient.setQueryData(settingsQueryKeys.accountNotificationPreferences, {
+        queryClient.setQueryData(getAccountNotificationPreferencesQueryKey(), {
           ...previous,
           ...patch,
         })
@@ -41,7 +41,7 @@ export function useMutateNotificationPreferences() {
     },
     onError: (_error, _patch, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(settingsQueryKeys.accountNotificationPreferences, context.previous)
+        queryClient.setQueryData(getAccountNotificationPreferencesQueryKey(), context.previous)
       }
     },
     onSuccess: (result) => {
@@ -49,7 +49,7 @@ export function useMutateNotificationPreferences() {
         return
       }
 
-      queryClient.setQueryData(settingsQueryKeys.accountNotificationPreferences, result.data)
+      queryClient.setQueryData(getAccountNotificationPreferencesQueryKey(), result.data)
     },
   })
 }

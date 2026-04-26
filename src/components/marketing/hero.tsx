@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl"
 import Link from "next/link"
 
 import { WebRoutes } from "@/lib/web.routes"
-import { GetStartedCtaButton } from "@/components/marketing/get-started-cta-button.client"
+import { GetStartedCtaButton } from "@/components/marketing/get-started-cta-button"
 import { BlurWaveTextAnimation } from "@/components/motion/blur-wave-text.animation"
 import { BottomUpFadeAnimation } from "@/components/motion/bottom-up-fade.animation"
 

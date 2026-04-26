@@ -4,14 +4,17 @@ import { getNotificationPreferencesAction } from "@/features/settings/actions/ge
 import { useQuery } from "@tanstack/react-query"
 
 import { authClient } from "@/features/auth/lib/auth-client"
-import { settingsQueryKeys } from "@/features/settings/constants/settings-query-keys"
+
+export const accountNotificationPreferencesQueryKey = "settings.account-notification-preferences"
+
+export const getAccountNotificationPreferencesQueryKey = () => [accountNotificationPreferencesQueryKey] as const
 
 export function useFetchNotificationPreferences() {
   const { data: session, isPending: isSessionPending } = authClient.useSession()
   const isAuthenticated = Boolean(session?.user)
 
   return useQuery({
-    queryKey: settingsQueryKeys.accountNotificationPreferences,
+    queryKey: getAccountNotificationPreferencesQueryKey(),
     queryFn: async () => {
       const result = await getNotificationPreferencesAction()
 

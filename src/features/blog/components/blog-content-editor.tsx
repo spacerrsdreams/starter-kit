@@ -1,6 +1,6 @@
 "use client"
 
-import { TiptapEditor } from "@/components/tiptap/tiptap.editor.client"
+import { TiptapEditor } from "@/components/tiptap/tiptap.editor"
 
 type BlogContentEditorProps = {
   value: string

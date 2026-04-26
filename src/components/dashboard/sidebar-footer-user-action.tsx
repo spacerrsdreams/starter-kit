@@ -18,7 +18,7 @@ const UserButton = dynamic(() => import("@/features/auth/components/user-button"
   loading: () => <SidebarFooterSkeleton />,
 })
 const HelpPopover = dynamic(
-  () => import("@/features/help/components/help-popover/help-popover.client").then((module) => module.HelpPopover),
+  () => import("@/features/help/components/help-popover/help-popover").then((module) => module.HelpPopover),
   {
     ssr: false,
   }

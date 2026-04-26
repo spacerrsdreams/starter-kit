@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation"
 
 import { WebRoutes } from "@/lib/web.routes"
-import { SignInForm } from "@/features/auth/components/sign-in/sign-in-form.client"
+import { SignUpForm } from "@/features/auth/components/sign-up/sign-up-form"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 
-export function SignInPageDialog() {
+export function SignUpPageDialog() {
   const router = useRouter()
 
   const handleSuccess = () => {
@@ -20,11 +20,7 @@ export function SignInPageDialog() {
         onInteractOutside={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
       >
-        <SignInForm
-          onSuccess={handleSuccess}
-          onSwitchToSignUp={() => router.push(WebRoutes.signUp.path)}
-          onForgotPassword={() => router.push(WebRoutes.resetPassword.path)}
-        />
+        <SignUpForm onSuccess={handleSuccess} onSwitchToSignIn={() => router.push(WebRoutes.signIn.path)} />
       </DialogContent>
     </Dialog>
   )

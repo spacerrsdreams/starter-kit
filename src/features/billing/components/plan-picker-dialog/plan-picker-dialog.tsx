@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl"
 
-import { PlanPicker } from "@/features/billing/components/plan-picker-dialog/plan-picker.client"
+import { PlanPicker } from "@/features/billing/components/plan-picker-dialog/plan-picker"
 import type { BillingProduct } from "@/features/billing/types/billing.types"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 

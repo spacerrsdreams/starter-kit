@@ -1,11 +1,11 @@
 "use client"
 
+import type { UIMessage } from "ai"
 import { Check, Copy, RefreshCcw } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
-import type { UIMessage } from "ai"
 
 import { cn } from "@/lib/utils"
 import { Attachment, AttachmentInfo, AttachmentPreview, Attachments } from "@/components/ai-elements/attachments"
@@ -108,8 +108,22 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
 
   return (
     <Message from={message.role} className="w-fit max-w-[min(100%,32rem)] justify-end">
+      <MessageContent className="min-w-0 flex-col gap-3">
+        {message.parts.map((part, partIndex) => {
+          if (part.type !== "text") {
+            return null
+          }
+
+          return (
+            <div key={partIndex} className="block max-w-full min-w-0 shrink-0">
+              <MessageResponse className="block max-w-full min-w-0">{part.text}</MessageResponse>
+            </div>
+          )
+        })}
+      </MessageContent>
+
       {message.parts.some((part) => part.type === "file") && (
-        <div className="mb-0 flex w-full">
+        <div className="mb-0 flex w-full justify-end">
           <Attachments className="w-fit pt-0 pl-0" variant="inline">
             {message.parts.map((part, partIndex) => {
               if (part.type !== "file") {
@@ -153,19 +167,7 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
           </Attachments>
         </div>
       )}
-      <MessageContent className="min-w-0 flex-col gap-3">
-        {message.parts.map((part, partIndex) => {
-          if (part.type !== "text") {
-            return null
-          }
 
-          return (
-            <div key={partIndex} className={cn("block max-w-full min-w-0 shrink-0")}>
-              <MessageResponse className={cn("block max-w-full min-w-0")}>{part.text}</MessageResponse>
-            </div>
-          )
-        })}
-      </MessageContent>
       <div className="-mt-1 flex items-center justify-end gap-1 text-muted-foreground opacity-0 transition-opacity duration-200 group-hover:opacity-100">
         <span className="text-xs">{timeLabel}</span>
         <div className="flex items-center justify-end gap-0 rounded-md bg-background/80 px-1 py-0.5">
@@ -234,6 +236,7 @@ export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, o
           ) : null}
         </div>
       </div>
+
       <Dialog open={previewImage !== null} onOpenChange={(nextOpen) => !nextOpen && setPreviewImage(null)}>
         <DialogContent
           className="w-fit p-2 max-sm:inset-auto max-sm:top-1/2 max-sm:right-auto max-sm:bottom-auto max-sm:left-1/2 max-sm:block max-sm:h-auto max-sm:w-fit max-sm:max-w-[96vw] max-sm:-translate-x-1/2 max-sm:-translate-y-1/2 max-sm:rounded-xl sm:max-w-[96vw] max-sm:[&>div]:max-w-none"

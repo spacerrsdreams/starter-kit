@@ -7,10 +7,10 @@ import { usePathname } from "next/navigation"
 import * as React from "react"
 
 import { isPathWithinRoute, WebRoutes } from "@/lib/web.routes"
-import { ChatDashboardSidebar } from "@/features/ai/chat/components/chat-dashboard-sidebar/chat-dashboard-sidebar.client"
+import { ChatDashboardSidebar } from "@/features/ai/chat/components/chat-dashboard-sidebar/chat-dashboard-sidebar"
 import { authClient } from "@/features/auth/lib/auth-client"
 import { NavLogo } from "@/components/dashboard/nav-logo"
-import { SidebarFooterUserAction } from "@/components/dashboard/sidebar-footer-user-action.client"
+import { SidebarFooterUserAction } from "@/components/dashboard/sidebar-footer-user-action"
 import {
   Sidebar as SidebarComponent,
   SidebarContent,

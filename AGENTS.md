@@ -1,12 +1,6 @@
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-
-<!-- END:nextjs-agent-rules -->
-
 <!-- BEGIN:Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed. -->
+
+# Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed
 
 Tradeoff: These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
@@ -18,8 +12,10 @@ Before implementing:
 State your assumptions explicitly. If uncertain, ask.
 If multiple interpretations exist, present them - don't pick silently.
 If a simpler approach exists, say so. Push back when warranted.
-If something is unclear, stop. Name what's confusing. Ask. 2. Simplicity First
-Minimum code that solves the problem. Nothing speculative.
+If something is unclear, stop. Name what's confusing. Ask.
+
+2. Simplicity First
+   Minimum code that solves the problem. Nothing speculative.
 
 No features beyond what was asked.
 No abstractions for single-use code.
@@ -57,13 +53,49 @@ For multi-step tasks, state a brief plan:
 1. [Step] → verify: [check]
 2. [Step] → verify: [check]
 3. [Step] → verify: [check]
-   Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-These guidelines are working if: fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-<!-- BEGIN:Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed. -->
+5. Self-Verification Before Declaring Done
+   Never consider a task complete without running the verification loop.
 
-## Project Rules (Migrated from `.cursor/rules`)
+After implementing any non-trivial change:
+
+- Run `bun run lint` — zero new warnings or errors introduced.
+- Run `bun run typecheck` — no new TypeScript errors.
+- Run relevant tests (`bun test` or scoped subset) — all pass.
+- If you added new behavior, confirm a test covers it. If none exists, write one.
+- Compare your output against the original request: list any stated requirements not yet addressed.
+- If CI commands are specified in the project, run them. Don't declare done if they fail.
+
+Shortcut exception: for trivial single-line fixes (typo, rename, constant change) skip the full loop but still run typecheck.
+
+6. Comments — Complex Code Only
+   Write comments to explain _why_, never _what_. Only add them where the code itself cannot communicate intent.
+
+**Add comments when:**
+
+- The logic is non-obvious and a reasonable engineer would pause to figure it out.
+- A decision was made that looks wrong but isn't (e.g. intentional empty catch, deliberate denormalization).
+- A workaround exists due to an external constraint (browser bug, third-party quirk, Prisma limitation).
+- A complex algorithm or multi-step state transition is implemented.
+
+**Never add comments for:**
+
+- Self-explanatory code (`// increment counter` above `count++`).
+- Type-obvious assignments, straightforward CRUD, standard React patterns.
+- Code that was just refactored to be readable — if you need a comment to explain it, simplify it first.
+
+**Keep comments maintained:**
+
+- If you change logic covered by a comment, update or remove the comment.
+- Stale comments that contradict the code are worse than no comments.
+
+<!-- END:Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed. -->
+
+<!-- BEGIN:Project Rules -->
+
+# Project Rules
 
 ### Architecture (Strict)
 
@@ -120,12 +152,19 @@ These guidelines are working if: fewer unnecessary changes in diffs, fewer rewri
 - **I**: Use focused props and return shapes.
 - **D**: Depend on explicit modules and concrete files.
 
-### React Query Hooks (Strict)
+### @tanstack/react-query Rules (Strict)
 
 - Do not inline reusable query/mutation definitions in UI components.
 - Place each query/mutation custom hook in its own file under `hooks/`.
 - One primary query/mutation per hook file.
 - Use `useFetch...` naming for reads and `useMutate...` naming for writes.
+- Query keys for reads must be exported from the same hook file that defines the query (for example `export const usersQueryKey = "users"` and `export const getUsersQueryKey = () => [usersQueryKey] as const`).
+- Use those same exported query key helpers everywhere (query definitions, invalidation, cache reads/writes) to keep navigation and refactors simple.
+- Any query/mutation HTTP call must go through `apiRequest` from `src/lib/http-client.ts` (do not use raw `fetch` in feature API clients), so non-OK responses are handled consistently.
+- Example:
+  - `src/features/example/api/example.api.ts` exports `getExampleApi()` that calls `apiRequest`.
+  - `src/features/example/hooks/use-fetch-example.ts` exports `exampleQueryKey` + `getExampleQueryKey()` and wraps it with `useQuery({ queryKey: getExampleQueryKey(), ... })`.
+  - `src/features/example/hooks/use-mutate-example.ts` wraps writes with `useMutation`.
 
 ### No Barrel Index Files
 
@@ -133,8 +172,9 @@ Exactly one exported React component per .tsx file. Non-exported helper componen
 
 ### One React Component per `.tsx` File
 
-- Exactly one React component per `*.tsx` file.
-- No inner helper components in the same file; split into sibling files.
+- Prefer one primary React component per `*.tsx` file.
+- Small, non-complex helper components that are tightly coupled to the primary component (for example simple list item renderers like `ul/li` wrappers) may be colocated in the same file.
+- If a helper component grows in complexity, is reused, or has its own logic/state concerns, split it into a sibling file.
 - Files with hooks only should be `*.ts`.
 - Move pure helpers out of component files into `utils`/`helpers`.
 
@@ -143,7 +183,8 @@ Exactly one exported React component per .tsx file. Non-exported helper componen
 - Default to Server Components.
 - Add `"use client"` only when browser-only APIs/interactivity are required.
 - Do not mark large route shells as client for one hook; split into islands.
-- Name client-only modules with `.client.tsx` (or `.client.ts`).
+- Use normal `*.ts` / `*.tsx` filenames for client modules (no `.client` suffix).
+- Reserve `*.server.ts` for explicit server-only modules.
 - Server parent owns data/copy/layout and passes serializable props to client islands.
 
 ### Server-Only Guard
@@ -183,6 +224,14 @@ Exactly one exported React component per .tsx file. Non-exported helper componen
 - Prefer `z.infer<typeof schema>` as the source of truth instead of duplicating interfaces.
 - Place feature-local schemas under `src/features/<feature>/schemas/` (or colocated `*.schema.ts`).
 - Shared schemas go in `src/lib/schemas/` or `src/schemas/`.
+
+### Security (Strict)
+
+- **No hardcoded secrets**: Never embed API keys, tokens, passwords, or connection strings in source code. Use environment variables. Mark placeholders explicitly (e.g. `process.env.STRIPE_SECRET_KEY`).
+- **Parameterized queries only**: Always use Prisma Client queries over raw SQL. If raw SQL is unavoidable, use parameterized placeholders — never string interpolation.
+- **Least privilege**: Request only the scopes/permissions/DB access actually needed for the operation. Do not reuse admin-level credentials for user-facing operations.
+- **No disabled security defaults**: Do not disable SSL/TLS validation, CORS protections, or CSP headers without an explicit, documented reason.
+- **Dependency hygiene**: Do not add new dependencies for functionality already available in the existing stack. If a new dependency is needed, note it explicitly in the response for human review.
 
 ### UI and Styling (Strict)
 
@@ -234,3 +283,17 @@ Exactly one exported React component per .tsx file. Non-exported helper componen
 - Always fetch plan prices from Stripe Price objects on the server using configured Stripe price IDs.
 - Use Stripe-derived values as the single source of truth for displayed pricing and checkout consistency.
 - If Stripe prices are unavailable, disable purchase actions instead of falling back to hardcoded amounts.
+
+<!-- END:Project Rules-->
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+
+This project uses the App Router exclusively. Never use Pages Router patterns,
+conventions, or APIs (`getServerSideProps`, `getStaticProps`, `_app.tsx`, `_document.tsx`, etc.).
+If a Next.js docs path covers both routers, follow the App Router section only.
+
+<!-- END:nextjs-agent-rules -->

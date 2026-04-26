@@ -10,7 +10,7 @@ import {
   AuthRequiredModalContext,
   type AuthRequiredModalProviderProps,
 } from "@/features/auth/components/auth-required-modal/auth-required-modal-context"
-import { AuthRequiredModalDialogLazy } from "@/features/auth/components/auth-required-modal/auth-required-modal-dialog.client"
+import { AuthRequiredModalDialogLazy } from "@/features/auth/components/auth-required-modal/auth-required-modal-dialog"
 
 export function AuthRequiredModalProvider({ children }: AuthRequiredModalProviderProps) {
   const router = useRouter()

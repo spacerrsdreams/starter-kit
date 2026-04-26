@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
-import { CreateBlogPostForm } from "@/features/blog/components/create-blog-post-form.client"
+import { CreateBlogPostForm } from "@/features/blog/components/create-blog-post-form"
 import { getAdminOrModeratorSession } from "@/features/blog/utils/get-admin-or-moderator-session.server"
 import { WebRoutes } from "@/lib/web.routes"
 
