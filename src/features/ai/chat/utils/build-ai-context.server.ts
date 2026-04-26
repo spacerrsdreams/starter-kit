@@ -7,7 +7,7 @@ import {
   SYSTEM_LEVEL_INSTRUCTIONS,
   TERMS_OF_SERVICE_CONTEXT,
 } from "@/features/ai/chat/constants/ai-shared-context.constants"
-import type { BuildAiContextInput } from "@/features/ai/chat/types/build-ai-context.types"
+import type { BuildAiContextInput } from "@/features/ai/chat/types/chat.server.types"
 
 function formatSection(title: string, lines: string[]) {
   return [`## ${title}`, ...lines].join("\n")

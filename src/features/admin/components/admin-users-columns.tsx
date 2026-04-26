@@ -3,7 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, Pencil, Trash2, UserRoundCheck } from "lucide-react"
 
-import type { AdminUserListItem, AdminUserSubscriptionStatus } from "@/features/admin/types/admin-users.types"
+import type { AdminUserListItem, AdminUserSubscriptionStatus } from "@/features/admin/types/admin.types"
 import { AdminUserRoleCell } from "@/features/admin/components/admin-user-role-cell.client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"

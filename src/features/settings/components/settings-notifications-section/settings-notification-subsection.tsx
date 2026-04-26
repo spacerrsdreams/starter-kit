@@ -1,6 +1,14 @@
 "use client"
 
-import type { SettingsNotificationSubsectionProps } from "@/features/settings/types/settings-section-stack.types"
+import type { LucideIcon } from "lucide-react"
+import type { ReactNode } from "react"
+
+type SettingsNotificationSubsectionProps = {
+  icon: LucideIcon
+  title: string
+  description: string
+  toggle?: ReactNode
+}
 
 export function SettingsNotificationSubsection({
   icon: Icon,

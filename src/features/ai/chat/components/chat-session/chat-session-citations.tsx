@@ -1,6 +1,6 @@
 "use client"
 
-import type { ChatSessionCitationsProps } from "@/features/ai/chat/types/chat-citations.types"
+import type { ChatCitationSource } from "@/features/ai/chat/types/chat.types"
 import {
   InlineCitation,
   InlineCitationCard,
@@ -16,6 +16,10 @@ import {
   InlineCitationSource,
   InlineCitationText,
 } from "@/components/ai-elements/inline-citation"
+
+type ChatSessionCitationsProps = {
+  sources: ChatCitationSource[]
+}
 
 export function ChatSessionCitations({ sources }: ChatSessionCitationsProps) {
   if (sources.length === 0) {

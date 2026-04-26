@@ -14,7 +14,7 @@ import {
 } from "@tanstack/react-table"
 import * as React from "react"
 
-import type { AdminUserListItem } from "@/features/admin/types/admin-users.types"
+import type { AdminUserListItem } from "@/features/admin/types/admin.types"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,

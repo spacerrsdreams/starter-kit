@@ -6,7 +6,7 @@ import type {
   CreateCheckoutSessionRequest,
   CreateCheckoutSessionResponse,
   CreatePortalSessionResponse,
-} from "@/features/billing/types/billing-api.types"
+} from "@/features/billing/types/billing.types"
 
 export async function getBillingSubscriptionApi() {
   const response = await apiRequest<BillingSubscriptionResponse>(ApiRoutes.billing.subscription)

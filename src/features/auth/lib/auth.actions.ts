@@ -9,7 +9,7 @@ import { redirect } from "next/navigation"
 
 import { ApiRoutes } from "@/lib/api.routes"
 import { auth } from "@/features/auth/lib/auth"
-import type { AuthEmbeddedOnlySuccess, AuthRedirectSuccess } from "@/features/auth/lib/auth-action.types"
+import type { AuthEmbeddedOnlySuccess, AuthRedirectSuccess } from "@/features/auth/types/auth.types"
 import { getAuthApiErrorCode } from "@/features/auth/lib/auth-utils"
 import { reactivateDeactivatedAccountWithDetail } from "@/features/auth/lib/auth.repository"
 import {

@@ -1,13 +1,7 @@
 import "server-only"
 
 import { Resend } from "resend"
-
-export interface SendMailOptions {
-  to: string
-  subject: string
-  text?: string
-  react: React.ReactNode
-}
+import type { SendMailOptions } from "@/features/emails/types/emails.types"
 
 export const getResend = () => {
   const apiKey = process.env.RESEND_API_KEY

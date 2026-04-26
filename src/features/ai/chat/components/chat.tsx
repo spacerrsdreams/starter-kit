@@ -13,9 +13,12 @@ import { NEW_CHAT_EVENT_NAME } from "@/features/ai/chat/constants/new-chat-event
 import { useFetchChatDetail } from "@/features/ai/chat/hooks/use-fetch-chat-detail"
 import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
-import type { ChatProps } from "@/features/ai/chat/types/chat.types"
 import { authClient } from "@/features/auth/lib/auth-client"
 import { PromptInputProvider } from "@/components/ai-elements/prompt-input"
+
+type ChatProps = {
+  initialChatId?: string | null
+}
 
 export function Chat({ initialChatId = null }: ChatProps) {
   const { data: session, isPending: isSessionPending } = authClient.useSession()

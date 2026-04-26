@@ -1,12 +1,16 @@
 import "server-only"
 
-import type Stripe from "stripe"
 import { z } from "zod"
 
 import { prisma } from "@/lib/prisma"
 import type { BillingProduct, BillingSubscriptionSnapshot } from "@/features/billing/types/billing.types"
+import type {
+  BillingSnapshotInput,
+  StripeSubscriptionStatus,
+  UpdateSubscriptionFromStripeParams,
+} from "@/features/billing/types/billing.server.types"
 
-const PaidStripeStatuses = new Set<Stripe.Subscription.Status>(["active", "trialing"])
+const PaidStripeStatuses = new Set<StripeSubscriptionStatus>(["active", "trialing"])
 const stripeSubscriptionStatusSchema = z.enum([
   "active",
   "canceled",
@@ -18,7 +22,7 @@ const stripeSubscriptionStatusSchema = z.enum([
   "unpaid",
 ])
 
-function parseStripeSubscriptionStatus(value: string | null): Stripe.Subscription.Status | null {
+function parseStripeSubscriptionStatus(value: string | null): StripeSubscriptionStatus | null {
   return stripeSubscriptionStatusSchema.safeParse(value).data ?? null
 }
 
@@ -34,12 +38,7 @@ function parseBillingProduct(stripePriceId: string | null | undefined): BillingP
   return null
 }
 
-function toSnapshot(params: {
-  customerId: string | null
-  stripePriceId?: string | null
-  subscriptionStatus?: Stripe.Subscription.Status | null
-  currentPeriodEnd?: Date | null
-}): BillingSubscriptionSnapshot {
+function toSnapshot(params: BillingSnapshotInput): BillingSubscriptionSnapshot {
   const subscriptionStatus = params.subscriptionStatus ?? null
   const isPaid = subscriptionStatus ? PaidStripeStatuses.has(subscriptionStatus) : false
   const currentProduct = isPaid ? parseBillingProduct(params.stripePriceId) : null
@@ -104,13 +103,7 @@ export async function getBillingSubscriptionByCustomerId(customerId: string) {
   })
 }
 
-export async function updateSubscriptionFromStripe(params: {
-  customerId: string
-  subscriptionId: string | null
-  priceId: string | null
-  subscriptionStatus: Stripe.Subscription.Status | null
-  currentPeriodEnd: Date | null
-}) {
+export async function updateSubscriptionFromStripe(params: UpdateSubscriptionFromStripeParams) {
   return prisma.billingSubscription.update({
     where: { stripeCustomerId: params.customerId },
     data: {

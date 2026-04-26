@@ -2,8 +2,8 @@
 
 import { ChevronRight, EllipsisIcon, Pencil, PlusIcon, Star, Trash2Icon } from "lucide-react"
 import { Route } from "next"
-import Link from "next/link"
 import { useTranslations } from "next-intl"
+import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
@@ -15,7 +15,7 @@ import { useFetchChats } from "@/features/ai/chat/hooks/use-fetch-chats"
 import { useMutateDeleteChat } from "@/features/ai/chat/hooks/use-mutate-delete-chat"
 import { useMutateUpdateChat } from "@/features/ai/chat/hooks/use-mutate-update-chat"
 import { useChatNavigationStore } from "@/features/ai/chat/store/chat-navigation.store"
-import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
+import type { ChatListItem } from "@/features/ai/chat/types/chat.types"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -66,6 +66,7 @@ export function ChatDashboardSidebar() {
   const chatRoutePrefix = `${WebRoutes.dashboard.path}/ai`
   const isAskAiRoute =
     pathname === WebRoutes.dashboard.path || pathname === chatRoutePrefix || pathname.startsWith(`${chatRoutePrefix}/`)
+  const isNewChatActive = isAskAiRoute && !activeChatId
 
   const savedChats = useMemo(() => chats.filter((chat) => chat.isSaved), [chats])
   const recentChats = useMemo(() => chats.filter((chat) => !chat.isSaved), [chats])
@@ -224,7 +225,7 @@ export function ChatDashboardSidebar() {
       <SidebarGroupContent className="flex min-h-0 flex-1">
         <SidebarMenu className="min-h-0 flex-1 gap-1 overflow-y-auto">
           <SidebarMenuItem>
-            <SidebarMenuButton isActive={isAskAiRoute} asChild onClick={handleStartNewChat} className="pl-1">
+            <SidebarMenuButton isActive={isNewChatActive} asChild onClick={handleStartNewChat} className="pl-1">
               <div role="button" className="flex w-full cursor-pointer items-center gap-2">
                 <div className="rounded-full bg-muted-foreground/15 p-1 font-medium">
                   <PlusIcon className="size-4" />
@@ -282,9 +283,7 @@ export function ChatDashboardSidebar() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t("aiChat.sidebar.deleteDialog.title")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("aiChat.sidebar.deleteDialog.description")}
-            </AlertDialogDescription>
+            <AlertDialogDescription>{t("aiChat.sidebar.deleteDialog.description")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleteChatMutation.isPending}>{t("aiChat.sidebar.cancel")}</AlertDialogCancel>

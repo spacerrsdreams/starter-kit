@@ -1,6 +1,6 @@
 "use client"
 
-import type { AdminUserRole } from "@/features/admin/types/admin-users.types"
+import type { AdminUserRole } from "@/features/admin/types/admin.types"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 type AdminUserRoleCellProps = {

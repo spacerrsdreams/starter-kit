@@ -1,8 +1,7 @@
 import { ApiRoutes } from "@/lib/api.routes"
 import { apiRequest } from "@/lib/http-client"
-import type { ChatsListResponse, CreateChatResponse, GetChatResponse } from "@/features/ai/chat/types/chat-api.types"
-import type { SetMessageReactionPayload } from "@/features/ai/chat/types/chat-message-reaction-api.types"
-import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
+import type { ChatsListResponse, CreateChatResponse, GetChatResponse, SetMessageReactionPayload } from "@/features/ai/chat/types/chat-api.types"
+import type { ChatMessageReaction } from "@/features/ai/chat/types/chat.types"
 
 type ListChatsApiParams = {
   limit: number

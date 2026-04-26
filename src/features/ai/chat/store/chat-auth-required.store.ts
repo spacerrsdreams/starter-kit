@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-import type { ChatAuthRequiredStore } from "@/features/ai/chat/types/chat-auth-required.types"
+import type { ChatAuthRequiredStore } from "@/features/ai/chat/types/chat.types"
 
 const PENDING_PROMPT_STORAGE_KEY = "ai:pending-auth-prompt"
 

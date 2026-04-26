@@ -14,7 +14,7 @@ import { ChatSessionUserMessage } from "@/features/ai/chat/components/chat-sessi
 import { useMutateCreateChat } from "@/features/ai/chat/hooks/use-mutate-create-chat"
 import { useMutateMessageReaction } from "@/features/ai/chat/hooks/use-mutate-message-reaction"
 import { useChatAuthRequiredStore } from "@/features/ai/chat/store/chat-auth-required.store"
-import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
+import type { ChatMessageReaction } from "@/features/ai/chat/types/chat.types"
 import { getMessageReaction } from "@/features/ai/chat/utils/chat-message-reaction.utils"
 import { getMessageFileParts, getMessageTextContent } from "@/features/ai/chat/utils/chat-session-message.utils"
 import { createStableChatTransport } from "@/features/ai/chat/utils/stable-chat-transport"
@@ -327,13 +327,6 @@ export function ChatSession({
     })
   }, [planPickerDialog])
 
-  let inputContainerLayoutClass = "mx-auto w-full max-w-3xl"
-  if (messages.length === 0 && compactMode) {
-    inputContainerLayoutClass = "mx-auto mt-auto w-full max-w-3xl pb-2 md:pb-0"
-  } else if (messages.length === 0) {
-    inputContainerLayoutClass = "mx-auto mt-4 w-full max-w-3xl pb-2 md:mt-10 md:pb-0"
-  }
-
   return (
     <>
       {messages.length === 0 && showUpgradePill ? (
@@ -374,7 +367,14 @@ export function ChatSession({
               >
                 <LogoIcon iconSize={28} containerSize={42} className="bg-primary" />
                 <div className={cn("space-y-2", compactMode && "mx-auto w-full max-w-sm")}>
-                  <h3 className="text-2xl leading-tight tracking-[-1px] text-balance md:text-4xl">{welcomeText}</h3>
+                  <h3
+                    className={cn(
+                      "text-2xl leading-tight tracking-[-1px] text-balance md:text-4xl",
+                      compactMode && "md:text-2xl"
+                    )}
+                  >
+                    {welcomeText}
+                  </h3>
                 </div>
               </ConversationEmptyState>
             )}
@@ -432,7 +432,9 @@ export function ChatSession({
           className={cn(
             "shrink-0 px-2 pt-3 pb-1 sm:pb-4.5",
             isMobile && "pb-[calc(env(safe-area-inset-bottom)+0.5rem)]",
-            inputContainerLayoutClass
+            "mx-auto w-full max-w-3xl",
+            messages.length === 0 && "mx-auto mt-4 w-full max-w-3xl pb-2 md:mt-10 md:pb-0",
+            messages.length === 0 && compactMode && "mx-auto mt-auto w-full max-w-3xl pb-2 md:pb-4"
           )}
         >
           <ChatInputForm

@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-import type { SettingsSectionId } from "@/features/settings/types/settings-dialog.types"
+import type { SettingsSectionId } from "@/features/settings/types/settings.types"
 
 type SettingsDialogStore = {
   open: boolean

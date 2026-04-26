@@ -1,6 +1,14 @@
 "use client"
 
-import type { SettingsLegalSectionLayoutProps } from "@/features/settings/types/settings-section-stack.types"
+import type { LucideIcon } from "lucide-react"
+import type { ReactNode } from "react"
+
+type SettingsLegalSectionLayoutProps = {
+  icon: LucideIcon
+  title: string
+  description: string
+  children: ReactNode
+}
 
 export function SettingsLegalSectionLayout({
   icon: Icon,

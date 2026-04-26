@@ -2,8 +2,14 @@
 
 import { cn } from "@/lib/utils"
 import { CHAT_EXAMPLE_PROMPTS } from "@/features/ai/chat/constants/chat-example-prompts.constants"
-import type { ChatExamplePromptsProps } from "@/features/ai/chat/types/chat-example-prompts.types"
 import { Button } from "@/components/ui/button"
+
+type ChatExamplePromptsProps = {
+  disabled?: boolean
+  prompts?: readonly string[]
+  layout?: "default" | "single-column"
+  onSelect: (text: string) => void
+}
 
 export function ChatExamplePrompts({
   disabled = false,

@@ -14,7 +14,7 @@ import { useFetchAdminUsers } from "@/features/admin/hooks/use-fetch-admin-users
 import { useMutateDeleteAdminUser } from "@/features/admin/hooks/use-mutate-delete-admin-user"
 import { useMutateImpersonateAdminUser } from "@/features/admin/hooks/use-mutate-impersonate-admin-user"
 import { useMutateUpdateAdminUser } from "@/features/admin/hooks/use-mutate-update-admin-user"
-import type { AdminUserListItem, AdminUserRole } from "@/features/admin/types/admin-users.types"
+import type { AdminUserListItem, AdminUserRole } from "@/features/admin/types/admin.types"
 
 type AdminUsersTableProps = {
   currentUserId: string

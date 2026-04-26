@@ -3,8 +3,15 @@
 import { useTranslations } from "next-intl"
 
 import { PlanPicker } from "@/features/billing/components/plan-picker-dialog/plan-picker.client"
-import type { PlanPickerDialogProps } from "@/features/billing/types/plan-picker-dialog.types"
+import type { BillingProduct } from "@/features/billing/types/billing.types"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+
+type PlanPickerDialogProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  isBillingLoading: boolean
+  onProductSelect: (selectedProduct: BillingProduct) => void
+}
 
 export function PlanPickerDialog({ open, onOpenChange, isBillingLoading, onProductSelect }: PlanPickerDialogProps) {
   const t = useTranslations("home.pricing")

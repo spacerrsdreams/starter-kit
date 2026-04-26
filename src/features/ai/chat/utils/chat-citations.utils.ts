@@ -1,6 +1,6 @@
 import type { UIMessage } from "ai"
 
-import type { ChatCitationSource } from "@/features/ai/chat/types/chat-citations.types"
+import type { ChatCitationSource } from "@/features/ai/chat/types/chat.types"
 
 export function getChatCitationSources(message: UIMessage): ChatCitationSource[] {
   const byKey = new Map<string, ChatCitationSource>()

@@ -1,6 +1,15 @@
 "use client"
 
-import type { SettingsAccountSectionLayoutProps } from "@/features/settings/types/settings-section-stack.types"
+import type { LucideIcon } from "lucide-react"
+import type { ReactNode } from "react"
+
+type SettingsAccountSectionLayoutProps = {
+  icon: LucideIcon
+  title: string
+  description: string
+  hasWarning?: boolean
+  children: ReactNode
+}
 
 export function SettingsAccountSectionLayout({
   icon: Icon,

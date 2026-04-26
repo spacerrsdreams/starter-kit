@@ -1,9 +1,8 @@
 import "server-only"
 
-import { UserRole } from "@/generated/prisma/client"
-
 import { prisma } from "@/lib/prisma"
-import type { AdminUsersListResponse, AdminUserSubscriptionStatus } from "@/features/admin/types/admin-users.types"
+import type { UpdateAdminUserData } from "@/features/admin/types/admin.server.types"
+import type { AdminUsersListResponse, AdminUserSubscriptionStatus } from "@/features/admin/types/admin.types"
 
 export async function listAdminUsers(): Promise<AdminUsersListResponse> {
   const [totalUsers, users] = await Promise.all([
@@ -56,11 +55,6 @@ function mapSubscriptionStatus(status: string | null | undefined): AdminUserSubs
   }
 
   return "inactive"
-}
-
-type UpdateAdminUserData = {
-  email?: string
-  role?: UserRole
 }
 
 export async function updateAdminUser(userId: string, data: UpdateAdminUserData) {

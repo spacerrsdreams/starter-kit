@@ -5,11 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { authClient } from "@/features/auth/lib/auth-client"
 import { getVisibleSettingsNavItems } from "@/features/settings/constants/settings-nav.constants"
-import type {
-  SettingsDialogProps,
-  SettingsMobileView,
-  SettingsSectionId,
-} from "@/features/settings/types/settings-dialog.types"
+import type { SettingsMobileView, SettingsSectionId } from "@/features/settings/types/settings.types"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -27,6 +23,12 @@ import { useIsMobile } from "@/hooks/use-mobile"
 
 import { SettingsItemIndicator } from "./settings-item-indicator"
 import { SettingsSectionContent } from "./settings-section-content"
+
+type SettingsDialogProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  defaultSection?: SettingsSectionId
+}
 
 export function SettingsDialog({ open, onOpenChange, defaultSection = "profile" }: SettingsDialogProps) {
   const isMobile = useIsMobile()

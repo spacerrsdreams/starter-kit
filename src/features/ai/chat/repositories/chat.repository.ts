@@ -5,9 +5,11 @@ import type { Message as MessageRow } from "@/generated/prisma/client"
 import type { UIMessage } from "ai"
 
 import { prisma } from "@/lib/prisma"
-import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
+import type { GenerateAiChatTitleIfMissingParams } from "@/features/ai/chat/types/chat.server.types"
+import type { ChatMessageReaction } from "@/features/ai/chat/types/chat.types"
 import { getMessageReaction, withMessageReaction } from "@/features/ai/chat/utils/chat-message-reaction.utils"
 import { toClientMessageId, toStorageMessageId } from "@/features/ai/chat/utils/chat-message-storage.utils"
+import { getFirstUserTextMessage } from "@/features/ai/chat/utils/chat-title.utils"
 import { generateChatTitleFromUserMessage } from "@/features/ai/chat/utils/generate-chat-title"
 
 function rowToUIMessage(row: MessageRow): UIMessage {
@@ -167,26 +169,24 @@ export async function updateChatMetadata(
   return updated.count > 0
 }
 
-export async function maybeGenerateAiChatTitle(chatId: string, userId: string, messages: UIMessage[]): Promise<void> {
-  const chat = await prisma.chat.findUnique({ where: { id: chatId } })
-  if (!chat || chat.userId !== userId || chat.title) {
+export async function generateAiChatTitleIfMissing({
+  chatId,
+  userId,
+  chatTitle,
+  messages,
+}: GenerateAiChatTitleIfMissingParams): Promise<void> {
+  if (chatTitle) {
     return
   }
-  const firstUser = messages.find((message) => message.role === "user")
-  if (!firstUser) {
+
+  const seedText = getFirstUserTextMessage(messages)
+  if (!seedText) {
     return
   }
-  const textPart = firstUser.parts.find((part) => part.type === "text")
-  if (!textPart || textPart.type !== "text") {
-    return
-  }
-  const raw = textPart.text.trim()
-  if (!raw) {
-    return
-  }
-  const title = await generateChatTitleFromUserMessage(raw)
-  await prisma.chat.update({
-    where: { id: chatId },
+
+  const title = await generateChatTitleFromUserMessage(seedText)
+  await prisma.chat.updateMany({
+    where: { id: chatId, userId, title: null },
     data: { title },
   })
 }

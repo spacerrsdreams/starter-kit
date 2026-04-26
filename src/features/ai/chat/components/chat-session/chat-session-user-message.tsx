@@ -5,13 +5,21 @@ import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
+import type { UIMessage } from "ai"
 
 import { cn } from "@/lib/utils"
-import type { ChatSessionUserMessageProps } from "@/features/ai/chat/types/chat-session-user-message.types"
 import { Attachment, AttachmentInfo, AttachmentPreview, Attachments } from "@/components/ai-elements/attachments"
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
+
+type ChatSessionUserMessageProps = {
+  message: UIMessage
+  canRetry: boolean
+  timeLabel: string
+  onCopy: () => Promise<void>
+  onRetry: () => Promise<void>
+}
 
 export function ChatSessionUserMessage({ message, canRetry, timeLabel, onCopy, onRetry }: ChatSessionUserMessageProps) {
   const t = useTranslations()

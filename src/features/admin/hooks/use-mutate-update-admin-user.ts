@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { updateAdminUserApi } from "@/features/admin/api/admin-users.api"
 import { adminQueryKeys } from "@/features/admin/constants/admin-query-keys"
-import type { AdminUserRole } from "@/features/admin/types/admin-users.types"
+import type { AdminUserRole } from "@/features/admin/types/admin.types"
 
 type UpdateAdminUserVariables = {
   userId: string

@@ -5,11 +5,12 @@ import { AnimatePresence, motion } from "motion/react"
 import { useTranslations } from "next-intl"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
+import type { UIMessage } from "ai"
 
 import { cn } from "@/lib/utils"
 import { ChatSessionCitations } from "@/features/ai/chat/components/chat-session/chat-session-citations"
 import { ChatSessionToolStatus } from "@/features/ai/chat/components/chat-session/chat-session-tool-status"
-import type { ChatSessionAssistantMessageProps } from "@/features/ai/chat/types/chat-citations.types"
+import type { ChatMessageReaction } from "@/features/ai/chat/types/chat.types"
 import { getChatCitationSources } from "@/features/ai/chat/utils/chat-citations.utils"
 import { getChatToolInvocationPart } from "@/features/ai/chat/utils/chat-tool-status.utils"
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message"
@@ -17,6 +18,19 @@ import { Button } from "@/components/ui/button"
 import { LogoSvg } from "@/components/ui/icons/logo.icon"
 import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
+
+type ChatSessionAssistantMessageProps = {
+  message: UIMessage
+  isAnimating: boolean
+  canRetry: boolean
+  showActionsByDefault: boolean
+  reaction: ChatMessageReaction | null
+  onCopy: () => Promise<void>
+  onRetry: () => Promise<void>
+  onToggleLike: () => Promise<void>
+  onToggleUnlike: () => Promise<void>
+  onSubmitUnlikeFeedback: (feedbackText: string) => Promise<void>
+}
 
 export function ChatSessionAssistantMessage({
   message,

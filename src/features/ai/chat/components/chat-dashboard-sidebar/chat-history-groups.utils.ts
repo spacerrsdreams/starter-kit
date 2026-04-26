@@ -1,4 +1,4 @@
-import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
+import type { ChatListItem } from "@/features/ai/chat/types/chat.types"
 
 export type ChatHistoryGroups = {
   today: ChatListItem[]

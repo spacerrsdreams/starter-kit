@@ -1,6 +1,6 @@
 import type { UIMessage } from "ai"
 
-import type { ChatMessageReaction } from "@/features/ai/chat/types/chat-message-reaction.types"
+import type { ChatMessageReaction } from "@/features/ai/chat/types/chat.types"
 
 function getMetadataRecord(message: UIMessage): Record<string, unknown> | null {
   const metadata = message.metadata

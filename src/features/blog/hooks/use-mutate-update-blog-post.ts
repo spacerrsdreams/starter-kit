@@ -3,7 +3,7 @@
 import { useMutation } from "@tanstack/react-query"
 
 import { updateBlogPostApi } from "@/features/blog/api/blog-posts.api"
-import type { CreateBlogPostRequest } from "@/features/blog/types/blog-post.types"
+import type { CreateBlogPostRequest } from "@/features/blog/types/blog.types"
 
 type UpdateBlogPostVariables = {
   postId: string

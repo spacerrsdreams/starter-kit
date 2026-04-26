@@ -1,9 +1,11 @@
 "use client"
 
 import { ArrowUpRight, ChevronRight, CircleHelp, FileText, Info } from "lucide-react"
+import { Route } from "next"
 import Link from "next/link"
 
 import { WebRoutes } from "@/lib/web.routes"
+import type { HelpLinkItem } from "@/features/help/types/help.types"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -13,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-const helpLinks = [
+const helpLinks: readonly HelpLinkItem[] = [
   {
     label: "Help Center",
     href: WebRoutes.contact.path,
@@ -50,7 +52,7 @@ export function HelpPopover() {
           <div key={item.label}>
             <DropdownMenuItem asChild>
               <Link
-                href={item.href}
+                href={item.href as Route}
                 target={item.href.startsWith("http") ? "_blank" : undefined}
                 rel={item.href.startsWith("http") ? "noreferrer" : undefined}
                 className="group"

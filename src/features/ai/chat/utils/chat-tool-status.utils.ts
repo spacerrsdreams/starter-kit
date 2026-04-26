@@ -1,6 +1,6 @@
 import type { UIMessage } from "ai"
 
-import type { ChatToolInvocationPart } from "@/features/ai/chat/types/chat-tool-status.types"
+import type { ChatToolInvocationPart } from "@/features/ai/chat/types/chat.types"
 
 function getToolName(part: ChatToolInvocationPart): string {
   return part.type.replace(/^tool-/, "")

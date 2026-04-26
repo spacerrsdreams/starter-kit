@@ -1,6 +1,6 @@
 import type { UIMessage } from "ai"
 
-import type { ChatListItem } from "@/features/ai/chat/types/chat-list.types"
+import type { ChatListItem, ChatMessageReaction } from "@/features/ai/chat/types/chat.types"
 
 export type ChatsListResponse = {
   chats: ChatListItem[]
@@ -15,4 +15,9 @@ export type GetChatResponse = {
   id: string
   title: string | null
   messages: UIMessage[]
+}
+
+export type SetMessageReactionPayload = {
+  reaction: ChatMessageReaction | null
+  feedbackText?: string | null
 }

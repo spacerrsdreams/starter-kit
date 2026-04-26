@@ -6,7 +6,7 @@ import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
 import { WebRoutes } from "@/lib/web.routes"
-import type { AiWidgetHistoryDropdownProps } from "@/features/ai/widget/types/ai-widget-history-dropdown.types"
+import type { ChatListItem } from "@/features/ai/chat/types/chat.types"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -16,6 +16,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ScrollArea } from "@/components/ui/scroll-area"
+
+type AiWidgetHistoryDropdownProps = {
+  chats: ChatListItem[]
+  activeChatId: string | null
+  isDeleting: boolean
+  onSelectChat: (chatId: string) => void
+  onDeleteChat: (chatId: string) => void
+}
 
 export function AiWidgetHistoryDropdown({
   chats,

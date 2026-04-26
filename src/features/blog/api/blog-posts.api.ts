@@ -1,6 +1,6 @@
 import { ApiRoutes } from "@/lib/api.routes"
 import { apiRequest } from "@/lib/http-client"
-import type { BlogPostsListResponse, CreateBlogPostRequest } from "@/features/blog/types/blog-post.types"
+import type { BlogPostsListResponse, CreateBlogPostRequest } from "@/features/blog/types/blog.types"
 import type { Locale } from "@/i18n/locales"
 
 export async function createBlogPostApi(body: CreateBlogPostRequest) {

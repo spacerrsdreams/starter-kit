@@ -3,12 +3,16 @@
 import { BadgeCheckIcon, LoaderCircleIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import type { ChatSessionToolStatusProps } from "@/features/ai/chat/types/chat-tool-status.types"
+import type { ChatToolInvocationPart } from "@/features/ai/chat/types/chat.types"
 import {
   getToolStatusLabel,
   isToolInvocationDone,
   isToolInvocationLoading,
 } from "@/features/ai/chat/utils/chat-tool-status.utils"
+
+type ChatSessionToolStatusProps = {
+  part: ChatToolInvocationPart
+}
 
 export function ChatSessionToolStatus({ part }: ChatSessionToolStatusProps) {
   const label = getToolStatusLabel(part)

@@ -11,7 +11,7 @@ import { sendEmailVerificationAction } from "@/features/settings/actions/send-em
 import type {
   SendEmailVerificationActionErrorCode,
   SettingsAccountSessionUser,
-} from "@/features/settings/types/settings-account-section.types"
+} from "@/features/settings/types/settings.types"
 import { formatResendTime } from "@/features/settings/utils/settings-account-section.utils"
 import { Button } from "@/components/ui/button"
 import {

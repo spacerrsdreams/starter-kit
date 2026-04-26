@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef } from "react"
 
 import { submitContactFormAction } from "@/features/contact/actions/submit-contact-form.action"
-import { initialContactFormActionState } from "@/features/contact/types/contact-form-action-state.types"
+import { initialContactFormActionState } from "@/features/contact/types/contact.types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

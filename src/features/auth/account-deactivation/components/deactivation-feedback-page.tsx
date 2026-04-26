@@ -3,7 +3,6 @@ import {
   deactivationFeedbackCategories,
   deactivationFeedbackCategoryLabels,
 } from "@/features/auth/account-deactivation/constants/deactivation-feedback-category.constants"
-import type { DeactivationFeedbackPageProps } from "@/features/auth/account-deactivation/types/deactivation-feedback-page.types"
 import { Button } from "@/components/ui/button"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { GlassPanel } from "@/components/ui/glass-panel"
@@ -19,6 +18,10 @@ const texts = {
   reasonHint: "Minimum 10 characters.",
   submit: "Deactivate account",
   validationError: "Please choose a category and add a longer reason before submitting.",
+}
+
+type DeactivationFeedbackPageProps = {
+  hasError: boolean
 }
 
 export function DeactivationFeedbackPage({ hasError }: DeactivationFeedbackPageProps) {

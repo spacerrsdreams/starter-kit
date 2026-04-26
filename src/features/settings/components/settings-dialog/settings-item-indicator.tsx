@@ -2,7 +2,9 @@
 
 import { AlertCircle } from "lucide-react"
 
-import type { SettingsItemIndicatorProps } from "@/features/settings/types/settings-item-indicator.types"
+type SettingsItemIndicatorProps = {
+  title: string
+}
 
 export function SettingsItemIndicator({ title }: SettingsItemIndicatorProps) {
   return (

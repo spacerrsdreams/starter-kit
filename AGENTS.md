@@ -82,7 +82,12 @@ These guidelines are working if: fewer unnecessary changes in diffs, fewer rewri
 ### Types (Strict)
 
 - Do not define shared domain/feature types inline in `.tsx` or implementation files.
-- Use dedicated files: `types.ts`, `*.types.ts`, or a `types/` folder.
+- Keep types feature-local under `src/features/<feature>/types/`.
+- Any dedicated type file (`*.types.ts`) must live inside a `types/` folder.
+- Prefer consolidated domain files over many tiny files:
+  - As an example, use `<domain>.types.ts` as the default shared type file (client-safe by default, and server can also import from it).
+  - As an example, use `<domain>.server.types.ts` only for server-only contracts used by repositories/actions/routes.
+- Split into additional `*.types.ts` files only when a type group is large, reused across multiple domains, or has a clear boundary (for example external API contracts).
 - Cross-feature shared types live in `src/global.types.ts` and import via `@/global.types`.
 - Prefer direct `import type` from concrete modules for inferred types.
 - Avoid inline `typeof import("...").symbol` style type hacks.
@@ -90,7 +95,9 @@ These guidelines are working if: fewer unnecessary changes in diffs, fewer rewri
 - Choose typing source by intent: use Prisma-generated types for DB-backed contracts, and app-local types for UI/view-state/domain-only shapes when Prisma would be misleading.
 - For client-side type imports from Prisma, use `@/generated/prisma/browser` with `import type`.
 - For server/runtime type imports from Prisma, use `@/generated/prisma/client`.
+- Any type that imports Prisma from non-browser paths (anything other than `@/generated/prisma/browser`) must stay in server-only type files (for example `*.server.types.ts`) to avoid leaking server runtime contracts into client bundles.
 - Component-local strict prop types (`*Props`, `*ComponentType`, `Component`) must stay in the same component file and should not directly import Prisma model types.
+- React component prop types must be declared in the same component file (do not place component `*Props` in dedicated `types/` files).
 
 ### TypeScript + Lint Discipline (Strict)
 

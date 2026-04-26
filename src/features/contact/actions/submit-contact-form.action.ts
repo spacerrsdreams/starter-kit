@@ -4,7 +4,7 @@ import "server-only"
 
 import { sendContactSubmissionEmail } from "@/features/emails/lib/emails.actions"
 import { submitContactFormSchema } from "@/features/contact/schemas/contact-submission.schema"
-import type { ContactFormActionState } from "@/features/contact/types/contact-form-action-state.types"
+import type { ContactFormActionState } from "@/features/contact/types/contact.types"
 
 export async function submitContactFormAction(
   _previousState: ContactFormActionState,

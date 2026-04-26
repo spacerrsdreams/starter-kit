@@ -4,7 +4,7 @@ import type {
   AdminUserRole,
   AdminUsersListResponse,
   UpdateAdminUserRequest,
-} from "@/features/admin/types/admin-users.types"
+} from "@/features/admin/types/admin.types"
 
 export async function listAdminUsersApi() {
   return apiRequest<AdminUsersListResponse>(ApiRoutes.admin.users.list)

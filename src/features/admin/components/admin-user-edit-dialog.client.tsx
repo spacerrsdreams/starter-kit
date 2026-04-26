@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-import type { AdminUserListItem, AdminUserRole } from "@/features/admin/types/admin-users.types"
+import type { AdminUserListItem, AdminUserRole } from "@/features/admin/types/admin.types"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
